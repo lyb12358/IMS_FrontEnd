@@ -1,6 +1,6 @@
 <template>
   <q-page class="flex flex-center">
-    <img src="~assets/personal_logo.jpg">
+    主页<!-- <img src="~assets/personal_logo.jpg"> -->
   </q-page>
 </template>
 

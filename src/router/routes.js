@@ -4,7 +4,8 @@ export default [
     path: '/',
     component: () => import('layouts/default'),
     children: [
-      { path: '', component: () => import('pages/index') }
+      { path: '', component: () => import('pages/index') },
+      { path: 'productWorkBench', component: () => import('pages/productWorkBench') }
     ]
   },
 

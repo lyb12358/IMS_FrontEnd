@@ -23,7 +23,7 @@ module.exports = function (ctx) {
     },
     build: {
       scopeHoisting: true,
-      vueRouterMode: 'history',
+      vueRouterMode: 'hash',
       // gzip: true,
       // analyze: true,
       // extractCSS: false,
@@ -54,7 +54,12 @@ module.exports = function (ctx) {
         'QListHeader',
         'QItem',
         'QItemMain',
-        'QItemSide'
+        'QItemSide',
+        'QTable',
+        'QTh',
+        'QTr',
+        'QTd',
+        'QTableColumns'
       ],
       directives: [
         'Ripple'
