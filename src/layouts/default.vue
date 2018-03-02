@@ -16,16 +16,21 @@
       </q-toolbar>
     </q-layout-header>
 
+    <!-- <q-layout-footer>
+      <q-toolbar color="primary">
+      </q-toolbar>
+    </q-layout-footer> -->
+
     <q-layout-drawer v-model="leftDrawerOpen"
                      content-class="bg-grey-2">
       <q-list no-border
               link
               inset-delimiter>
         <q-item @click.native="$router.push('/')">
-          <q-item-main label="主页"/>
+          <q-item-main label="主页" />
         </q-item>
         <q-item @click.native="$router.push('productWorkBench')">
-          <q-item-main label="产品管理"/>
+          <q-item-main label="产品管理" />
         </q-item>
         <q-list-header>Essential Links</q-list-header>
         <q-item @click.native="openURL('http://quasar-framework.org')">

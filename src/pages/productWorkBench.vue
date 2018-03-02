@@ -13,6 +13,23 @@
              :loading="loading"
              color="secondary"
              @request="request">
+      <div slot="top-left"
+           slot-scope="props"
+           class="row">
+        <q-input class="q-mt-ml q-mr-sm"
+                 v-model="searchForm.style"
+                 float-label="款号" />
+        <q-input class="q-mt-ml q-mr-sm"
+                 v-model="searchForm.code"
+                 float-label="产品编号" />
+        <q-input class="q-mt-ml q-mr-sm"
+                 v-model="searchForm.name"
+                 float-label="产品名称" />
+        <q-btn icon="search"
+               label="搜索"
+               color="secondary"
+               @click="showInfo" />
+      </div>
       <template slot="top-right"
                 slot-scope="props">
         <q-table-columns color="secondary"
@@ -23,18 +40,43 @@
         <q-select color="secondary"
                   v-model="separator"
                   :options="[
-          { label: '水平', value: 'horizontal' },
-          { label: '竖直', value: 'vertical' },
-          { label: '网格', value: 'cell' },
-          { label: '无', value: 'none' }
+          { label: '水平框线', value: 'horizontal' },
+          { label: '竖直框线', value: 'vertical' },
+          { label: '网格框线', value: 'cell' },
+          { label: '无框线', value: 'none' }
         ]"
                   hide-underline />
         <q-btn flat
                round
                dense
                :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-               @click="props.toggleFullscreen" />
+               @click="props.toggleFullscreen">
+          <q-tooltip>点下试试，可以全屏展现表格哦！</q-tooltip>
+        </q-btn>
       </template>
+      <div slot="pagination"
+           slot-scope="props"
+           class="row flex-center q-py-sm">
+        <q-btn round
+               dense
+               size="sm"
+               icon="undo"
+               color="secondary"
+               class="q-mr-sm"
+               :disable="props.isFirstPage"
+               @click="props.prevPage" />
+        <div class="q-mr-sm"
+             style="font-size: small">
+          页 {{ props.pagination.page }} / {{ props.pagesNumber }}
+        </div>
+        <q-btn round
+               dense
+               size="sm"
+               icon="redo"
+               color="secondary"
+               :disable="props.isLastPage"
+               @click="props.nextPage" />
+      </div>
     </q-table>
   </q-page>
 </template>
@@ -43,9 +85,24 @@
 export default {
   data() {
     return {
+      searchForm: {
+        style: '',
+        code: '',
+        name: ''
+      },
       loading: false,
+      dark: true,
       selected: [],
-      visibleColumns: ['departId','comId','prodStyle','prodFamily','prodClass','prodMat','prodCode','prodName','prodSize','retailPrice'],
+      visibleColumns: [
+        'prodStyle',
+        'prodFamily',
+        'prodClass',
+        'prodMat',
+        'prodCode',
+        'prodName',
+        'prodSize',
+        'retailPrice'
+      ],
       separator: 'horizontal',
       serverPagination: {
         page: 1,
@@ -57,17 +114,20 @@ export default {
         { name: 'departId', label: '所属部门', field: 'departId' },
         { name: 'comId', label: '所属公司', field: 'comId' },
         { name: 'prodStyle', label: '款号', field: 'prodStyle' },
+        { name: 'prodCode', label: '产品编号', field: 'prodCode' },
+        { name: 'prodName', label: '产品名称id', field: 'prodName' },
         { name: 'prodFamily', label: '产品所属', field: 'prodFamily' },
         { name: 'prodClass', label: '产品分类', field: 'prodClass' },
         { name: 'prodMat', label: '面料', field: 'prodMat' },
-        { name: 'prodCode', label: '产品编号', field: 'prodCode' },
-        { name: 'prodName', label: '产品名称id', field: 'prodName' },
         { name: 'prodSize', label: '尺寸', field: 'prodSize' },
         { name: 'retailPrice', label: '零售价', field: 'retailPrice' }
       ]
     }
   },
   methods: {
+    showInfo() {
+      console.log(this.searchForm)
+    },
     request({ pagination }) {
       // we set QTable to "loading" state
       this.loading = true
