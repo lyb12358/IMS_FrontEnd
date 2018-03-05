@@ -5,8 +5,6 @@
              :data="serverData"
              :columns="columns"
              row-key="id"
-             selection="multiple"
-             :selected.sync="selected"
              :visible-columns="visibleColumns"
              :separator="separator"
              :pagination.sync="serverPagination"
@@ -27,6 +25,7 @@
                  float-label="产品名称" />
         <q-btn icon="mdi-magnify"
                label="搜索"
+               rounded
                color="secondary"
                @click="showInfo" />
       </div>
