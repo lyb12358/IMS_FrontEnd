@@ -14,6 +14,7 @@ module.exports = function (ctx) {
       //'material-icons'
       // 'ionicons',
       // 'fontawesome',
+      //
       'mdi'
     ],
     supportIE: true,
