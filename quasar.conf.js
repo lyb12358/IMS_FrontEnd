@@ -13,8 +13,8 @@ module.exports = function (ctx) {
       ctx.theme.mat ? 'roboto-font' : null,
       //'material-icons'
       // 'ionicons',
+      // 'fontawesome',
       'mdi'
-      // 'fontawesome'
     ],
     supportIE: true,
     vendor: {
