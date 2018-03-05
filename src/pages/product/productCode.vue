@@ -25,7 +25,7 @@
         <q-input class="q-mt-ml q-mr-sm"
                  v-model="searchForm.name"
                  float-label="产品名称" />
-        <q-btn icon="search"
+        <q-btn icon="mdi-magnify"
                label="搜索"
                color="secondary"
                @click="showInfo" />
@@ -49,7 +49,7 @@
         <q-btn flat
                round
                dense
-               :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
+               :icon="props.inFullscreen ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'"
                @click="props.toggleFullscreen">
           <q-tooltip>点下试试，可以全屏展现表格哦！</q-tooltip>
         </q-btn>
@@ -60,7 +60,7 @@
         <q-btn round
                dense
                size="sm"
-               icon="undo"
+               icon="mdi-undo"
                color="secondary"
                class="q-mr-sm"
                :disable="props.isFirstPage"
@@ -72,7 +72,7 @@
         <q-btn round
                dense
                size="sm"
-               icon="redo"
+               icon="mdi-redo"
                color="secondary"
                :disable="props.isLastPage"
                @click="props.nextPage" />

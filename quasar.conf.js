@@ -11,9 +11,9 @@ module.exports = function (ctx) {
     ],
     extras: [
       ctx.theme.mat ? 'roboto-font' : null,
-      'material-icons'
+      //'material-icons'
       // 'ionicons',
-      // 'mdi',
+      'mdi'
       // 'fontawesome'
     ],
     supportIE: true,
@@ -28,7 +28,7 @@ module.exports = function (ctx) {
       // analyze: true,
       // extractCSS: false,
       // useNotifier: false,
-      extendWebpack (cfg) {
+      extendWebpack(cfg) {
       }
     },
     devServer: {
@@ -61,10 +61,13 @@ module.exports = function (ctx) {
         'QBtn',
         'QIcon',
         'QList',
+        'QCollapsible',
         'QListHeader',
         'QItem',
         'QItemMain',
         'QItemSide',
+        'QItemTile',
+        'QItemSeparator',
         'QTable',
         'QTh',
         'QTr',
@@ -73,7 +76,13 @@ module.exports = function (ctx) {
         'QSelect',
         'QToggle',
         'QTooltip',
-        'QInput'
+        'QInput',
+        'QCard',
+        'QCardTitle',
+        'QCardMain',
+        'QCardMedia',
+        'QCardSeparator',
+        'QCardActions'
       ],
       directives: [
         'Ripple'
@@ -81,7 +90,8 @@ module.exports = function (ctx) {
       plugins: [
         'Notify'
       ],
-      i18n:'zh-hans'
+      i18n: 'zh-hans',
+      iconSet: 'mdi'
     },
     // animations: 'all' --- includes all animations
     animations: [
@@ -129,7 +139,7 @@ module.exports = function (ctx) {
       // id: 'org.cordova.quasar.app'
     },
     electron: {
-      extendWebpack (cfg) {
+      extendWebpack(cfg) {
         // do something with cfg
       },
       packager: {
