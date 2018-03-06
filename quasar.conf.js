@@ -83,7 +83,9 @@ module.exports = function (ctx) {
         'QCardMain',
         'QCardMedia',
         'QCardSeparator',
-        'QCardActions'
+        'QCardActions',
+        'QChip',
+        'QCheckbox'
       ],
       directives: [
         'Ripple'
@@ -94,9 +96,9 @@ module.exports = function (ctx) {
       i18n: 'zh-hans',
       iconSet: 'mdi'
     },
-    // animations: 'all' --- includes all animations
-    animations: [
-    ],
+    animations: 'all', 
+    // animations: [
+    // ],
     pwa: {
       cacheExt: 'js,html,css,ttf,eot,otf,woff,woff2,json,svg,gif,jpg,jpeg,png,wav,ogg,webm,flac,aac,mp4,mp3',
       manifest: {

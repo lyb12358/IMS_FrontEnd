@@ -10,7 +10,8 @@
              :pagination.sync="serverPagination"
              :loading="loading"
              color="secondary"
-             @request="request">
+             @request="request"
+             table>
       <div slot="top-left"
            slot-scope="props"
            class="row">
@@ -33,7 +34,7 @@
                 slot-scope="props">
         <q-table-columns color="secondary"
                          class="q-mr-sm"
-                         label="可以看见的列"
+                         label="筛选列"
                          v-model="visibleColumns"
                          :columns="columns" />
         <q-select color="secondary"
@@ -50,8 +51,91 @@
                dense
                :icon="props.inFullscreen ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'"
                @click="props.toggleFullscreen">
-          <q-tooltip>点下试试，可以全屏展现表格哦！</q-tooltip>
+          <q-tooltip>全屏，可以打印试试</q-tooltip>
         </q-btn>
+      </template>
+      <q-tr slot="header"
+            slot-scope="props">
+        <!-- <q-th auto-width>
+          <q-checkbox v-if="props.multipleSelect"
+                      v-model="props.selected"
+                      indeterminate-value="some" />
+        </q-th> -->
+        <q-th v-for="col in props.cols"
+              :key="col.name"
+              :props="props">
+          {{ col.label }}
+        </q-th>
+      </q-tr>
+      <template slot="body"
+                slot-scope="props">
+        <q-tr :props="props">
+          <!-- <q-td auto-width>
+            <q-checkbox color="secondary"
+                        v-model="props.selected" />
+          </q-td> -->
+          <q-td key="id"
+                :props="props">{{ props.row.id }}</q-td>
+          <q-td key="departId"
+                :props="props">{{ props.row.departId }}</q-td>
+          <q-td key="comId"
+                :props="props">{{ props.row.comId }}</q-td>
+          <q-td key="prodStyle"
+                :props="props">{{ props.row.prodStyle }}</q-td>
+          <q-td key="prodCode"
+                :props="props">
+            <q-checkbox color="secondary"
+                        v-model="props.expand"
+                        checked-icon="mdi-minus"
+                        unchecked-icon="mdi-plus"
+                        class="q-mr-md" /> {{ props.row.prodCode }}
+          </q-td>
+          <q-td key="prodName"
+                :props="props">{{ props.row.prodName }}</q-td>
+          <q-td key="prodFamily"
+                :props="props">{{ props.row.prodFamily }}</q-td>
+          <q-td key="prodClass"
+                :props="props">{{ props.row.prodClass }}</q-td>
+          <q-td key="prodMat"
+                :props="props">{{ props.row.prodMat }}</q-td>
+          <q-td key="prodSize"
+                :props="props">{{ props.row.prodSize }}</q-td>
+          <q-td key="retailPrice"
+                :props="props">
+            <q-chip small
+                    rounded
+                    color="amber">{{ props.row.retailPrice }}</q-chip>
+          </q-td>
+        </q-tr>
+        <q-tr v-show="props.expand"
+              :props="props">
+          <q-td colspan="100%">
+            <q-btn icon="mdi-format-list-numbers"
+                   rounded
+                   color="primary"
+                   @click="showExpand(props)">
+              <q-tooltip>款式信息</q-tooltip>
+            </q-btn>
+            <q-btn icon="mdi-image"
+                   rounded
+                   color="orange"
+                   @click="showExpand(props)">
+              <q-tooltip>查看产品图片</q-tooltip>
+            </q-btn>
+            <q-btn icon="mdi-playlist-plus"
+                   rounded
+                   color="secondary"
+                   @click="showExpand(props)">
+              <q-tooltip>增加同款产品</q-tooltip>
+            </q-btn>
+            <q-btn icon="mdi-delete"
+                   rounded
+                   color="negative"
+                   @click="showExpand(props)">
+              <q-tooltip>删除</q-tooltip>
+            </q-btn>
+          </q-td>
+        </q-tr>
       </template>
       <div slot="pagination"
            slot-scope="props"
@@ -114,7 +198,7 @@ export default {
         { name: 'comId', label: '所属公司', field: 'comId' },
         { name: 'prodStyle', label: '款号', field: 'prodStyle' },
         { name: 'prodCode', label: '产品编号', field: 'prodCode' },
-        { name: 'prodName', label: '产品名称id', field: 'prodName' },
+        { name: 'prodName', label: '产品名称', field: 'prodName' },
         { name: 'prodFamily', label: '产品所属', field: 'prodFamily' },
         { name: 'prodClass', label: '产品分类', field: 'prodClass' },
         { name: 'prodMat', label: '面料', field: 'prodMat' },
@@ -124,6 +208,9 @@ export default {
     }
   },
   methods: {
+    showExpand(x) {
+      console.log(x)
+    },
     showInfo() {
       console.log(this.searchForm)
     },
@@ -165,6 +252,9 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="stylus">
+  .q-table th
+    font-size:14px
+  .q-table tbody td
+    font-size:16px
 </style>

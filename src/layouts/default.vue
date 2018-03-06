@@ -28,16 +28,27 @@
               inset-delimiter
               style="padding:0">
         <q-card class="no-shadow">
+          <div class="row flex-center bg-white"
+               style="height: 100px">
+            <img src="~assets/logo.png"
+                 style="height: 75px; width 75px;">
+            <div class="caption q-ml-md">
+               v0.1
+            </div>
+          </div>
           <q-item>
             <q-item-side avatar="/assets/personal_logo.jpg" />
-            <q-item-main >
+            <q-item-main>
               <q-item-tile label>罗亚冰</q-item-tile>
               <q-item-tile sublabel>信息中心</q-item-tile>
             </q-item-main>
             <!-- <q-item-main>
               <q-item-tile label>角色：管理员</q-item-tile>
             </q-item-main> -->
-            <q-btn flat color="primary" icon="mdi-logout" @click="excuse('用户')" />
+            <q-btn flat
+                   color="primary"
+                   icon="mdi-logout"
+                   @click="excuse('用户相关功能还在施工中，别点了~')" />
             <!-- <q-item-side icon="mdi-logout"
                        color="primary" /> -->
           </q-item>
@@ -45,28 +56,71 @@
         <q-item @click.native="$router.push('/')">
           <q-item-side icon="mdi-home"
                        color="primary" />
-          <q-item-main label="主页"
-                       color="primary" />
+          <q-item-main label="主页" />
         </q-item>
-        <q-item @click.native="$router.push('productWorkBench')">
-          <q-item-side icon="mdi-layers"
-                       color="primary" />
-          <q-item-main label="产品管理"
-                       color="primary" />
-        </q-item>
+        <q-collapsible>
+          <template slot="header">
+            <q-item-side icon="mdi-account-multiple"
+                         color="primary" />
+            <q-item-main label="用户管理" />
+          </template>
+          <q-item link
+                  @click.native="excuse('都跟你说了是摆设，你点也没用~')"
+                  class="q-ml-xl">
+            <q-item-main label="用户" />
+          </q-item>
+          <q-item link
+                  @click.native="excuse('都跟你说了是摆设，你点也没用~')"
+                  class="q-ml-xl">
+            <q-item-main label="角色" />
+          </q-item>
+        </q-collapsible>
+        <q-collapsible>
+          <template slot="header">
+            <q-item-side icon="mdi-domain"
+                         color="primary" />
+            <q-item-main label="组织管理" />
+          </template>
+          <q-item link
+                  @click.native="excuse('都跟你说了是摆设，你点也没用~')"
+                  class="q-ml-xl">
+            <q-item-main label="公司管理" />
+          </q-item>
+          <q-item link
+                  @click.native="excuse('都跟你说了是摆设，你点也没用~')"
+                  class="q-ml-xl">
+            <q-item-main label="部门管理" />
+          </q-item>
+        </q-collapsible>
+        <q-collapsible>
+          <template slot="header">
+            <q-item-side icon="mdi-layers"
+                         color="primary" />
+            <q-item-main label="产品管理" />
+          </template>
+          <q-item link
+                  @click.native="$router.push('productCode')"
+                  class="q-ml-xl">
+            <q-item-main label="产品编号管理" />
+          </q-item>
+          <q-item link
+                  @click.native="$router.push('productCode')"
+                  class="q-ml-xl">
+            <q-item-main label="产品款式管理" />
+          </q-item>
+        </q-collapsible>
+
         <q-item-separator />
         <q-list-header>外部链接</q-list-header>
         <q-item @click.native="openURL('http://hao.china-beyond.com/')">
-          <q-item-side icon="mdi-navigation"
+          <q-item-side icon="mdi-compass"
                        color="primary" />
-          <q-item-main label="导航"
-                       color="primary" />
+          <q-item-main label="导航" />
         </q-item>
         <q-item @click.native="openURL('http://beyond-oa.com/')">
           <q-item-side icon="mdi-briefcase"
                        color="primary" />
-          <q-item-main label="OA"
-                       color="primary" />
+          <q-item-main label="OA" />
         </q-item>
       </q-list>
     </q-layout-drawer>
@@ -89,15 +143,18 @@ export default {
   },
   methods: {
     openURL,
-    excuse(x){
+    excuse(x) {
       this.$q.notify({
-        message:x+'功能尚在施工中,别点了~~~',
-        type:'warning',
-        icon:'mdi-emoticon-cool',
-        position:'bottom-right',
+        message: x,
+        color: 'purple',
+        icon: 'mdi-emoticon-cool',
+        position: 'bottom-right',
         avatar: 'assets/xiuxian.jpg'
       })
     }
+  },
+  mounted() {
+    this.excuse('只有产品管理有内容，其他页面是摆设，不用去点~')
   }
 }
 </script>
