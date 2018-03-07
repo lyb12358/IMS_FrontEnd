@@ -4,7 +4,8 @@ module.exports = function (ctx) {
   return {
     plugins: [
       'i18n',
-      'axios'
+      'axios',
+      'vue-echarts'
     ],
     css: [
       'app.styl'
@@ -57,6 +58,7 @@ module.exports = function (ctx) {
         'QPageContainer',
         'QPageSticky',
         'QPage',
+        'QScrollArea',
         'QToolbar',
         'QToolbarTitle',
         'QBtn',

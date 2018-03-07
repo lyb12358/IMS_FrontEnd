@@ -14,7 +14,7 @@
              table>
       <div slot="top-left"
            slot-scope="props"
-           class="row">
+           class="row print-hide">
         <q-input class="q-mt-ml q-mr-sm"
                  v-model="searchForm.style"
                  float-label="款号" />
@@ -25,19 +25,36 @@
                  v-model="searchForm.name"
                  float-label="产品名称" />
         <q-btn icon="mdi-magnify"
-               label="搜索"
                rounded
-               color="secondary"
-               @click="showInfo" />
+               class="q-ma-xs"
+               color="secondary">
+          <q-tooltip>搜索</q-tooltip>
+        </q-btn>
+        <q-btn icon="mdi-new-box"
+               rounded
+               class="q-ma-xs"
+               color="primary"
+               @click="showInfo">
+          <q-tooltip>新建</q-tooltip>
+        </q-btn>
+        <q-btn icon="mdi-file-excel"
+               rounded
+               class="q-ma-xs"
+               color="tertiary"
+               @click="showInfo">
+          <q-tooltip>导出</q-tooltip>
+        </q-btn>
       </div>
       <template slot="top-right"
-                slot-scope="props">
+                slot-scope="props"
+                class="print-hide">
         <q-table-columns color="secondary"
-                         class="q-mr-sm"
+                         class="q-mr-sm print-hide"
                          label="筛选列"
                          v-model="visibleColumns"
                          :columns="columns" />
         <q-select color="secondary"
+                  class="print-hide"
                   v-model="separator"
                   :options="[
           { label: '水平框线', value: 'horizontal' },
@@ -47,11 +64,19 @@
         ]"
                   hide-underline />
         <q-btn flat
-               round
-               dense
+               rounded
+               class="print-hide"
                :icon="props.inFullscreen ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'"
                @click="props.toggleFullscreen">
-          <q-tooltip>全屏，可以打印试试</q-tooltip>
+          <q-tooltip>全屏</q-tooltip>
+        </q-btn>
+        <q-btn flat
+               rounded
+               class="print-hide"
+               v-if="props.inFullscreen"
+               icon="mdi-printer"
+               @click="printSth">
+          <q-tooltip>打印</q-tooltip>
         </q-btn>
       </template>
       <q-tr slot="header"
@@ -101,10 +126,7 @@
           <q-td key="prodSize"
                 :props="props">{{ props.row.prodSize }}</q-td>
           <q-td key="retailPrice"
-                :props="props">
-            <q-chip small
-                    rounded
-                    color="amber">{{ props.row.retailPrice }}</q-chip>
+                :props="props">{{ props.row.retailPrice }}
           </q-td>
         </q-tr>
         <q-tr v-show="props.expand"
@@ -118,7 +140,7 @@
             </q-btn>
             <q-btn icon="mdi-image"
                    rounded
-                   color="orange"
+                   color="tertiary"
                    @click="showExpand(props)">
               <q-tooltip>查看产品图片</q-tooltip>
             </q-btn>
@@ -139,7 +161,7 @@
       </template>
       <div slot="pagination"
            slot-scope="props"
-           class="row flex-center q-py-sm">
+           class="row flex-center q-py-sm print-hide">
         <q-btn round
                dense
                size="sm"
@@ -214,6 +236,9 @@ export default {
     showInfo() {
       console.log(this.searchForm)
     },
+    printSth() {
+      window.print()
+    },
     request({ pagination }) {
       // we set QTable to "loading" state
       this.loading = true
@@ -253,8 +278,8 @@ export default {
 </script>
 
 <style lang="stylus">
-  .q-table th
-    font-size:14px
-  .q-table tbody td
-    font-size:16px
+.q-table th
+  font-size 13px
+.q-table tbody td
+  font-size 15px
 </style>
