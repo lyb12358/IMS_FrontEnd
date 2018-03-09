@@ -113,8 +113,17 @@
                     class="q-ml-xl">
               <q-item-main label="产品款式管理" />
             </q-item>
+            <q-item link
+                    @click.native="$router.push('productCat')"
+                    class="q-ml-xl">
+              <q-item-main label="产品类别管理" />
+            </q-item>
           </q-collapsible>
-
+          <q-item @click.native="$router.push('readme')">
+            <q-item-side icon="mdi-book-open"
+                         color="primary" />
+            <q-item-main label="更新日志" />
+          </q-item>
           <q-item-separator />
           <q-list-header>外部链接</q-list-header>
           <q-item @click.native="openURL('http://hao.china-beyond.com/')">

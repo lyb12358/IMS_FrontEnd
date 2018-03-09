@@ -9,8 +9,10 @@ export default [
       { path: 'department', component: () => import('pages/organization/department') },
       { path: 'productCode', component: () => import('pages/product/productCode') },
       { path: 'productStyle', component: () => import('pages/product/productStyle') },
+      { path: 'productCat', component: () => import('pages/product/productCat') },
       { path: 'user', component: () => import('pages/userManagement/user') },
-      { path: 'role', component: () => import('pages/userManagement/role') }
+      { path: 'role', component: () => import('pages/userManagement/role') },
+      { path: 'readme', component: () => import('pages/readme') }
     ]
   },
 

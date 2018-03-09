@@ -5,7 +5,8 @@ module.exports = function (ctx) {
     plugins: [
       'i18n',
       'axios',
-      'vue-echarts'
+      'vue-echarts',
+      'vue-simply-markdown'
     ],
     css: [
       'app.styl'
@@ -87,7 +88,8 @@ module.exports = function (ctx) {
         'QCardSeparator',
         'QCardActions',
         'QChip',
-        'QCheckbox'
+        'QCheckbox',
+        'QTree'
       ],
       directives: [
         'Ripple'
