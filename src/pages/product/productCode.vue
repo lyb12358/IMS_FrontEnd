@@ -34,7 +34,7 @@
                rounded
                class="q-ma-xs"
                color="primary"
-               @click="showInfo">
+               @click="opened = true">
           <q-tooltip>新建</q-tooltip>
         </q-btn>
         <q-btn icon="mdi-file-excel"
@@ -183,6 +183,12 @@
                @click="props.nextPage" />
       </div>
     </q-table>
+    <q-modal v-model="opened" content-css="padding: 30px" no-backdrop-dismiss no-esc-dismiss>
+      <h4>Basic Modal</h4>
+      <q-btn color="primary"
+             @click="opened = false"
+             label="Close" />
+    </q-modal>
   </q-page>
 </template>
 
@@ -190,6 +196,7 @@
 export default {
   data() {
     return {
+      opened: false,
       searchForm: {
         style: '',
         code: '',

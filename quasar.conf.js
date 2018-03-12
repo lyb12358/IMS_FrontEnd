@@ -93,10 +93,12 @@ module.exports = function (ctx) {
         'QCardActions',
         'QChip',
         'QCheckbox',
-        'QTree'
+        'QTree',
+        'QModal'
       ],
       directives: [
-        'Ripple'
+        'Ripple',
+        'CloseOverlay'
       ],
       plugins: [
         'Notify'

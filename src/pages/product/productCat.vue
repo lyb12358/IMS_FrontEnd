@@ -1,6 +1,7 @@
 <template>
   <q-page padding>
-    <div>
+    <div class="row justify-center">
+      <div>
       <div class="q-mb-sm">
         <q-btn size="sm"
                color="primary"
@@ -17,8 +18,10 @@
               ref="tree"
               :selected.sync="selected"
               node-key="label" />
-    </div>
+    
     <q-input v-model="xx" />
+    </div>
+    </div>
   </q-page>
 </template>
 
