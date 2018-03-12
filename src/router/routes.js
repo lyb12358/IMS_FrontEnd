@@ -12,7 +12,7 @@ export default [
       { path: 'productCat', component: () => import('pages/product/productCat') },
       { path: 'user', component: () => import('pages/userManagement/user') },
       { path: 'role', component: () => import('pages/userManagement/role') },
-      { path: 'readme', component: () => import('pages/readme') }
+      { path: 'changeLog', component: () => import('pages/changeLog') }
     ]
   },
 

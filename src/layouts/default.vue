@@ -42,7 +42,7 @@
             </div>
             <q-item-separator />
             <q-item>
-              <q-item-side avatar="/assets/personal_logo.jpg" />
+              <q-item-side avatar="statics/logo/personal_logo.jpg" />
               <q-item-main>
                 <q-item-tile label>罗亚冰</q-item-tile>
                 <q-item-tile sublabel>信息中心</q-item-tile>
@@ -119,7 +119,7 @@
               <q-item-main label="产品类别管理" />
             </q-item>
           </q-collapsible>
-          <q-item @click.native="$router.push('readme')">
+          <q-item @click.native="$router.push('changeLog')">
             <q-item-side icon="mdi-book-open"
                          color="primary" />
             <q-item-main label="更新日志" />
@@ -170,7 +170,7 @@ export default {
         color: 'tertiary',
         icon: 'mdi-emoticon-cool',
         position: 'bottom-right',
-        avatar: 'assets/xiuxian.jpg'
+        avatar: 'statics/logo/xiuxian.jpg'
       })
     },
     resetScroll(el, done) {

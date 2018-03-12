@@ -32,6 +32,10 @@ module.exports = function (ctx) {
       // extractCSS: false,
       // useNotifier: false,
       extendWebpack(cfg) {
+        cfg.module.rules.push({
+          test: /\.md$/,
+          loader: 'text-loader'
+        })
       }
     },
     devServer: {
@@ -100,7 +104,7 @@ module.exports = function (ctx) {
       i18n: 'zh-hans',
       iconSet: 'mdi'
     },
-    animations: 'all', 
+    animations: 'all',
     // animations: [
     // ],
     pwa: {
