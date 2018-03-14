@@ -183,11 +183,29 @@
                @click="props.nextPage" />
       </div>
     </q-table>
-    <q-modal v-model="opened" content-css="padding: 30px" no-backdrop-dismiss no-esc-dismiss>
-      <h4>Basic Modal</h4>
-      <q-btn color="primary"
-             @click="opened = false"
-             label="Close" />
+    <q-modal v-model="opened"  no-backdrop-dismiss no-esc-dismiss n>
+      <div class=" row justify-center items-center" >
+    <q-card class="no-shadow">
+      <q-card-title>Login</q-card-title>
+      <q-card-main>
+        <form>
+          <q-field>
+            <q-input v-model="email" type="email" float-label="E-Mail" required></q-input>
+          </q-field>
+
+          <q-field>
+            <q-input v-model="password" type="password" float-label="Password" required></q-input>
+          </q-field>
+        </form>
+      </q-card-main>
+
+      <q-card-separator/>
+
+      <q-card-actions>
+        <q-btn @click="login" type="submit">Login</q-btn>
+      </q-card-actions>
+    </q-card>
+  </div>
     </q-modal>
   </q-page>
 </template>
