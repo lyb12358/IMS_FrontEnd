@@ -71,6 +71,7 @@ module.exports = function (ctx) {
         'QList',
         'QCollapsible',
         'QListHeader',
+        'QField',
         'QItem',
         'QItemMain',
         'QItemSide',

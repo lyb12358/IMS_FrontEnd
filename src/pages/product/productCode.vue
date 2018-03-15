@@ -188,13 +188,13 @@
     <q-card class="no-shadow">
       <q-card-title>Login</q-card-title>
       <q-card-main>
-        <form>
+        <form id='myForm'>
           <q-field>
-            <q-input v-model="email" type="email" float-label="E-Mail" required></q-input>
+            <q-input v-model="user.name" float-label="E-Mail" required></q-input>
           </q-field>
 
           <q-field>
-            <q-input v-model="password" type="password" float-label="Password" required></q-input>
+            <q-input v-model="user.password" type="password" float-label="Password" required></q-input>
           </q-field>
         </form>
       </q-card-main>
@@ -202,7 +202,7 @@
       <q-card-separator/>
 
       <q-card-actions>
-        <q-btn @click="login" type="submit">Login</q-btn>
+        <q-btn @click='resetForm'>重置</q-btn>
       </q-card-actions>
     </q-card>
   </div>
@@ -215,6 +215,10 @@ export default {
   data() {
     return {
       opened: false,
+      user: {
+        password: '',
+        name: ''
+      },
       searchForm: {
         style: '',
         code: '',
@@ -255,6 +259,9 @@ export default {
     }
   },
   methods: {
+    resetForm(){
+      document.getElementById("myForm").reset()
+    },
     showExpand(x) {
       console.log(x)
     },
