@@ -109,7 +109,7 @@
               <q-item-main label="产品编号管理" />
             </q-item>
             <q-item link
-                    @click.native="$router.push('productCode')"
+                    @click.native="$router.push('productStyle')"
                     class="q-ml-xl">
               <q-item-main label="产品款式管理" />
             </q-item>

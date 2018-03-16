@@ -1,6 +1,5 @@
 <template>
   <q-page padding>
-    <!-- content -->
     <q-table ref="table"
              :data="serverData"
              :columns="columns"
@@ -34,7 +33,7 @@
                rounded
                class="q-ma-xs"
                color="primary"
-               @click="opened = true">
+               @click="newOpened=true">
           <q-tooltip>新建</q-tooltip>
         </q-btn>
         <q-btn icon="mdi-file-excel"
@@ -183,38 +182,45 @@
                @click="props.nextPage" />
       </div>
     </q-table>
-    <q-modal v-model="opened"  no-backdrop-dismiss no-esc-dismiss n>
-      <div class=" row justify-center items-center" >
-    <q-card class="no-shadow">
-      <q-card-title>Login</q-card-title>
-      <q-card-main>
-        <form id='myForm'>
-          <q-field>
-            <q-input v-model="user.name" float-label="E-Mail" required></q-input>
-          </q-field>
-
-          <q-field>
-            <q-input v-model="user.password" type="password" float-label="Password" required></q-input>
-          </q-field>
-        </form>
-      </q-card-main>
-
-      <q-card-separator/>
-
-      <q-card-actions>
-        <q-btn @click='resetForm'>重置</q-btn>
-      </q-card-actions>
-    </q-card>
-  </div>
+    <q-modal v-model="newOpened"
+             no-backdrop-dismiss
+             no-esc-dismiss
+             >
+      <div class=" row justify-center items-center ">
+        <q-card class="no-shadow">
+          <q-card-title>Login</q-card-title>
+          <q-card-main>
+            <form id='myForm' class='gutter-sm'>
+              <q-field>
+                <q-input v-model="user.name"
+                         float-label="E-Mail"
+                         required></q-input>
+              </q-field>
+              <q-field>
+                <q-input v-model="user.password"
+                         float-label="Password"
+                         required></q-input>
+              </q-field>
+            </form>
+          </q-card-main>
+          <q-card-separator/>
+          <q-card-actions>
+            <q-btn rounded @click="resetForm">重置</q-btn>
+            <q-btn @click="save">保存</q-btn>
+            <q-btn @click="newOpened = false">关闭</q-btn>
+          </q-card-actions>
+        </q-card>
+      </div>
     </q-modal>
   </q-page>
+  
 </template>
 
 <script>
 export default {
   data() {
     return {
-      opened: false,
+      newOpened: false,
       user: {
         password: '',
         name: ''
@@ -259,8 +265,11 @@ export default {
     }
   },
   methods: {
-    resetForm(){
-      document.getElementById("myForm").reset()
+    save(){
+      console.log(this.user)
+    },
+    resetForm() {
+      document.getElementById('myForm').reset()
     },
     showExpand(x) {
       console.log(x)

@@ -2,25 +2,24 @@
   <q-page padding>
     <div class="row justify-center">
       <div>
-      <div class="q-mb-sm">
-        <q-btn size="sm"
-               color="primary"
-               @click="selectGoodService"
-               label="Select 'Good service'" />
-        <q-btn v-if="selected"
-               size="sm"
-               color="red"
-               @click="unselectNode"
-               label="Unselect node" />
+        <div class="q-mb-sm">
+          <q-btn size="sm"
+                 color="primary"
+                 @click="selectGoodService"
+                 label="Select 'Good service'" />
+          <q-btn v-if="selected"
+                 size="sm"
+                 color="red"
+                 @click="unselectNode"
+                 label="Unselect node" />
+        </div>
+        <q-tree :nodes="props"
+                default-expand-all
+                ref="tree"
+                :selected.sync="selected"
+                node-key="label" />
+
       </div>
-      <q-tree :nodes="props"
-              default-expand-all
-              ref="tree"
-              :selected.sync="selected"
-              node-key="label" />
-    
-    <q-input v-model="xx" />
-    </div>
     </div>
   </q-page>
 </template>
