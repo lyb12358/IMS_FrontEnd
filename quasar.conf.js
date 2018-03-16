@@ -95,7 +95,9 @@ module.exports = function (ctx) {
         'QChip',
         'QCheckbox',
         'QTree',
-        'QModal'
+        'QModal',
+        'QModalLayout',
+        'QSearch'
       ],
       directives: [
         'Ripple',

@@ -9,6 +9,15 @@
         <q-tooltip>新建</q-tooltip>
       </q-btn>
     </div>
+    <div>
+      <q-btn icon="mdi-new-box"
+             rounded
+             class="q-ma-xs"
+             color="primary"
+             @click="opened=true">
+        <q-tooltip>新建2</q-tooltip>
+      </q-btn>
+    </div>
     <q-modal v-model="newOpened"
              no-backdrop-dismiss
              no-esc-dismiss
@@ -18,37 +27,37 @@
               class='gutter-sm'>
           <div>
             <div class="row gutter-sm">
-              <div class="col-12">
-                <q-input inverted
+              <div class="col-xs-12  col-sm-6 col-md-3">
+                <q-input 
                          v-model="model"
                          class="no-margin"
                          float-label="col-12" />
               </div>
-              <div class="col-xs-12 col-sm-6">
+              <div class="col-xs-12 col-sm-6 col-md-3">
                 <q-input inverted
                          v-model="model"
                          class="no-margin"
-                         float-label="col-xs-12 col-sm-6 TOP LEFT" />
+                         float-label="col-xs-12 col-sm-3 TOP LEFT" />
               </div>
-              <div class="col-xs-12 col-sm-6">
+              <div class="col-xs-12 col-sm-6 col-md-3">
                 <q-input inverted
                          v-model="model"
                          class="no-margin"
-                         float-label="col-xs-12 col-sm-6 TOP RIGHT" />
+                         float-label="col-xs-12 col-sm-3 TOP RIGHT" />
               </div>
-              <div class="col-xs-12 col-sm-6">
+              <div class="col-xs-12 col-sm-6 col-md-3">
                 <q-input inverted
                          v-model="model"
                          class="no-margin"
-                         float-label="col-xs-12 col-sm-6 BOTTOM LEFT" />
+                         float-label="col-xs-12 col-sm-3 BOTTOM LEFT" />
               </div>
-              <div class="col-xs-12 col-sm-6">
+              <div class="col-xs-12 col-sm-6 col-md-3">
                 <q-input inverted
                          v-model="model"
                          class="no-margin"
-                         float-label="col-xs-12 col-sm-6 BOTTOM RIGHT" />
+                         float-label="col-xs-12 col-sm-3 BOTTOM RIGHT" />
               </div>
-              <div class="col-12">
+              <div class="col-xs-12  col-sm-6 col-md-3">
                 <q-input inverted
                          v-model="model"
                          class="no-margin"
@@ -64,6 +73,41 @@
 
       </div>
     </q-modal>
+    <q-modal v-model="opened" :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+  <q-modal-layout>
+    <q-toolbar slot="header">
+      <q-btn
+        flat
+        round
+        dense
+        v-close-overlay
+        icon="mdi-arrow-left"
+      />
+      <q-toolbar-title>
+        Header
+      </q-toolbar-title>
+    </q-toolbar>
+
+
+    <q-toolbar slot="footer">
+      <q-toolbar-title>
+        Footer
+      </q-toolbar-title>
+    </q-toolbar>
+
+    <div class="layout-padding">
+      <h1>Modal</h1>
+
+      <q-btn
+        color="primary"
+        v-close-overlay
+        label="Close"
+      />
+
+      <p>This is a Modal presenting a Layout.</p>
+    </div>
+  </q-modal-layout>
+</q-modal>
   </q-page>
 </template>
 
@@ -72,6 +116,7 @@ export default {
   data() {
     return {
       newOpened: false,
+      opened: false,
       user: {
         password: '',
         name: ''
@@ -81,6 +126,8 @@ export default {
 }
 </script>
 
-<style>
+<style lang='stylus'>
+  #myForm
+    padding 30px 
 
 </style>
