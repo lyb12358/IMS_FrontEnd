@@ -11,12 +11,12 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
-    "vue-echarts": "^3.0.4",
+    "vue-echarts": "^3.0.5",
     "vue-i18n": "^7.6.0",
     "vue-simple-markdown": "^1.0.6"
   },
   "devDependencies": {
-    "quasar-cli": "^0.15.11",
+    "quasar-cli": "^0.15.12",
     "text-loader": "0.0.1"
   },
   "engines": {
