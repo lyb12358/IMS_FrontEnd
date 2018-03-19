@@ -296,7 +296,7 @@ export default {
           this.serverPagination.rowsNumber = 20
 
           // then we update the rows with the fetched ones
-          this.serverData = data.data
+          this.serverData = data.rows
 
           // finally we tell QTable to exit the "loading" state
           this.loading = false

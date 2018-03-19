@@ -1,4 +1,7 @@
 ![logo](statics/logo/logo.png)
+## 2018-03-19
+* 升级cli模块，更新依赖
+* 调整modal框样式
 ## 2018-03-14
 * 升级cli模块，更新依赖
 * 调整modal框样式
