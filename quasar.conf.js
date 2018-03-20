@@ -97,7 +97,8 @@ module.exports = function (ctx) {
         'QTree',
         'QModal',
         'QModalLayout',
-        'QSearch'
+        'QSearch',
+        'QUploader'
       ],
       directives: [
         'Ripple',
