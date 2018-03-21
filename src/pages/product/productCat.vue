@@ -27,7 +27,7 @@
              class="q-ma-xs"
              color="primary"
              @click="opened=true">
-        <q-tooltip>新建2</q-tooltip>
+        <q-tooltip>新建</q-tooltip>
       </q-btn>
     </div>
     <q-modal v-model="opened"
@@ -44,7 +44,6 @@
           </q-toolbar-title>
         </q-toolbar>
         <q-toolbar slot="footer"
-                   transparent
                    inverted>
           <div class="col-12 row justify-center ">
             <div style="margin:0 2rem">
@@ -62,12 +61,12 @@
         <div class="layout-padding">
           <div class="row gutter-sm">
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="user.name"
+              <q-input v-model="product.name"
                        class="no-margin"
                        float-label="款号" />
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
-              <q-input v-model="user.name"
+              <q-input v-model="product.name"
                        class="no-margin"
                        float-label="款名" />
             </div>
@@ -84,22 +83,22 @@
                         :options="selectOptions" />
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
-              <q-input v-model="user.name"
+              <q-input v-model="product.name"
                        class="no-margin"
                        float-label="产品所属" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="user.name"
+              <q-input v-model="product.name"
                        class="no-margin"
                        float-label="产品类别" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="user.name"
+              <q-input v-model="product.name"
                        class="no-margin"
                        float-label="产品属性" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="user.name"
+              <q-input v-model="product.name"
                        class="no-margin"
                        float-label="产品材料" />
             </div>
@@ -118,11 +117,11 @@
               <q-toggle v-model="checked"
                         label="是否上架" />
             </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            <!-- <div class="col-xs-12  col-sm-6 col-md-3">
               <q-uploader :url="url"
                           auto-expand
                           float-label="上传图片" />
-            </div>
+            </div> -->
             <div class="col-xs-12  col-sm-12 col-md-6">
               <q-input v-model="area"
                        clearable
@@ -140,10 +139,15 @@
 <script>
 export default {
   data: () => ({
-    checked: true,
+    checked: 'true',
     area: '',
     multipleSelect: '',
     select: '',
+    opened: false,
+    product: {
+      password: '',
+      name: ''
+    },
     selectOptions: [
       {
         label: 'Google',
@@ -189,12 +193,8 @@ export default {
           }
         ]
       }
-    ],
-    opened: false,
-    user: {
-      password: '',
-      name: ''
-    }
+    ]
+    
   }),
   methods: {
     selectGoodService() {

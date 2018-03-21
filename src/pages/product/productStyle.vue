@@ -105,28 +105,27 @@
           <q-td key="comId"
                 :props="props">{{ props.row.comId }}</q-td>
           <q-td key="prodStyle"
-                :props="props">{{ props.row.prodStyle }}</q-td>
-          <q-td key="prodCode"
                 :props="props">
             <q-checkbox color="secondary"
                         v-model="props.expand"
                         checked-icon="mdi-minus"
                         unchecked-icon="mdi-plus"
-                        class="q-mr-md" /> {{ props.row.prodCode }}
+                        class="q-mr-md" /> {{ props.row.prodStyle }}
           </q-td>
-          <q-td key="prodName"
-                :props="props">{{ props.row.prodName }}</q-td>
+          <q-td key="styleName"
+                :props="props">{{ props.row.styleName }}</q-td>
           <q-td key="prodFamily"
                 :props="props">{{ props.row.prodFamily }}</q-td>
           <q-td key="prodClass"
                 :props="props">{{ props.row.prodClass }}</q-td>
+          <q-td key="prodProp"
+                :props="props">{{ props.row.prodProp }}</q-td>
           <q-td key="prodMat"
                 :props="props">{{ props.row.prodMat }}</q-td>
-          <q-td key="prodSize"
-                :props="props">{{ props.row.prodSize }}</q-td>
-          <q-td key="retailPrice"
-                :props="props">{{ props.row.retailPrice }}
-          </q-td>
+          <q-td key="prodDesc"
+                :props="props">{{ props.row.prodDesc }}</q-td>
+          <q-td key="status"
+                :props="props">{{ props.row.status }}</q-td>
         </q-tr>
         <q-tr v-show="props.expand"
               :props="props">
@@ -182,38 +181,9 @@
                @click="props.nextPage" />
       </div>
     </q-table>
-    <q-modal v-model="newOpened"
-             no-backdrop-dismiss
-             no-esc-dismiss
-             >
-      <div class=" row justify-center items-center ">
-        <q-card class="no-shadow">
-          <q-card-title>Login</q-card-title>
-          <q-card-main>
-            <form id='myForm' class='gutter-sm'>
-              <q-field>
-                <q-input v-model="user.name"
-                         float-label="E-Mail"
-                         required></q-input>
-              </q-field>
-              <q-field>
-                <q-input v-model="user.password"
-                         float-label="Password"
-                         required></q-input>
-              </q-field>
-            </form>
-          </q-card-main>
-          <q-card-separator/>
-          <q-card-actions>
-            <q-btn rounded @click="resetForm">重置</q-btn>
-            <q-btn @click="save">保存</q-btn>
-            <q-btn @click="newOpened = false">关闭</q-btn>
-          </q-card-actions>
-        </q-card>
-      </div>
-    </q-modal>
+
   </q-page>
-  
+
 </template>
 
 <script>
@@ -241,7 +211,7 @@ export default {
         'prodCode',
         'prodName',
         'prodSize',
-        'retailPrice'
+        'status'
       ],
       separator: 'horizontal',
       serverPagination: {
@@ -254,18 +224,18 @@ export default {
         { name: 'departId', label: '所属部门', field: 'departId' },
         { name: 'comId', label: '所属公司', field: 'comId' },
         { name: 'prodStyle', label: '款号', field: 'prodStyle' },
-        { name: 'prodCode', label: '产品编号', field: 'prodCode' },
-        { name: 'prodName', label: '产品名称', field: 'prodName' },
+        { name: 'styleName', label: '产品名称', field: 'styleName' },
         { name: 'prodFamily', label: '产品所属', field: 'prodFamily' },
-        { name: 'prodClass', label: '产品分类', field: 'prodClass' },
+        { name: 'prodClass', label: '产品类别', field: 'prodClass' },
+        { name: 'prodProp', label: '产品属性', field: 'prodProp' },
         { name: 'prodMat', label: '面料', field: 'prodMat' },
-        { name: 'prodSize', label: '尺寸', field: 'prodSize' },
-        { name: 'retailPrice', label: '零售价', field: 'retailPrice' }
+        { name: 'prodDesc', label: '产品描述', field: 'prodDesc' },
+        { name: 'status', label: '状态', field: 'status' }
       ]
     }
   },
   methods: {
-    save(){
+    save() {
       console.log(this.user)
     },
     resetForm() {
@@ -287,7 +257,7 @@ export default {
       // we do the server data fetch, based on pagination and filter received
       // (using Axios here, but can be anything; parameters vary based on backend implementation)
       this.$axios
-        .get('/api/getProdList')
+        .get('/api/getProdStyleList')
         .then(({ data }) => {
           // updating pagination to reflect in the UI
           this.serverPagination = pagination
