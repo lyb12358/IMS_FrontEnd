@@ -1,26 +1,5 @@
 <template>
   <q-page padding>
-    <div class="row justify-center">
-      <div>
-        <div class="q-mb-sm">
-          <q-btn size="sm"
-                 color="primary"
-                 @click="selectGoodService"
-                 label="Select 'Good service'" />
-          <q-btn v-if="selected"
-                 size="sm"
-                 color="red"
-                 @click="unselectNode"
-                 label="Unselect node" />
-        </div>
-        <q-tree :nodes="props"
-                default-expand-all
-                ref="tree"
-                :selected.sync="selected"
-                node-key="label" />
-
-      </div>
-    </div>
     <div>
       <q-btn icon="mdi-new-box"
              rounded
@@ -83,19 +62,22 @@
                         :options="selectOptions" />
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
-              <q-input v-model="product.name"
-                       class="no-margin"
-                       float-label="产品所属" />
+              <q-select v-model="select"
+                        float-label="产品属性"
+                        radio
+                        :options="selectOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="product.name"
-                       class="no-margin"
-                       float-label="产品类别" />
+              <q-select v-model="select"
+                        float-label="产品类别"
+                        radio
+                        :options="selectOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="product.name"
-                       class="no-margin"
-                       float-label="产品属性" />
+              <q-select v-model="select"
+                        float-label="产品所属"
+                        radio
+                        :options="selectOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-input v-model="product.name"
@@ -109,11 +91,6 @@
                         :options="selectOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="select"
-                       class="no-margin"
-                       float-label="产品描述" />
-            </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
               <q-toggle v-model="checked"
                         label="是否上架" />
             </div>
@@ -122,11 +99,11 @@
                           auto-expand
                           float-label="上传图片" />
             </div> -->
-            <div class="col-xs-12  col-sm-12 col-md-6">
+            <div class="col-xs-12  col-sm-12 col-md-12">
               <q-input v-model="area"
                        clearable
                        type="textarea"
-                       float-label="Textarea"
+                       float-label="产品描述"
                        :max-height="100" />
             </div>
           </div>
@@ -157,62 +134,11 @@ export default {
         label: 'Facebook',
         value: 'fb'
       }
-    ],
-    selected: null,
-    props: [
-      {
-        label: 'Satisfied customers',
-        children: [
-          {
-            label: 'Good food',
-            children: [
-              { label: 'Quality ingredients' },
-              { label: 'Good recipe' }
-            ]
-          },
-          {
-            label: 'Good service',
-            children: [
-              { label: 'Prompt attention' },
-              { label: 'Professional waiter' }
-            ]
-          },
-          {
-            label: 'Pleasant surroundings',
-            children: [
-              {
-                label: 'Happy atmosphere'
-              },
-              {
-                label: 'Good table presentation'
-              },
-              {
-                label: 'Pleasing decor'
-              }
-            ]
-          }
-        ]
-      }
     ]
     
   }),
   methods: {
-    selectGoodService() {
-      if (this.selected !== 'Good service') {
-        this.selected = 'Good service'
-      }
-    },
-    unselectNode() {
-      this.selected = null
-    }
-  },
-  computed: {
-    xx() {
-      if (null != this.selected) {
-        console.log(this.$refs.tree.getNodeByKey(this.selected).label)
-        return this.$refs.tree.getNodeByKey(this.selected)
-      }
-    }
+   
   }
 }
 </script>
