@@ -16,8 +16,9 @@
         <q-tree :nodes="props"
                 default-expand-all
                 ref="tree"
+                tick-strategy="leaf"
                 color="primary"
-                :selected.sync="selected"
+                :ticked.sync="selected"
                 node-key="label" />
 
       </div>
@@ -28,41 +29,9 @@
 <script>
 export default {
   data: () => ({
-    selected: null,
+    selected: [],
     props: [
       {
-        label: 'Satisfied customers',
-        children: [
-          {
-            label: 'Good food',
-            children: [
-              { label: 'Quality ingredients' },
-              { label: 'Good recipe' }
-            ]
-          },
-          {
-            label: 'Good service',
-            children: [
-              { label: 'Prompt attention' },
-              { label: 'Professional waiter' }
-            ]
-          },
-          {
-            label: 'Pleasant surroundings',
-            children: [
-              {
-                label: 'Happy atmosphere'
-              },
-              {
-                label: 'Good table presentation'
-              },
-              {
-                label: 'Pleasing decor'
-              }
-            ]
-          }
-        ]
-      },{
         label: 'Satisfied customers',
         children: [
           {
@@ -105,7 +74,8 @@ export default {
       }
     },
     unselectNode() {
-      this.selected = null
+      console.log(this.selected)
+      this.selected = []
     }
   },
   computed: {
