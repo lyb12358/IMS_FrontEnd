@@ -5,8 +5,7 @@ export default [
     component: () => import('layouts/default'),
     children: [
       { path: '', component: () => import('pages/index') },
-      { path: 'company', component: () => import('pages/organization/company') },
-      { path: 'department', component: () => import('pages/organization/department') },
+      { path: 'comManage', component: () => import('pages/organization/comManage') },
       { path: 'productCode', component: () => import('pages/product/productCode') },
       { path: 'productStyle', component: () => import('pages/product/productStyle') },
       { path: 'productCat', component: () => import('pages/product/productCat') },

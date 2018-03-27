@@ -87,14 +87,9 @@
               <q-item-main label="组织管理" />
             </template>
             <q-item link
-                    @click.native="$router.push('company')"
+                    @click.native="$router.push('comManage')"
                     class="q-ml-xl">
-              <q-item-main label="公司管理" />
-            </q-item>
-            <q-item link
-                    @click.native="excuse('都跟你说了是摆设，你点也没用~')"
-                    class="q-ml-xl">
-              <q-item-main label="部门管理" />
+              <q-item-main label="公司/部门管理" />
             </q-item>
           </q-collapsible>
           <q-collapsible>

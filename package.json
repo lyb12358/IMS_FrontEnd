@@ -16,7 +16,7 @@
     "vue-simple-markdown": "^1.0.6"
   },
   "devDependencies": {
-    "quasar-cli": "^0.15.12",
+    "quasar-cli": "^0.15.14",
     "text-loader": "0.0.1"
   },
   "engines": {
