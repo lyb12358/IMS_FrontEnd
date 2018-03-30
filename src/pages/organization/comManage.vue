@@ -6,19 +6,18 @@
           <q-btn size="sm"
                  color="primary"
                  @click="selectGoodService"
-                 label="Select 'Good service'" />
+                 label="选择'信息中心'" />
           <q-btn v-if="selected"
                  size="sm"
                  color="red"
                  @click="unselectNode"
-                 label="Unselect node" />
+                 label="取消选择" />
         </div>
         <q-tree :nodes="props"
                 default-expand-all
                 ref="tree"
-                tick-strategy="leaf"
                 color="primary"
-                :ticked.sync="selected"
+                :selected.sync="selected"
                 node-key="label" />
 
       </div>
@@ -30,47 +29,13 @@
 export default {
   data: () => ({
     selected: [],
-    props: [
-      {
-        label: 'Satisfied customers',
-        children: [
-          {
-            label: 'Good food',
-            children: [
-              { label: 'Quality ingredients' },
-              { label: 'Good recipe' }
-            ]
-          },
-          {
-            label: 'Good service',
-            children: [
-              { label: 'Prompt attention' },
-              { label: 'Professional waiter' }
-            ]
-          },
-          {
-            label: 'Pleasant surroundings',
-            children: [
-              {
-                label: 'Happy atmosphere'
-              },
-              {
-                label: 'Good table presentation'
-              },
-              {
-                label: 'Pleasing decor'
-              }
-            ]
-          }
-        ]
-      }
-    ]
+    props: []
     
   }),
   methods: {
     selectGoodService() {
-      if (this.selected !== 'Good service') {
-        this.selected = 'Good service'
+      if (this.selected !== '信息中心') {
+        this.selected = '信息中心'
       }
     },
     unselectNode() {
@@ -85,7 +50,17 @@ export default {
         return this.$refs.tree.getNodeByKey(this.selected)
       }
     }
-  }
+  },
+  mounted() {
+     this.$axios
+        .get('/api/getOrgList')
+        .then(({ data }) => {
+          console.log(data);
+          this.props= data;
+        })
+        .catch(error => {
+        })
+   }   
 }
 </script>
 
