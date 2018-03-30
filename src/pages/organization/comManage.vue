@@ -14,11 +14,10 @@
                  label="取消选择" />
         </div>
         <q-tree :nodes="props"
-                default-expand-all
                 ref="tree"
                 color="primary"
                 :selected.sync="selected"
-                node-key="label" />
+                node-key="id" />
 
       </div>
     </div>
@@ -28,7 +27,7 @@
 <script>
 export default {
   data: () => ({
-    selected: [],
+    selected: '',
     props: []
     
   }),
@@ -40,7 +39,7 @@ export default {
     },
     unselectNode() {
       console.log(this.selected)
-      this.selected = []
+      this.selected = ''
     }
   },
   computed: {
@@ -51,11 +50,10 @@ export default {
       }
     }
   },
-  mounted() {
+ created() {
      this.$axios
         .get('/api/getOrgList')
         .then(({ data }) => {
-          console.log(data);
           this.props= data;
         })
         .catch(error => {
