@@ -14,6 +14,7 @@
                  label="取消选择" />
         </div>
         <q-tree :nodes="props"
+                default-expand-all
                 ref="tree"
                 color="primary"
                 :selected.sync="selected"
@@ -29,7 +30,6 @@ export default {
   data: () => ({
     selected: '',
     props: []
-    
   }),
   methods: {
     selectGoodService() {
@@ -50,15 +50,15 @@ export default {
       }
     }
   },
- created() {
-     this.$axios
-        .get('/api/getOrgList')
-        .then(({ data }) => {
-          this.props= data;
-        })
-        .catch(error => {
-        })
-   }   
+  created() {
+    this.$axios
+      .get('/api/getOrgList')
+      .then(({ data }) => {
+        this.props.push(data[0])
+        this.$nextTick(() => { this.$refs.tree.expandAll() })
+      })
+      .catch(error => {})
+  }
 }
 </script>
 
