@@ -14,12 +14,14 @@
                  label="取消选择" />
         </div>
         <q-tree :nodes="props"
-                default-expand-all
-                ref="tree"
+                ref="orgTree"
                 color="primary"
                 :selected.sync="selected"
                 node-key="id" />
 
+      </div>
+      <div>
+        <p>{{xx}}</p>
       </div>
     </div>
   </q-page>
@@ -44,18 +46,20 @@ export default {
   },
   computed: {
     xx() {
-      if (null != this.selected) {
-        console.log(this.$refs.tree.getNodeByKey(this.selected).label)
-        return this.$refs.tree.getNodeByKey(this.selected)
+      if ('' != this.selected) {
+        console.log(this.$refs.orgTree.getNodeByKey(this.selected).label)
+        return this.$refs.orgTree.getNodeByKey(this.selected).id
       }
     }
   },
-  created() {
+  mounted() {
     this.$axios
       .get('/api/getOrgList')
       .then(({ data }) => {
         this.props.push(data[0])
-        this.$nextTick(() => { this.$refs.tree.expandAll() })
+        this.$nextTick(() => {
+          this.$refs.orgTree.expandAll()
+        })
       })
       .catch(error => {})
   }

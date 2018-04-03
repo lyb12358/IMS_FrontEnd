@@ -5,11 +5,13 @@
              rounded
              class="q-ma-xs"
              color="primary"
-             @click="opened=true">
+             @click="addOpened=true">
         <q-tooltip>新建</q-tooltip>
       </q-btn>
     </div>
-    <q-modal v-model="opened"
+    <q-modal v-model="addOpened"
+             no-esc-dismiss
+             no-backdrop-dismiss
              :content-css="{minWidth: '100vw', minHeight: '100vh'}">
       <q-modal-layout footer-class="no-shadow">
         <q-toolbar slot="header">
@@ -50,16 +52,19 @@
                        float-label="款名" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="select"
-                        float-label="公司"
-                        radio
-                        :options="selectOptions" />
-            </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="select"
-                        float-label="部门"
-                        radio
-                        :options="selectOptions" />
+              <q-input v-model="product.orgLabel"
+                       ref="orgInput"
+                       readonly=true
+                       class="no-margin"
+                       float-label="所属部门"
+                       :after="[
+                          {
+                            icon: 'mdi-plus',
+                            handler () {
+                              orgOpened=true
+                            }
+                          }
+                        ]" />
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
               <q-select v-model="select"
@@ -110,18 +115,35 @@
         </div>
       </q-modal-layout>
     </q-modal>
+    <q-modal v-model="orgOpened">
+      <q-tree :nodes="props"
+              ref="orgTree"
+              color="primary"
+              :selected.sync="selected"
+              node-key="id" />
+      <q-btn color="primary"
+             @click="selectOrg"
+             label="确定" />
+      <q-btn color="primary"
+             @click="orgOpened = false"
+             label="取消" />
+    </q-modal>
   </q-page>
 </template>
 
 <script>
 export default {
   data: () => ({
-    checked: 'true',
+    selected: '',
+    props: [],
+    checked: true,
     area: '',
-    multipleSelect: '',
     select: '',
-    opened: false,
+    addOpened: false,
+    orgOpened: false,
     product: {
+      orgLabel: '',
+      orgId: '',
       password: '',
       name: ''
     },
@@ -135,10 +157,28 @@ export default {
         value: 'fb'
       }
     ]
-    
   }),
   methods: {
-   
+    selectOrg() {
+      this.product.orgId = this.$refs.orgTree.getNodeByKey(this.selected).orgId
+      this.product.orgLabel = this.$refs.orgTree.getNodeByKey(
+        this.selected
+      ).label
+      this.orgOpened = false
+      this.$refs.orgInput.focus()
+      this.$refs.orgInput.blur()
+    }
+  },
+  mounted() {
+    this.$axios
+      .get('/api/getOrgList')
+      .then(({ data }) => {
+        this.props.push(data[0])
+        this.$nextTick(() => {
+          this.$refs.orgTree.expandAll()
+        })
+      })
+      .catch(error => {})
   }
 }
 </script>

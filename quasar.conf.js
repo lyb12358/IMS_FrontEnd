@@ -6,7 +6,8 @@ module.exports = function (ctx) {
       'i18n',
       'axios',
       'vue-echarts',
-      'vue-simply-markdown'
+      'vue-simply-markdown',
+      'vuelidate'
     ],
     css: [
       'app.styl'
