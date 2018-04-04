@@ -12,7 +12,7 @@
     <q-modal v-model="addOpened"
              no-esc-dismiss
              no-backdrop-dismiss
-             :content-css="{minWidth: '100vw', minHeight: '100vh'}">
+             :content-css="{minWidth: '80vw', minHeight: '80vh'}">
       <q-modal-layout footer-class="no-shadow">
         <q-toolbar slot="header">
           <q-btn flat
@@ -42,61 +42,56 @@
         <div class="layout-padding">
           <div class="row gutter-sm">
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="product.name"
+              <q-input v-model="product.prodStyle"
                        class="no-margin"
                        float-label="款号" />
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
-              <q-input v-model="product.name"
+              <q-input v-model="product.styleName"
                        class="no-margin"
                        float-label="款名" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="product.orgLabel"
-                       ref="orgInput"
+              <q-input v-model="product.departLabel"
+                       ref="departInput"
                        readonly=true
+                       @focus="departOpened=true"
                        class="no-margin"
-                       float-label="所属部门"
-                       :after="[
-                          {
-                            icon: 'mdi-plus',
-                            handler () {
-                              orgOpened=true
-                            }
-                          }
-                        ]" />
+                       float-label="所属部门" />
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
-              <q-select v-model="select"
+              <q-select v-model="product.prodProp"
                         float-label="产品属性"
                         radio
-                        :options="selectOptions" />
+                        :options="propOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="select"
-                        float-label="产品类别"
-                        radio
-                        :options="selectOptions" />
+              <q-input v-model="product.classLabel"
+                       ref="classInput"
+                       readonly=true
+                       @focus="openClassModal()"
+                       class="no-margin"
+                       float-label="产品类别" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="select"
+              <q-select v-model="product.prodFamily"
                         float-label="产品所属"
                         radio
-                        :options="selectOptions" />
+                        :options="familyOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="product.name"
+              <q-input v-model="product.prodMat"
                        class="no-margin"
                        float-label="产品材料" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="select"
+              <q-select v-model="product.prodLevel"
                         float-label="产品档次"
                         radio
-                        :options="selectOptions" />
+                        :options="levelOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-toggle v-model="checked"
+              <q-toggle v-model="product.status"
                         label="是否上架" />
             </div>
             <!-- <div class="col-xs-12  col-sm-6 col-md-3">
@@ -105,7 +100,7 @@
                           float-label="上传图片" />
             </div> -->
             <div class="col-xs-12  col-sm-12 col-md-12">
-              <q-input v-model="area"
+              <q-input v-model="product.prodDesc"
                        clearable
                        type="textarea"
                        float-label="产品描述"
@@ -115,17 +110,30 @@
         </div>
       </q-modal-layout>
     </q-modal>
-    <q-modal v-model="orgOpened">
-      <q-tree :nodes="props"
-              ref="orgTree"
+    <q-modal v-model="departOpened">
+      <q-tree :nodes="departProps"
+              ref="departTree"
               color="primary"
-              :selected.sync="selected"
+              :selected.sync="departSelected"
               node-key="id" />
       <q-btn color="primary"
-             @click="selectOrg"
+             @click="selectdepart"
              label="确定" />
       <q-btn color="primary"
-             @click="orgOpened = false"
+             @click="departOpened = false"
+             label="取消" />
+    </q-modal>
+    <q-modal v-model="classOpened">
+      <q-tree :nodes="classProps"
+              ref="classTree"
+              color="primary"
+              :selected.sync="classSelected"
+              node-key="id" />
+      <q-btn color="primary"
+             @click="selectclass"
+             label="确定" />
+      <q-btn color="primary"
+             @click="classOpened = false"
              label="取消" />
     </q-modal>
   </q-page>
@@ -134,48 +142,87 @@
 <script>
 export default {
   data: () => ({
-    selected: '',
-    props: [],
-    checked: true,
-    area: '',
-    select: '',
+    departSelected: '',
+    departProps: [],
+    classSelected: '',
+    classProps: [],
     addOpened: false,
-    orgOpened: false,
+    departOpened: false,
+    classOpened: false,
     product: {
-      orgLabel: '',
-      orgId: '',
-      password: '',
-      name: ''
+      departLabel: '',
+      departId: '',
+      classLabel: '',
+      prodClass: '',
+      styleName: '',
+      prodStyle: '',
+      prodFamily: '',
+      prodProp: '',
+      prodClass: '',
+      prodDesc: '',
+      status: true
     },
-    selectOptions: [
-      {
-        label: 'Google',
-        value: 'goog'
-      },
-      {
-        label: 'Facebook',
-        value: 'fb'
-      }
-    ]
+    familyOptions: [],
+    propOptions: [],
+    levelOptions: []
   }),
   methods: {
-    selectOrg() {
-      this.product.orgId = this.$refs.orgTree.getNodeByKey(this.selected).orgId
-      this.product.orgLabel = this.$refs.orgTree.getNodeByKey(
-        this.selected
+    warning(x) {
+      this.$q.notify({
+        message: x,
+        color: 'warning',
+        position: 'bottom-right',
+        avatar: 'statics/logo/xiuxian.jpg'
+      })
+    },
+    selectdepart() {
+      this.product.departId = this.$refs.departTree.getNodeByKey(
+        this.departSelected
+      ).id
+      this.product.departLabel = this.$refs.departTree.getNodeByKey(
+        this.departSelected
       ).label
-      this.orgOpened = false
-      this.$refs.orgInput.focus()
-      this.$refs.orgInput.blur()
+      this.departOpened = false
+      this.$refs.departInput.blur()
+    },
+    openClassModal() {
+      if (this.product.prodFamily != '') {
+        this.$axios
+          .get('/api/getProdClassList', {
+            params: {
+              familyId: this.product.prodFamily
+            }
+          })
+          .then(({ data }) => {
+            this.classProps.push(data[0])
+            this.$nextTick(() => {
+              this.classOpened = true
+              this.$refs.classTree.expandAll()
+            })
+          })
+          .catch(error => {})
+      } else {
+        warning('请先选择产品所属')
+      }
+    },
+    selectClass() {
+      this.product.prodClass = this.$refs.classTree.getNodeByKey(
+        this.classSelected
+      ).id
+      this.product.classLabel = this.$refs.classTree.getNodeByKey(
+        this.classSelected
+      ).label
+      this.classOpened = false
+      this.$refs.classInput.blur()
     }
   },
   mounted() {
     this.$axios
       .get('/api/getOrgList')
       .then(({ data }) => {
-        this.props.push(data[0])
+        this.departProps.push(data[0])
         this.$nextTick(() => {
-          this.$refs.orgTree.expandAll()
+          this.$refs.departTree.expandAll()
         })
       })
       .catch(error => {})

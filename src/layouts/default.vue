@@ -163,7 +163,6 @@ export default {
       this.$q.notify({
         message: x,
         color: 'tertiary',
-        icon: 'mdi-emoticon-cool',
         position: 'bottom-right',
         avatar: 'statics/logo/xiuxian.jpg'
       })
