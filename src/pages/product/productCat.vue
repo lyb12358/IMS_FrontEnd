@@ -54,7 +54,7 @@
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-input v-model="product.departLabel"
                        ref="departInput"
-                       readonly=true
+                       readonly
                        @focus="departOpened=true"
                        class="no-margin"
                        float-label="所属部门" />
@@ -68,7 +68,7 @@
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-input v-model="product.classLabel"
                        ref="classInput"
-                       readonly=true
+                       readonly
                        @focus="openClassModal()"
                        class="no-margin"
                        float-label="产品类别" />
@@ -117,7 +117,7 @@
               :selected.sync="departSelected"
               node-key="id" />
       <q-btn color="primary"
-             @click="selectdepart"
+             @click="selectDepart"
              label="确定" />
       <q-btn color="primary"
              @click="departOpened = false"
@@ -130,7 +130,7 @@
               :selected.sync="classSelected"
               node-key="id" />
       <q-btn color="primary"
-             @click="selectclass"
+             @click="selectClass"
              label="确定" />
       <q-btn color="primary"
              @click="classOpened = false"
@@ -158,7 +158,6 @@ export default {
       prodStyle: '',
       prodFamily: '',
       prodProp: '',
-      prodClass: '',
       prodDesc: '',
       status: true
     },
@@ -175,7 +174,7 @@ export default {
         avatar: 'statics/logo/xiuxian.jpg'
       })
     },
-    selectdepart() {
+    selectDepart() {
       this.product.departId = this.$refs.departTree.getNodeByKey(
         this.departSelected
       ).id
@@ -194,15 +193,12 @@ export default {
             }
           })
           .then(({ data }) => {
-            this.classProps.push(data[0])
-            this.$nextTick(() => {
-              this.classOpened = true
-              this.$refs.classTree.expandAll()
-            })
+            this.classProps = data
+            this.classOpened = true
           })
           .catch(error => {})
       } else {
-        warning('请先选择产品所属')
+        this.warning('请先选择产品所属')
       }
     },
     selectClass() {
@@ -224,6 +220,24 @@ export default {
         this.$nextTick(() => {
           this.$refs.departTree.expandAll()
         })
+      })
+      .catch(error => {})
+    this.$axios
+      .get('/api/getProdFamilyList')
+      .then(({ data }) => {
+        this.familyOptions = data
+      })
+      .catch(error => {})
+    this.$axios
+      .get('/api/getProdPropList')
+      .then(({ data }) => {
+        this.propOptions = data
+      })
+      .catch(error => {})
+    this.$axios
+      .get('/api/getProdLevelList')
+      .then(({ data }) => {
+        this.levelOptions = data
       })
       .catch(error => {})
   }
