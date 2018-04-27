@@ -319,8 +319,5 @@ export default {
 </script>
 
 <style lang="stylus">
-.q-table th
-  font-size 13px
-.q-table tbody td
-  font-size 15px
+
 </style>
