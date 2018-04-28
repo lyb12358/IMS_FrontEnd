@@ -376,11 +376,11 @@ export default {
     printSth() {
       window.print()
     },
-    warning(x) {
+    notify(type, message) {
       this.$q.notify({
-        message: x,
-        color: 'warning',
-        position: 'bottom-right',
+        message: message,
+        type: type,
+        position: 'bottom-right'
       })
     },
     //产品各属性的方法
@@ -408,7 +408,7 @@ export default {
           })
           .catch(error => {})
       } else {
-        this.warning('请先选择产品所属')
+        this.notify('warning','请先选择产品所属')
       }
     },
     selectClass() {

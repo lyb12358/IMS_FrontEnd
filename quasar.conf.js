@@ -14,7 +14,7 @@ module.exports = function (ctx) {
     ],
     extras: [
       ctx.theme.mat ? 'roboto-font' : null,
-      //'material-icons'
+      'material-icons',
       // 'ionicons',
       // 'fontawesome',
       //
@@ -96,6 +96,7 @@ module.exports = function (ctx) {
         'QChip',
         'QCheckbox',
         'QTree',
+        'QDialog',
         'QModal',
         'QModalLayout',
         'QSearch',
@@ -109,7 +110,7 @@ module.exports = function (ctx) {
         'Notify'
       ],
       // i18n: 'zh-hans',
-      iconSet: 'mdi'
+      iconSet: 'material-icons'
     },
     animations: 'all',
     // animations: [

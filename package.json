@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "axios": "^0.17.1",
-    "vue-echarts": "^3.0.5",
+    "vue-echarts": "^3.0.7",
     "vue-i18n": "^7.6.0",
-    "vue-simple-markdown": "^1.0.6",
+    "vue-simple-markdown": "^1.0.7",
     "vuelidate": "^0.6.2"
   },
   "devDependencies": {
