@@ -11,9 +11,7 @@
     </div>
     <q-dialog v-model="imageUploadModel"
               prevent-close>
-      <!-- This or use "title" prop on <q-dialog> -->
       <span slot="title">上传产品图片</span>
-      <!-- This or use "message" prop on <q-dialog> -->
       <span slot="message">点击"+"，选择清晰度较高的图片，将作为本产品主要图片展示</span>
       <div slot="body">
         <q-uploader ref="imageUpload"
@@ -56,7 +54,7 @@ export default {
     addImageFile(files) {
       if (files[0].size > 5 * 1024 * 1024) {
         this.$refs.imageUpload.reset()
-        this.notify('warning','图片不能大于5m')
+        this.notify('warning', '图片不能大于5MB')
       }
     },
     imageUpload() {
@@ -69,10 +67,13 @@ export default {
     },
     // when image has just bean uploaded
     imageUploaded(file, xhr) {
-      let response = JSON.parse(xhr.response)
+      this.notify('positive', '上传成功')
     },
     // when it has encountered error while uploading
-    imageUploadedFail(file, xhr) {}
+    imageUploadedFail(file, xhr) {
+      let response = JSON.parse(xhr.response)
+      this.notify('negative', response.info)
+    }
   }
 }
 </script>

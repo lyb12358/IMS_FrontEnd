@@ -128,6 +128,12 @@
                    @click="showExpand(props.row.styleName )">
               <q-tooltip>款式信息</q-tooltip>
             </q-btn>
+            <q-btn icon="mdi-image-plus"
+                   rounded
+                   color="secondary"
+                   @click="openImageUpload(props.row.id,props.row.prodStyle,props.row.styleName )">
+              <q-tooltip>上传产品图片</q-tooltip>
+            </q-btn>
             <q-btn icon="mdi-image"
                    rounded
                    color="tertiary"
@@ -269,6 +275,7 @@
         </div>
       </q-modal-layout>
     </q-modal>
+    <!-- select department -->
     <q-modal v-model="departOpened">
       <q-tree :nodes="departProps"
               ref="departTree"
@@ -282,6 +289,7 @@
              @click="departOpened = false"
              label="取消" />
     </q-modal>
+    <!-- select prodClass -->
     <q-modal v-model="classOpened">
       <q-tree :nodes="classProps"
               ref="classTree"
@@ -295,6 +303,36 @@
              @click="classOpened = false"
              label="取消" />
     </q-modal>
+    <!-- upload image -->
+    <q-dialog v-model="imageUploadDialog"
+              prevent-close>
+      <span slot="title">上传产品图片</span>
+      <span slot="message">点击"+"，选择清晰度较高的图片，将作为本产品主要图片展示</span>
+      <div slot="body">
+        <q-uploader ref="imageUpload"
+                    :url="imageUploadUrl"
+                    :additionalFields="[
+                      {'name':'id','value':this.expandId},
+                      {'name':'prodStyle','value':this.expandStyle},
+                      {'name':'styleName','value':this.expandName}]"
+                    clearable
+                    auto-expand
+                    hide-upload-button
+                    float-label="上传图片"
+                    @uploaded="imageUploaded"
+                    @fail="imageUploadedFail"
+                    @add="addImageFile" />
+      </div>
+      <template slot="buttons"
+                slot-scope="props">
+        <q-btn color="primary"
+               label="上传"
+               @click="imageUpload" />
+        <q-btn color="primary"
+               label="取消"
+               @click="imageUploadCancel" />
+      </template>
+    </q-dialog>
   </q-page>
 
 </template>
@@ -336,6 +374,7 @@ export default {
         { name: 'prodDesc', label: '产品描述', field: 'prodDesc' },
         { name: 'status', label: '状态', field: 'status' }
       ],
+      //modal
       departSelected: '',
       departProps: [],
       classSelected: '',
@@ -357,13 +396,16 @@ export default {
       },
       familyOptions: [],
       propOptions: [],
-      levelOptions: []
+      levelOptions: [],
+      //upload image
+      expandId: 0,
+      expandStyle: '',
+      expandName: '',
+      imageUploadDialog: false,
+      imageUploadUrl: 'api/pic/upload'
     }
   },
   methods: {
-    save() {
-      console.log(this.user)
-    },
     resetForm() {
       document.getElementById('myForm').reset()
     },
@@ -383,7 +425,7 @@ export default {
         position: 'bottom-right'
       })
     },
-    //产品各属性的方法
+    //产品添加modal
     selectDepart() {
       this.product.departId = this.$refs.departTree.getNodeByKey(
         this.departSelected
@@ -408,7 +450,7 @@ export default {
           })
           .catch(error => {})
       } else {
-        this.notify('warning','请先选择产品所属')
+        this.notify('warning', '请先选择产品所属')
       }
     },
     selectClass() {
@@ -420,6 +462,37 @@ export default {
       ).label
       this.classOpened = false
       this.$refs.classInput.blur()
+    },
+    //upload image
+    openImageUpload(id, prodStyle, styleName) {
+      this.expandId = id
+      this.expandStyle = prodStyle
+      this.expandName = styleName
+      this.imageUploadDialog = true
+    },
+    addImageFile(files) {
+      if (files[0].size > 5 * 1024 * 1024) {
+        this.$refs.imageUpload.reset()
+        this.notify('warning', '图片不能大于5MB')
+      }
+    },
+    imageUpload() {
+      this.$refs.imageUpload.upload()
+    },
+    imageUploadCancel() {
+      this.$refs.imageUpload.reset()
+      this.imageUploadDialog = false
+    },
+    // when image has just bean uploaded
+    imageUploaded(file, xhr) {
+      this.notify('positive', '上传成功')
+      this.$refs.imageUpload.reset()
+      this.imageUploadDialog = false
+    },
+    // when it has encountered error while uploading
+    imageUploadedFail(file, xhr) {
+      let response = JSON.parse(xhr.response)
+      this.notify('negative', response.info)
     },
     //表格数据请求
     request({ pagination }) {
