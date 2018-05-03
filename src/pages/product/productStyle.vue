@@ -90,8 +90,12 @@
       <template slot="body"
                 slot-scope="props">
         <q-tr :props="props">
-          <q-td key="id"
-                :props="props">{{ props.row.id }}</q-td>
+          <q-td key="thumbnail"
+                :props="props">
+            <img :src="thumbnailCheck(props.row.id,props.row.thumbnail)"
+                 style="height: 80px; width: 140px;"></q-td>
+          <!-- <q-td key="id"
+                :props="props">{{ props.row.id }}</q-td> -->
           <q-td key="departId"
                 :props="props">{{ props.row.departId }}</q-td>
           <q-td key="comId"
@@ -116,6 +120,8 @@
                 :props="props">{{ props.row.prodMat }}</q-td>
           <q-td key="prodDesc"
                 :props="props">{{ props.row.prodDesc }}</q-td>
+          <q-td key="image"
+                :props="props">{{ props.row.image }}</q-td>
           <q-td key="status"
                 :props="props">{{ props.row.status }}</q-td>
         </q-tr>
@@ -134,12 +140,15 @@
                    @click="openImageUpload(props.row.id,props.row.prodStyle,props.row.styleName )">
               <q-tooltip>上传产品图片</q-tooltip>
             </q-btn>
-            <q-btn icon="mdi-image"
-                   rounded
-                   color="tertiary"
-                   @click="showExpand(props.row.styleName )">
-              <q-tooltip>查看产品图片</q-tooltip>
-            </q-btn>
+            <a :href="'api/image/'+props.row.id+'/'+props.row.image"
+               :download="props.row.styleName">
+              <q-btn icon="mdi-image-area-close"
+                     v-if="props.row.thumbnail!=null"
+                     rounded
+                     color="tertiary">
+                <q-tooltip>下载原图</q-tooltip>
+              </q-btn>
+            </a>
             <q-btn icon="mdi-delete"
                    rounded
                    color="negative"
@@ -195,12 +204,12 @@
             <div style="margin:0 2rem">
               <q-btn color="primary"
                      v-close-overlay
-                     label="Close" />
+                     label="确定" />
             </div>
             <div style="margin:0 2rem">
               <q-btn color="primary"
                      v-close-overlay
-                     label="Close" />
+                     label="取消" />
             </div>
           </div>
         </q-toolbar>
@@ -259,11 +268,6 @@
               <q-toggle v-model="product.status"
                         label="是否上架" />
             </div>
-            <!-- <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-uploader :url="url"
-                          auto-expand
-                          float-label="上传图片" />
-            </div> -->
             <div class="col-xs-12  col-sm-12 col-md-12">
               <q-input v-model="product.prodDesc"
                        clearable
@@ -348,6 +352,7 @@ export default {
       },
       loading: false,
       visibleColumns: [
+        'thumbnail',
         'prodStyle',
         'prodFamily',
         'prodClass',
@@ -363,16 +368,46 @@ export default {
       },
       serverData: [],
       columns: [
-        { name: 'id', label: 'id', field: 'id' },
-        { name: 'departId', label: '所属部门', field: 'departId' },
-        { name: 'comId', label: '所属公司', field: 'comId' },
-        { name: 'prodStyle', label: '款号', field: 'prodStyle' },
-        { name: 'styleName', label: '产品名称', field: 'styleName' },
-        { name: 'prodFamily', label: '产品所属', field: 'prodFamily' },
-        { name: 'prodClass', label: '产品类别', field: 'prodClass' },
-        { name: 'prodProp', label: '产品属性', field: 'prodProp' },
-        { name: 'prodDesc', label: '产品描述', field: 'prodDesc' },
-        { name: 'status', label: '状态', field: 'status' }
+        { name: 'thumbnail', align: 'left', label: '简图', field: 'thumbnail' },
+        {
+          name: 'departId',
+          align: 'left',
+          label: '所属部门',
+          field: 'departId'
+        },
+        { name: 'comId', align: 'left', label: '所属公司', field: 'comId' },
+        { name: 'prodStyle', align: 'left', label: '款号', field: 'prodStyle' },
+        {
+          name: 'styleName',
+          align: 'left',
+          label: '产品名称',
+          field: 'styleName'
+        },
+        {
+          name: 'prodFamily',
+          align: 'left',
+          label: '产品所属',
+          field: 'prodFamily'
+        },
+        {
+          name: 'prodClass',
+          align: 'left',
+          label: '产品类别',
+          field: 'prodClass'
+        },
+        {
+          name: 'prodProp',
+          align: 'left',
+          label: '产品属性',
+          field: 'prodProp'
+        },
+        {
+          name: 'prodDesc',
+          align: 'left',
+          label: '产品描述',
+          field: 'prodDesc'
+        },
+        { name: 'status', align: 'left', label: '状态', field: 'status' }
       ],
       //modal
       departSelected: '',
@@ -403,12 +438,12 @@ export default {
       expandName: '',
       imageUploadDialog: false,
       imageUploadUrl: 'api/pic/upload'
+      //check thumbnail
+      // thumbnailPopover: false,
+      // thumbnailLocation: ''
     }
   },
   methods: {
-    resetForm() {
-      document.getElementById('myForm').reset()
-    },
     showExpand(x) {
       console.log(x)
     },
@@ -493,6 +528,14 @@ export default {
     imageUploadedFail(file, xhr) {
       let response = JSON.parse(xhr.response)
       this.notify('negative', response.info)
+    },
+    //check thumbnail
+    thumbnailCheck(id, thumbnail) {
+      if (!(thumbnail === null)) {
+        return 'api/image/' + id + '/' + thumbnail
+      } else {
+        return 'statics/sad.svg'
+      }
     },
     //表格数据请求
     request({ pagination }) {
