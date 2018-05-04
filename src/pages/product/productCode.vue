@@ -9,8 +9,8 @@
              :pagination.sync="serverPagination"
              :loading="loading"
              color="secondary"
-             @request="request"
-             table>
+             :rows-per-page-options="[5,10,15,20]"
+             @request="request">
       <div slot="top-left"
            slot-scope="props"
            class="row print-hide">
@@ -184,13 +184,13 @@
     </q-table>
     <q-modal v-model="newOpened"
              no-backdrop-dismiss
-             no-esc-dismiss
-             >
+             no-esc-dismiss>
       <div class=" row justify-center items-center ">
         <q-card class="no-shadow">
           <q-card-title>Login</q-card-title>
           <q-card-main>
-            <form id='myForm' class='gutter-sm'>
+            <form id='myForm'
+                  class='gutter-sm'>
               <q-field>
                 <q-input v-model="user.name"
                          float-label="E-Mail"
@@ -205,7 +205,8 @@
           </q-card-main>
           <q-card-separator/>
           <q-card-actions>
-            <q-btn rounded @click="resetForm">重置</q-btn>
+            <q-btn rounded
+                   @click="resetForm">重置</q-btn>
             <q-btn @click="save">保存</q-btn>
             <q-btn @click="newOpened = false">关闭</q-btn>
           </q-card-actions>
@@ -213,7 +214,7 @@
       </div>
     </q-modal>
   </q-page>
-  
+
 </template>
 
 <script>
@@ -246,6 +247,7 @@ export default {
       separator: 'horizontal',
       serverPagination: {
         page: 1,
+        rowsPerPage: 5,
         rowsNumber: 20 // specifying this determines pagination is server-side
       },
       serverData: [],
@@ -265,7 +267,7 @@ export default {
     }
   },
   methods: {
-    save(){
+    save() {
       console.log(this.user)
     },
     resetForm() {
@@ -287,13 +289,18 @@ export default {
       // we do the server data fetch, based on pagination and filter received
       // (using Axios here, but can be anything; parameters vary based on backend implementation)
       this.$axios
-        .get('/api/getProdList')
+        .get('/api/getProdList', {
+          params: {
+            page: pagination.page,
+            row: pagination.rowsPerPage
+          }
+        })
         .then(({ data }) => {
           // updating pagination to reflect in the UI
           this.serverPagination = pagination
 
           // we also set (or update) rowsNumber
-          this.serverPagination.rowsNumber = 20
+          this.serverPagination.rowsNumber = data.total
 
           // then we update the rows with the fetched ones
           this.serverData = data.rows
@@ -319,5 +326,4 @@ export default {
 </script>
 
 <style lang="stylus">
-
 </style>

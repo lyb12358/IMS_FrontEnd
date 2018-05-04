@@ -10,8 +10,8 @@
              :pagination.sync="serverPagination"
              :loading="loading"
              color="secondary"
-             @request="request"
-             table>
+             :rows-per-page-options="[5,10,15,20]"
+             @request="request">
       <div slot="top-left"
            slot-scope="props"
            class="row print-hide">
@@ -171,7 +171,7 @@
                @click="props.prevPage" />
         <div class="q-mr-sm"
              style="font-size: small">
-          页 {{ props.pagination.page }} / {{ props.pagesNumber }}
+           {{ props.pagination.page }} / {{ props.pagesNumber }}
         </div>
         <q-btn round
                dense
@@ -364,7 +364,8 @@ export default {
       separator: 'horizontal',
       serverPagination: {
         page: 1,
-        rowsNumber: 20 // specifying this determines pagination is server-side
+        rowsPerPage: 5,
+        rowsNumber: 5 // specifying this determines pagination is server-side
       },
       serverData: [],
       columns: [
@@ -545,13 +546,18 @@ export default {
       // we do the server data fetch, based on pagination and filter received
       // (using Axios here, but can be anything; parameters vary based on backend implementation)
       this.$axios
-        .get('/api/getProdStyleList')
+        .get('/api/getProdStyleList', {
+          params: {
+            page: pagination.page,
+            row: pagination.rowsPerPage
+          }
+        })
         .then(({ data }) => {
           // updating pagination to reflect in the UI
           this.serverPagination = pagination
 
           // we also set (or update) rowsNumber
-          this.serverPagination.rowsNumber = 20
+          this.serverPagination.rowsNumber = data.total
 
           // then we update the rows with the fetched ones
           this.serverData = data.rows

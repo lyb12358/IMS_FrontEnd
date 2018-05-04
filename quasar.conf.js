@@ -109,7 +109,7 @@ module.exports = function (ctx) {
       plugins: [
         'Notify'
       ],
-      // i18n: 'zh-hans',
+      i18n: 'zh-hans',
       iconSet: 'material-icons'
     },
     animations: 'all',
