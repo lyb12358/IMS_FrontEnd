@@ -203,8 +203,8 @@
           <div class="col-12 row justify-center ">
             <div style="margin:0 2rem">
               <q-btn color="primary"
-                     label="确定" 
-                     @click="addProdStyle"/>
+                     label="确定"
+                     @click="addProdStyle" />
             </div>
             <div style="margin:0 2rem">
               <q-btn color="primary"
@@ -419,7 +419,7 @@ export default {
       departOpened: false,
       classOpened: false,
       product: {
-        id:0,
+        id: 0,
         departLabel: '',
         departId: '',
         classLabel: '',
