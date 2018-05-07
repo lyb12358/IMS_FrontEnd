@@ -171,7 +171,7 @@
                @click="props.prevPage" />
         <div class="q-mr-sm"
              style="font-size: small">
-           {{ props.pagination.page }} / {{ props.pagesNumber }}
+          {{ props.pagination.page }} / {{ props.pagesNumber }}
         </div>
         <q-btn round
                dense
@@ -203,8 +203,8 @@
           <div class="col-12 row justify-center ">
             <div style="margin:0 2rem">
               <q-btn color="primary"
-                     v-close-overlay
-                     label="确定" />
+                     label="确定" 
+                     @click="addProdStyle"/>
             </div>
             <div style="margin:0 2rem">
               <q-btn color="primary"
@@ -419,6 +419,7 @@ export default {
       departOpened: false,
       classOpened: false,
       product: {
+        id:0,
         departLabel: '',
         departId: '',
         classLabel: '',
@@ -538,13 +539,17 @@ export default {
         return 'statics/sad.svg'
       }
     },
+    addProdStyle() {
+      this.$axios
+        .put('/api/prodStyles', this.product)
+        .then(({ data }) => {
+          console.log(data.success)
+        })
+        .catch(error => {})
+    },
     //表格数据请求
     request({ pagination }) {
-      // we set QTable to "loading" state
       this.loading = true
-
-      // we do the server data fetch, based on pagination and filter received
-      // (using Axios here, but can be anything; parameters vary based on backend implementation)
       this.$axios
         .get('/api/getProdStyleList', {
           params: {
@@ -553,22 +558,12 @@ export default {
           }
         })
         .then(({ data }) => {
-          // updating pagination to reflect in the UI
           this.serverPagination = pagination
-
-          // we also set (or update) rowsNumber
           this.serverPagination.rowsNumber = data.total
-
-          // then we update the rows with the fetched ones
           this.serverData = data.rows
-
-          // finally we tell QTable to exit the "loading" state
           this.loading = false
         })
         .catch(error => {
-          // there's an error... do SOMETHING
-
-          // we tell QTable to exit the "loading" state
           this.loading = false
         })
     }
