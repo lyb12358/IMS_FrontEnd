@@ -208,6 +208,11 @@
             </div>
             <div style="margin:0 2rem">
               <q-btn color="primary"
+                     label="重置"
+                     @click="resetModal" />
+            </div>
+            <div style="margin:0 2rem">
+              <q-btn color="primary"
                      v-close-overlay
                      label="取消" />
             </div>
@@ -424,6 +429,7 @@ export default {
         departId: '',
         classLabel: '',
         prodClass: '',
+        prodMat: '',
         styleName: '',
         prodStyle: '',
         prodFamily: '',
@@ -546,6 +552,9 @@ export default {
           console.log(data.success)
         })
         .catch(error => {})
+    },
+    resetModal() {
+      Object.assign(this.product, this.$options.data.call(this).product)
     },
     //表格数据请求
     request({ pagination }) {
