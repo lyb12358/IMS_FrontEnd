@@ -283,41 +283,26 @@ export default {
       window.print()
     },
     request({ pagination }) {
-      // we set QTable to "loading" state
       this.loading = true
-
-      // we do the server data fetch, based on pagination and filter received
-      // (using Axios here, but can be anything; parameters vary based on backend implementation)
       this.$axios
-        .get('/api/getProdList', {
+        .get('/api/prods', {
           params: {
             page: pagination.page,
             row: pagination.rowsPerPage
           }
         })
         .then(({ data }) => {
-          // updating pagination to reflect in the UI
           this.serverPagination = pagination
-
-          // we also set (or update) rowsNumber
           this.serverPagination.rowsNumber = data.total
-
-          // then we update the rows with the fetched ones
           this.serverData = data.rows
-
-          // finally we tell QTable to exit the "loading" state
           this.loading = false
         })
         .catch(error => {
-          // there's an error... do SOMETHING
-
-          // we tell QTable to exit the "loading" state
           this.loading = false
         })
     }
   },
   mounted() {
-    // once mounted, we need to trigger the initial server data fetch
     this.request({
       pagination: this.serverPagination
     })

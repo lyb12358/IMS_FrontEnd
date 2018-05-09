@@ -446,9 +446,6 @@ export default {
       expandName: '',
       imageUploadDialog: false,
       imageUploadUrl: 'api/pic/upload'
-      //check thumbnail
-      // thumbnailPopover: false,
-      // thumbnailLocation: ''
     }
   },
   methods: {
@@ -482,7 +479,7 @@ export default {
     openClassModal() {
       if (this.product.prodFamily != '') {
         this.$axios
-          .get('/api/getProdClassList', {
+          .get('/api/prodClasses', {
             params: {
               familyId: this.product.prodFamily
             }
@@ -547,7 +544,7 @@ export default {
     },
     addProdStyle() {
       this.$axios
-        .put('/api/prodStyles', this.product)
+        .post('/api/prodStyles', this.product)
         .then(({ data }) => {
           console.log(data.success)
         })
@@ -560,7 +557,7 @@ export default {
     request({ pagination }) {
       this.loading = true
       this.$axios
-        .get('/api/getProdStyleList', {
+        .get('/api/prodStyles', {
           params: {
             page: pagination.page,
             row: pagination.rowsPerPage
@@ -584,7 +581,7 @@ export default {
     })
     //产品几个参数的请求
     this.$axios
-      .get('/api/getOrgList')
+      .get('/api/orgs')
       .then(({ data }) => {
         this.departProps.push(data[0])
         this.$nextTick(() => {
@@ -593,19 +590,19 @@ export default {
       })
       .catch(error => {})
     this.$axios
-      .get('/api/getProdFamilyList')
+      .get('/api/prodFamilys')
       .then(({ data }) => {
         this.familyOptions = data
       })
       .catch(error => {})
     this.$axios
-      .get('/api/getProdPropList')
+      .get('/api/prodProps')
       .then(({ data }) => {
         this.propOptions = data
       })
       .catch(error => {})
     this.$axios
-      .get('/api/getProdLevelList')
+      .get('/api/prodLevels')
       .then(({ data }) => {
         this.levelOptions = data
       })
