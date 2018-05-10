@@ -245,18 +245,18 @@
                         :options="propOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="product.classLabel"
-                       ref="classInput"
-                       readonly
-                       @focus="openClassModal()"
-                       class="no-margin"
-                       float-label="产品类别" />
-            </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="product.prodFamily"
                         float-label="产品所属"
                         radio
                         :options="familyOptions" />
+            </div>
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-input v-model="product.classLabel"
+                       ref="classInput"
+                       readonly
+                       @focus="openClassDialog()"
+                       class="no-margin"
+                       float-label="产品类别" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-input v-model="product.prodMat"
@@ -448,6 +448,12 @@ export default {
       imageUploadUrl: 'api/pic/upload'
     }
   },
+  watch:{
+    'product.prodFamily':function(){
+      this.product.prodClass=''
+      this.product.classLabel=''
+    }
+  },
   methods: {
     showExpand(x) {
       console.log(x)
@@ -476,7 +482,7 @@ export default {
       this.departOpened = false
       this.$refs.departInput.blur()
     },
-    openClassModal() {
+    openClassDialog() {
       if (this.product.prodFamily != '') {
         this.$axios
           .get('/api/prodClasses', {
@@ -546,7 +552,13 @@ export default {
       this.$axios
         .post('/api/prodStyles', this.product)
         .then(({ data }) => {
-          console.log(data.success)
+          if (data.result === 'success') {
+            this.addOpened = false
+            Object.assign(this.product, this.$options.data.call(this).product)
+            this.notify('positive', '产品款式添加成功')
+          } else {
+            this.notify('negative', result.info)
+          }
         })
         .catch(error => {})
     },
