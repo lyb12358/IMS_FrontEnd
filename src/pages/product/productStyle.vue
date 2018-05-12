@@ -97,7 +97,7 @@
           <!-- <q-td key="id"
                 :props="props">{{ props.row.id }}</q-td> -->
           <q-td key="departId"
-                :props="props">{{ props.row.departId }}</q-td>
+                :props="props">{{ props.row.departLabel}}</q-td>
           <q-td key="comId"
                 :props="props">{{ props.row.comId }}</q-td>
           <q-td key="prodStyle"
@@ -111,11 +111,11 @@
           <q-td key="styleName"
                 :props="props">{{ props.row.styleName }}</q-td>
           <q-td key="prodFamily"
-                :props="props">{{ props.row.prodFamily }}</q-td>
+                :props="props">{{ props.row.familyLabel }}</q-td>
           <q-td key="prodClass"
-                :props="props">{{ props.row.prodClass }}</q-td>
+                :props="props">{{ props.row.classLabel }}</q-td>
           <q-td key="prodProp"
-                :props="props">{{ props.row.prodProp }}</q-td>
+                :props="props">{{ props.row.propLabel }}</q-td>
           <q-td key="prodMat"
                 :props="props">{{ props.row.prodMat }}</q-td>
           <q-td key="prodDesc"
@@ -361,10 +361,9 @@ export default {
         'prodStyle',
         'prodFamily',
         'prodClass',
-        'prodCode',
+        'prodLevel',
         'styleName',
-        'prodSize',
-        'status'
+        'prodProp'
       ],
       separator: 'horizontal',
       serverPagination: {
@@ -406,6 +405,12 @@ export default {
           align: 'left',
           label: '产品属性',
           field: 'prodProp'
+        },
+        {
+          name: 'prodLevel',
+          align: 'left',
+          label: '产品档次',
+          field: 'prodLevel'
         },
         {
           name: 'prodDesc',
