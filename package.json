@@ -10,7 +10,7 @@
     "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
-    "axios": "^0.17.1",
+    "axios": "^0.18.0",
     "vue-echarts": "^3.0.7",
     "vue-i18n": "^7.6.0",
     "vue-simple-markdown": "^1.0.7",
