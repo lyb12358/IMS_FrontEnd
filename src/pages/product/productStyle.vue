@@ -34,7 +34,7 @@
                rounded
                class="q-ma-xs"
                color="primary"
-               @click="addOpened=true">
+               @click="openMainModal('add',0)">
           <q-tooltip>新建</q-tooltip>
         </q-btn>
         <q-btn icon="mdi-file-excel"
@@ -118,6 +118,8 @@
                 :props="props">{{ props.row.propLabel }}</q-td>
           <q-td key="prodMat"
                 :props="props">{{ props.row.prodMat }}</q-td>
+          <q-td key="prodLevel"
+                :props="props">{{ props.row.levelLabel }}</q-td>
           <q-td key="prodDesc"
                 :props="props">{{ props.row.prodDesc }}</q-td>
           <q-td key="image"
@@ -131,8 +133,8 @@
             <q-btn icon="mdi-format-list-numbers"
                    rounded
                    color="primary"
-                   @click="showExpand(props.row.styleName )">
-              <q-tooltip>款式信息</q-tooltip>
+                   @click="openMainModal('update',props.row.id)">
+              <q-tooltip>修改款式信息</q-tooltip>
             </q-btn>
             <q-btn icon="mdi-image-plus"
                    rounded
@@ -183,7 +185,7 @@
       </div>
     </q-table>
     <!-- 新建款式modal -->
-    <q-modal v-model="addOpened"
+    <q-modal v-model="mainModalOpened"
              no-esc-dismiss
              no-backdrop-dismiss
              :content-css="{minWidth: '80vw', minHeight: '80vh'}">
@@ -195,18 +197,26 @@
                  v-close-overlay
                  icon="mdi-arrow-left" />
           <q-toolbar-title>
-            新增产品
+            {{modalActionName}}
           </q-toolbar-title>
         </q-toolbar>
         <q-toolbar slot="footer"
                    inverted>
           <div class="col-12 row justify-center ">
-            <div style="margin:0 2rem">
+            <div v-if="modalActionName==='更新产品款式'"
+                 style="margin:0 2rem">
+              <q-btn color="primary"
+                     label="确定"
+                     @click="updateProdStyle" />
+            </div>
+            <div v-if="modalActionName==='新增产品款式'"
+                 style="margin:0 2rem">
               <q-btn color="primary"
                      label="确定"
                      @click="addProdStyle" />
             </div>
-            <div style="margin:0 2rem">
+            <div v-if="modalActionName==='新增产品款式'"
+                 style="margin:0 2rem">
               <q-btn color="primary"
                      label="重置"
                      @click="resetModal" />
@@ -421,11 +431,13 @@ export default {
         { name: 'status', align: 'left', label: '状态', field: 'status' }
       ],
       //modal
+      mainModalOpened: false,
+      modalActionName: '',
+      //modal content
       departSelected: '',
       departProps: [],
       classSelected: '',
       classProps: [],
-      addOpened: false,
       departOpened: false,
       classOpened: false,
       product: {
@@ -439,6 +451,7 @@ export default {
         prodStyle: '',
         prodFamily: '',
         prodProp: '',
+        prodLevel: '',
         prodDesc: '',
         status: true
       },
@@ -453,10 +466,11 @@ export default {
       imageUploadUrl: 'api/pic/upload'
     }
   },
-  watch:{
-    'product.prodFamily':function(){
-      this.product.prodClass=''
-      this.product.classLabel=''
+  watch: {
+    //reset prodClass when prodFamily change
+    'product.prodFamily': function() {
+      this.product.prodClass = ''
+      this.product.classLabel = ''
     }
   },
   methods: {
@@ -476,7 +490,33 @@ export default {
         position: 'bottom-right'
       })
     },
-    //产品添加modal
+    //main modal function
+    openMainModal(action, id) {
+      if (action === 'add') {
+        this.modalActionName = '新增产品款式'
+        this.mainModalOpened = true
+      } else if (action === 'update') {
+        this.modalActionName = '更新产品款式'
+        this.$axios
+          .get('/api/prodStyle/' + id)
+          .then(({ data }) => {
+            let product = data
+            if (product.status == 1) {
+              product.status = true
+            } else {
+              product.status = false
+            }
+            Object.assign(this.product, product)
+            this.$nextTick(() => {
+              this.product.classLabel = product.classLabel
+              this.product.prodClass = product.prodClass
+              this.mainModalOpened = true
+            })
+          })
+          .catch(error => {})
+      }
+    },
+    //add product
     selectDepart() {
       this.product.departId = this.$refs.departTree.getNodeByKey(
         this.departSelected
@@ -555,14 +595,28 @@ export default {
     },
     addProdStyle() {
       this.$axios
-        .post('/api/prodStyles', this.product)
+        .post('/api/prodStyle', this.product)
         .then(({ data }) => {
           if (data.result === 'success') {
-            this.addOpened = false
+            this.mainModalOpened = false
             Object.assign(this.product, this.$options.data.call(this).product)
             this.notify('positive', '产品款式添加成功')
           } else {
-            this.notify('negative', result.info)
+            this.notify('negative', data.info)
+          }
+        })
+        .catch(error => {})
+    },
+    updateProdStyle() {
+      this.$axios
+        .put('/api/prodStyle', this.product)
+        .then(({ data }) => {
+          if (data.result === 'success') {
+            this.mainModalOpened = false
+            Object.assign(this.product, this.$options.data.call(this).product)
+            this.notify('positive', '产品款式修改成功')
+          } else {
+            this.notify('negative', data.info)
           }
         })
         .catch(error => {})
