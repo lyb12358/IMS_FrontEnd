@@ -295,33 +295,47 @@
       </q-modal-layout>
     </q-modal>
     <!-- select department -->
-    <q-modal v-model="departOpened">
-      <q-tree :nodes="departProps"
-              ref="departTree"
-              color="primary"
-              :selected.sync="departSelected"
-              node-key="id" />
-      <q-btn color="primary"
-             @click="selectDepart"
-             label="确定" />
-      <q-btn color="primary"
-             @click="departOpened = false"
-             label="取消" />
-    </q-modal>
+    <q-dialog v-model="departOpened"
+              prevent-close>
+      <span slot="title">选择部门</span>
+      <div slot="body">
+        <q-tree :nodes="departProps"
+                ref="departTree"
+                color="primary"
+                :selected.sync="departSelected"
+                node-key="id" />
+      </div>
+      <template slot="buttons"
+                slot-scope="props">
+        <q-btn color="primary"
+               @click="selectDepart"
+               label="确定" />
+        <q-btn color="primary"
+               @click="departOpened = false"
+               label="取消" />
+      </template>
+    </q-dialog>
     <!-- select prodClass -->
-    <q-modal v-model="classOpened">
-      <q-tree :nodes="classProps"
-              ref="classTree"
-              color="primary"
-              :selected.sync="classSelected"
-              node-key="id" />
-      <q-btn color="primary"
-             @click="selectClass"
-             label="确定" />
-      <q-btn color="primary"
-             @click="classOpened = false"
-             label="取消" />
-    </q-modal>
+    <q-dialog v-model="classOpened"
+              prevent-close>
+      <span slot="title">选择产品类别</span>
+      <div slot="body">
+        <q-tree :nodes="classProps"
+                ref="classTree"
+                color="primary"
+                :selected.sync="classSelected"
+                node-key="id" />
+      </div>
+      <template slot="buttons"
+                slot-scope="props">
+        <q-btn color="primary"
+               @click="selectClass"
+               label="确定" />
+        <q-btn color="primary"
+               @click="classOpened = false"
+               label="取消" />
+      </template>
+    </q-dialog>
     <!-- upload image -->
     <q-dialog v-model="imageUploadDialog"
               prevent-close>
