@@ -8,6 +8,13 @@
              @click="imageUploadModel=true">
         <q-tooltip>新建</q-tooltip>
       </q-btn>
+      <q-btn icon="mdi-clipboard-arrow-down"
+             rounded
+             class="q-ma-xs"
+             color="primary"
+             @click="fileDownload">
+        <q-tooltip>下载</q-tooltip>
+      </q-btn>
     </div>
     <q-dialog v-model="imageUploadModel"
               prevent-close>
@@ -44,6 +51,34 @@ export default {
     imageUploadUrl: 'api/pic/upload'
   }),
   methods: {
+    fileDownload() {
+      this.$axios
+        .get('api/test/download', {
+          responseType: 'blob'
+        })
+        .then(response => {
+          this.download(response.data)
+        })
+        .catch(error => {
+          console.log(error.message)
+        })
+    },
+    // download file
+    download(data) {
+      if (!data) {
+        return
+      }
+      let url = window.URL.createObjectURL(new Blob([data]))
+      let link = document.createElement('a')
+      link.style.display = 'none'
+      link.href = url
+      link.setAttribute('download', 'xxx.pdf')
+      document.body.appendChild(link)
+      link.click()
+      // release url object
+      URL.revokeObjectURL(link.href)
+      document.body.removeChild(link)
+    },
     notify(type, message) {
       this.$q.notify({
         message: message,
@@ -79,5 +114,4 @@ export default {
 </script>
 
 <style>
-
 </style>
