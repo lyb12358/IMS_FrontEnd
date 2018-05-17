@@ -310,5 +310,12 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
+.q-table th
+  font-size 13px
+.q-table tbody td
+  font-size 15px
+@media (min-width: 1200px)
+  .layout-padding
+    padding 1.5rem 1.5rem
 </style>
