@@ -155,7 +155,7 @@
                    rounded
                    color="orange"
                    @click="specDownload(props.row.id,props.row.styleName )">
-              <q-tooltip>下载说明书</q-tooltip>
+              <q-tooltip>下载产品说明书</q-tooltip>
             </q-btn>
             <q-btn icon="mdi-delete"
                    rounded
@@ -666,7 +666,7 @@ export default {
       let link = document.createElement('a')
       link.style.display = 'none'
       link.href = url
-      link.setAttribute('download', name+'产品说明书.pdf')
+      link.setAttribute('download', name + '产品说明书.pdf')
       document.body.appendChild(link)
       link.click()
       // release url object
