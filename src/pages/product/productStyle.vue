@@ -151,6 +151,12 @@
                 <q-tooltip>下载原图</q-tooltip>
               </q-btn>
             </a>
+            <q-btn icon="mdi-clipboard-arrow-down"
+                   rounded
+                   color="orange"
+                   @click="specDownload(props.row.id,props.row.styleName )">
+              <q-tooltip>下载说明书</q-tooltip>
+            </q-btn>
             <q-btn icon="mdi-delete"
                    rounded
                    color="negative"
@@ -512,7 +518,7 @@ export default {
       } else if (action === 'update') {
         this.modalActionName = '更新产品款式'
         this.$axios
-          .get('/api/prodStyle/' + id)
+          .get('/api/prodStyles/' + id)
           .then(({ data }) => {
             let product = data
             if (product.status == 1) {
@@ -637,6 +643,35 @@ export default {
     },
     resetModal() {
       Object.assign(this.product, this.$options.data.call(this).product)
+    },
+    //download specification
+    specDownload(id, name) {
+      this.$axios
+        .get('api/specs/' + id, {
+          responseType: 'blob'
+        })
+        .then(response => {
+          this.fileDownload(response.data, name)
+        })
+        .catch(error => {
+          console.log(error.message)
+        })
+    },
+    // public method to download file
+    fileDownload(data, name) {
+      if (!data) {
+        return
+      }
+      let url = window.URL.createObjectURL(new Blob([data]))
+      let link = document.createElement('a')
+      link.style.display = 'none'
+      link.href = url
+      link.setAttribute('download', name+'产品说明书.pdf')
+      document.body.appendChild(link)
+      link.click()
+      // release url object
+      URL.revokeObjectURL(link.href)
+      document.body.removeChild(link)
     },
     //表格数据请求
     request({ pagination }) {

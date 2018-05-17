@@ -12,7 +12,7 @@
              rounded
              class="q-ma-xs"
              color="primary"
-             @click="fileDownload">
+             @click="pdfDownload">
         <q-tooltip>下载</q-tooltip>
       </q-btn>
     </div>
@@ -51,20 +51,20 @@ export default {
     imageUploadUrl: 'api/pic/upload'
   }),
   methods: {
-    fileDownload() {
+    pdfDownload() {
       this.$axios
-        .get('api/test/download', {
+        .get('api/specs/1', {
           responseType: 'blob'
         })
         .then(response => {
-          this.download(response.data)
+          this.fileDownload(response.data)
         })
         .catch(error => {
           console.log(error.message)
         })
     },
-    // download file
-    download(data) {
+    // public method to download file
+    fileDownload(data) {
       if (!data) {
         return
       }
@@ -72,7 +72,7 @@ export default {
       let link = document.createElement('a')
       link.style.display = 'none'
       link.href = url
-      link.setAttribute('download', 'xxx.pdf')
+      link.setAttribute('download', '说明书.pdf')
       document.body.appendChild(link)
       link.click()
       // release url object
