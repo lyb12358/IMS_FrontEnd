@@ -41,7 +41,7 @@
                rounded
                class="q-ma-xs"
                color="tertiary"
-               @click="showInfo">
+               @click="showExpand()">
           <q-tooltip>导出</q-tooltip>
         </q-btn>
       </div>
@@ -497,9 +497,6 @@ export default {
     showExpand(x) {
       console.log(x)
     },
-    showInfo() {
-      console.log(this.searchForm)
-    },
     printSth() {
       window.print()
     },
@@ -699,7 +696,7 @@ export default {
     this.request({
       pagination: this.serverPagination
     })
-    //产品几个参数的请求
+    //once mounted, fetch some product parameters
     this.$axios
       .get('/api/orgs')
       .then(({ data }) => {

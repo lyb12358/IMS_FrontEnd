@@ -33,14 +33,14 @@
                rounded
                class="q-ma-xs"
                color="primary"
-               @click="newOpened=true">
+               @click="openMainModal()">
           <q-tooltip>新建</q-tooltip>
         </q-btn>
         <q-btn icon="mdi-file-excel"
                rounded
                class="q-ma-xs"
                color="tertiary"
-               @click="showExpand('x')">
+               @click="showExpand()">
           <q-tooltip>导出</q-tooltip>
         </q-btn>
       </div>
@@ -117,15 +117,29 @@
           <q-td key="prodName"
                 :props="props">{{ props.row.prodName }}</q-td>
           <q-td key="prodFamily"
-                :props="props">{{ props.row.prodFamily }}</q-td>
+                :props="props">{{ props.row.familyLabel}}</q-td>
           <q-td key="prodClass"
-                :props="props">{{ props.row.prodClass }}</q-td>
+                :props="props">{{ props.row.classLabel }}</q-td>
+          <q-td key="prodProp"
+                :props="props">{{ props.row.propLabel }}</q-td>
+          <q-td key="prodLevel"
+                :props="props">{{ props.row.levelLabel }}</q-td>
           <q-td key="prodMat"
                 :props="props">{{ props.row.prodMat }}</q-td>
           <q-td key="prodSize"
                 :props="props">{{ props.row.prodSize }}</q-td>
+          <q-td key="prodCat"
+                :props="props">{{ props.row.prodCat }}</q-td>
+          <q-td key="weight"
+                :props="props">{{ props.row.weight }}</q-td>
           <q-td key="retailPrice"
                 :props="props">{{ props.row.retailPrice }}
+          </q-td>
+          <q-td key="supplyPrice"
+                :props="props">{{ props.row.supplyPrice }}
+          </q-td>
+          <q-td key="costPrice"
+                :props="props">{{ props.row.costPrice }}
           </q-td>
         </q-tr>
         <q-tr v-show="props.expand"
@@ -134,25 +148,25 @@
             <q-btn icon="mdi-format-list-numbers"
                    rounded
                    color="primary"
-                   @click="showExpand(props)">
+                   @click="showExpand()">
               <q-tooltip>修改产品信息</q-tooltip>
             </q-btn>
             <q-btn icon="mdi-playlist-plus"
                    rounded
                    color="secondary"
-                   @click="showExpand(props)">
+                   @click="showExpand()">
               <q-tooltip>增加同款产品</q-tooltip>
             </q-btn>
             <q-btn icon="mdi-image"
                    rounded
                    color="tertiary"
-                   @click="showExpand(props)">
+                   @click="showExpand()">
               <q-tooltip>查看产品图片</q-tooltip>
             </q-btn>
             <q-btn icon="mdi-delete"
                    rounded
                    color="negative"
-                   @click="showExpand(props)">
+                   @click="showExpand()">
               <q-tooltip>删除</q-tooltip>
             </q-btn>
           </q-td>
@@ -182,7 +196,7 @@
                @click="props.nextPage" />
       </div>
     </q-table>
-    <q-modal v-model="newOpened"
+    <q-modal v-model="openMainModal"
              no-backdrop-dismiss
              no-esc-dismiss>
 
@@ -195,7 +209,6 @@
 export default {
   data() {
     return {
-      newOpened: false,
       searchForm: {
         style: '',
         code: '',
@@ -253,24 +266,98 @@ export default {
           label: '产品分类',
           field: 'prodClass'
         },
+        {
+          name: 'prodProp',
+          align: 'left',
+          label: '产品属性',
+          field: 'prodProp'
+        },
+        {
+          name: 'prodLevel',
+          align: 'left',
+          label: '产品档次',
+          field: 'prodLevel'
+        },
         { name: 'prodMat', align: 'left', label: '面料', field: 'prodMat' },
-        { name: 'prodSize', align: 'left', label: '尺寸', field: 'prodSize' },
+        { name: 'prodSize', align: 'left', label: '规格', field: 'prodSize' },
+        { name: 'prodCat', align: 'left', label: '品类', field: 'prodSize' },
+        { name: 'weight', align: 'left', label: '克重', field: 'prodSize' },
         {
           name: 'retailPrice',
           align: 'left',
           label: '零售价',
           field: 'retailPrice'
-        }
-      ]
+        },
+        {
+          name: 'supplyPrice',
+          align: 'left',
+          label: '供应价',
+          field: 'supplyPrice'
+        },
+        {
+          name: 'costPrice',
+          align: 'left',
+          label: '成本价',
+          field: 'costPrice'
+        },
+        { name: 'status', align: 'left', label: '状态', field: 'status' }
+      ],
+      //modal content
+      productStyle: {
+        id: 0,
+        departLabel: '',
+        departId: '',
+        classLabel: '',
+        prodClass: '',
+        prodMat: '',
+        styleName: '',
+        prodStyle: '',
+        prodFamily: '',
+        prodProp: '',
+        prodLevel: '',
+        prodDesc: '',
+        status: true
+      },
+      product: {
+        id: 0,
+        prodCode: '',
+        prodName: '',
+        prodSize: '',
+        prodCat: '',
+        retailPrice: 0,
+        supplyPrice: 0,
+        costPrice: 0,
+        weight: 0,
+        departLabel: '',
+        departId: '',
+        classLabel: '',
+        prodClass: '',
+        prodMat: '',
+        prodStyle: '',
+        prodFamily: '',
+        prodProp: '',
+        prodLevel: '',
+        prodDesc: '',
+        status: true
+      }
     }
   },
   methods: {
-    showExpand(x) {
-      console.log(x)
+    showExpand() {
+      console.log(this.$q.platform.is.MicroMessenger)
     },
     printSth() {
       window.print()
     },
+    notify(type, message) {
+      this.$q.notify({
+        message: message,
+        type: type,
+        position: 'bottom-right'
+      })
+    },
+    //main modal function
+    openMainModal(action, id) {},
     request({ pagination }) {
       this.loading = true
       this.$axios
