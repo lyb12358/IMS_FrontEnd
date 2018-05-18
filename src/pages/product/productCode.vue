@@ -9,7 +9,7 @@
              :pagination.sync="serverPagination"
              :loading="loading"
              color="secondary"
-             :rows-per-page-options="[5,10,15,20]"
+             :rows-per-page-options="[10,15,20]"
              @request="request">
       <div slot="top-left"
            slot-scope="props"
@@ -40,7 +40,7 @@
                rounded
                class="q-ma-xs"
                color="tertiary"
-               @click="showInfo">
+               @click="showExpand('x')">
           <q-tooltip>导出</q-tooltip>
         </q-btn>
       </div>
@@ -135,19 +135,19 @@
                    rounded
                    color="primary"
                    @click="showExpand(props)">
-              <q-tooltip>款式信息</q-tooltip>
-            </q-btn>
-            <q-btn icon="mdi-image"
-                   rounded
-                   color="tertiary"
-                   @click="showExpand(props)">
-              <q-tooltip>查看产品图片</q-tooltip>
+              <q-tooltip>修改产品信息</q-tooltip>
             </q-btn>
             <q-btn icon="mdi-playlist-plus"
                    rounded
                    color="secondary"
                    @click="showExpand(props)">
               <q-tooltip>增加同款产品</q-tooltip>
+            </q-btn>
+            <q-btn icon="mdi-image"
+                   rounded
+                   color="tertiary"
+                   @click="showExpand(props)">
+              <q-tooltip>查看产品图片</q-tooltip>
             </q-btn>
             <q-btn icon="mdi-delete"
                    rounded
@@ -185,33 +185,7 @@
     <q-modal v-model="newOpened"
              no-backdrop-dismiss
              no-esc-dismiss>
-      <div class=" row justify-center items-center ">
-        <q-card class="no-shadow">
-          <q-card-title>Login</q-card-title>
-          <q-card-main>
-            <form id='myForm'
-                  class='gutter-sm'>
-              <q-field>
-                <q-input v-model="user.name"
-                         float-label="E-Mail"
-                         required></q-input>
-              </q-field>
-              <q-field>
-                <q-input v-model="user.password"
-                         float-label="Password"
-                         required></q-input>
-              </q-field>
-            </form>
-          </q-card-main>
-          <q-card-separator/>
-          <q-card-actions>
-            <q-btn rounded
-                   @click="resetForm">重置</q-btn>
-            <q-btn @click="save">保存</q-btn>
-            <q-btn @click="newOpened = false">关闭</q-btn>
-          </q-card-actions>
-        </q-card>
-      </div>
+
     </q-modal>
   </q-page>
 
@@ -222,18 +196,12 @@ export default {
   data() {
     return {
       newOpened: false,
-      user: {
-        password: '',
-        name: ''
-      },
       searchForm: {
         style: '',
         code: '',
         name: ''
       },
       loading: false,
-      dark: true,
-      selected: [],
       visibleColumns: [
         'prodStyle',
         'prodFamily',
@@ -248,36 +216,57 @@ export default {
       serverPagination: {
         page: 1,
         rowsPerPage: 5,
-        rowsNumber: 20 // specifying this determines pagination is server-side
+        rowsNumber: 10 // specifying this determines pagination is server-side
       },
       serverData: [],
       columns: [
-        { name: 'id', label: 'id', field: 'id' },
-        { name: 'departId', label: '所属部门', field: 'departId' },
-        { name: 'comId', label: '所属公司', field: 'comId' },
-        { name: 'prodStyle', label: '款号', field: 'prodStyle' },
-        { name: 'prodCode', label: '产品编号', field: 'prodCode' },
-        { name: 'prodName', label: '产品名称', field: 'prodName' },
-        { name: 'prodFamily', label: '产品所属', field: 'prodFamily' },
-        { name: 'prodClass', label: '产品分类', field: 'prodClass' },
-        { name: 'prodMat', label: '面料', field: 'prodMat' },
-        { name: 'prodSize', label: '尺寸', field: 'prodSize' },
-        { name: 'retailPrice', label: '零售价', field: 'retailPrice' }
+        { name: 'id', align: 'left', label: 'id', field: 'id' },
+        {
+          name: 'departId',
+          align: 'left',
+          label: '所属部门',
+          field: 'departId'
+        },
+        { name: 'comId', align: 'left', label: '所属公司', field: 'comId' },
+        { name: 'prodStyle', align: 'left', label: '款号', field: 'prodStyle' },
+        {
+          name: 'prodCode',
+          align: 'left',
+          label: '产品编号',
+          field: 'prodCode'
+        },
+        {
+          name: 'prodName',
+          align: 'left',
+          label: '产品名称',
+          field: 'prodName'
+        },
+        {
+          name: 'prodFamily',
+          align: 'left',
+          label: '产品所属',
+          field: 'prodFamily'
+        },
+        {
+          name: 'prodClass',
+          align: 'left',
+          label: '产品分类',
+          field: 'prodClass'
+        },
+        { name: 'prodMat', align: 'left', label: '面料', field: 'prodMat' },
+        { name: 'prodSize', align: 'left', label: '尺寸', field: 'prodSize' },
+        {
+          name: 'retailPrice',
+          align: 'left',
+          label: '零售价',
+          field: 'retailPrice'
+        }
       ]
     }
   },
   methods: {
-    save() {
-      console.log(this.user)
-    },
-    resetForm() {
-      document.getElementById('myForm').reset()
-    },
     showExpand(x) {
       console.log(x)
-    },
-    showInfo() {
-      console.log(this.searchForm)
     },
     printSth() {
       window.print()

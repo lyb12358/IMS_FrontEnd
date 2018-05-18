@@ -100,7 +100,11 @@ module.exports = function (ctx) {
         'QModal',
         'QModalLayout',
         'QSearch',
-        'QUploader'
+        'QUploader',
+        'QTabs',
+        'QTab',
+        'QTabPane',
+        'QRouteTab'
       ],
       directives: [
         'Ripple',
