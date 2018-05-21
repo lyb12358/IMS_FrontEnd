@@ -54,7 +54,7 @@ export default {
   },
   created() {
     this.$axios
-      .get('/api/getOrgList')
+      .get('/getOrgList')
       .then(({ data }) => {
         this.props.push(data[0])
         this.$nextTick(() => {
@@ -67,5 +67,4 @@ export default {
 </script>
 
 <style>
-
 </style>

@@ -361,7 +361,7 @@ export default {
     request({ pagination }) {
       this.loading = true
       this.$axios
-        .get('/api/prods', {
+        .get('/prods', {
           params: {
             page: pagination.page,
             row: pagination.rowsPerPage

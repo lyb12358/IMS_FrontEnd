@@ -15,29 +15,29 @@ module.exports = function (ctx) {
     extras: [
       ctx.theme.mat ? 'roboto-font' : null,
       'material-icons',
-      // 'ionicons',
-      // 'fontawesome',
-      //
       'mdi'
     ],
     supportIE: true,
-    vendor: {
-      add: [],
-      remove: []
-    },
     build: {
       scopeHoisting: true,
       vueRouterMode: 'hash',
+      // vueCompiler: true,
       // gzip: true,
       // analyze: true,
       // extractCSS: false,
-      // useNotifier: false,
       extendWebpack(cfg) {
         cfg.module.rules.push({
           test: /\.md$/,
           loader: 'text-loader'
         })
-      }
+      },
+      env: ctx.dev
+        ? { // so on dev we'll have
+          API: JSON.stringify('/api')
+        }
+        : { // and on build (production):
+          API: JSON.stringify('http://10.98.10.166:8080')
+        }
     },
     devServer: {
       // https: true,
@@ -120,7 +120,8 @@ module.exports = function (ctx) {
     // animations: [
     // ],
     pwa: {
-      cacheExt: 'js,html,css,ttf,eot,otf,woff,woff2,json,svg,gif,jpg,jpeg,png,wav,ogg,webm,flac,aac,mp4,mp3',
+      // workboxPluginMode: 'InjectManifest',
+      // workboxOptions: {},
       manifest: {
         // name: 'Quasar App',
         // short_name: 'Quasar-PWA',
@@ -162,10 +163,13 @@ module.exports = function (ctx) {
       // id: 'org.cordova.quasar.app'
     },
     electron: {
+      // bundler: 'builder', // or 'packager'
       extendWebpack(cfg) {
-        // do something with cfg
+        // do something with Electron process Webpack cfg
       },
       packager: {
+        // https://github.com/electron-userland/electron-packager/blob/master/docs/api.md#options
+
         // OS X / Mac App Store
         // appBundleId: '',
         // appCategoryType: '',
@@ -174,10 +178,12 @@ module.exports = function (ctx) {
 
         // Window only
         // win32metadata: { ... }
-      }
-    },
+      },
+      builder: {
+        // https://www.electron.build/configuration/configuration
 
-    // leave this here for Quasar CLI
-    starterKit: '1.0.0-beta.4'
+        // appId: 'quasar-app'
+      }
+    }
   }
 }

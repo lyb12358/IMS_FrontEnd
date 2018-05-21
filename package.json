@@ -17,7 +17,7 @@
     "vuelidate": "^0.6.2"
   },
   "devDependencies": {
-    "quasar-cli": "^0.15.20",
+    "quasar-cli": "^0.16.0",
     "text-loader": "0.0.1"
   },
   "engines": {

@@ -48,12 +48,12 @@
 export default {
   data: () => ({
     imageUploadModel: false,
-    imageUploadUrl: 'api/pic/upload'
+    imageUploadUrl: '/pic/upload'
   }),
   methods: {
     pdfDownload() {
       this.$axios
-        .get('api/specs/1', {
+        .get('/specs/1', {
           responseType: 'blob'
         })
         .then(response => {

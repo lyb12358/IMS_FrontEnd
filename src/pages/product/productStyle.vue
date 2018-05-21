@@ -142,7 +142,7 @@
                    @click="openImageUpload(props.row.id,props.row.prodStyle,props.row.styleName )">
               <q-tooltip>上传产品图片</q-tooltip>
             </q-btn>
-            <a :href="'api/image/'+props.row.id+'/'+props.row.image"
+            <a :href="'/image/'+props.row.id+'/'+props.row.image"
                :download="props.row.styleName">
               <q-btn icon="mdi-image-area-close"
                      v-if="props.row.thumbnail!=null"
@@ -483,7 +483,7 @@ export default {
       expandStyle: '',
       expandName: '',
       imageUploadDialog: false,
-      imageUploadUrl: 'api/pic/upload'
+      imageUploadUrl: '/pic/upload'
     }
   },
   watch: {
@@ -515,7 +515,7 @@ export default {
       } else if (action === 'update') {
         this.modalActionName = '更新产品款式'
         this.$axios
-          .get('/api/prodStyles/' + id)
+          .get('/prodStyles/' + id)
           .then(({ data }) => {
             let product = data
             if (product.status == 1) {
@@ -547,7 +547,7 @@ export default {
     openClassDialog() {
       if (this.product.prodFamily != '') {
         this.$axios
-          .get('/api/prodClasses', {
+          .get('/prodClasses', {
             params: {
               familyId: this.product.prodFamily
             }
@@ -605,14 +605,14 @@ export default {
     //check thumbnail
     thumbnailCheck(id, thumbnail) {
       if (!(thumbnail === null)) {
-        return 'api/image/' + id + '/' + thumbnail
+        return '/image/' + id + '/' + thumbnail
       } else {
         return 'statics/sad.svg'
       }
     },
     addProdStyle() {
       this.$axios
-        .post('/api/prodStyle', this.product)
+        .post('/prodStyle', this.product)
         .then(({ data }) => {
           if (data.result === 'success') {
             this.mainModalOpened = false
@@ -626,7 +626,7 @@ export default {
     },
     updateProdStyle() {
       this.$axios
-        .put('/api/prodStyle', this.product)
+        .put('/prodStyle', this.product)
         .then(({ data }) => {
           if (data.result === 'success') {
             this.mainModalOpened = false
@@ -644,7 +644,7 @@ export default {
     //download specification
     specDownload(id, name) {
       this.$axios
-        .get('api/specs/' + id, {
+        .get('/specs/' + id, {
           responseType: 'blob'
         })
         .then(response => {
@@ -674,7 +674,7 @@ export default {
     request({ pagination }) {
       this.loading = true
       this.$axios
-        .get('/api/prodStyles', {
+        .get('/prodStyles', {
           params: {
             page: pagination.page,
             row: pagination.rowsPerPage
@@ -698,7 +698,7 @@ export default {
     })
     //once mounted, fetch some product parameters
     this.$axios
-      .get('/api/orgs')
+      .get('/orgs')
       .then(({ data }) => {
         this.departProps.push(data[0])
         this.$nextTick(() => {
@@ -707,19 +707,19 @@ export default {
       })
       .catch(error => {})
     this.$axios
-      .get('/api/prodFamilys')
+      .get('/prodFamilys')
       .then(({ data }) => {
         this.familyOptions = data
       })
       .catch(error => {})
     this.$axios
-      .get('/api/prodProps')
+      .get('/prodProps')
       .then(({ data }) => {
         this.propOptions = data
       })
       .catch(error => {})
     this.$axios
-      .get('/api/prodLevels')
+      .get('/prodLevels')
       .then(({ data }) => {
         this.levelOptions = data
       })
