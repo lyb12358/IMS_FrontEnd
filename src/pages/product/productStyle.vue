@@ -605,7 +605,7 @@ export default {
     //check thumbnail
     thumbnailCheck(id, thumbnail) {
       if (!(thumbnail === null)) {
-        return '/image/' + id + '/' + thumbnail
+        return process.env.API+'/image/' + id + '/' + thumbnail
       } else {
         return 'statics/sad.svg'
       }

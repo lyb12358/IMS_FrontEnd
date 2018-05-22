@@ -196,7 +196,7 @@
                @click="props.nextPage" />
       </div>
     </q-table>
-    <q-modal v-model="openMainModal"
+    <q-modal v-model="mainModalOpened"
              no-backdrop-dismiss
              no-esc-dismiss>
 
@@ -357,7 +357,9 @@ export default {
       })
     },
     //main modal function
-    openMainModal(action, id) {},
+    openMainModal(action, id) {
+
+    },
     request({ pagination }) {
       this.loading = true
       this.$axios

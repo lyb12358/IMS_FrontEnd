@@ -14,6 +14,7 @@ module.exports = function (ctx) {
     ],
     extras: [
       ctx.theme.mat ? 'roboto-font' : null,
+      ctx.theme.ios ? 'ionicons' : null,
       'material-icons',
       'mdi'
     ],
@@ -114,7 +115,7 @@ module.exports = function (ctx) {
         'Notify'
       ],
       i18n: 'zh-hans',
-      iconSet: 'material-icons'
+      iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
     },
     animations: 'all',
     // animations: [

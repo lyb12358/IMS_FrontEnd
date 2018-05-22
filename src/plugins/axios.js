@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { Notify } from 'quasar'
+import store from 'src/store'
+import { getStorageToken } from 'src/utils/auth'
 
 const service = axios.create({
   baseURL: process.env.API,
@@ -9,7 +11,7 @@ const service = axios.create({
 // request interceptors
 service.interceptors.request.use(config => {
   if (store.getters.token) {
-    config.headers['imsToken'] = getToken()
+    config.headers['imsToken'] = getStorageToken()
   }
   return config
 }, error => {
