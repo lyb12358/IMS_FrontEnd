@@ -2,13 +2,12 @@ import { getStorageToken, setStorageToken, removeStorageToken } from 'src/utils/
 import { login, logout, getInfo } from 'src/api/login'
 
 export function Login({ commit }, userInfo) {
-    const account = userInfo.account.trim()
     return new Promise((resolve, reject) => {
-        login(account, userInfo.password).then(response => {
+        login(userInfo).then(response => {
             const data = response.data
-            setStorageToken(data.token)
-            commit('SetToken', data.token)
-            resolve()
+            // setStorageToken(data.token)
+            // commit('SetToken', data.token)
+            resolve(response)
         }).catch(error => {
             reject(error)
         })
@@ -27,7 +26,7 @@ export function GetInfo({ commit, state }) {
             }
             commit('SetName', data.name)
             commit('SetAvatar', data.avatar)
-            resolve()
+            resolve(response)
         }).catch(error => {
             reject(error)
         })
@@ -45,5 +44,13 @@ export function Logout({ commit, state }) {
         }).catch(error => {
             reject(error)
         })
+    })
+}
+
+export function FedLogout({ commit }) {
+    return new Promise(resolve => {
+        commit('SetToken', '')
+        removeStorageToken()
+        resolve()
     })
 }

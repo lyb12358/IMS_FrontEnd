@@ -1,13 +1,10 @@
 import { service } from 'src/plugins/axios'
 
-export function login(account, password) {
+export function login(user) {
     return service({
         url: '/user/login',
         method: 'post',
-        data: {
-            account,
-            password
-        }
+        data: user
     })
 }
 

@@ -7,7 +7,8 @@ module.exports = function (ctx) {
       'axios',
       'vue-echarts',
       'vue-simply-markdown',
-      'vuelidate'
+      'vuelidate',
+      'auth'
     ],
     css: [
       'app.styl'
@@ -105,14 +106,18 @@ module.exports = function (ctx) {
         'QTabs',
         'QTab',
         'QTabPane',
-        'QRouteTab'
+        'QRouteTab',
+        'QInnerLoading',
+        'QSpinnerGears'
       ],
       directives: [
         'Ripple',
         'CloseOverlay'
       ],
       plugins: [
-        'Notify'
+        'Notify',
+        'LocalStorage',
+        'SessionStorage'
       ],
       i18n: 'zh-hans',
       iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'

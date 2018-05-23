@@ -2,7 +2,7 @@
 export default [
   {
     path: '/',
-    component: () => import('layouts/default'),
+    component: () => import('layouts/dashboard'),
     children: [
       { path: '', component: () => import('pages/index') },
       { path: 'comManage', component: () => import('pages/organization/comManage') },
@@ -14,7 +14,26 @@ export default [
       { path: 'changeLog', component: () => import('pages/changeLog') }
     ]
   },
-
+  {
+    path: '/auth',
+    redirect: '/auth/login',
+    meta: { guest: true },
+    component: () => import('layouts/auth'),
+    children: [
+      {
+        path: 'login',
+        name: 'login',
+        component: () => import('pages/auth/login'),
+        meta: { title: 'Login' }
+      },
+      {
+        path: 'register',
+        name: 'register',
+        component: () => import('pages/auth/register'),
+        meta: { title: 'Register' }
+      }
+    ]
+  },
   { // Always leave this as last one
     path: '*',
     component: () => import('pages/404')

@@ -151,7 +151,7 @@
 import { openURL } from 'quasar'
 
 export default {
-  name: 'LayoutDefault',
+  name: 'dashboard',
   data() {
     return {
       leftDrawerOpen: true
