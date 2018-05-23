@@ -1,20 +1,20 @@
 import { login, logout, getInfo } from 'src/api/login'
-import { LocalStorage } from 'quasar'
+import { LocalStorage, SessionStorage } from 'quasar'
 
 const TokenKey = 'imsToken'
 
 export function getStorageToken() {
-    return LocalStorage.get.item(TokenKey)
+    return SessionStorage.get.item(TokenKey)
 }
 
 export function setStorageToken(token) {
-    return LocalStorage.set(TokenKey, token)
+    return SessionStorage.set(TokenKey, token)
 }
 
 export function removeStorageToken() {
-    return LocalStorage.remove(TokenKey)
+    return SessionStorage.remove(TokenKey)
 }
 
 export function removeStorageAll() {
-    return LocalStorage.clear()
+    return SessionStorage.clear()
 }

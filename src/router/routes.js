@@ -2,9 +2,10 @@
 export default [
   {
     path: '/',
+    redirect: '/index',
     component: () => import('layouts/dashboard'),
     children: [
-      { path: '', component: () => import('pages/index') },
+      { path: 'index', component: () => import('pages/index') },
       { path: 'comManage', component: () => import('pages/organization/comManage') },
       { path: 'productCode', component: () => import('pages/product/productCode') },
       { path: 'productStyle', component: () => import('pages/product/productStyle') },

@@ -1,15 +1,15 @@
 export const token = (state) => {
-    return state.user.token
+    return state.token
 }
 export const name = (state) => {
-    return state.user.name
+    return state.name
 }
 export const avatar = (state) => {
-    return state.user.avatar
+    return state.avatar
 }
 export const roles = (state) => {
-    return state.user.roles
+    return state.roles
 }
 export const permissions = (state) => {
-    return state.user.permissions
+    return state.permissions
 }

@@ -5,7 +5,7 @@ import { getStorageToken } from 'src/utils/auth'
 
 const service = axios.create({
   baseURL: process.env.API,
-  timeout: 15000
+  timeout: 5000
 })
 
 // request interceptors
@@ -24,7 +24,7 @@ service.interceptors.request.use(config => {
 service.interceptors.response.use(
   response => {
 
-    // const res = response.data
+    const res = response.data
     // if (res.result !== 'success') {
     //   Notify.create({
     //     message: res.info,
@@ -53,7 +53,7 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error)// for debug
     Notify.create({
-      message: res.info,
+      message: res.msg,
       type: nagetive,
       position: 'bottom-right'
     })

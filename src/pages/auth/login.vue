@@ -7,33 +7,37 @@
         欢迎，请先登录！
       </q-card-title>
       <q-card-main>
-        <q-field helper="用户名"
+        <q-field icon="mdi-account"
                  class="q-mt-lg"
                  :error="$v.user.account.$error"
                  error-label="没用户名你还想登录？">
           <q-input v-model.trim="user.account"
+                   float-label="用户名"
                    ref="account" />
         </q-field>
-        <q-field helper="密码"
+        <q-field icon="mdi-textbox-password"
                  class="q-mt-lg"
                  :error="$v.user.password.$error"
                  error-label="密码至少6位">
           <q-input v-model="user.password"
+                   float-label="密码"
                    type="password"
                    ref="password"
                    @keyup.enter="login" />
         </q-field>
       </q-card-main>
-      <q-card-separator class="q-mt-lg" />
       <q-card-actions align="end">
         <!-- <q-btn label="Register"
                flat
                color="secondary"
                @click="$router.push({ name: 'register' })" /> -->
+        <q-btn label="注册"
+               flat
+               color="secondary"
+               @click="notify('warning','暂未开放注册~')" />
         <q-btn label="登录"
-               :disable="$v.user.$invalid"
                color="primary"
-               icon="fa-arrow-right"
+               icon="mdi-login"
                @click="login" />
       </q-card-actions>
       <q-inner-loading :visible="loading">
@@ -64,16 +68,26 @@ export default {
     }
   },
   methods: {
+    notify(type, message) {
+      this.$q.notify({
+        message: message,
+        type: type,
+        position: 'bottom-right'
+      })
+    },
     login() {
-      this.$v.form.$touch()
+      this.$v.user.$touch()
+      if (this.$v.user.$invalid) {
+        return
+      }
       this.loading = true
       this.$store
-        .dispatch('Login', this.user)
+        .dispatch('user/Login', this.user)
         .then(response => {
           let data = response.data
           if (data.code === 200) {
             this.loading = false
-            this.$router.push({ name: '/' })
+            this.$router.push('/index')
             this.$q.notify({
               type: 'positive',
               position: 'bottom-right',
@@ -95,6 +109,7 @@ export default {
   },
   mounted() {
     this.$refs.account.focus()
+    console.log(this.$store.state.user.name)
   }
 }
 </script>
