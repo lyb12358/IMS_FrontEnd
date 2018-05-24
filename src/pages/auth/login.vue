@@ -109,7 +109,6 @@ export default {
   },
   mounted() {
     this.$refs.account.focus()
-    console.log(this.$store.state.user.name)
   }
 }
 </script>

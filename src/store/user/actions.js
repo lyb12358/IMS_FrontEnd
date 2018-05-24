@@ -4,9 +4,9 @@ import { login, logout, getInfo } from 'src/api/login'
 export function Login({ commit }, userInfo) {
     return new Promise((resolve, reject) => {
         login(userInfo).then(response => {
-            const data = response.data
-            // setStorageToken(data.token)
-            // commit('SetToken', data.token)
+            const result = response.data
+            setStorageToken(result.data)
+            commit('SetToken', result.data)
             resolve(response)
         }).catch(error => {
             reject(error)

@@ -10,7 +10,7 @@ const service = axios.create({
 
 // request interceptors
 service.interceptors.request.use(config => {
-  if (store.getters.token) {
+  if (store.getters['user/token']) {
     config.headers['imsToken'] = getStorageToken()
   }
   return config
