@@ -85,7 +85,7 @@ export default {
         .dispatch('user/Login', this.user)
         .then(response => {
           let data = response.data
-          if (data.code === 200) {
+          if (data.code === 20000) {
             this.loading = false
             this.$router.push('/index')
             this.$q.notify({
