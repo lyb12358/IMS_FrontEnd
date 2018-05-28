@@ -8,7 +8,7 @@ module.exports = function (ctx) {
       'vue-echarts',
       'vue-simply-markdown',
       'vuelidate',
-      'auth'
+      'route-permission'
     ],
     css: [
       'app.styl'
@@ -117,7 +117,8 @@ module.exports = function (ctx) {
       plugins: [
         'Notify',
         'LocalStorage',
-        'SessionStorage'
+        'SessionStorage',
+        'Dialog'
       ],
       i18n: 'zh-hans',
       iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'

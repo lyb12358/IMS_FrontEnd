@@ -85,22 +85,13 @@ export default {
         .dispatch('user/Login', this.user)
         .then(response => {
           let data = response.data
-          if (data.code === 20000) {
-            this.loading = false
-            this.$router.push('/index')
-            this.$q.notify({
-              type: 'positive',
-              position: 'bottom-right',
-              message: '登录成功'
-            })
-          } else {
-            this.loading = false
-            this.$q.notify({
-              type: 'negative',
-              position: 'bottom-right',
-              message: data.msg
-            })
-          }
+          this.loading = false
+          this.$router.push('/index')
+          this.$q.notify({
+            type: 'positive',
+            position: 'bottom-right',
+            message: data.msg
+          })
         })
         .catch(error => {
           this.loading = false

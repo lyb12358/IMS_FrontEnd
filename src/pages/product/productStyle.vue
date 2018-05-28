@@ -154,7 +154,7 @@
             <q-btn icon="mdi-clipboard-arrow-down"
                    rounded
                    color="orange"
-                   @click="specDownload(props.row.id,props.row.styleName )">
+                   @click="downloadSpec(props.row.id,props.row.styleName )">
               <q-tooltip>下载产品说明书</q-tooltip>
             </q-btn>
             <q-btn icon="mdi-delete"
@@ -213,13 +213,13 @@
                  style="margin:0 2rem">
               <q-btn color="primary"
                      label="确定"
-                     @click="updateProdStyle" />
+                     @click="modifyProdStyle" />
             </div>
             <div v-if="modalActionName==='新增产品款式'"
                  style="margin:0 2rem">
               <q-btn color="primary"
                      label="确定"
-                     @click="addProdStyle" />
+                     @click="newProdStyle" />
             </div>
             <div v-if="modalActionName==='新增产品款式'"
                  style="margin:0 2rem">
@@ -377,6 +377,19 @@
 </template>
 
 <script>
+import { getOrgList } from 'src/api/organization'
+import {
+  getProdStyleList,
+  getProdStyleById,
+  addProdStyle,
+  updateProdStyle,
+  specDownload,
+  getProdFamilyList,
+  getProdClassList,
+  getProdPropList,
+  getProdLevelList
+} from 'src/api/product'
+
 export default {
   data() {
     return {
@@ -514,10 +527,9 @@ export default {
         this.mainModalOpened = true
       } else if (action === 'update') {
         this.modalActionName = '更新产品款式'
-        this.$axios
-          .get('/prodStyles/' + id)
-          .then(({ data }) => {
-            let product = data
+        getProdStyleById(id)
+          .then(response => {
+            let product = response.data
             if (product.status == 1) {
               product.status = true
             } else {
@@ -530,7 +542,6 @@ export default {
               this.mainModalOpened = true
             })
           })
-          .catch(error => {})
       }
     },
     //add product
@@ -546,17 +557,11 @@ export default {
     },
     openClassDialog() {
       if (this.product.prodFamily != '') {
-        this.$axios
-          .get('/prodClasses', {
-            params: {
-              familyId: this.product.prodFamily
-            }
-          })
-          .then(({ data }) => {
-            this.classProps = data
-            this.classOpened = true
-          })
-          .catch(error => {})
+        getProdClassList(this.product.prodFamily).then(response => {
+          let data = response.data.data
+          this.classProps = data
+          this.classOpened = true
+        })
       } else {
         this.notify('warning', '请先选择产品所属')
       }
@@ -605,54 +610,35 @@ export default {
     //check thumbnail
     thumbnailCheck(id, thumbnail) {
       if (!(thumbnail === null)) {
-        return process.env.API+'/image/' + id + '/' + thumbnail
+        return process.env.API + '/image/' + id + '/' + thumbnail
       } else {
         return 'statics/sad.svg'
       }
     },
-    addProdStyle() {
-      this.$axios
-        .post('/prodStyle', this.product)
-        .then(({ data }) => {
-          if (data.result === 'success') {
-            this.mainModalOpened = false
-            Object.assign(this.product, this.$options.data.call(this).product)
-            this.notify('positive', '产品款式添加成功')
-          } else {
-            this.notify('negative', data.info)
-          }
-        })
-        .catch(error => {})
+    newProdStyle() {
+      addProdStyle(this.product).then(response => {
+        let data = response.data.data
+        this.mainModalOpened = false
+        Object.assign(this.product, this.$options.data.call(this).product)
+        this.notify('positive', data.msg)
+      })
     },
-    updateProdStyle() {
-      this.$axios
-        .put('/prodStyle', this.product)
-        .then(({ data }) => {
-          if (data.result === 'success') {
-            this.mainModalOpened = false
-            Object.assign(this.product, this.$options.data.call(this).product)
-            this.notify('positive', '产品款式修改成功')
-          } else {
-            this.notify('negative', data.info)
-          }
-        })
-        .catch(error => {})
+    modifyProdStyle() {
+      updateProdStyle(this.product).then(response => {
+        let data = response.data.data
+        this.mainModalOpened = false
+        Object.assign(this.product, this.$options.data.call(this).product)
+        this.notify('positive', data.msg)
+      })
     },
     resetModal() {
       Object.assign(this.product, this.$options.data.call(this).product)
     },
     //download specification
-    specDownload(id, name) {
-      this.$axios
-        .get('/specs/' + id, {
-          responseType: 'blob'
-        })
-        .then(response => {
-          this.fileDownload(response.data, name)
-        })
-        .catch(error => {
-          console.log(error.message)
-        })
+    downloadSpec(id, name) {
+      specDownload().then(response => {
+        this.fileDownload(response.data, name)
+      })
     },
     // public method to download file
     fileDownload(data, name) {
@@ -673,14 +659,11 @@ export default {
     //表格数据请求
     request({ pagination }) {
       this.loading = true
-      this.$axios
-        .get('/prodStyles', {
-          params: {
-            page: pagination.page,
-            row: pagination.rowsPerPage
-          }
-        })
-        .then(({ data }) => {
+      let page = pagination.page
+      let row = pagination.rowsPerPage
+      getProdStyleList(page, row)
+        .then(response => {
+          let data = response.data.data
           this.serverPagination = pagination
           this.serverPagination.rowsNumber = data.total
           this.serverData = data.rows
@@ -697,33 +680,22 @@ export default {
       pagination: this.serverPagination
     })
     //once mounted, fetch some product parameters
-    this.$axios
-      .get('/orgs')
-      .then(({ data }) => {
-        this.departProps.push(data[0])
-        this.$nextTick(() => {
-          this.$refs.departTree.expandAll()
-        })
+    getOrgList().then(response => {
+      let data = response.data.data
+      this.departProps.push(data[0])
+      this.$nextTick(() => {
+        this.$refs.departTree.expandAll()
       })
-      .catch(error => {})
-    this.$axios
-      .get('/prodFamilys')
-      .then(({ data }) => {
-        this.familyOptions = data
-      })
-      .catch(error => {})
-    this.$axios
-      .get('/prodProps')
-      .then(({ data }) => {
-        this.propOptions = data
-      })
-      .catch(error => {})
-    this.$axios
-      .get('/prodLevels')
-      .then(({ data }) => {
-        this.levelOptions = data
-      })
-      .catch(error => {})
+    })
+    getProdFamilyList().then(response => {
+      this.familyOptions = response.data.data
+    })
+    getProdPropList().then(response => {
+      this.propOptions = response.data.data
+    })
+    getProdLevelList().then(response => {
+      this.levelOptions = response.data.data
+    })
   }
 }
 </script>

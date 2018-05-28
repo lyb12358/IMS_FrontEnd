@@ -10,8 +10,8 @@ export default [
       { path: 'productCode', component: () => import('pages/product/productCode') },
       { path: 'productStyle', component: () => import('pages/product/productStyle') },
       { path: 'productCat', component: () => import('pages/product/productCat') },
-      { path: 'user', component: () => import('pages/userManagement/user') },
-      { path: 'role', component: () => import('pages/userManagement/role') },
+      { path: 'user', component: () => import('pages/userManage/user') },
+      { path: 'role', component: () => import('pages/userManage/role') },
       { path: 'changeLog', component: () => import('pages/changeLog') }
     ]
   },

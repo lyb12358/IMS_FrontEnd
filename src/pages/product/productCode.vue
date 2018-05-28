@@ -357,19 +357,14 @@ export default {
       })
     },
     //main modal function
-    openMainModal(action, id) {
-
-    },
+    openMainModal(action, id) {},
     request({ pagination }) {
       this.loading = true
-      this.$axios
-        .get('/prods', {
-          params: {
-            page: pagination.page,
-            row: pagination.rowsPerPage
-          }
-        })
-        .then(({ data }) => {
+      let page = pagination.page
+      let row = pagination.rowsPerPage
+      getProdStyleList(page, row)
+        .then(response => {
+          let data = response.data.data
           this.serverPagination = pagination
           this.serverPagination.rowsNumber = data.total
           this.serverData = data.rows

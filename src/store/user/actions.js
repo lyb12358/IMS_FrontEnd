@@ -1,5 +1,5 @@
-import { getStorageToken, setStorageToken, removeStorageToken } from 'src/utils/auth'
-import { login, logout, getInfo } from 'src/api/login'
+import { getStorageToken, setStorageToken, removeStorageToken } from 'src/utils/tokenControl'
+import { login, logout, getInfo } from 'src/api/auth'
 
 export function Login({ commit }, userInfo) {
     return new Promise((resolve, reject) => {

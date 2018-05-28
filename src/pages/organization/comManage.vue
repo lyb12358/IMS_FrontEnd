@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import { getOrgList } from 'src/api/organization'
+
 export default {
   data: () => ({
     selected: '',
@@ -53,9 +55,9 @@ export default {
     }
   },
   created() {
-    this.$axios
-      .get('/getOrgList')
-      .then(({ data }) => {
+    getOrgList()
+      .then(response => {
+        let data = response.data.data
         this.props.push(data[0])
         this.$nextTick(() => {
           this.$refs.orgTree.expandAll()
