@@ -206,6 +206,16 @@
 </template>
 
 <script>
+import { getOrgList } from 'src/api/organization'
+import {
+  getProdList,
+  specDownload,
+  getProdFamilyList,
+  getProdClassList,
+  getProdPropList,
+  getProdLevelList
+} from 'src/api/product'
+
 export default {
   data() {
     return {
