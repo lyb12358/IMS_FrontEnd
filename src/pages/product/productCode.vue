@@ -219,6 +219,7 @@ import {
 export default {
   data() {
     return {
+      api:process.env.API,
       searchForm: {
         style: '',
         code: '',
@@ -312,6 +313,8 @@ export default {
         },
         { name: 'status', align: 'left', label: '状态', field: 'status' }
       ],
+      //modal
+      mainModalOpened:false,
       //modal content
       productStyle: {
         id: 0,
@@ -372,7 +375,7 @@ export default {
       this.loading = true
       let page = pagination.page
       let row = pagination.rowsPerPage
-      getProdStyleList(page, row)
+      getProdList(page, row)
         .then(response => {
           let data = response.data.data
           this.serverPagination = pagination

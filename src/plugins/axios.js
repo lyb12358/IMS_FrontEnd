@@ -3,6 +3,7 @@ import { Notify, Dialog } from 'quasar'
 import store from 'src/store'
 import { getStorageToken } from 'src/utils/tokenControl'
 
+
 const service = axios.create({
   baseURL: process.env.API,
   timeout: 5000
@@ -25,10 +26,10 @@ service.interceptors.response.use(
   response => {
 
     const res = response.data
-    if (res.code !== 20000) {
+    if (res.code && res.code !== 20000) {
       Notify.create({
         message: res.msg,
-        type: nagetive,
+        type: 'negative',
         position: 'bottom-right'
       })
 
@@ -39,7 +40,7 @@ service.interceptors.response.use(
           ok: '重新登录',
           cancel: '取消'
         }).then(() => {
-          store.dispatch('user/FedLogOut').then(() => {
+          store.dispatch('user/FedLogout').then(() => {
             location.reload()// 为了重新实例化vue-router对象 避免bug
           })
         })
@@ -52,8 +53,8 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error)// for debug
     Notify.create({
-      message: res.msg,
-      type: nagetive,
+      message: error.msg || '网络异常，请联系系统管理员！',
+      type: 'negative',
       position: 'bottom-right'
     })
     return Promise.reject(error)

@@ -142,7 +142,7 @@
                    @click="openImageUpload(props.row.id,props.row.prodStyle,props.row.styleName )">
               <q-tooltip>上传产品图片</q-tooltip>
             </q-btn>
-            <a :href="'/image/'+props.row.id+'/'+props.row.image"
+            <a :href="api+'/image/'+props.row.id+'/'+props.row.image"
                :download="props.row.styleName">
               <q-btn icon="mdi-image-area-close"
                      v-if="props.row.thumbnail!=null"
@@ -349,7 +349,7 @@
       <span slot="message">点击"+"，选择清晰度较高的图片，将作为本产品主要图片展示</span>
       <div slot="body">
         <q-uploader ref="imageUpload"
-                    :url="imageUploadUrl"
+                    :url="api+imageUploadUrl"
                     :additionalFields="[
                       {'name':'id','value':this.expandId},
                       {'name':'prodStyle','value':this.expandStyle},
@@ -393,6 +393,7 @@ import {
 export default {
   data() {
     return {
+      api:process.env.API,
       searchForm: {
         style: '',
         code: '',
@@ -605,12 +606,12 @@ export default {
     // when it has encountered error while uploading
     imageUploadedFail(file, xhr) {
       let response = JSON.parse(xhr.response)
-      this.notify('negative', response.info)
+      this.notify('negative', response.data.msg)
     },
     //check thumbnail
     thumbnailCheck(id, thumbnail) {
       if (!(thumbnail === null)) {
-        return process.env.API + '/image/' + id + '/' + thumbnail
+        return this.api + '/image/' + id + '/' + thumbnail
       } else {
         return 'statics/sad.svg'
       }
@@ -636,7 +637,7 @@ export default {
     },
     //download specification
     downloadSpec(id, name) {
-      specDownload().then(response => {
+      specDownload(id).then(response => {
         this.fileDownload(response.data, name)
       })
     },

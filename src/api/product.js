@@ -19,7 +19,7 @@ export function getProdStyleList(page, row) {
 }
 export function getProdStyleById(id) {
     return service({
-        url: '/prodStyles' + id,
+        url: '/prodStyles/' + id,
         method: 'get',
     })
 }

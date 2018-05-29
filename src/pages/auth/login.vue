@@ -87,11 +87,7 @@ export default {
           let data = response.data
           this.loading = false
           this.$router.push('/index')
-          this.$q.notify({
-            type: 'positive',
-            position: 'bottom-right',
-            message: data.msg
-          })
+          this.notify('positive',data.msg)
         })
         .catch(error => {
           this.loading = false
