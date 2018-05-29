@@ -53,7 +53,7 @@
               <q-btn flat
                      color="primary"
                      icon="mdi-logout"
-                     @click="excuse('用户相关功能还在施工中，别点了~')" />
+                     @click="logout()" />
               <!-- <q-item-side icon="mdi-logout"
                        color="primary" /> -->
             </q-item>
@@ -70,12 +70,12 @@
               <q-item-main label="用户管理" />
             </template>
             <q-item link
-                    @click.native="excuse('都跟你说了是摆设，你点也没用~')"
+                    @click.native="notify('warning','都跟你说了是摆设，你点也没用~')"
                     class="q-ml-xl">
               <q-item-main label="用户" />
             </q-item>
             <q-item link
-                    @click.native="excuse('都跟你说了是摆设，你点也没用~')"
+                    @click.native="notify('warning','都跟你说了是摆设，你点也没用~')"
                     class="q-ml-xl">
               <q-item-main label="角色" />
             </q-item>
@@ -159,12 +159,18 @@ export default {
   },
   methods: {
     openURL,
-    excuse(x) {
+    logout(){
+      this.$store.dispatch('user/FedLogout')
+      .then(() => {
+        this.$router.push('/auth/login')
+        this.notify('positive','已登出')
+      })
+    },
+    notify(type, message) {
       this.$q.notify({
-        message: x,
-        color: 'tertiary',
-        position: 'bottom-right',
-        avatar: 'statics/logo/xiuxian.jpg'
+        message: message,
+        type: type,
+        position: 'bottom-right'
       })
     },
     resetScroll(el, done) {
@@ -174,7 +180,6 @@ export default {
     }
   },
   mounted() {
-    this.excuse('只有产品管理有内容，其他页面是摆设，不用去点~')
   }
 }
 </script>

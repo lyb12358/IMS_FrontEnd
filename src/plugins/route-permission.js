@@ -8,36 +8,43 @@ export default ({ router, store, Vue }) => {
       if (to.path === '/auth/login') {
         next({ path: '/' })
       } else {
-        // if (store.getters['user/roles'].length === 0) { // 判断当前用户是否已拉取完user_info信息
-        //   store.dispatch('user/GetInfo').then(response => { // 拉取user_info
-        //     console.log(response.data.roles)
-        //     console.log(response.data.permissions)
-        //     const roles = response.data.roles
-        //     const permissions = response.data.permissions
-        //     store.dispatch('GenerateRoutes', { permissions }).then(() => {
-        //       router.addRoutes(store.getters.addRouters)
-        //       next({ ...to, replace: true }) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
-        //     })
-        //   }).catch((error) => {
-        //     store.dispatch('FedLogOut').then(() => {
-        //       Notify.create({
-        //         message: error.msg || '鉴权失败，请重新登录',
-        //         type: nagetive,
-        //         position: 'bottom-right'
-        //       })
-        //       next({ path: '/' })
-        //     })
-        //   })
-        // } else {
-        next()
-        // }
+        if (store.getters['user/permissions'].length === 0) {
+          store.dispatch('user/GetInfo').then(response => {
+            console.log(response.data.permissions)
+          }).catch((error) => {
+            store.dispatch('user/FedLogout').then(() => {
+              Notify.create({
+                message: error.data.msg || '鉴权失败，请重新登录',
+                type: 'negative',
+                position: 'bottom-right'
+              })
+              next({ path: '/' })
+            })
+          })
+        }
+        const permissions = store.getters['user/permissions']
+        if (to.meta.requiresAuth && (permissions.indexOf('superAdmin') < 0)) {
+          if (permissions.indexOf(to.meta.auth) > -1) {
+            console.log('有权限进入')
+            next()
+          } else {
+            Notify.create({
+              message: '权限不足，无法访问',
+              type: 'negative',
+              position: 'bottom-right'
+            })
+          }
+        } else {
+          console.log('不需要权限或者是超级管理员')
+          next()
+        }
       }
     } else {
       /* has no token*/
-      if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
+      if (whiteList.indexOf(to.path) > -1) {
         next()
       } else {
-        next('/auth/login') // 否则全部重定向到登录页
+        next('/auth/login')
       }
     }
   })

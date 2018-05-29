@@ -17,7 +17,7 @@ export function Login({ commit }, userInfo) {
 export function GetInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
-            const data = response.data
+            const data = response.data.data
             if (data.roles && data.roles.length > 0) { // 验证返回的roles是否是一个非空数组
                 commit('SetRoles', data.roles)
                 commit('SetPermissions', data.permissions)
@@ -50,6 +50,8 @@ export function Logout({ commit, state }) {
 export function FedLogout({ commit }) {
     return new Promise(resolve => {
         commit('SetToken', '')
+        commit('SetRoles', [])
+        commit('SetPermissions', [])
         removeStorageToken()
         resolve()
     })
