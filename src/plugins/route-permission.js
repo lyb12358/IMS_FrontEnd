@@ -8,9 +8,8 @@ export default ({ router, store, Vue }) => {
       if (to.path === '/auth/login') {
         next({ path: '/' })
       } else {
-        if (store.getters['user/permissions'].length === 0) {
+        if (store.getters['user/userInfo'].permissions.length === 0) {
           store.dispatch('user/GetInfo').then(response => {
-            console.log(response.data.permissions)
           }).catch((error) => {
             store.dispatch('user/FedLogout').then(() => {
               Notify.create({
@@ -22,7 +21,7 @@ export default ({ router, store, Vue }) => {
             })
           })
         }
-        const permissions = store.getters['user/permissions']
+        const permissions = store.getters['user/userInfo'].permissions
         if (to.meta.requiresAuth && (permissions.indexOf('superAdmin') < 0)) {
           if (permissions.indexOf(to.meta.auth) > -1) {
             console.log('有权限进入')

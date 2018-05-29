@@ -37,15 +37,15 @@
                 IMS
               </div>
               <div class="caption q-ml-lg">
-                v0.1
+                v0.1.0
               </div>
             </div>
             <q-item-separator />
             <q-item>
               <q-item-side avatar="statics/logo/personal_logo.jpg" />
               <q-item-main>
-                <q-item-tile label>罗亚冰</q-item-tile>
-                <q-item-tile sublabel>信息中心</q-item-tile>
+                <q-item-tile label>{{userName}}</q-item-tile>
+                <q-item-tile sublabel>{{departName}}</q-item-tile>
               </q-item-main>
               <!-- <q-item-main>
               <q-item-tile label>角色：管理员</q-item-tile>
@@ -155,6 +155,14 @@ export default {
   data() {
     return {
       leftDrawerOpen: true
+    }
+  },
+  computed:{
+    userName(){
+      return this.$store.getters['user/userInfo'].name
+    },
+    departName(){
+      return this.$store.getters['user/userInfo'].departLabel
     }
   },
   methods: {
