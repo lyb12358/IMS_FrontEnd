@@ -10,8 +10,8 @@
         </q-btn>
 
         <q-toolbar-title style="font-weight:bold">
-          博洋家纺信息中心
-          <div slot="subtitle">coded by Lyb</div>
+          博洋家纺
+          <div slot="subtitle">IT Center</div>
         </q-toolbar-title>
       </q-toolbar>
     </q-layout-header>
