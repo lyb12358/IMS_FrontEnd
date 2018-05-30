@@ -15,7 +15,7 @@ export default ({ router, store, Vue }) => {
               Notify.create({
                 message: error.data.msg || '鉴权失败，请重新登录',
                 type: 'negative',
-                position: 'bottom-right'
+                position: 'top-right'
               })
               next({ path: '/' })
             })
@@ -30,7 +30,7 @@ export default ({ router, store, Vue }) => {
             Notify.create({
               message: '权限不足，无法访问',
               type: 'negative',
-              position: 'bottom-right'
+              position: 'top-right'
             })
           }
         } else {

@@ -30,7 +30,7 @@ service.interceptors.response.use(
       Notify.create({
         message: res.msg,
         type: 'negative',
-        position: 'bottom-right'
+        position: 'top-right'
       })
 
       if (res.code === 50000 || res.code === 50001 || res.code === 50002) {
@@ -55,7 +55,7 @@ service.interceptors.response.use(
     Notify.create({
       message: error.data.msg || '网络异常，请联系系统管理员！',
       type: 'negative',
-      position: 'bottom-right'
+      position: 'top-right'
     })
     return Promise.reject(error)
   }

@@ -518,7 +518,7 @@ export default {
       this.$q.notify({
         message: message,
         type: type,
-        position: 'bottom-right'
+        position: 'top-right'
       })
     },
     //main modal function

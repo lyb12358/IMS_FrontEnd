@@ -27,14 +27,19 @@
         </q-field>
       </q-card-main>
       <q-card-actions align="end">
-        <!-- <q-btn label="Register"
-               flat
-               color="secondary"
-               @click="$router.push({ name: 'register' })" /> -->
+        <q-btn label="在线更新"
+               color="tertiary"
+               icon="mdi-windows"
+               v-if="$q.platform.is.electron"
+               @click="notify('warning','客户端在线更新将在1.0版本推出')" />
         <q-btn label="注册"
                flat
                color="secondary"
                @click="notify('warning','暂未开放注册~')" />
+        <q-btn label="重置"
+               flat
+               color="secondary"
+               @click="resetLogin" />
         <q-btn label="登录"
                color="primary"
                icon="mdi-login"
@@ -72,8 +77,12 @@ export default {
       this.$q.notify({
         message: message,
         type: type,
-        position: 'bottom-right'
+        position: 'top-right'
       })
+    },
+    resetLogin(){
+      Object.assign(this.user, this.$options.data.call(this).user)
+      this.$v.user.$reset()
     },
     login() {
       this.$v.user.$touch()

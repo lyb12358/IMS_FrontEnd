@@ -65,30 +65,33 @@
                          color="primary" />
             <q-item-main label="主页" />
           </q-item>
-          <q-collapsible>
+          <q-collapsible v-if="checkAuth('view_user')|checkAuth('view_role')">
             <template slot="header">
               <q-item-side icon="mdi-account-multiple"
                            color="primary" />
               <q-item-main label="用户管理" />
             </template>
             <q-item link
+                    v-if="checkAuth('view_user')"
                     @click.native="notify('warning','都跟你说了是摆设，你点也没用~')"
                     class="q-ml-xl">
               <q-item-main label="用户" />
             </q-item>
             <q-item link
+                    v-if="checkAuth('view_role')"
                     @click.native="notify('warning','都跟你说了是摆设，你点也没用~')"
                     class="q-ml-xl">
               <q-item-main label="角色" />
             </q-item>
           </q-collapsible>
-          <q-collapsible>
+          <q-collapsible v-if="checkAuth('view_comManage')">
             <template slot="header">
               <q-item-side icon="mdi-domain"
                            color="primary" />
               <q-item-main label="组织管理" />
             </template>
             <q-item link
+                    v-if="checkAuth('view_comManage')"
                     @click.native="$router.push('comManage')"
                     class="q-ml-xl">
               <q-item-main label="公司/部门管理" />
@@ -101,22 +104,26 @@
               <q-item-main label="产品管理" />
             </template>
             <q-item link
+                    v-if="checkAuth('view_productCode')"
                     @click.native="$router.push('productCode')"
                     class="q-ml-xl">
               <q-item-main label="产品编号管理" />
             </q-item>
             <q-item link
+                    v-if="checkAuth('view_productStyle')"
                     @click.native="$router.push('productStyle')"
                     class="q-ml-xl">
               <q-item-main label="产品款式管理" />
             </q-item>
             <q-item link
+                    v-if="checkAuth('view_productCat')"
                     @click.native="$router.push('productCat')"
                     class="q-ml-xl">
               <q-item-main label="产品类别管理" />
             </q-item>
           </q-collapsible>
-          <q-item @click.native="$router.push('changeLog')">
+          <q-item v-if="checkAuth('view_changeLog')"
+                  @click.native="$router.push('changeLog')">
             <q-item-side icon="mdi-book-open"
                          color="primary" />
             <q-item-main label="更新日志" />
@@ -182,6 +189,16 @@ export default {
   },
   methods: {
     openURL,
+    checkAuth(auth){
+      if(this.permissions.indexOf('superAdmin') > -1){
+        return true
+      }
+      if(this.permissions.indexOf(auth)> -1){
+        return true
+      }else{
+        return false
+      }
+    },
     logout(){
       this.$q.dialog({ 
         title: '退出登录',
@@ -201,7 +218,7 @@ export default {
       this.$q.notify({
         message: message,
         type: type,
-        position: 'bottom-right'
+        position: 'top-right'
       })
     },
     resetScroll(el, done) {
