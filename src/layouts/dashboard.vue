@@ -45,7 +45,7 @@
               <q-item-side avatar="statics/logo/personal_logo.jpg" />
               <q-item-main>
                 <q-item-tile label>{{userName}}</q-item-tile>
-                <q-item-tile sublabel>{{departName}}</q-item-tile>
+                <q-item-tile sublabel>{{comName}} {{departName}}</q-item-tile>
               </q-item-main>
               <!-- <q-item-main>
               <q-item-tile label>角色：管理员</q-item-tile>
@@ -163,6 +163,9 @@ export default {
     },
     departName(){
       return this.$store.getters['user/userInfo'].departLabel
+    },
+    comName(){
+      return this.$store.getters['user/userInfo'].comLabel
     }
   },
   methods: {
