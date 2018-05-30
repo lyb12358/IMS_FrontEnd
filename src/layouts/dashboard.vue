@@ -42,7 +42,7 @@
             </div>
             <q-item-separator />
             <q-item>
-              <q-item-side avatar="statics/logo/personal_logo.jpg" />
+              <q-item-side :avatar="avatarLcation" />
               <q-item-main>
                 <q-item-tile label>{{userName}}</q-item-tile>
                 <q-item-tile sublabel>{{comName}} {{departName}}</q-item-tile>
@@ -53,7 +53,9 @@
               <q-btn flat
                      color="primary"
                      icon="mdi-logout"
-                     @click="logout()" />
+                     @click="logout()">
+                <q-tooltip>登出</q-tooltip>
+              </q-btn>
               <!-- <q-item-side icon="mdi-logout"
                        color="primary" /> -->
             </q-item>
@@ -158,6 +160,9 @@ export default {
     }
   },
   computed:{
+    permissions(){
+      return this.$store.getters['user/permissions']
+    },
     userName(){
       return this.$store.getters['user/userInfo'].name
     },
@@ -166,15 +171,30 @@ export default {
     },
     comName(){
       return this.$store.getters['user/userInfo'].comLabel
+    },
+    avatarLcation(){
+      if(this.permissions.indexOf('superAdmin') > -1){
+        return 'statics/logo/personal_logo.jpg'
+      } else{
+        return  'statics/sad.svg'
+      }
     }
   },
   methods: {
     openURL,
     logout(){
-      this.$store.dispatch('user/FedLogout')
+      this.$q.dialog({ 
+        title: '退出登录',
+        message: '你确定要退出登录吗？',
+        ok: '确定',
+        cancel: '取消'
+      })
       .then(() => {
-        this.$router.push('/auth/login')
-        this.notify('positive','已登出')
+        this.$store.dispatch('user/FedLogout')
+        .then(() => {
+          this.$router.push('/auth/login')
+          this.notify('positive','已登出')
+        })
       })
     },
     notify(type, message) {

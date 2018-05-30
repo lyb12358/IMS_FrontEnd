@@ -45,6 +45,7 @@ module.exports = function (ctx) {
       // https: true,
       port: 9090,
       open: true, // opens browser window automatically
+      index: '/',
       proxy: {
         // proxy all requests starting with /api to jsonplaceholder
         '/api': {

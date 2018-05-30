@@ -33,7 +33,7 @@
                rounded
                class="q-ma-xs"
                color="primary"
-               @click="openMainModal()">
+               @click="mainModalOpened=true">
           <q-tooltip>新建</q-tooltip>
         </q-btn>
         <q-btn icon="mdi-file-excel"
@@ -198,8 +198,48 @@
     </q-table>
     <q-modal v-model="mainModalOpened"
              no-backdrop-dismiss
-             no-esc-dismiss>
-
+             no-esc-dismiss
+             :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+      <q-modal-layout footer-class="no-shadow">
+        <q-toolbar slot="header">
+          <q-btn flat
+                 round
+                 dense
+                 v-close-overlay
+                 icon="mdi-arrow-left" />
+          <q-toolbar-title>
+            {{modalActionName}}
+          </q-toolbar-title>
+        </q-toolbar>
+        <q-toolbar slot="footer"
+                   inverted>
+          <div class="col-12 row justify-center ">
+            <div v-if="modalActionName==='修改产品信息'"
+                 style="margin:0 2rem">
+              <q-btn color="primary"
+                     label="确定"
+                     @click="modifyProd" />
+            </div>
+            <div v-if="modalActionName==='新增产品信息'"
+                 style="margin:0 2rem">
+              <q-btn color="primary"
+                     label="确定"
+                     @click="newProd" />
+            </div>
+            <div v-if="modalActionName==='新增产品信息'"
+                 style="margin:0 2rem">
+              <q-btn color="primary"
+                     label="重置"
+                     @click="resetModal" />
+            </div>
+            <div style="margin:0 2rem">
+              <q-btn color="primary"
+                     v-close-overlay
+                     label="取消" />
+            </div>
+          </div>
+        </q-toolbar>
+      </q-modal-layout>
     </q-modal>
   </q-page>
 
@@ -209,11 +249,7 @@
 import { getOrgList } from 'src/api/organization'
 import {
   getProdList,
-  specDownload,
-  getProdFamilyList,
-  getProdClassList,
-  getProdPropList,
-  getProdLevelList
+  specDownload
 } from 'src/api/product'
 
 export default {
@@ -315,6 +351,7 @@ export default {
       ],
       //modal
       mainModalOpened:false,
+      modalActionName: '',
       //modal content
       productStyle: {
         id: 0,

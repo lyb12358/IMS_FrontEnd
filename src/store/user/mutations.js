@@ -1,9 +1,9 @@
 export const SetToken = (state, token) => {
-    state.token = token
+  state.token = token
 }
 export const SetPermissions = (state, permissions) => {
-    state.permissions = permissions
+  state.permissions = permissions
 }
 export const SetUserInfo = (state, userInfo) => {
-    state.userInfo = userInfo
+  state.userInfo = userInfo
 }

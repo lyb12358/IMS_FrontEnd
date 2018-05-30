@@ -209,7 +209,7 @@
         <q-toolbar slot="footer"
                    inverted>
           <div class="col-12 row justify-center ">
-            <div v-if="modalActionName==='更新产品款式'"
+            <div v-if="modalActionName==='修改产品款式'"
                  style="margin:0 2rem">
               <q-btn color="primary"
                      label="确定"
@@ -527,7 +527,7 @@ export default {
         this.modalActionName = '新增产品款式'
         this.mainModalOpened = true
       } else if (action === 'update') {
-        this.modalActionName = '更新产品款式'
+        this.modalActionName = '修改产品款式'
         getProdStyleById(id)
           .then(response => {
             let product = response.data
@@ -602,6 +602,9 @@ export default {
       this.notify('positive', '上传成功')
       this.$refs.imageUpload.reset()
       this.imageUploadDialog = false
+      this.request({
+          pagination: this.serverPagination
+      })
     },
     // when it has encountered error while uploading
     imageUploadedFail(file, xhr) {
@@ -622,6 +625,9 @@ export default {
         this.mainModalOpened = false
         Object.assign(this.product, this.$options.data.call(this).product)
         this.notify('positive', data.msg)
+        this.request({
+          pagination: this.serverPagination
+        })
       })
     },
     modifyProdStyle() {
@@ -630,6 +636,9 @@ export default {
         this.mainModalOpened = false
         Object.assign(this.product, this.$options.data.call(this).product)
         this.notify('positive', data.msg)
+        this.request({
+          pagination: this.serverPagination
+        })
       })
     },
     resetModal() {

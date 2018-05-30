@@ -1,9 +1,9 @@
 export const token = (state) => {
-    return state.token
+  return state.token
 }
 export const permissions = (state) => {
-    return state.permissions
+  return state.permissions
 }
 export const userInfo = (state) => {
-    return state.userInfo
+  return state.userInfo
 }
