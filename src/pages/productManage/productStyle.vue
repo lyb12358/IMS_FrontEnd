@@ -191,7 +191,7 @@
       </div>
     </q-table>
     <!-- 新建款式modal -->
-    <q-modal v-model="mainModalOpened"
+    <q-modal v-model="mainStyleModalOpened"
              no-esc-dismiss
              no-backdrop-dismiss
              :content-css="{minWidth: '80vw', minHeight: '80vh'}">
@@ -225,7 +225,7 @@
                  style="margin:0 2rem">
               <q-btn color="primary"
                      label="重置"
-                     @click="resetModal" />
+                     @click="resetStyleModal" />
             </div>
             <div style="margin:0 2rem">
               <q-btn color="primary"
@@ -237,17 +237,17 @@
         <div class="layout-padding">
           <div class="row gutter-sm">
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="product.prodStyle"
+              <q-input v-model="productStyle.prodStyle"
                        class="no-margin"
                        float-label="款号" />
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
-              <q-input v-model="product.styleName"
+              <q-input v-model="productStyle.styleName"
                        class="no-margin"
                        float-label="款名" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="product.departLabel"
+              <q-input v-model="productStyle.departLabel"
                        ref="departInput"
                        readonly
                        @focus="departOpened=true"
@@ -255,19 +255,19 @@
                        float-label="所属部门" />
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
-              <q-select v-model="product.prodProp"
+              <q-select v-model="productStyle.prodProp"
                         float-label="产品属性"
                         radio
                         :options="propOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="product.prodFamily"
+              <q-select v-model="productStyle.prodFamily"
                         float-label="产品所属"
                         radio
                         :options="familyOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="product.classLabel"
+              <q-input v-model="productStyle.classLabel"
                        ref="classInput"
                        readonly
                        @focus="openClassDialog()"
@@ -275,22 +275,22 @@
                        float-label="产品类别" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="product.prodMat"
+              <q-input v-model="productStyle.prodMat"
                        class="no-margin"
                        float-label="产品材料" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="product.prodLevel"
+              <q-select v-model="productStyle.prodLevel"
                         float-label="产品档次"
                         radio
                         :options="levelOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-toggle v-model="product.status"
+              <q-toggle v-model="productStyle.status"
                         label="是否上架" />
             </div>
             <div class="col-xs-12  col-sm-12 col-md-12">
-              <q-input v-model="product.prodDesc"
+              <q-input v-model="productStyle.prodDesc"
                        clearable
                        type="textarea"
                        float-label="产品描述"
@@ -465,7 +465,7 @@ export default {
         { name: 'status', align: 'left', label: '状态', field: 'status' }
       ],
       //modal
-      mainModalOpened: false,
+      mainStyleModalOpened: false,
       modalActionName: '',
       //modal content
       departSelected: '',
@@ -474,7 +474,7 @@ export default {
       classProps: [],
       departOpened: false,
       classOpened: false,
-      product: {
+      productStyle: {
         id: 0,
         departLabel: '',
         departId: '',
@@ -502,9 +502,9 @@ export default {
   },
   watch: {
     //reset prodClass when prodFamily change
-    'product.prodFamily': function() {
-      this.product.prodClass = ''
-      this.product.classLabel = ''
+    'productStyle.prodFamily': function() {
+      this.productStyle.prodClass = ''
+      this.productStyle.classLabel = ''
     }
   },
   methods: {
@@ -525,40 +525,40 @@ export default {
     openMainModal(action, id) {
       if (action === 'add') {
         this.modalActionName = '新增产品款式'
-        this.mainModalOpened = true
+        this.mainStyleModalOpened = true
       } else if (action === 'update') {
         this.modalActionName = '修改产品款式'
         getProdStyleById(id)
           .then(response => {
-            let product = response.data
-            if (product.status == 1) {
-              product.status = true
+            let productStyle = response.data
+            if (productStyle.status == 1) {
+              productStyle.status = true
             } else {
-              product.status = false
+              productStyle.status = false
             }
-            Object.assign(this.product, product)
+            Object.assign(this.productStyle, productStyle)
             this.$nextTick(() => {
-              this.product.classLabel = product.classLabel
-              this.product.prodClass = product.prodClass
-              this.mainModalOpened = true
+              this.productStyle.classLabel = productStyle.classLabel
+              this.productStyle.prodClass = productStyle.prodClass
+              this.mainStyleModalOpened = true
             })
           })
       }
     },
     //add product
     selectDepart() {
-      this.product.departId = this.$refs.departTree.getNodeByKey(
+      this.productStyle.departId = this.$refs.departTree.getNodeByKey(
         this.departSelected
       ).id
-      this.product.departLabel = this.$refs.departTree.getNodeByKey(
+      this.productStyle.departLabel = this.$refs.departTree.getNodeByKey(
         this.departSelected
       ).label
       this.departOpened = false
       this.$refs.departInput.blur()
     },
     openClassDialog() {
-      if (this.product.prodFamily != '') {
-        getProdClassList(this.product.prodFamily).then(response => {
+      if (this.productStyle.prodFamily != '') {
+        getProdClassList(this.productStyle.prodFamily).then(response => {
           let data = response.data.data
           this.classProps = data
           this.classOpened = true
@@ -568,10 +568,10 @@ export default {
       }
     },
     selectClass() {
-      this.product.prodClass = this.$refs.classTree.getNodeByKey(
+      this.productStyle.prodClass = this.$refs.classTree.getNodeByKey(
         this.classSelected
       ).id
-      this.product.classLabel = this.$refs.classTree.getNodeByKey(
+      this.productStyle.classLabel = this.$refs.classTree.getNodeByKey(
         this.classSelected
       ).label
       this.classOpened = false
@@ -620,10 +620,10 @@ export default {
       }
     },
     newProdStyle() {
-      addProdStyle(this.product).then(response => {
+      addProdStyle(this.productStyle).then(response => {
         let data = response.data.data
-        this.mainModalOpened = false
-        Object.assign(this.product, this.$options.data.call(this).product)
+        this.mainStyleModalOpened = false
+        Object.assign(this.productStyle, this.$options.data.call(this).productStyle)
         this.notify('positive', data.msg)
         this.request({
           pagination: this.serverPagination
@@ -631,18 +631,18 @@ export default {
       })
     },
     modifyProdStyle() {
-      updateProdStyle(this.product).then(response => {
+      updateProdStyle(this.productStyle).then(response => {
         let data = response.data.data
-        this.mainModalOpened = false
-        Object.assign(this.product, this.$options.data.call(this).product)
+        this.mainStyleModalOpened = false
+        Object.assign(this.productStyle, this.$options.data.call(this).productStyle)
         this.notify('positive', data.msg)
         this.request({
           pagination: this.serverPagination
         })
       })
     },
-    resetModal() {
-      Object.assign(this.product, this.$options.data.call(this).product)
+    resetStyleModal() {
+      Object.assign(this.productStyle, this.$options.data.call(this).productStyle)
     },
     //download specification
     downloadSpec(id, name) {

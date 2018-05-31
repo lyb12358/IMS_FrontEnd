@@ -24,7 +24,6 @@ export default ({ router, store, Vue }) => {
         const permissions = store.getters['user/permissions']
         if (to.meta.requiresAuth && (permissions.indexOf('superAdmin') < 0)) {
           if (permissions.indexOf(to.meta.auth) > -1) {
-            console.log('有权限进入')
             next()
           } else {
             Notify.create({
@@ -32,9 +31,9 @@ export default ({ router, store, Vue }) => {
               type: 'negative',
               position: 'top-right'
             })
+            next('/auth/login')
           }
         } else {
-          console.log('不需要权限或者是超级管理员')
           next()
         }
       }

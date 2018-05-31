@@ -1,9 +1,9 @@
 {
   "name": "ims_frontend",
-  "version": "1.0.0",
+  "version": "0.5.0",
   "description": "A Intergrated Management System coded by Lyb",
-  "productName": "IMS_FrontEnd",
-  "cordovaId": "org.cordova.quasar.app",
+  "productName": "产品管理系统",
+  "cordovaId": "org.beyond.app",
   "author": "lyb12358 <69788721@qq.com>",
   "private": true,
   "scripts": {
@@ -12,12 +12,12 @@
   "dependencies": {
     "axios": "^0.18.0",
     "vue-echarts": "^3.0.7",
-    "vue-i18n": "^7.6.0",
+    "vue-i18n": "^7.7.0",
     "vue-simple-markdown": "^1.0.7",
-    "vuelidate": "^0.6.2"
+    "vuelidate": "^0.7.4"
   },
   "devDependencies": {
-    "quasar-cli": "^0.16.3",
+    "quasar-cli": "^0.16.4",
     "text-loader": "0.0.1"
   },
   "engines": {

@@ -33,7 +33,7 @@
                rounded
                class="q-ma-xs"
                color="primary"
-               @click="mainModalOpened=true">
+               @click="chooseStyleDialogOpend=true">
           <q-tooltip>新建</q-tooltip>
         </q-btn>
         <q-btn icon="mdi-file-excel"
@@ -196,7 +196,26 @@
                @click="props.nextPage" />
       </div>
     </q-table>
-    <q-modal v-model="mainModalOpened"
+    <!-- choose style -->
+    <q-dialog v-model="chooseStyleDialogOpend"
+              prevent-close>
+      <span slot="title">请选择产品所属款式</span>
+      <div slot="body">
+        <q-input v-model.trim="styleChoosed"
+                 float-label="产品款式" />
+      </div>
+      <template slot="buttons"
+                slot-scope="props">
+        <q-btn color="primary"
+               @click="checkStyle()"
+               label="确定" />
+        <q-btn color="primary"
+               @click="chooseStyleDialogOpend = false"
+               label="取消" />
+      </template>
+    </q-dialog>
+    <!-- main modal -->
+    <q-modal v-model="mainCodeModalOpened"
              no-backdrop-dismiss
              no-esc-dismiss
              :content-css="{minWidth: '80vw', minHeight: '80vh'}">
@@ -211,6 +230,7 @@
             {{modalActionName}}
           </q-toolbar-title>
         </q-toolbar>
+        
         <q-toolbar slot="footer"
                    inverted>
           <div class="col-12 row justify-center ">
@@ -230,7 +250,7 @@
                  style="margin:0 2rem">
               <q-btn color="primary"
                      label="重置"
-                     @click="resetModal" />
+                     @click="resetCodeModal" />
             </div>
             <div style="margin:0 2rem">
               <q-btn color="primary"
@@ -247,15 +267,12 @@
 
 <script>
 import { getOrgList } from 'src/api/organization'
-import {
-  getProdList,
-  specDownload
-} from 'src/api/product'
+import { getProdList, checkProdStyle, specDownload } from 'src/api/product'
 
 export default {
   data() {
     return {
-      api:process.env.API,
+      api: process.env.API,
       searchForm: {
         style: '',
         code: '',
@@ -349,8 +366,11 @@ export default {
         },
         { name: 'status', align: 'left', label: '状态', field: 'status' }
       ],
+      //choose style dialog
+      chooseStyleDialogOpend: false,
+      styleChoosed: '',
       //modal
-      mainModalOpened:false,
+      mainCodeModalOpened: false,
       modalActionName: '',
       //modal content
       productStyle: {
@@ -394,7 +414,7 @@ export default {
   },
   methods: {
     showExpand() {
-      console.log(this.$q.platform.is.MicroMessenger)
+      console.log('hi')
     },
     printSth() {
       window.print()
@@ -406,8 +426,26 @@ export default {
         position: 'top-right'
       })
     },
+    //choose style
+    checkStyle() {
+      checkProdStyle(this.styleChoosed).then(response => {
+        let productStyle = response.data.data
+        this.chooseStyleDialogOpend = false
+        Object.assign(this.productStyle, productStyle)
+        // this.$nextTick(() => {
+        // })
+        this.openMainCodeModal('add')
+      })
+    },
     //main modal function
-    openMainModal(action, id) {},
+    openMainCodeModal(action) {
+      if (action === 'add') {
+        this.modalActionName = '新增产品信息'
+        this.mainCodeModalOpened = true
+      } else if (action === 'update') {
+        this.modalActionName = '修改产品信息'
+      }
+    },
     request({ pagination }) {
       this.loading = true
       let page = pagination.page

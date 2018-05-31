@@ -53,7 +53,7 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error)// for debug
     Notify.create({
-      message: error.data.msg || '网络异常，请联系系统管理员！',
+      message: error || '网络异常，请联系系统管理员！',
       type: 'negative',
       position: 'top-right'
     })

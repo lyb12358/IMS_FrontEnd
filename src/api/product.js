@@ -19,7 +19,7 @@ export function getProdStyleList(page, row) {
 }
 export function getProdStyleById(id) {
     return service({
-        url: '/prodStyles/' + id,
+        url: '/prodStyles/id/' + id,
         method: 'get',
     })
 }
@@ -37,7 +37,12 @@ export function updateProdStyle(prodstyle) {
         data: prodstyle
     })
 }
-
+export function checkProdStyle(prodStyle) {
+    return service({
+        url: '/prodStyles/prodStyle/' + prodStyle,
+        method: 'get',
+    })
+}
 
 //file,image
 export function specDownload(id) {
