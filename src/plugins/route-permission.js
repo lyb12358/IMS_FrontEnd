@@ -1,7 +1,7 @@
 import { Notify } from 'quasar'
 import { getStorageToken } from 'src/utils/tokenControl'
 export default ({ router, store, Vue }) => {
-  const whiteList = ['/auth/login', '/auth/register']// no redirect whitelist
+  const whiteList = ['/auth/login', '/auth/register', '/mobileWarn']// no redirect whitelist
   router.beforeEach((to, from, next) => {
     if (getStorageToken()) { // determine if there has token
       /* has token*/

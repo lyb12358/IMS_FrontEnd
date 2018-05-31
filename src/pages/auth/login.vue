@@ -9,7 +9,7 @@
               产品管理系统 Beta
             </span>
             <br>
-            <small style="color:white;text-shadow:green 0 1px 0;">
+            <small style="color:white;">
               coded by Lyb
               <span style="color:red">♥</span>
             </small>
@@ -51,6 +51,7 @@
                    color="secondary"
                    @click="resetLogin" />
             <q-btn label="登录"
+                   :loading="loading"
                    color="primary"
                    icon="mdi-login"
                    @click="login" />
@@ -69,10 +70,10 @@
             </small>
           </q-card-main>
         </q-card>
-        <q-inner-loading :visible="loading">
+        <!-- <q-inner-loading :visible="loading">
           <q-spinner-gears size="75px"
                            color="primary"></q-spinner-gears>
-        </q-inner-loading>
+        </q-inner-loading> -->
       </div>
 
       <div class="bg-boxes">
@@ -230,13 +231,18 @@ export default {
         .dispatch('user/Login', this.user)
         .then(response => {
           let data = response.data
-          this.loading = false
           this.$router.push('/index')
+          this.loading = false
           this.notify('positive',data.msg)
         })
         .catch(error => {
           this.loading = false
         })
+    }
+  },
+  created(){
+    if(this.$q.platform.is.mobile){
+      this.$router.push('/mobileWarn')
     }
   },
   mounted() {
@@ -253,10 +259,8 @@ export default {
   left 0
   right 0
   background #50a3a2
-  background -webkit-linear-gradient(top left, #50a3a2 0%, #53e3a6 100%)
-  background linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%)
-  // font-family: 'Roboto', sans-serif;
-  // font-weight: 300;
+  background -webkit-linear-gradient(top left, #027be3 0%, #027be3 100%)
+  background linear-gradient(to bottom right, #027be3 0%, #027be3 100%)
   height 100vh /* Allow spacing based on window height */
   margin 0
   min-height 240px
