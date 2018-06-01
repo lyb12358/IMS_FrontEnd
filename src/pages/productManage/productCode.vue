@@ -559,6 +559,7 @@ export default {
     openMainCodeModal(action, id) {
       if (action === 'add') {
         this.modalActionName = '新增产品信息'
+        this.product.departId = this.productStyle.departId
         this.product.prodStyle = this.productStyle.prodStyle
         this.product.prodName = this.productStyle.styleName
         this.mainCodeModalOpened = true
