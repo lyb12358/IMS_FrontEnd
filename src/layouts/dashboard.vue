@@ -33,11 +33,11 @@
               <!-- <img src="~assets/logo.png"
                    style="height: 75px; width 75px;"> -->
               <div class="text-italic force-color"
-                   style="font-weight:800;font-size:50px;">
+                   style="font-weight:800;font-size:3em;">
                 IMS
               </div>
               <div class="caption q-ml-lg">
-                v0.1.0
+                v0.5.0
               </div>
             </div>
             <q-item-separator />
@@ -166,53 +166,53 @@ export default {
       leftDrawerOpen: true
     }
   },
-  computed:{
-    permissions(){
+  computed: {
+    permissions() {
       return this.$store.getters['user/permissions']
     },
-    userName(){
+    userName() {
       return this.$store.getters['user/userInfo'].name
     },
-    departName(){
+    departName() {
       return this.$store.getters['user/userInfo'].departLabel
     },
-    comName(){
+    comName() {
       return this.$store.getters['user/userInfo'].comLabel
     },
-    avatarLcation(){
-      if(this.permissions.indexOf('superAdmin') > -1){
+    avatarLcation() {
+      if (this.permissions.indexOf('superAdmin') > -1) {
         return 'statics/logo/personal_logo.jpg'
-      } else{
-        return  'statics/sad.svg'
+      } else {
+        return 'statics/sad.svg'
       }
     }
   },
   methods: {
     openURL,
-    checkAuth(auth){
-      if(this.permissions.indexOf('superAdmin') > -1){
+    checkAuth(auth) {
+      if (this.permissions.indexOf('superAdmin') > -1) {
         return true
       }
-      if(this.permissions.indexOf(auth)> -1){
+      if (this.permissions.indexOf(auth) > -1) {
         return true
-      }else{
+      } else {
         return false
       }
     },
-    logout(){
-      this.$q.dialog({ 
-        title: '退出登录',
-        message: '你确定要退出登录吗？',
-        ok: '确定',
-        cancel: '取消'
-      })
-      .then(() => {
-        this.$store.dispatch('user/FedLogout')
-        .then(() => {
-          this.$router.push('/auth/login')
-          this.notify('positive','已登出')
+    logout() {
+      this.$q
+        .dialog({
+          title: '退出登录',
+          message: '你确定要退出登录吗？',
+          ok: '确定',
+          cancel: '取消'
         })
-      })
+        .then(() => {
+          this.$store.dispatch('user/FedLogout').then(() => {
+            this.$router.push('/auth/login')
+            this.notify('positive', '已登出')
+          })
+        })
     },
     notify(type, message) {
       this.$q.notify({
@@ -227,8 +227,7 @@ export default {
       done()
     }
   },
-  mounted() {
-  }
+  mounted() {}
 }
 </script>
 

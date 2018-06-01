@@ -1,4 +1,4 @@
-import { getStorageToken, setStorageToken, removeStorageToken } from 'src/utils/tokenControl'
+import { getStorageToken, setStorageToken, removeStorageToken } from 'src/utils/storageControl'
 import { login, logout, getInfo } from 'src/api/auth'
 
 export function Login({ commit }, userInfo) {

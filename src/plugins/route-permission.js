@@ -1,5 +1,5 @@
 import { Notify } from 'quasar'
-import { getStorageToken } from 'src/utils/tokenControl'
+import { getStorageToken } from 'src/utils/storageControl'
 export default ({ router, store, Vue }) => {
   const whiteList = ['/auth/login', '/auth/register', '/mobileWarn']// no redirect whitelist
   router.beforeEach((to, from, next) => {
@@ -10,31 +10,49 @@ export default ({ router, store, Vue }) => {
       } else {
         if (store.getters['user/permissions'].length === 0) {
           store.dispatch('user/GetInfo').then(response => {
+            const permissions = store.getters['user/permissions']
+            if (to.meta.requiresAuth && (permissions.indexOf('superAdmin') < 0)) {
+              if (permissions.indexOf(to.meta.auth) > -1) {
+                next()
+              } else {
+                Notify.create({
+                  message: '权限不足，无法访问',
+                  type: 'negative',
+                  position: 'top-right'
+                })
+                next('/auth/login')
+              }
+            } else {
+              next()
+            }
           }).catch((error) => {
             store.dispatch('user/FedLogout').then(() => {
               Notify.create({
-                message: error.data.msg || '鉴权失败，请重新登录',
+                message: '鉴权失败，请重新登录',
                 type: 'negative',
                 position: 'top-right'
               })
               next({ path: '/' })
             })
           })
-        }
-        const permissions = store.getters['user/permissions']
-        if (to.meta.requiresAuth && (permissions.indexOf('superAdmin') < 0)) {
-          if (permissions.indexOf(to.meta.auth) > -1) {
-            next()
-          } else {
-            Notify.create({
-              message: '权限不足，无法访问',
-              type: 'negative',
-              position: 'top-right'
-            })
-            next('/auth/login')
-          }
         } else {
-          next()
+          const permissions = store.getters['user/permissions']
+          if (to.meta.requiresAuth && (permissions.indexOf('superAdmin') < 0)) {
+            console.log(permissions)
+            console.log(store.getters['user/permissions'])
+            if (permissions.indexOf(to.meta.auth) > -1) {
+              next()
+            } else {
+              Notify.create({
+                message: '权限不足，无法访问',
+                type: 'negative',
+                position: 'top-right'
+              })
+              next('/auth/login')
+            }
+          } else {
+            next()
+          }
         }
       }
     } else {

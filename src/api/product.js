@@ -8,6 +8,26 @@ export function getProdList(page, row) {
         params: { page, row }
     })
 }
+export function getProdById(id) {
+    return service({
+        url: '/prods/prod/' + id,
+        method: 'get',
+    })
+}
+export function addProdCode(product) {
+    return service({
+        url: '/prodCodes',
+        method: 'post',
+        data: product
+    })
+}
+export function updateProdCode(product) {
+    return service({
+        url: '/prodCode',
+        method: 'put',
+        data: product
+    })
+}
 
 //productStyle
 export function getProdStyleList(page, row) {
@@ -23,11 +43,11 @@ export function getProdStyleById(id) {
         method: 'get',
     })
 }
-export function addProdStyle(prodstyle) {
+export function addProdStyle(productStyle) {
     return service({
         url: '/prodStyles',
         method: 'post',
-        data: prodstyle
+        data: productStyle
     })
 }
 export function updateProdStyle(prodstyle) {

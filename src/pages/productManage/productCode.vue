@@ -15,9 +15,6 @@
            slot-scope="props"
            class="row print-hide">
         <q-input class="q-mt-ml q-mr-sm"
-                 v-model="searchForm.style"
-                 float-label="款号" />
-        <q-input class="q-mt-ml q-mr-sm"
                  v-model="searchForm.code"
                  float-label="产品编号" />
         <q-input class="q-mt-ml q-mr-sm"
@@ -87,7 +84,8 @@
         </q-th> -->
         <q-th v-for="col in props.cols"
               :key="col.name"
-              :props="props">
+              :props="props"
+              style="text-align:center">
           {{ col.label }}
         </q-th>
       </q-tr>
@@ -99,15 +97,20 @@
                         v-model="props.selected" />
           </q-td> -->
           <q-td key="id"
-                :props="props">{{ props.row.id }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.id }}</q-td>
           <q-td key="departId"
-                :props="props">{{ props.row.departId }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.departId }}</q-td>
           <q-td key="comId"
-                :props="props">{{ props.row.comId }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.comId }}</q-td>
           <q-td key="prodStyle"
-                :props="props">{{ props.row.prodStyle }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.prodStyle }}</q-td>
           <q-td key="prodCode"
-                :props="props">
+                :props="props"
+                style="text-align:center">
             <q-checkbox color="secondary"
                         v-model="props.expand"
                         checked-icon="mdi-minus"
@@ -115,31 +118,43 @@
                         class="q-mr-md" /> {{ props.row.prodCode }}
           </q-td>
           <q-td key="prodName"
-                :props="props">{{ props.row.prodName }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.prodName }}</q-td>
           <q-td key="prodFamily"
-                :props="props">{{ props.row.familyLabel}}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.familyLabel}}</q-td>
           <q-td key="prodClass"
-                :props="props">{{ props.row.classLabel }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.classLabel }}</q-td>
           <q-td key="prodProp"
-                :props="props">{{ props.row.propLabel }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.propLabel }}</q-td>
           <q-td key="prodLevel"
-                :props="props">{{ props.row.levelLabel }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.levelLabel }}</q-td>
           <q-td key="prodMat"
-                :props="props">{{ props.row.prodMat }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.prodMat }}</q-td>
           <q-td key="prodSize"
-                :props="props">{{ props.row.prodSize }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.prodSize }}</q-td>
           <q-td key="prodCat"
-                :props="props">{{ props.row.prodCat }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.prodCat }}</q-td>
           <q-td key="weight"
-                :props="props">{{ props.row.weight }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.weight }}</q-td>
           <q-td key="retailPrice"
-                :props="props">{{ props.row.retailPrice }}
+                :props="props"
+                style="text-align:center">{{ props.row.retailPrice }}
           </q-td>
           <q-td key="supplyPrice"
-                :props="props">{{ props.row.supplyPrice }}
+                :props="props"
+                style="text-align:center">{{ props.row.supplyPrice }}
           </q-td>
           <q-td key="costPrice"
-                :props="props">{{ props.row.costPrice }}
+                :props="props"
+                style="text-align:center">{{ props.row.costPrice }}
           </q-td>
         </q-tr>
         <q-tr v-show="props.expand"
@@ -148,25 +163,34 @@
             <q-btn icon="mdi-format-list-numbers"
                    rounded
                    color="primary"
-                   @click="showExpand()">
-              <q-tooltip>修改产品信息</q-tooltip>
+                   @click="openMainCodeModal('update',props.row.id)">
+              <q-tooltip>修改该编号产品信息</q-tooltip>
             </q-btn>
             <q-btn icon="mdi-playlist-plus"
                    rounded
                    color="secondary"
-                   @click="showExpand()">
-              <q-tooltip>增加同款产品</q-tooltip>
+                   @click="checkStyle(props.row.prodStyle)">
+              <q-tooltip>增加同款式产品</q-tooltip>
             </q-btn>
-            <q-btn icon="mdi-image"
+            <a :href="api+'/image/'+props.row.styleId+'/'+props.row.image"
+               :download="props.row.prodName">
+              <q-btn icon="mdi-image-area-close"
+                     v-if="props.row.thumbnail!=null"
+                     rounded
+                     color="tertiary">
+                <q-tooltip>下载原图</q-tooltip>
+              </q-btn>
+            </a>
+            <q-btn icon="mdi-clipboard-arrow-down"
                    rounded
-                   color="tertiary"
-                   @click="showExpand()">
-              <q-tooltip>查看产品图片</q-tooltip>
+                   color="orange"
+                   @click="downloadSpec(props.row.styleId,props.row.prodName )">
+              <q-tooltip>下载产品说明书</q-tooltip>
             </q-btn>
             <q-btn icon="mdi-delete"
                    rounded
                    color="negative"
-                   @click="showExpand()">
+                   @click="deleteProdCode()">
               <q-tooltip>删除</q-tooltip>
             </q-btn>
           </q-td>
@@ -199,15 +223,16 @@
     <!-- choose style -->
     <q-dialog v-model="chooseStyleDialogOpend"
               prevent-close>
-      <span slot="title">请选择产品所属款式</span>
+      <span slot="title">请输入产品所属款式</span>
       <div slot="body">
         <q-input v-model.trim="styleChoosed"
-                 float-label="产品款式" />
+                 float-label="产品款式"
+                 @keyup.enter="checkStyle(styleChoosed)" />
       </div>
       <template slot="buttons"
                 slot-scope="props">
         <q-btn color="primary"
-               @click="checkStyle()"
+               @click="checkStyle(styleChoosed)"
                label="确定" />
         <q-btn color="primary"
                @click="chooseStyleDialogOpend = false"
@@ -230,7 +255,6 @@
             {{modalActionName}}
           </q-toolbar-title>
         </q-toolbar>
-        
         <q-toolbar slot="footer"
                    inverted>
           <div class="col-12 row justify-center ">
@@ -238,13 +262,13 @@
                  style="margin:0 2rem">
               <q-btn color="primary"
                      label="确定"
-                     @click="modifyProd" />
+                     @click="modifyProdCode" />
             </div>
             <div v-if="modalActionName==='新增产品信息'"
                  style="margin:0 2rem">
               <q-btn color="primary"
                      label="确定"
-                     @click="newProd" />
+                     @click="newProdCode" />
             </div>
             <div v-if="modalActionName==='新增产品信息'"
                  style="margin:0 2rem">
@@ -259,6 +283,89 @@
             </div>
           </div>
         </q-toolbar>
+        <div class="layout-padding">
+          <div class="row">
+            <div class="col-md-12">
+              <q-collapsible :label="productStyle.styleName"
+                             sublabel="点击可展开该款式详细内容">
+                <q-card>
+                  <q-card-main>
+                    <table class="q-table">
+                      <tbody>
+                        <tr>
+                          <td class="text-right">款号：</td>
+                          <td class="text-left">{{productStyle.prodStyle}}</td>
+                          <td class="text-right">款名：</td>
+                          <td class="text-left">{{productStyle.styleName}}</td>
+                          <td class="text-right">部门：</td>
+                          <td class="text-left">{{productStyle.departLabel}}</td>
+                        </tr>
+                        <tr>
+                          <td class="text-right">属性：</td>
+                          <td class="text-left">{{productStyle.propLabel}}</td>
+                          <td class="text-right">所属：</td>
+                          <td class="text-left">{{productStyle.familyLabel}}</td>
+                          <td class="text-right">类别：</td>
+                          <td class="text-left">{{productStyle.classLabel}}</td>
+                        </tr>
+                        <tr>
+                          <td class="text-right">面料：</td>
+                          <td class="text-left">{{productStyle.prodMat}}</td>
+                          <td class="text-right">档次：</td>
+                          <td class="text-left">{{productStyle.levelLabel}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </q-card-main>
+                </q-card>
+              </q-collapsible>
+            </div>
+          </div>
+          <div class="row gutter-sm">
+            <div class="col-xs-12  col-sm-6 col-md-4">
+              <q-input v-model="product.prodCode"
+                       class="no-margin"
+                       float-label="编号" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-input v-model="product.prodName"
+                       class="no-margin"
+                       float-label="名称" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-input v-model="product.prodSize"
+                       class="no-margin"
+                       float-label="规格" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-input v-model="product.prodCat"
+                       class="no-margin"
+                       float-label="品类" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-input v-model="product.weight"
+                       class="no-margin"
+                       float-label="克重" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-input v-model="product.retailPrice"
+                       class="no-margin"
+                       float-label="零售价" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-input v-model="product.supplyPrice"
+                       class="no-margin"
+                       float-label="供应价" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-input v-model="product.costPrice"
+                       class="no-margin"
+                       float-label="成本价" />
+            </div>
+          </div>
+        </div>
       </q-modal-layout>
     </q-modal>
   </q-page>
@@ -267,7 +374,15 @@
 
 <script>
 import { getOrgList } from 'src/api/organization'
-import { getProdList, checkProdStyle, specDownload } from 'src/api/product'
+import {
+  getProdList,
+  getProdById,
+  addProdCode,
+  updateProdCode,
+  getProdStyleByAny,
+  checkProdStyle,
+  specDownload
+} from 'src/api/product'
 
 export default {
   data() {
@@ -292,7 +407,7 @@ export default {
       separator: 'horizontal',
       serverPagination: {
         page: 1,
-        rowsPerPage: 5,
+        rowsPerPage: 10,
         rowsNumber: 10 // specifying this determines pagination is server-side
       },
       serverData: [],
@@ -383,8 +498,11 @@ export default {
         styleName: '',
         prodStyle: '',
         prodFamily: '',
+        familyLabel: '',
         prodProp: '',
+        propLabel: '',
         prodLevel: '',
+        levelLabel: '',
         prodDesc: '',
         status: true
       },
@@ -427,8 +545,8 @@ export default {
       })
     },
     //choose style
-    checkStyle() {
-      checkProdStyle(this.styleChoosed).then(response => {
+    checkStyle(styleChoosed) {
+      checkProdStyle(styleChoosed).then(response => {
         let productStyle = response.data.data
         this.chooseStyleDialogOpend = false
         Object.assign(this.productStyle, productStyle)
@@ -438,13 +556,90 @@ export default {
       })
     },
     //main modal function
-    openMainCodeModal(action) {
+    openMainCodeModal(action, id) {
       if (action === 'add') {
         this.modalActionName = '新增产品信息'
+        this.product.prodStyle = this.productStyle.prodStyle
+        this.product.prodName = this.productStyle.styleName
         this.mainCodeModalOpened = true
       } else if (action === 'update') {
         this.modalActionName = '修改产品信息'
+        getProdById(id).then(response => {
+          let product = response.data.data
+          if (product.status == 1) {
+            product.status = true
+          } else {
+            product.status = false
+          }
+          Object.assign(this.productStyle, product)
+          Object.assign(this.product, product)
+          this.$nextTick(() => {
+            this.mainCodeModalOpened = true
+          })
+        })
       }
+    },
+    newProdCode() {
+      addProdCode(this.product).then(response => {
+        let data = response.data
+        this.mainCodeModalOpened = false
+        Object.assign(this.product, this.$options.data.call(this).product)
+        Object.assign(
+          this.productStyle,
+          this.$options.data.call(this).productStyle
+        )
+        this.notify('positive', data.msg)
+        this.request({
+          pagination: this.serverPagination
+        })
+      })
+    },
+    modifyProdCode() {
+      updateProdCode(this.product).then(response => {
+        let data = response.data
+        this.mainCodeModalOpened = false
+        Object.assign(this.product, this.$options.data.call(this).product)
+        Object.assign(
+          this.productStyle,
+          this.$options.data.call(this).productStyle
+        )
+        this.notify('positive', data.msg)
+        this.request({
+          pagination: this.serverPagination
+        })
+      })
+    },
+    resetCodeModal() {
+      Object.assign(this.product, this.$options.data.call(this).product)
+    },
+    //download specification
+    downloadSpec(id, name) {
+      specDownload(id).then(response => {
+        this.fileDownload(response.data, name)
+      })
+    },
+    // public method to download file
+    fileDownload(data, name) {
+      if (!data) {
+        return
+      }
+      let url = window.URL.createObjectURL(new Blob([data]))
+      let link = document.createElement('a')
+      link.style.display = 'none'
+      link.href = url
+      link.setAttribute('download', name + '产品说明书.pdf')
+      document.body.appendChild(link)
+      link.click()
+      // release url object
+      URL.revokeObjectURL(link.href)
+      document.body.removeChild(link)
+    },
+    // delete prodCode
+    deleteProdCode() {
+      this.notify(
+        'warning',
+        '老实说我还没确定好是逻辑删除还是物理删除，所以Beta版本暂不提供删除功能'
+      )
     },
     request({ pagination }) {
       this.loading = true
@@ -476,6 +671,7 @@ export default {
   font-size 13px
 .q-table tbody td
   font-size 15px
+  padding 7px 7px
 @media (min-width: 1200px)
   .layout-padding
     padding 1.5rem 1.5rem

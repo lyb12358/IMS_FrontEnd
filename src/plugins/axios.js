@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { Notify, Dialog } from 'quasar'
 import store from 'src/store'
-import { getStorageToken } from 'src/utils/tokenControl'
+import { getStorageToken } from 'src/utils/storageControl'
 
 
 const service = axios.create({
@@ -53,7 +53,7 @@ service.interceptors.response.use(
   error => {
     console.log('err' + error)// for debug
     Notify.create({
-      message: error || '网络异常，请联系系统管理员！',
+      message: '网络异常，请联系系统管理员！',
       type: 'negative',
       position: 'top-right'
     })

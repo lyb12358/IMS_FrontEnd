@@ -19,11 +19,8 @@
                  v-model="searchForm.style"
                  float-label="款号" />
         <q-input class="q-mt-ml q-mr-sm"
-                 v-model="searchForm.code"
-                 float-label="产品编号" />
-        <q-input class="q-mt-ml q-mr-sm"
                  v-model="searchForm.name"
-                 float-label="产品名称" />
+                 float-label="款名" />
         <q-btn icon="mdi-magnify"
                rounded
                class="q-ma-xs"
@@ -34,7 +31,7 @@
                rounded
                class="q-ma-xs"
                color="primary"
-               @click="openMainModal('add',0)">
+               @click="openMainStyleModal('add',0)">
           <q-tooltip>新建</q-tooltip>
         </q-btn>
         <q-btn icon="mdi-file-excel"
@@ -133,7 +130,7 @@
             <q-btn icon="mdi-format-list-numbers"
                    rounded
                    color="primary"
-                   @click="openMainModal('update',props.row.id)">
+                   @click="openMainStyleModal('update',props.row.id)">
               <q-tooltip>修改款式信息</q-tooltip>
             </q-btn>
             <q-btn icon="mdi-image-plus"
@@ -160,7 +157,7 @@
             <q-btn icon="mdi-delete"
                    rounded
                    color="negative"
-                   @click="showExpand(props.row.styleName )">
+                   @click="deleteProdStyle()">
               <q-tooltip>删除</q-tooltip>
             </q-btn>
           </q-td>
@@ -302,7 +299,8 @@
     </q-modal>
     <!-- select department -->
     <q-dialog v-model="departOpened"
-              prevent-close>
+              prevent-close
+              noRefocus>
       <span slot="title">选择部门</span>
       <div slot="body">
         <q-tree :nodes="departProps"
@@ -323,7 +321,8 @@
     </q-dialog>
     <!-- select prodClass -->
     <q-dialog v-model="classOpened"
-              prevent-close>
+              prevent-close
+              noRefocus: true>
       <span slot="title">选择产品类别</span>
       <div slot="body">
         <q-tree :nodes="classProps"
@@ -393,7 +392,7 @@ import {
 export default {
   data() {
     return {
-      api:process.env.API,
+      api: process.env.API,
       searchForm: {
         style: '',
         code: '',
@@ -522,27 +521,26 @@ export default {
       })
     },
     //main modal function
-    openMainModal(action, id) {
+    openMainStyleModal(action, id) {
       if (action === 'add') {
         this.modalActionName = '新增产品款式'
         this.mainStyleModalOpened = true
       } else if (action === 'update') {
         this.modalActionName = '修改产品款式'
-        getProdStyleById(id)
-          .then(response => {
-            let productStyle = response.data
-            if (productStyle.status == 1) {
-              productStyle.status = true
-            } else {
-              productStyle.status = false
-            }
-            Object.assign(this.productStyle, productStyle)
-            this.$nextTick(() => {
-              this.productStyle.classLabel = productStyle.classLabel
-              this.productStyle.prodClass = productStyle.prodClass
-              this.mainStyleModalOpened = true
-            })
+        getProdStyleById(id).then(response => {
+          let productStyle = response.data.data
+          if (productStyle.status == 1) {
+            productStyle.status = true
+          } else {
+            productStyle.status = false
+          }
+          Object.assign(this.productStyle, productStyle)
+          this.$nextTick(() => {
+            this.productStyle.classLabel = productStyle.classLabel
+            this.productStyle.prodClass = productStyle.prodClass
+            this.mainStyleModalOpened = true
           })
+        })
       }
     },
     //add product
@@ -554,7 +552,6 @@ export default {
         this.departSelected
       ).label
       this.departOpened = false
-      this.$refs.departInput.blur()
     },
     openClassDialog() {
       if (this.productStyle.prodFamily != '') {
@@ -575,7 +572,6 @@ export default {
         this.classSelected
       ).label
       this.classOpened = false
-      this.$refs.classInput.blur()
     },
     //upload image
     openImageUpload(id, prodStyle, styleName) {
@@ -603,7 +599,7 @@ export default {
       this.$refs.imageUpload.reset()
       this.imageUploadDialog = false
       this.request({
-          pagination: this.serverPagination
+        pagination: this.serverPagination
       })
     },
     // when it has encountered error while uploading
@@ -621,9 +617,12 @@ export default {
     },
     newProdStyle() {
       addProdStyle(this.productStyle).then(response => {
-        let data = response.data.data
+        let data = response.data
         this.mainStyleModalOpened = false
-        Object.assign(this.productStyle, this.$options.data.call(this).productStyle)
+        Object.assign(
+          this.productStyle,
+          this.$options.data.call(this).productStyle
+        )
         this.notify('positive', data.msg)
         this.request({
           pagination: this.serverPagination
@@ -632,9 +631,12 @@ export default {
     },
     modifyProdStyle() {
       updateProdStyle(this.productStyle).then(response => {
-        let data = response.data.data
+        let data = response.data
         this.mainStyleModalOpened = false
-        Object.assign(this.productStyle, this.$options.data.call(this).productStyle)
+        Object.assign(
+          this.productStyle,
+          this.$options.data.call(this).productStyle
+        )
         this.notify('positive', data.msg)
         this.request({
           pagination: this.serverPagination
@@ -642,7 +644,10 @@ export default {
       })
     },
     resetStyleModal() {
-      Object.assign(this.productStyle, this.$options.data.call(this).productStyle)
+      Object.assign(
+        this.productStyle,
+        this.$options.data.call(this).productStyle
+      )
     },
     //download specification
     downloadSpec(id, name) {
@@ -665,6 +670,13 @@ export default {
       // release url object
       URL.revokeObjectURL(link.href)
       document.body.removeChild(link)
+    },
+    // delete prodStyle
+    deleteProdStyle() {
+      this.notify(
+        'warning',
+        '老实说我还没确定好是逻辑删除还是物理删除，所以Beta版本暂不提供删除功能'
+      )
     },
     //表格数据请求
     request({ pagination }) {

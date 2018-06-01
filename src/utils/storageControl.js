@@ -3,6 +3,8 @@ import { LocalStorage, SessionStorage } from 'quasar'
 
 const TokenKey = 'imsToken'
 
+
+//token
 export function getStorageToken() {
     return SessionStorage.get.item(TokenKey)
 }
@@ -18,3 +20,5 @@ export function removeStorageToken() {
 export function removeStorageAll() {
     return SessionStorage.clear()
 }
+
+

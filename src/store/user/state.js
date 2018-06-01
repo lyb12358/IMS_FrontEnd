@@ -1,4 +1,4 @@
-import { getStorageToken } from 'src/utils/tokenControl'
+import { getStorageToken } from 'src/utils/storageControl'
 export default {
   token: getStorageToken(),
   permissions: [],
