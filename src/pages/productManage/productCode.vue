@@ -15,15 +15,23 @@
            slot-scope="props"
            class="row print-hide">
         <q-input class="q-mt-ml q-mr-sm"
-                 v-model="searchForm.code"
+                 v-model="searchForm.prodCode"
                  float-label="产品编号" />
         <q-input class="q-mt-ml q-mr-sm"
-                 v-model="searchForm.name"
+                 v-model="searchForm.prodName"
                  float-label="产品名称" />
+        <q-btn icon="mdi-eraser"
+               rounded
+               class="q-ma-xs"
+               color="dark"
+               @click="resetSearchForm()">
+          <q-tooltip>重置</q-tooltip>
+        </q-btn>
         <q-btn icon="mdi-magnify"
                rounded
                class="q-ma-xs"
-               color="secondary">
+               color="secondary"
+                @click="search()">
           <q-tooltip>搜索</q-tooltip>
         </q-btn>
         <q-btn icon="mdi-new-box"
@@ -389,9 +397,10 @@ export default {
     return {
       api: process.env.API,
       searchForm: {
-        style: '',
-        code: '',
-        name: ''
+        page:0,
+        row:0,
+        prodCode: '',
+        prodName: ''
       },
       loading: false,
       visibleColumns: [
@@ -534,6 +543,19 @@ export default {
     showExpand() {
       console.log('hi')
     },
+    resetSearchForm() {
+      Object.assign(this.searchForm, this.$options.data.call(this).searchForm)
+      this.serverPagination.page = 1
+      this.request({
+        pagination: this.serverPagination
+      })
+    },
+    search(){
+      this.serverPagination.page=1
+      this.request({
+      pagination: this.serverPagination
+    })
+    },
     printSth() {
       window.print()
     },
@@ -643,9 +665,9 @@ export default {
     },
     request({ pagination }) {
       this.loading = true
-      let page = pagination.page
-      let row = pagination.rowsPerPage
-      getProdList(page, row)
+      this.searchForm.page = pagination.page
+      this.searchForm.row = pagination.rowsPerPage
+      getProdList( this.searchForm)
         .then(response => {
           let data = response.data.data
           this.serverPagination = pagination
