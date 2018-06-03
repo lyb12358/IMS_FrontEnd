@@ -251,15 +251,21 @@
         <div class="layout-padding">
           <div class="row gutter-sm">
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="productStyle.prodStyle"
-                       :readonly="modalActionName==='修改产品款式'?true:false"
-                       class="no-margin"
-                       float-label="款号" />
+              <q-field :error="$v.productStyle.prodStyle.$error"
+                       error-label="款号必填，且不超过10位">
+                <q-input v-model="productStyle.prodStyle"
+                         :readonly="modalActionName==='修改产品款式'?true:false"
+                         class="no-margin"
+                         float-label="款号" />
+              </q-field>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
-              <q-input v-model="productStyle.styleName"
-                       class="no-margin"
-                       float-label="款名" />
+              <q-field :error="$v.productStyle.styleName.$error"
+                       error-label="款名必填，且不超过15位">
+                <q-input v-model="productStyle.styleName"
+                         class="no-margin"
+                         float-label="款名" />
+              </q-field>
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-input v-model="productStyle.departLabel"
@@ -276,27 +282,36 @@
                         :options="propOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="productStyle.prodFamily"
-                        float-label="产品所属"
-                        radio
-                        :options="familyOptions" />
+              <q-field :error="$v.productStyle.prodFamily.$error"
+                       error-label="产品所属必填">
+                <q-select v-model="productStyle.prodFamily"
+                          float-label="产品所属"
+                          radio
+                          :options="familyOptions" />
+              </q-field>
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="productStyle.classLabel"
-                       ref="classInput"
-                       readonly
-                       @focus="openClassDialog()"
-                       class="no-margin"
-                       float-label="产品类别" />
+              <q-field :error="$v.productStyle.classLabel.$error"
+                       error-label="产品类别必填">
+                <q-input v-model="productStyle.classLabel"
+                         ref="classInput"
+                         readonly
+                         @focus="openClassDialog()"
+                         class="no-margin"
+                         float-label="产品类别" />
+              </q-field>
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="productStyle.prodMat"
-                       class="no-margin"
-                       float-label="产品材料" />
+              <q-field :error="$v.productStyle.prodMat.$error"
+                       error-label="材料名称这么长合适吗？">
+                <q-input v-model="productStyle.prodMat"
+                         class="no-margin"
+                         float-label="材料" />
+              </q-field>
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.prodLevel"
-                        float-label="产品档次"
+                        float-label="档次"
                         radio
                         :options="levelOptions" />
             </div>
@@ -340,8 +355,7 @@
     <!-- select prodClass -->
     <q-dialog v-model="classOpened"
               prevent-close
-              noRefocus:
-              true>
+              noRefocus>
       <span slot="title">选择产品类别</span>
       <div slot="body">
         <q-tree :nodes="classProps"
@@ -395,6 +409,13 @@
 </template>
 
 <script>
+import {
+  minLength,
+  maxLength,
+  minValue,
+  integer,
+  required
+} from 'vuelidate/lib/validators'
 import { getOrgList } from 'src/api/organization'
 import {
   getProdStyleList,
@@ -512,6 +533,15 @@ export default {
       imageUploadUrl: '/pic/upload'
     }
   },
+  validations: {
+    productStyle: {
+      prodStyle: { required, maxLength: maxLength(10) },
+      styleName: { required, maxLength: maxLength(15) },
+      prodFamily: { required },
+      classLabel: { required },
+      prodMat: { maxLength: maxLength(15) }
+    }
+  },
   computed: {
     myPermissions() {
       return this.$store.getters['user/permissions']
@@ -557,6 +587,7 @@ export default {
         position: 'top-right'
       })
     },
+    //modal input depart permission check
     checkDepartPermission() {
       if (this.myPermissions.indexOf('superAdmin') > -1) {
         this.departOpened = true
@@ -602,6 +633,15 @@ export default {
     },
     //add product
     selectDepart() {
+      if (this.departSelected == '') {
+        this.notify('warning', '请选择一个部门')
+        return
+      }
+      if (this.$refs.departTree.getNodeByKey(this.departSelected).isParent == 1) {
+        this.notify('warning', '产品绑定到部门，而非公司')
+        this.departSelected = ''
+        return
+      }
       this.productStyle.departId = this.$refs.departTree.getNodeByKey(
         this.departSelected
       ).id
@@ -622,6 +662,15 @@ export default {
       }
     },
     selectClass() {
+      if (this.classSelected == '') {
+        this.notify('warning', '请选择一个类别')
+        return
+      }
+      if (this.$refs.classTree.getNodeByKey(this.classSelected).isParent == 1) {
+        this.notify('warning', '只能选择子类')
+        this.classSelected = ''
+        return
+      }
       this.productStyle.prodClass = this.$refs.classTree.getNodeByKey(
         this.classSelected
       ).id
@@ -680,6 +729,10 @@ export default {
       }
     },
     newProdStyle() {
+      this.$v.productStyle.$touch()
+      if (this.$v.productStyle.$invalid) {
+        return
+      }
       addProdStyle(this.productStyle).then(response => {
         let data = response.data
         this.mainStyleModalOpened = false
@@ -694,6 +747,10 @@ export default {
       })
     },
     modifyProdStyle() {
+      this.$v.productStyle.$touch()
+      if (this.$v.productStyle.$invalid) {
+        return
+      }
       updateProdStyle(this.productStyle).then(response => {
         let data = response.data
         this.mainStyleModalOpened = false
@@ -708,10 +765,18 @@ export default {
       })
     },
     resetStyleModal() {
+      let departId=this.productStyle.departId
+      let departLabel=this.productStyle.departLabel
       Object.assign(
         this.productStyle,
         this.$options.data.call(this).productStyle
       )
+      this.$nextTick(() => {
+        this.productStyle.departId=departId
+        this.productStyle.departLabel=departLabel
+        this.$v.productStyle.$reset()
+      })
+      
     },
     //download specification
     downloadSpec(id, name) {

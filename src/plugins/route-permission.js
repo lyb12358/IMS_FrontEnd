@@ -38,8 +38,6 @@ export default ({ router, store, Vue }) => {
         } else {
           const permissions = store.getters['user/permissions']
           if (to.meta.requiresAuth && (permissions.indexOf('superAdmin') < 0)) {
-            console.log(permissions)
-            console.log(store.getters['user/permissions'])
             if (permissions.indexOf(to.meta.auth) > -1) {
               next()
             } else {

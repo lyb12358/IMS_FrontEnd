@@ -388,6 +388,13 @@
 </template>
 
 <script>
+import {
+  minLength,
+  maxLength,
+  minValue,
+  integer,
+  required
+} from 'vuelidate/lib/validators'
 import { getOrgList } from 'src/api/organization'
 import {
   getProdList,
@@ -546,6 +553,15 @@ export default {
       }
     }
   },
+  validations: {
+    product: {
+      prodCode: { required, maxLength: maxLength(20) },
+      prodName: { required, maxLength: maxLength(15) },
+      prodFamily: { required },
+      classLabel: { required },
+      prodMat: { maxLength: maxLength(15) }
+    }
+  },
   computed: {
     myPermissions() {
       return this.$store.getters['user/permissions']
@@ -678,6 +694,12 @@ export default {
     },
     resetCodeModal() {
       Object.assign(this.product, this.$options.data.call(this).product)
+      this.$nextTick(() => {
+        this.product.styleId = this.productStyle.id
+        this.product.departId = this.productStyle.departId
+        this.product.prodStyle = this.productStyle.prodStyle
+        this.product.prodName = this.productStyle.styleName
+      })
     },
     //download specification
     downloadSpec(id, name) {
