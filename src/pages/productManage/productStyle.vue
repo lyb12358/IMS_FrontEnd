@@ -35,7 +35,8 @@
                @click="search()">
           <q-tooltip>搜索</q-tooltip>
         </q-btn>
-        <q-btn icon="mdi-new-box"
+        <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
+               icon="mdi-new-box"
                rounded
                class="q-ma-xs"
                color="primary"
@@ -140,16 +141,18 @@
         <q-tr v-show="props.expand"
               :props="props">
           <q-td colspan="100%">
-            <q-btn icon="mdi-format-list-numbers"
+            <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
+                   icon="mdi-format-list-numbers"
                    rounded
                    color="primary"
-                   @click="openMainStyleModal('update',props.row.id)">
+                   @click="openMainStyleModal('update',props.row.id,props.row.departId)">
               <q-tooltip>修改款式信息</q-tooltip>
             </q-btn>
-            <q-btn icon="mdi-image-plus"
+            <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
+                   icon="mdi-image-plus"
                    rounded
                    color="secondary"
-                   @click="openImageUpload(props.row.id,props.row.prodStyle,props.row.styleName )">
+                   @click="openImageUpload(props.row.id,props.row.prodStyle,props.row.styleName,props.row.departId )">
               <q-tooltip>上传产品图片</q-tooltip>
             </q-btn>
             <a :href="api+'/image/'+props.row.id+'/'+props.row.image"
@@ -167,10 +170,11 @@
                    @click="downloadSpec(props.row.id,props.row.styleName )">
               <q-tooltip>下载产品说明书</q-tooltip>
             </q-btn>
-            <q-btn icon="mdi-delete"
+            <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
+                   icon="mdi-delete"
                    rounded
                    color="negative"
-                   @click="deleteProdStyle()">
+                   @click="deleteProdStyle(props.row.departId)">
               <q-tooltip>删除</q-tooltip>
             </q-btn>
           </q-td>
@@ -248,6 +252,7 @@
           <div class="row gutter-sm">
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-input v-model="productStyle.prodStyle"
+                       :readonly="modalActionName==='修改产品款式'?true:false"
                        class="no-margin"
                        float-label="款号" />
             </div>
@@ -260,7 +265,7 @@
               <q-input v-model="productStyle.departLabel"
                        ref="departInput"
                        readonly
-                       @focus="departOpened=true"
+                       @focus="checkDepartPermission()"
                        class="no-margin"
                        float-label="所属部门" />
             </div>
@@ -507,6 +512,17 @@ export default {
       imageUploadUrl: '/pic/upload'
     }
   },
+  computed: {
+    myPermissions() {
+      return this.$store.getters['user/permissions']
+    },
+    myDepart() {
+      return this.$store.getters['user/userInfo'].departId
+    },
+    myDepartName() {
+      return this.$store.getters['user/userInfo'].departLabel
+    }
+  },
   watch: {
     //reset prodClass when prodFamily change
     'productStyle.prodFamily': function() {
@@ -541,16 +557,32 @@ export default {
         position: 'top-right'
       })
     },
+    checkDepartPermission() {
+      if (this.myPermissions.indexOf('superAdmin') > -1) {
+        this.departOpened = true
+      }
+    },
     //main modal function
-    openMainStyleModal(action, id) {
+    openMainStyleModal(action, id, departId) {
       if (action === 'add') {
         this.modalActionName = '新增产品款式'
         Object.assign(
           this.productStyle,
           this.$options.data.call(this).productStyle
         )
-        this.mainStyleModalOpened = true
+        this.$nextTick(() => {
+          this.productStyle.departLabel = this.myDepartName
+          this.productStyle.departId = this.myDepart
+          this.mainStyleModalOpened = true
+        })
       } else if (action === 'update') {
+        if (
+          departId != this.myDepart &&
+          this.myPermissions.indexOf('superAdmin') < 0
+        ) {
+          this.notify('warning', '无权维护非本部门产品')
+          return
+        }
         this.modalActionName = '修改产品款式'
         getProdStyleById(id).then(response => {
           let productStyle = response.data.data
@@ -599,7 +631,14 @@ export default {
       this.classOpened = false
     },
     //upload image
-    openImageUpload(id, prodStyle, styleName) {
+    openImageUpload(id, prodStyle, styleName, departId) {
+      if (
+        departId != this.myDepart &&
+        this.myPermissions.indexOf('superAdmin') < 0
+      ) {
+        this.notify('warning', '无权维护非本部门产品')
+        return
+      }
       this.expandId = id
       this.expandStyle = prodStyle
       this.expandName = styleName
@@ -697,7 +736,14 @@ export default {
       document.body.removeChild(link)
     },
     // delete prodStyle
-    deleteProdStyle() {
+    deleteProdStyle(departId) {
+      if (
+        departId != this.myDepart &&
+        this.myPermissions.indexOf('superAdmin') < 0
+      ) {
+        this.notify('warning', '无权维护非本部门产品')
+        return
+      }
       this.notify(
         'warning',
         '老实说我还没确定好是逻辑删除还是物理删除，所以Beta版本暂不提供删除功能'
