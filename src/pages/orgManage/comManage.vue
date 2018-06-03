@@ -3,7 +3,7 @@
     <div class="row justify-center">
       <div>
         <div class="q-mb-sm">
-          <q-btn size="sm"
+          <!-- <q-btn size="sm"
                  color="primary"
                  @click="selectGoodService"
                  label="选择'信息中心'" />
@@ -11,7 +11,7 @@
                  size="sm"
                  color="red"
                  @click="unselectNode"
-                 label="取消选择" />
+                 label="取消选择" /> -->
         </div>
         <q-tree :nodes="props"
                 ref="orgTree"
@@ -19,9 +19,6 @@
                 :selected.sync="selected"
                 node-key="id" />
 
-      </div>
-      <div>
-        <p>{{xx}}</p>
       </div>
     </div>
   </q-page>
@@ -35,25 +32,8 @@ export default {
     selected: '',
     props: []
   }),
-  methods: {
-    selectGoodService() {
-      if (this.selected !== '信息中心') {
-        this.selected = '信息中心'
-      }
-    },
-    unselectNode() {
-      console.log(this.selected)
-      this.selected = ''
-    }
-  },
-  computed: {
-    xx() {
-      if ('' != this.selected) {
-        console.log(this.$refs.orgTree.getNodeByKey(this.selected).label)
-        return this.$refs.orgTree.getNodeByKey(this.selected).id
-      }
-    }
-  },
+  methods: {},
+  computed: {},
   created() {
     getOrgList()
       .then(response => {

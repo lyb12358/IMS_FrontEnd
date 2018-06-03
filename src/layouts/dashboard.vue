@@ -73,13 +73,13 @@
             </template>
             <q-item link
                     v-if="checkAuth('view_user')"
-                    @click.native="notify('warning','都跟你说了是摆设，你点也没用~')"
+                    @click.native="notify('warning','施工中~')"
                     class="q-ml-xl">
               <q-item-main label="用户" />
             </q-item>
             <q-item link
                     v-if="checkAuth('view_role')"
-                    @click.native="notify('warning','都跟你说了是摆设，你点也没用~')"
+                    @click.native="notify('warning','施工中~')"
                     class="q-ml-xl">
               <q-item-main label="角色" />
             </q-item>
@@ -117,7 +117,7 @@
             </q-item>
             <q-item link
                     v-if="checkAuth('view_productCat')"
-                    @click.native="$router.push('productCat')"
+                    @click.native="notify('warning','施工中~')"
                     class="q-ml-xl">
               <q-item-main label="产品类别管理" />
             </q-item>
@@ -227,7 +227,14 @@ export default {
       done()
     }
   },
-  mounted() {}
+  mounted() {
+    this.$q.notify({
+      message: '除了产品管理的两个页面，其他基本是摆设，不用去点',
+      color: 'tertiary',
+      position: 'bottom-right',
+      avatar: 'statics/logo/xiuxian.jpg'
+    })
+  }
 }
 </script>
 
