@@ -31,7 +31,7 @@
                rounded
                class="q-ma-xs"
                color="secondary"
-                @click="search()">
+               @click="search()">
           <q-tooltip>搜索</q-tooltip>
         </q-btn>
         <q-btn icon="mdi-new-box"
@@ -294,8 +294,13 @@
         <div class="layout-padding">
           <div class="row">
             <div class="col-md-12">
-              <q-collapsible :label="productStyle.styleName"
-                             sublabel="点击可展开该款式详细内容">
+              <q-collapsible>
+                <template slot="header">
+                  <q-item-side :image="thumbnailCheck(product.styleId, productStyle.thumbnail)"
+                         color="primary" />
+                  <q-item-main :label="productStyle.styleName"
+                               sublabel="点击可展开该款式详细内容" />
+                </template>
                 <q-card>
                   <q-card-main>
                     <table class="q-table">
@@ -397,8 +402,8 @@ export default {
     return {
       api: process.env.API,
       searchForm: {
-        page:0,
-        row:0,
+        page: 0,
+        row: 0,
         prodCode: '',
         prodName: ''
       },
@@ -487,8 +492,7 @@ export default {
           align: 'left',
           label: '成本价',
           field: 'costPrice'
-        },
-        { name: 'status', align: 'left', label: '状态', field: 'status' }
+        }
       ],
       //choose style dialog
       chooseStyleDialogOpend: false,
@@ -513,7 +517,8 @@ export default {
         prodLevel: '',
         levelLabel: '',
         prodDesc: '',
-        status: true
+        status: true,
+        thumbnail: ''
       },
       product: {
         id: 0,
@@ -535,7 +540,8 @@ export default {
         prodProp: '',
         prodLevel: '',
         prodDesc: '',
-        status: true
+        status: true,
+        styleId:''
       }
     }
   },
@@ -550,11 +556,11 @@ export default {
         pagination: this.serverPagination
       })
     },
-    search(){
-      this.serverPagination.page=1
+    search() {
+      this.serverPagination.page = 1
       this.request({
-      pagination: this.serverPagination
-    })
+        pagination: this.serverPagination
+      })
     },
     printSth() {
       window.print()
@@ -569,6 +575,11 @@ export default {
     //choose style
     checkStyle(styleChoosed) {
       checkProdStyle(styleChoosed).then(response => {
+        Object.assign(this.product, this.$options.data.call(this).product)
+        Object.assign(
+          this.productStyle,
+          this.$options.data.call(this).productStyle
+        )
         let productStyle = response.data.data
         this.chooseStyleDialogOpend = false
         Object.assign(this.productStyle, productStyle)
@@ -577,10 +588,19 @@ export default {
         this.openMainCodeModal('add')
       })
     },
+    //check thumbnail
+    thumbnailCheck(id, thumbnail) {
+      if (!(thumbnail === null)) {
+        return this.api + '/image/' + id + '/' + thumbnail
+      } else {
+        return 'statics/sad.svg'
+      }
+    },
     //main modal function
     openMainCodeModal(action, id) {
       if (action === 'add') {
         this.modalActionName = '新增产品信息'
+        this.product.styleId = this.productStyle.id
         this.product.departId = this.productStyle.departId
         this.product.prodStyle = this.productStyle.prodStyle
         this.product.prodName = this.productStyle.styleName
@@ -668,7 +688,7 @@ export default {
       this.loading = true
       this.searchForm.page = pagination.page
       this.searchForm.row = pagination.rowsPerPage
-      getProdList( this.searchForm)
+      getProdList(this.searchForm)
         .then(response => {
           let data = response.data.data
           this.serverPagination = pagination

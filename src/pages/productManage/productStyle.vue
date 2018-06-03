@@ -88,7 +88,8 @@
             slot-scope="props">
         <q-th v-for="col in props.cols"
               :key="col.name"
-              :props="props">
+              :props="props"
+              style="text-align:center">
           {{ col.label }}
         </q-th>
       </q-tr>
@@ -96,17 +97,18 @@
                 slot-scope="props">
         <q-tr :props="props">
           <q-td key="thumbnail"
-                :props="props">
+                :props="props"
+                style="text-align:center">
             <img :src="thumbnailCheck(props.row.id,props.row.thumbnail)"
                  style="height: 80px; width: 140px;"></q-td>
           <!-- <q-td key="id"
                 :props="props">{{ props.row.id }}</q-td> -->
           <q-td key="departId"
-                :props="props">{{ props.row.departLabel}}</q-td>
-          <q-td key="comId"
-                :props="props">{{ props.row.comId }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.departLabel}}</q-td>
           <q-td key="prodStyle"
-                :props="props">
+                :props="props"
+                style="text-align:center">
             <q-checkbox color="secondary"
                         v-model="props.expand"
                         checked-icon="mdi-minus"
@@ -114,23 +116,26 @@
                         class="q-mr-md" /> {{ props.row.prodStyle }}
           </q-td>
           <q-td key="styleName"
-                :props="props">{{ props.row.styleName }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.styleName }}</q-td>
           <q-td key="prodFamily"
-                :props="props">{{ props.row.familyLabel }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.familyLabel }}</q-td>
           <q-td key="prodClass"
-                :props="props">{{ props.row.classLabel }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.classLabel }}</q-td>
           <q-td key="prodProp"
-                :props="props">{{ props.row.propLabel }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.propLabel }}</q-td>
           <q-td key="prodMat"
-                :props="props">{{ props.row.prodMat }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.prodMat }}</q-td>
           <q-td key="prodLevel"
-                :props="props">{{ props.row.levelLabel }}</q-td>
-          <q-td key="prodDesc"
-                :props="props">{{ props.row.prodDesc }}</q-td>
-          <q-td key="image"
-                :props="props">{{ props.row.image }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.levelLabel }}</q-td>
           <q-td key="status"
-                :props="props">{{ props.row.status }}</q-td>
+                :props="props"
+                style="text-align:center">{{ props.row.status==1?'上架':'下架' }}</q-td>
         </q-tr>
         <q-tr v-show="props.expand"
               :props="props">
@@ -433,7 +438,6 @@ export default {
           label: '所属部门',
           field: 'departId'
         },
-        { name: 'comId', align: 'left', label: '所属公司', field: 'comId' },
         { name: 'prodStyle', align: 'left', label: '款号', field: 'prodStyle' },
         {
           name: 'styleName',
@@ -464,12 +468,6 @@ export default {
           align: 'left',
           label: '产品档次',
           field: 'prodLevel'
-        },
-        {
-          name: 'prodDesc',
-          align: 'left',
-          label: '产品描述',
-          field: 'prodDesc'
         },
         { name: 'status', align: 'left', label: '状态', field: 'status' }
       ],
@@ -547,6 +545,10 @@ export default {
     openMainStyleModal(action, id) {
       if (action === 'add') {
         this.modalActionName = '新增产品款式'
+        Object.assign(
+          this.productStyle,
+          this.$options.data.call(this).productStyle
+        )
         this.mainStyleModalOpened = true
       } else if (action === 'update') {
         this.modalActionName = '修改产品款式'
