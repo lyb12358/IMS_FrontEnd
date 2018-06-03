@@ -121,6 +121,12 @@
                     class="q-ml-xl">
               <q-item-main label="产品类别管理" />
             </q-item>
+            <q-item link
+                    v-if="$q.platform.is.cordova"
+                    @click.native="$router.push('productCard')"
+                    class="q-ml-xl">
+              <q-item-main label="产品卡片" />
+            </q-item>
           </q-collapsible>
           <q-item v-if="checkAuth('view_changeLog')"
                   @click.native="$router.push('changeLog')">
