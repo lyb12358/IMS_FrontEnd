@@ -149,18 +149,18 @@
                 style="text-align:center">{{ props.row.prodCat }}</q-td>
           <q-td key="weight"
                 :props="props"
-                style="text-align:center">{{ props.row.weight }}</q-td>
+                style="text-align:center">{{ props.row.weight/100 }}</q-td>
           <q-td key="retailPrice"
                 :props="props"
-                style="text-align:center">{{ props.row.retailPrice }}
+                style="text-align:center">{{ props.row.retailPrice/100 }}
           </q-td>
           <q-td key="supplyPrice"
                 :props="props"
-                style="text-align:center">{{ props.row.supplyPrice }}
+                style="text-align:center">{{ props.row.supplyPrice/100 }}
           </q-td>
           <q-td key="costPrice"
                 :props="props"
-                style="text-align:center">{{ props.row.costPrice }}
+                style="text-align:center">{{ props.row.costPrice/100 }}
           </q-td>
         </q-tr>
         <q-tr v-show="props.expand"
@@ -337,47 +337,71 @@
           </div>
           <div class="row gutter-sm">
             <div class="col-xs-12  col-sm-6 col-md-4">
-              <q-input v-model="product.prodCode"
-                       :readonly="modalActionName==='修改产品信息'?true:false"
-                       class="no-margin"
-                       float-label="编号" />
+              <q-field :error="$v.product.prodCode.$error"
+                       error-label="编号必填，且不超过20位">
+                <q-input v-model="product.prodCode"
+                         :readonly="modalActionName==='修改产品信息'?true:false"
+                         class="no-margin"
+                         float-label="编号" />
+              </q-field>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4">
-              <q-input v-model="product.prodName"
-                       class="no-margin"
-                       float-label="名称" />
+              <q-field :error="$v.product.prodName.$error"
+                       error-label="名称必填，且不超过15位">
+                <q-input v-model="product.prodName"
+                         class="no-margin"
+                         float-label="名称" />
+              </q-field>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4">
-              <q-input v-model="product.prodSize"
-                       class="no-margin"
-                       float-label="规格" />
+              <q-field :error="$v.product.prodSize.$error"
+                       error-label="不超过20位">
+                <q-input v-model="product.prodSize"
+                         class="no-margin"
+                         float-label="规格" />
+              </q-field>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4">
-              <q-input v-model="product.prodCat"
-                       class="no-margin"
-                       float-label="品类" />
+              <q-field :error="$v.product.prodCat.$error"
+                       error-label="不超过20位">
+                <q-input v-model="product.prodCat"
+                         class="no-margin"
+                         float-label="品类" />
+              </q-field>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4">
-              <q-input v-model="product.weight"
-                       class="no-margin"
-                       float-label="克重" />
+              <q-field :error="$v.product.weight.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="product.weight"
+                         class="no-margin"
+                         float-label="克重" />
+              </q-field>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4">
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4">
-              <q-input v-model="product.retailPrice"
-                       class="no-margin"
-                       float-label="零售价" />
+              <q-field :error="$v.product.retailPrice.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="product.retailPrice"
+                         class="no-margin"
+                         float-label="零售价" />
+              </q-field>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4">
-              <q-input v-model="product.supplyPrice"
-                       class="no-margin"
-                       float-label="供应价" />
+              <q-field :error="$v.product.supplyPrice.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="product.supplyPrice"
+                         class="no-margin"
+                         float-label="供应价" />
+              </q-field>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4">
-              <q-input v-model="product.costPrice"
-                       class="no-margin"
-                       float-label="成本价" />
+              <q-field :error="$v.product.costPrice.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="product.costPrice"
+                         class="no-margin"
+                         float-label="成本价" />
+              </q-field>
             </div>
           </div>
         </div>
@@ -392,7 +416,10 @@ import {
   minLength,
   maxLength,
   minValue,
+  maxValue,
+  numeric,
   integer,
+  decimal,
   required
 } from 'vuelidate/lib/validators'
 import { getOrgList } from 'src/api/organization'
@@ -557,9 +584,20 @@ export default {
     product: {
       prodCode: { required, maxLength: maxLength(20) },
       prodName: { required, maxLength: maxLength(15) },
-      prodFamily: { required },
-      classLabel: { required },
-      prodMat: { maxLength: maxLength(15) }
+      prodSize: { maxLength: maxLength(20) },
+      prodCat: { maxLength: maxLength(20) },
+      weight: { decimal, minValue: minValue(0), maxValue: maxValue(999999) },
+      retailPrice: {
+        decimal,
+        minValue: minValue(0),
+        maxValue: maxValue(999999)
+      },
+      supplyPrice: {
+        decimal,
+        minValue: minValue(0),
+        maxValue: maxValue(999999)
+      },
+      costPrice: { decimal, minValue: minValue(0), maxValue: maxValue(999999) }
     }
   },
   computed: {
@@ -576,9 +614,11 @@ export default {
     },
     resetSearchForm() {
       Object.assign(this.searchForm, this.$options.data.call(this).searchForm)
-      this.serverPagination.page = 1
-      this.request({
-        pagination: this.serverPagination
+      this.$nextTick(() => {
+        this.serverPagination.page = 1
+        this.request({
+          pagination: this.serverPagination
+        })
       })
     },
     search() {
@@ -631,6 +671,7 @@ export default {
     },
     //main modal function
     openMainCodeModal(action, id, departId) {
+      this.$v.product.$reset()
       if (action === 'add') {
         this.modalActionName = '新增产品信息'
         this.product.styleId = this.productStyle.id
@@ -657,15 +698,28 @@ export default {
           Object.assign(this.productStyle, product)
           Object.assign(this.product, product)
           this.$nextTick(() => {
+            this.product.weight = this.product.weight / 100
+            this.product.retailPrice = this.product.retailPrice / 100
+            this.product.supplyPrice = this.product.supplyPrice / 100
+            this.product.costPrice = this.product.costPrice / 100
             this.mainCodeModalOpened = true
           })
         })
       }
     },
     newProdCode() {
+      this.$v.product.$touch()
+      if (this.$v.product.$invalid) {
+        return
+      }
+      this.$v.product.$reset()
+      this.mainCodeModalOpened = false
+      this.product.weight = parseInt(this.product.weight * 100)
+      this.product.retailPrice = parseInt(this.product.retailPrice * 100)
+      this.product.supplyPrice = parseInt(this.product.supplyPrice * 100)
+      this.product.costPrice = parseInt(this.product.costPrice * 100)
       addProdCode(this.product).then(response => {
         let data = response.data
-        this.mainCodeModalOpened = false
         Object.assign(this.product, this.$options.data.call(this).product)
         Object.assign(
           this.productStyle,
@@ -678,9 +732,18 @@ export default {
       })
     },
     modifyProdCode() {
+      this.$v.product.$touch()
+      if (this.$v.product.$invalid) {
+        return
+      }
+      this.$v.product.$reset()
+      this.mainCodeModalOpened = false
+      this.product.weight = parseInt(this.product.weight * 100)
+      this.product.retailPrice = parseInt(this.product.retailPrice * 100)
+      this.product.supplyPrice = parseInt(this.product.supplyPrice * 100)
+      this.product.costPrice = parseInt(this.product.costPrice * 100)
       updateProdCode(this.product).then(response => {
         let data = response.data
-        this.mainCodeModalOpened = false
         Object.assign(this.product, this.$options.data.call(this).product)
         Object.assign(
           this.productStyle,
@@ -699,6 +762,7 @@ export default {
         this.product.departId = this.productStyle.departId
         this.product.prodStyle = this.productStyle.prodStyle
         this.product.prodName = this.productStyle.styleName
+        this.$v.product.$reset()
       })
     },
     //download specification

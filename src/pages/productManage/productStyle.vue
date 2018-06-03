@@ -413,7 +413,10 @@ import {
   minLength,
   maxLength,
   minValue,
+  maxValue,
+  numeric,
   integer,
+  decimal,
   required
 } from 'vuelidate/lib/validators'
 import { getOrgList } from 'src/api/organization'
@@ -539,7 +542,7 @@ export default {
       styleName: { required, maxLength: maxLength(15) },
       prodFamily: { required },
       classLabel: { required },
-      prodMat: { maxLength: maxLength(15) }
+      prodMat: { maxLength: maxLength(20) }
     }
   },
   computed: {
@@ -566,9 +569,11 @@ export default {
     },
     resetSearchForm() {
       Object.assign(this.searchForm, this.$options.data.call(this).searchForm)
-      this.serverPagination.page = 1
-      this.request({
-        pagination: this.serverPagination
+      this.$nextTick(() => {
+        this.serverPagination.page = 1
+        this.request({
+          pagination: this.serverPagination
+        })
       })
     },
     search() {
@@ -595,6 +600,7 @@ export default {
     },
     //main modal function
     openMainStyleModal(action, id, departId) {
+      this.$v.productStyle.$reset()
       if (action === 'add') {
         this.modalActionName = '新增产品款式'
         Object.assign(
@@ -637,7 +643,9 @@ export default {
         this.notify('warning', '请选择一个部门')
         return
       }
-      if (this.$refs.departTree.getNodeByKey(this.departSelected).isParent == 1) {
+      if (
+        this.$refs.departTree.getNodeByKey(this.departSelected).isParent == 1
+      ) {
         this.notify('warning', '产品绑定到部门，而非公司')
         this.departSelected = ''
         return
@@ -733,6 +741,7 @@ export default {
       if (this.$v.productStyle.$invalid) {
         return
       }
+      this.$v.productStyle.$reset()
       addProdStyle(this.productStyle).then(response => {
         let data = response.data
         this.mainStyleModalOpened = false
@@ -751,6 +760,7 @@ export default {
       if (this.$v.productStyle.$invalid) {
         return
       }
+      this.$v.productStyle.$reset()
       updateProdStyle(this.productStyle).then(response => {
         let data = response.data
         this.mainStyleModalOpened = false
@@ -765,18 +775,17 @@ export default {
       })
     },
     resetStyleModal() {
-      let departId=this.productStyle.departId
-      let departLabel=this.productStyle.departLabel
+      let departId = this.productStyle.departId
+      let departLabel = this.productStyle.departLabel
       Object.assign(
         this.productStyle,
         this.$options.data.call(this).productStyle
       )
       this.$nextTick(() => {
-        this.productStyle.departId=departId
-        this.productStyle.departLabel=departLabel
+        this.productStyle.departId = departId
+        this.productStyle.departLabel = departLabel
         this.$v.productStyle.$reset()
       })
-      
     },
     //download specification
     downloadSpec(id, name) {
