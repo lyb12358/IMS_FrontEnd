@@ -217,7 +217,7 @@ export default {
         position: 'top-right'
       })
     },
-    resetLogin(){
+    resetLogin() {
       Object.assign(this.user, this.$options.data.call(this).user)
       this.$v.user.$reset()
     },
@@ -233,15 +233,15 @@ export default {
           let data = response.data
           this.$router.push('/index')
           this.loading = false
-          this.notify('positive',data.msg)
+          this.notify('positive', data.msg)
         })
         .catch(error => {
           this.loading = false
         })
     }
   },
-  created(){
-    if(this.$q.platform.is.mobile){
+  created() {
+    if (this.$q.platform.is.mobile) {
       this.$router.push('/mobileWarn')
     }
   },
@@ -258,9 +258,9 @@ export default {
   bottom 0
   left 0
   right 0
-  background #50a3a2
-  background -webkit-linear-gradient(top left, #027be3 0%, #027be3 100%)
-  background linear-gradient(to bottom right, #027be3 0%, #027be3 100%)
+  background #48c6ef
+  background -webkit-linear-gradient(top left, #48c6ef 0%, #6f86d6 100%)
+  background linear-gradient(to bottom right, #48c6ef 0%, #6f86d6 100%)
   height 100vh /* Allow spacing based on window height */
   margin 0
   min-height 240px

@@ -16,15 +16,23 @@
            slot-scope="props"
            class="row print-hide">
         <q-input class="q-mt-ml q-mr-sm"
-                 v-model="searchForm.style"
+                 v-model="searchForm.prodStyle"
                  float-label="款号" />
         <q-input class="q-mt-ml q-mr-sm"
-                 v-model="searchForm.name"
+                 v-model="searchForm.styleName"
                  float-label="款名" />
+        <q-btn icon="mdi-eraser"
+               rounded
+               class="q-ma-xs"
+               color="dark"
+               @click="resetSearchForm()">
+          <q-tooltip>重置</q-tooltip>
+        </q-btn>
         <q-btn icon="mdi-magnify"
                rounded
                class="q-ma-xs"
-               color="secondary">
+               color="secondary"
+               @click="search()">
           <q-tooltip>搜索</q-tooltip>
         </q-btn>
         <q-btn icon="mdi-new-box"
@@ -322,7 +330,8 @@
     <!-- select prodClass -->
     <q-dialog v-model="classOpened"
               prevent-close
-              noRefocus: true>
+              noRefocus:
+              true>
       <span slot="title">选择产品类别</span>
       <div slot="body">
         <q-tree :nodes="classProps"
@@ -394,9 +403,10 @@ export default {
     return {
       api: process.env.API,
       searchForm: {
-        style: '',
-        code: '',
-        name: ''
+        page: 0,
+        row: 0,
+        prodStyle: '',
+        styleName: ''
       },
       loading: false,
       visibleColumns: [
@@ -509,6 +519,19 @@ export default {
   methods: {
     showExpand(x) {
       console.log(x)
+    },
+    resetSearchForm() {
+      Object.assign(this.searchForm, this.$options.data.call(this).searchForm)
+      this.serverPagination.page = 1
+      this.request({
+        pagination: this.serverPagination
+      })
+    },
+    search() {
+      this.serverPagination.page = 1
+      this.request({
+        pagination: this.serverPagination
+      })
     },
     printSth() {
       window.print()
@@ -681,9 +704,9 @@ export default {
     //表格数据请求
     request({ pagination }) {
       this.loading = true
-      let page = pagination.page
-      let row = pagination.rowsPerPage
-      getProdStyleList(page, row)
+      this.searchForm.page = pagination.page
+      this.searchForm.row = pagination.rowsPerPage
+      getProdStyleList(this.searchForm)
         .then(response => {
           let data = response.data.data
           this.serverPagination = pagination

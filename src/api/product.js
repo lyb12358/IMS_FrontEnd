@@ -1,11 +1,11 @@
 import { service } from 'src/plugins/axios'
 
 //product
-export function getProdList(page, row) {
+export function getProdList(searchForm) {
     return service({
         url: '/prods',
-        method: 'get',
-        params: { page, row }
+        method: 'post',
+        data: searchForm
     })
 }
 export function getProdById(id) {
@@ -16,7 +16,7 @@ export function getProdById(id) {
 }
 export function addProdCode(product) {
     return service({
-        url: '/prodCodes',
+        url: '/prodCode',
         method: 'post',
         data: product
     })
@@ -30,11 +30,11 @@ export function updateProdCode(product) {
 }
 
 //productStyle
-export function getProdStyleList(page, row) {
+export function getProdStyleList(searchForm) {
     return service({
         url: '/prodStyles',
-        method: 'get',
-        params: { page, row }
+        method: 'post',
+        data: searchForm
     })
 }
 export function getProdStyleById(id) {
@@ -45,7 +45,7 @@ export function getProdStyleById(id) {
 }
 export function addProdStyle(productStyle) {
     return service({
-        url: '/prodStyles',
+        url: '/prodStyle',
         method: 'post',
         data: productStyle
     })
