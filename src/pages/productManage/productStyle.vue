@@ -43,13 +43,13 @@
                @click="openMainStyleModal('add',0)">
           <q-tooltip>新建</q-tooltip>
         </q-btn>
-        <q-btn icon="mdi-file-excel"
+        <!-- <q-btn icon="mdi-file-excel"
                rounded
                class="q-ma-xs"
                color="tertiary"
-               @click="showExpand()">
+               @click="notify('warning','施工中~')">
           <q-tooltip>导出</q-tooltip>
-        </q-btn>
+        </q-btn> -->
       </div>
       <template slot="top-right"
                 slot-scope="props"
@@ -564,9 +564,6 @@ export default {
     }
   },
   methods: {
-    showExpand(x) {
-      console.log(x)
-    },
     resetSearchForm() {
       Object.assign(this.searchForm, this.$options.data.call(this).searchForm)
       this.$nextTick(() => {

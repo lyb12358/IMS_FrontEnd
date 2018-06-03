@@ -42,13 +42,13 @@
                @click="chooseStyleDialogOpend=true">
           <q-tooltip>新建</q-tooltip>
         </q-btn>
-        <q-btn icon="mdi-file-excel"
+        <!-- <q-btn icon="mdi-file-excel"
                rounded
                class="q-ma-xs"
                color="tertiary"
-               @click="showExpand()">
+               @click="notify('warning','施工中~')">
           <q-tooltip>导出</q-tooltip>
-        </q-btn>
+        </q-btn> -->
       </div>
       <template slot="top-right"
                 slot-scope="props"
@@ -577,7 +577,24 @@ export default {
         prodDesc: '',
         status: true,
         styleId: ''
-      }
+      },
+      stockData: [
+        {
+          Symbol: 'AAPL',
+          Company: 'Apple Inc.',
+          Price: '132.54'
+        },
+        {
+          Symbol: 'INTC',
+          Company: 'Intel Corporation',
+          Price: '33.45'
+        },
+        {
+          Symbol: 'GOOG',
+          Company: 'Google Inc',
+          Price: '554.52'
+        }
+      ]
     }
   },
   validations: {
@@ -609,9 +626,6 @@ export default {
     }
   },
   methods: {
-    showExpand() {
-      console.log('hi')
-    },
     resetSearchForm() {
       Object.assign(this.searchForm, this.$options.data.call(this).searchForm)
       this.$nextTick(() => {
