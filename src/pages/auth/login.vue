@@ -241,8 +241,10 @@ export default {
     }
   },
   created() {
-    if (this.$q.platform.is.mobile) {
-      this.$router.push('/mobileWarn')
+    if (!this.$q.platform.is.cordova) {
+      if (this.$q.platform.is.mobile) {
+        this.$router.push('/mobileWarn')
+      }
     }
   },
   mounted() {
