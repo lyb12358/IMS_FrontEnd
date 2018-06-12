@@ -1,8 +1,7 @@
 <template>
   <q-page no-padding>
     <div class="row justify-center">
-      <vue-simple-markdown :source="changeLog"
-                           style="min-width:600px"></vue-simple-markdown>
+      <vue-simple-markdown :source="changeLog"></vue-simple-markdown>
     </div>
   </q-page>
 </template>
@@ -22,4 +21,9 @@ export default {
 <style lang="stylus">
 .markdown-body
   font-family 'Roboto', 'Microsoft YaHei', '-apple-system', 'Helvetica Neue', Helvetica, Arial, sans-serif
+.markdown-body ul
+  margin-bottom 0px
+.markdown-body h2
+  margin-top 0px
+  margin-bottom 0px
 </style>

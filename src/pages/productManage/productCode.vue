@@ -199,7 +199,7 @@
                    icon="mdi-delete"
                    rounded
                    color="negative"
-                   @click="deleteProdCode(props.row.departId)">
+                   @click="deleteProdCode(props.row.id)">
               <q-tooltip>删除</q-tooltip>
             </q-btn>
           </q-td>

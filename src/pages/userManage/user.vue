@@ -1,12 +1,150 @@
 <template>
   <q-page padding>
-    <!-- content -->
+    <q-table ref="table"
+             :data="serverData"
+             :columns="columns"
+             row-key="id"
+             :visible-columns="visibleColumns"
+             :separator="separator"
+             :pagination.sync="serverPagination"
+             :loading="loading"
+             color="secondary"
+             :rows-per-page-options="[5,10,15,20]"
+             @request="request">
+      <div slot="top-left"
+           slot-scope="props"
+           class="row print-hide">
+        <q-input class="q-mt-ml q-mr-sm"
+                 v-model="searchForm.prodStyle"
+                 float-label="用户名" />
+        <q-input class="q-mt-ml q-mr-sm"
+                 v-model="searchForm.styleName"
+                 float-label="姓名" />
+        <q-btn icon="mdi-eraser"
+               rounded
+               class="q-ma-xs"
+               color="dark"
+               @click="resetSearchForm()">
+          <q-tooltip>重置</q-tooltip>
+        </q-btn>
+        <q-btn icon="mdi-magnify"
+               rounded
+               class="q-ma-xs"
+               color="secondary"
+               @click="search()">
+          <q-tooltip>搜索</q-tooltip>
+        </q-btn>
+        <q-btn icon="mdi-new-box"
+               rounded
+               class="q-ma-xs"
+               color="primary"
+               @click="openMainUserModal('add',0)">
+          <q-tooltip>新建</q-tooltip>
+        </q-btn>
+      </div>
+      <template slot="top-right"
+                slot-scope="props"
+                class="print-hide">
+        <q-table-columns color="secondary"
+                         class="q-mr-sm print-hide"
+                         label="筛选列"
+                         v-model="visibleColumns"
+                         :columns="columns" />
+        <q-select color="secondary"
+                  class="print-hide"
+                  v-model="separator"
+                  :options="[
+          { label: '水平框线', value: 'horizontal' },
+          { label: '竖直框线', value: 'vertical' },
+          { label: '网格框线', value: 'cell' },
+          { label: '无框线', value: 'none' }
+        ]"
+                  hide-underline />
+        <q-btn flat
+               rounded
+               class="print-hide"
+               :icon="props.inFullscreen ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'"
+               @click="props.toggleFullscreen">
+          <q-tooltip>全屏</q-tooltip>
+        </q-btn>
+      </template>
+      <q-tr slot="header"
+            slot-scope="props">
+        <q-th v-for="col in props.cols"
+              :key="col.name"
+              :props="props"
+              style="text-align:center">
+          {{ col.label }}
+        </q-th>
+      </q-tr>
+      <template slot="body"
+                slot-scope="props">
+        <q-tr :props="props">
+          <q-td key="account"
+                :props="props"
+                style="text-align:center">
+            <q-checkbox color="secondary"
+                        v-model="props.expand"
+                        checked-icon="mdi-minus"
+                        unchecked-icon="mdi-plus"
+                        class="q-mr-md" />{{ props.row.account}}</q-td>
+          <q-td key="name"
+                :props="props"
+                style="text-align:center">{{ props.row.name}}</q-td>
+          <q-td key="departId"
+                :props="props"
+                style="text-align:center">{{ props.row.departLabel}}</q-td>
+          <q-td key="comId"
+                :props="props"
+                style="text-align:center">{{ props.row.comLabel }}</q-td>
+          <q-td key="status"
+                :props="props"
+                style="text-align:center">{{ props.row.status==1?'启用':'停用' }}</q-td>
+        </q-tr>
+        <q-tr v-show="props.expand"
+              :props="props">
+          <q-td colspan="100%">
+            <q-btn icon="mdi-delete"
+                   rounded
+                   color="negative"
+                   @click="deleteUser(props.row.departId)">
+              <q-tooltip>删除</q-tooltip>
+            </q-btn>
+          </q-td>
+        </q-tr>
+      </template>
+      <div slot="pagination"
+           slot-scope="props"
+           class="row flex-center q-py-sm print-hide">
+        <q-btn round
+               dense
+               size="sm"
+               icon="mdi-undo"
+               color="secondary"
+               class="q-mr-sm"
+               :disable="props.isFirstPage"
+               @click="props.prevPage" />
+        <div class="q-mr-sm"
+             style="font-size: small">
+          {{ props.pagination.page }} / {{ props.pagesNumber }}
+        </div>
+        <q-btn round
+               dense
+               size="sm"
+               icon="mdi-redo"
+               color="secondary"
+               :disable="props.isLastPage"
+               @click="props.nextPage" />
+      </div>
+    </q-table>
   </q-page>
 </template>
 
 <script>
 export default {
-  // name: 'PageName',
+  data() {
+    return {}
+  }
 }
 </script>
 

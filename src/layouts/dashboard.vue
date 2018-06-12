@@ -10,7 +10,7 @@
         </q-btn>
 
         <q-toolbar-title style="font-weight:bold">
-          博洋家纺
+          {{$route.meta.title}}
           <div slot="subtitle">IT Center</div>
         </q-toolbar-title>
       </q-toolbar>
@@ -73,13 +73,13 @@
             </template>
             <q-item link
                     v-if="checkAuth('view_user')"
-                    @click.native="notify('warning','施工中~')"
+                    @click.native="$router.push('user')"
                     class="q-ml-xl">
               <q-item-main label="用户" />
             </q-item>
             <q-item link
                     v-if="checkAuth('view_role')"
-                    @click.native="notify('warning','施工中~')"
+                    @click.native="$router.push('role')"
                     class="q-ml-xl">
               <q-item-main label="角色" />
             </q-item>

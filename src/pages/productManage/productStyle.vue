@@ -1,6 +1,5 @@
 <template>
   <q-page padding>
-    <!-- 数据表格 -->
     <q-table ref="table"
              :data="serverData"
              :columns="columns"
@@ -174,7 +173,7 @@
                    icon="mdi-delete"
                    rounded
                    color="negative"
-                   @click="deleteProdStyle(props.row.departId)">
+                   @click="deleteProdStyle(props.row.id)">
               <q-tooltip>删除</q-tooltip>
             </q-btn>
           </q-td>
