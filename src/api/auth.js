@@ -1,5 +1,6 @@
 import { service } from 'src/plugins/axios'
 
+//auth
 export function login(user) {
     return service({
         url: '/user/login',
@@ -7,7 +8,6 @@ export function login(user) {
         data: user
     })
 }
-
 export function getInfoByToken(token) {
     return service({
         url: '/user/info',
@@ -15,10 +15,18 @@ export function getInfoByToken(token) {
         params: { token }
     })
 }
-
+//auth deprecated
 export function logout() {
     return service({
         url: '/user/logout',
         method: 'post'
+    })
+}
+//user manage
+export function getUserList(searchForm) {
+    return service({
+        url: '/users',
+        method: 'post',
+        data: searchForm
     })
 }

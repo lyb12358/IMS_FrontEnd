@@ -141,9 +141,47 @@
 </template>
 
 <script>
+import { getUserList } from 'src/api/auth'
 export default {
   data() {
-    return {}
+    return {
+      api: process.env.API,
+      searchForm: {
+        page: 0,
+        row: 0,
+        account: '',
+        name: ''
+      },
+      loading: false,
+      visibleColumns: ['account', 'name', 'departId', 'comId', 'status'],
+      separator: 'horizontal',
+      serverPagination: {
+        page: 1,
+        rowsPerPage: 10,
+        rowsNumber: 10 // specifying this determines pagination is server-side
+      },
+      serverData: [],
+      columns: [
+        { name: 'id', label: 'id', field: 'id' },
+        { name: 'account', label: '账号', field: 'account' },
+        { name: 'name', label: '名称', field: 'name' },
+        {
+          name: 'departId',
+          label: '所属部门',
+          field: 'departId'
+        },
+        {
+          name: 'comId',
+          label: '所属公司',
+          field: 'comId'
+        },
+        {
+          name: 'status',
+          label: '状态',
+          field: 'status'
+        }
+      ]
+    }
   },
   methods: {
     notify(type, message) {
