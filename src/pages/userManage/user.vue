@@ -107,7 +107,7 @@
             <q-btn icon="mdi-delete"
                    rounded
                    color="negative"
-                   @click="deleteUser(props.row.departId)">
+                   @click="deleteUser(props.row.id)">
               <q-tooltip>删除</q-tooltip>
             </q-btn>
           </q-td>
@@ -144,6 +144,18 @@
 export default {
   data() {
     return {}
+  },
+  methods: {
+    notify(type, message) {
+      this.$q.notify({
+        message: message,
+        type: type,
+        position: 'top-right'
+      })
+    },
+    deleteUser(id) {
+      this.notify('warning', 'Ok,Ok~')
+    }
   }
 }
 </script>

@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from 'src/api/auth'
+import { login, logout, getInfoByToken } from 'src/api/auth'
 import { LocalStorage, SessionStorage } from 'quasar'
 
 const TokenKey = 'imsToken'

@@ -8,7 +8,7 @@ export function login(user) {
     })
 }
 
-export function getInfo(token) {
+export function getInfoByToken(token) {
     return service({
         url: '/user/info',
         method: 'get',

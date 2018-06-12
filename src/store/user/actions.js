@@ -1,5 +1,5 @@
 import { getStorageToken, setStorageToken, removeStorageToken } from 'src/utils/storageControl'
-import { login, logout, getInfo } from 'src/api/auth'
+import { login, logout, getInfoByToken } from 'src/api/auth'
 
 export function Login({ commit }, userInfo) {
   return new Promise((resolve, reject) => {
@@ -16,7 +16,7 @@ export function Login({ commit }, userInfo) {
 
 export function GetInfo({ commit, state }) {
   return new Promise((resolve, reject) => {
-    getInfo(state.token).then(response => {
+    getInfoByToken(state.token).then(response => {
       const data = response.data.data
       commit('SetPermissions', data.permissions)
       commit('SetUserInfo', data)
