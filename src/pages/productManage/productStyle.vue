@@ -819,7 +819,7 @@ export default {
         '老实说我还没确定好是逻辑删除还是物理删除，所以Beta版本暂不提供删除功能'
       )
     },
-    //表格数据请求
+    //dataTable request
     request({ pagination }) {
       this.loading = true
       this.searchForm.page = pagination.page

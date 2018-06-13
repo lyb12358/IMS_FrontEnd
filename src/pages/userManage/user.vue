@@ -50,7 +50,7 @@
                          label="筛选列"
                          v-model="visibleColumns"
                          :columns="columns" />
-        <q-select color="secondary"
+        <!-- <q-select color="secondary"
                   class="print-hide"
                   v-model="separator"
                   :options="[
@@ -59,7 +59,7 @@
           { label: '网格框线', value: 'cell' },
           { label: '无框线', value: 'none' }
         ]"
-                  hide-underline />
+                  hide-underline /> -->
         <q-btn flat
                rounded
                class="print-hide"
@@ -193,10 +193,54 @@ export default {
     },
     deleteUser(id) {
       this.notify('warning', 'Ok,Ok~')
+    },
+    resetSearchForm() {
+      Object.assign(this.searchForm, this.$options.data.call(this).searchForm)
+      this.$nextTick(() => {
+        this.serverPagination.page = 1
+        this.request({
+          pagination: this.serverPagination
+        })
+      })
+    },
+    search() {
+      this.serverPagination.page = 1
+      this.request({
+        pagination: this.serverPagination
+      })
+    },
+    //dataTable request
+    request({ pagination }) {
+      this.loading = true
+      this.searchForm.page = pagination.page
+      this.searchForm.row = pagination.rowsPerPage
+      getProdStyleList(this.searchForm)
+        .then(response => {
+          let data = response.data.data
+          this.serverPagination = pagination
+          this.serverPagination.rowsNumber = data.total
+          this.serverData = data.rows
+          this.loading = false
+        })
+        .catch(error => {
+          this.loading = false
+        })
     }
+  },
+  mounted() {
+    this.request({
+      pagination: this.serverPagination
+    })
   }
 }
 </script>
 
-<style>
+<style lang="stylus" scoped>
+.q-table th
+  font-size 13px
+.q-table tbody td
+  font-size 15px
+@media (min-width: 1200px)
+  .layout-padding
+    padding 1.5rem 1.5rem
 </style>
