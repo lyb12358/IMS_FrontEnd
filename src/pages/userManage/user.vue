@@ -15,10 +15,10 @@
            slot-scope="props"
            class="row print-hide">
         <q-input class="q-mt-ml q-mr-sm"
-                 v-model="searchForm.prodStyle"
-                 float-label="用户名" />
+                 v-model="searchForm.account"
+                 float-label="账号" />
         <q-input class="q-mt-ml q-mr-sm"
-                 v-model="searchForm.styleName"
+                 v-model="searchForm.name"
                  float-label="姓名" />
         <q-btn icon="mdi-eraser"
                rounded
@@ -162,7 +162,6 @@ export default {
       },
       serverData: [],
       columns: [
-        { name: 'id', label: 'id', field: 'id' },
         { name: 'account', label: '账号', field: 'account' },
         { name: 'name', label: '名称', field: 'name' },
         {
@@ -214,7 +213,7 @@ export default {
       this.loading = true
       this.searchForm.page = pagination.page
       this.searchForm.row = pagination.rowsPerPage
-      getProdStyleList(this.searchForm)
+      getUserList(this.searchForm)
         .then(response => {
           let data = response.data.data
           this.serverPagination = pagination
