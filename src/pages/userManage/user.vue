@@ -141,7 +141,7 @@
 </template>
 
 <script>
-import { getUserList } from 'src/api/auth'
+import { getUserList } from 'src/api/userManage'
 export default {
   data() {
     return {

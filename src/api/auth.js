@@ -22,11 +22,4 @@ export function logout() {
         method: 'post'
     })
 }
-//user manage
-export function getUserList(searchForm) {
-    return service({
-        url: '/users',
-        method: 'post',
-        data: searchForm
-    })
-}
+
