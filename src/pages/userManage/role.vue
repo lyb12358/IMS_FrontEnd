@@ -151,7 +151,7 @@ export default {
       serverPagination: {
         page: 1,
         rowsPerPage: 10,
-        rowsNumber: 10 // specifying this determines pagination is server-side
+        rowsNumber: 10
       },
       serverData: [],
       columns: [
