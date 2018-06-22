@@ -786,7 +786,7 @@ export default {
     //download specification
     downloadSpec(id, name) {
       specDownload(id).then(response => {
-        this.fileDownload(response.data, name)
+        this.fileDownload(response.data, name + '产品说明书.pdf')
       })
     },
     // public method to download file
@@ -798,7 +798,7 @@ export default {
       let link = document.createElement('a')
       link.style.display = 'none'
       link.href = url
-      link.setAttribute('download', name + '产品说明书.pdf')
+      link.setAttribute('download', name)
       document.body.appendChild(link)
       link.click()
       // release url object

@@ -65,6 +65,13 @@ export function checkProdStyle(prodStyle) {
 }
 
 //file,image
+export function excelDownload() {
+    return service({
+        url: '/test/excel',
+        method: 'get',
+        responseType: 'blob'
+    })
+}
 export function specDownload(id) {
     return service({
         url: '/specs/' + id,

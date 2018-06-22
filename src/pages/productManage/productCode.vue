@@ -42,13 +42,13 @@
                @click="chooseStyleDialogOpend=true">
           <q-tooltip>新建</q-tooltip>
         </q-btn>
-        <!-- <q-btn icon="mdi-file-excel"
+        <q-btn icon="mdi-file-excel"
                rounded
                class="q-ma-xs"
                color="tertiary"
-               @click="notify('warning','施工中~')">
+               @click="downloadExcel()">
           <q-tooltip>导出</q-tooltip>
-        </q-btn> -->
+        </q-btn>
       </div>
       <template slot="top-right"
                 slot-scope="props"
@@ -430,6 +430,7 @@ import {
   updateProdCode,
   getProdStyleByAny,
   checkProdStyle,
+  excelDownload,
   specDownload
 } from 'src/api/product'
 
@@ -779,10 +780,16 @@ export default {
         this.$v.product.$reset()
       })
     },
+    //download excel
+    downloadExcel() {
+      excelDownload().then(response => {
+        this.fileDownload(response.data, 'sss.xls')
+      })
+    },
     //download specification
     downloadSpec(id, name) {
       specDownload(id).then(response => {
-        this.fileDownload(response.data, name)
+        this.fileDownload(response.data, name + '产品说明书.pdf')
       })
     },
     // public method to download file
@@ -794,7 +801,7 @@ export default {
       let link = document.createElement('a')
       link.style.display = 'none'
       link.href = url
-      link.setAttribute('download', name + '产品说明书.pdf')
+      link.setAttribute('download', name)
       document.body.appendChild(link)
       link.click()
       // release url object
