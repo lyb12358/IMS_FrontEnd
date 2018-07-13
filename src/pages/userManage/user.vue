@@ -104,6 +104,12 @@
         <q-tr v-show="props.expand"
               :props="props">
           <q-td colspan="100%">
+            <q-btn icon="mdi-settings"
+                   rounded
+                   color="secondary"
+                   @click="userSetting(props.row.id)">
+              <q-tooltip>用户设置</q-tooltip>
+            </q-btn>
             <q-btn icon="mdi-delete"
                    rounded
                    color="negative"
@@ -137,6 +143,55 @@
                @click="props.nextPage" />
       </div>
     </q-table>
+    <q-modal v-model="mainUserModalOpened"
+             no-backdrop-dismiss
+             no-esc-dismiss
+             :content-css="{minWidth: '50vw', minHeight: '50vh'}">
+      <q-modal-layout footer-class="no-shadow">
+        <q-toolbar slot="header">
+          <q-btn flat
+                 round
+                 dense
+                 v-close-overlay
+                 icon="mdi-arrow-left" />
+          <q-toolbar-title>
+            {{modalActionName}}
+          </q-toolbar-title>
+        </q-toolbar>
+        <q-toolbar slot="footer"
+                   inverted>
+          <div class="col-12 row justify-center ">
+            <div v-if="modalActionName==='修改用户'"
+                 style="margin:0 2rem">
+              <q-btn color="primary"
+                     label="确定"
+                     @click="modifyUser" />
+            </div>
+            <div v-if="modalActionName==='新增用户'"
+                 style="margin:0 2rem">
+              <q-btn color="primary"
+                     label="确定"
+                     @click="newUser" />
+            </div>
+            <div v-if="modalActionName==='新增用户'"
+                 style="margin:0 2rem">
+              <q-btn color="primary"
+                     label="重置"
+                     @click="resetUserModal" />
+            </div>
+            <div style="margin:0 2rem">
+              <q-btn color="primary"
+                     v-close-overlay
+                     label="取消" />
+            </div>
+          </div>
+        </q-toolbar>
+        <div class="layout-padding">
+          <div class="row gutter-sm">
+          </div>
+        </div>
+      </q-modal-layout>
+    </q-modal>
   </q-page>
 </template>
 
@@ -179,7 +234,10 @@ export default {
           label: '状态',
           field: 'status'
         }
-      ]
+      ],
+      //main modal
+      mainUserModalOpened: false,
+      modalActionName: ''
     }
   },
   methods: {
@@ -189,6 +247,9 @@ export default {
         type: type,
         position: 'top-right'
       })
+    },
+    userSetting(id) {
+      this.notify('warning', 'Ok,Ok~')
     },
     deleteUser(id) {
       this.notify('warning', 'Ok,Ok~')
@@ -208,6 +269,16 @@ export default {
         pagination: this.serverPagination
       })
     },
+    //main modal
+    openMainUserModal(action, id) {
+      if (action === 'add') {
+        this.modalActionName = '新增用户'
+        this.mainUserModalOpened = true
+      }
+    },
+    newUSer() {},
+    modifyUser() {},
+    resetUserModal() {},
     //dataTable request
     request({ pagination }) {
       this.loading = true
