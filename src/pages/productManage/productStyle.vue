@@ -40,7 +40,7 @@
                class="q-ma-xs"
                color="primary"
                @click="openMainStyleModal('add',0)">
-          <q-tooltip>新建</q-tooltip>
+          <q-tooltip>新建款式</q-tooltip>
         </q-btn>
         <!-- <q-btn icon="mdi-file-excel"
                rounded
