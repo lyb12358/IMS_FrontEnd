@@ -127,6 +127,9 @@ module.exports = function (ctx) {
     animations: 'all',
     // animations: [
     // ],
+    ssr: {
+      pwa: false
+    },
     pwa: {
       // workboxPluginMode: 'InjectManifest',
       // workboxOptions: {},
