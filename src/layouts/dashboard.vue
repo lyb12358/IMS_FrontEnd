@@ -180,10 +180,10 @@ export default {
       return this.$store.getters['user/userInfo'].name
     },
     departName() {
-      return this.$store.getters['user/userInfo'].departLabel
+      return this.$store.getters['user/userInfo'].departName
     },
     comName() {
-      return this.$store.getters['user/userInfo'].comLabel
+      return this.$store.getters['user/userInfo'].comName
     },
     avatarLcation() {
       if (this.permissions.indexOf('superAdmin') > -1) {
@@ -223,8 +223,7 @@ export default {
     notify(type, message) {
       this.$q.notify({
         message: message,
-        type: type,
-        position: 'top-right'
+        type: type
       })
     },
     resetScroll(el, done) {
@@ -237,7 +236,6 @@ export default {
     this.$q.notify({
       message: '除了产品管理的两个页面，其他基本是摆设，不用去点',
       color: 'tertiary',
-      position: 'bottom-right',
       avatar: 'statics/logo/xiuxian.jpg'
     })
   }

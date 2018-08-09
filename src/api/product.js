@@ -43,11 +43,17 @@ export function getProdStyleById(id) {
         method: 'get',
     })
 }
-export function addProdStyle(productStyle) {
+export function checkProdStyle(prodStyle) {
+    return service({
+        url: '/prodStyles/prodStyle/' + prodStyle,
+        method: 'get',
+    })
+}
+export function addProdStyle(prodStyle) {
     return service({
         url: '/prodStyle',
         method: 'post',
-        data: productStyle
+        data: prodStyle
     })
 }
 export function updateProdStyle(prodstyle) {
@@ -57,55 +63,11 @@ export function updateProdStyle(prodstyle) {
         data: prodstyle
     })
 }
-export function checkProdStyle(prodStyle) {
-    return service({
-        url: '/prodStyles/prodStyle/' + prodStyle,
-        method: 'get',
-    })
-}
 
-//file,image
-export function excelDownload() {
-    return service({
-        url: '/test/excel',
-        method: 'get',
-        responseType: 'blob'
-    })
-}
-export function specDownload(id) {
-    return service({
-        url: '/specs/' + id,
-        method: 'get',
-        responseType: 'blob'
-    })
-}
 
-//productCat
-export function getProdFamilyList() {
-    return service({
-        url: '/prodFamilys',
-        method: 'get'
-    })
-}
-export function getProdClassList(familyId) {
-    return service({
-        url: '/prodClasses',
-        method: 'get',
-        params: { familyId }
-    })
-}
-export function getProdPropList() {
-    return service({
-        url: '/prodProps',
-        method: 'get'
-    })
-}
-export function getProdLevelList() {
-    return service({
-        url: '/prodLevels',
-        method: 'get'
-    })
-}
+
+
+
 
 
 

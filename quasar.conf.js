@@ -109,7 +109,8 @@ module.exports = function (ctx) {
         'QTabPane',
         'QRouteTab',
         'QInnerLoading',
-        'QSpinnerGears'
+        'QSpinnerGears',
+        'QAjaxBar'
       ],
       directives: [
         'Ripple',
@@ -121,6 +122,11 @@ module.exports = function (ctx) {
         'SessionStorage',
         'Dialog'
       ],
+      config: {
+        notify: {
+          position: 'top-right'
+        }
+      },
       i18n: 'zh-hans',
       iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
     },

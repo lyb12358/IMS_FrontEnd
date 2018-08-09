@@ -174,8 +174,7 @@ export default {
     notify(type, message) {
       this.$q.notify({
         message: message,
-        type: type,
-        position: 'top-right'
+        type: type
       })
     },
     deleteRole(id) {

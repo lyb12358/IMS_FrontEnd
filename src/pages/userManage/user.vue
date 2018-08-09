@@ -93,10 +93,10 @@
                 style="text-align:center">{{ props.row.name}}</q-td>
           <q-td key="departId"
                 :props="props"
-                style="text-align:center">{{ props.row.departLabel}}</q-td>
+                style="text-align:center">{{ props.row.departName}}</q-td>
           <q-td key="comId"
                 :props="props"
-                style="text-align:center">{{ props.row.comLabel }}</q-td>
+                style="text-align:center">{{ props.row.comName }}</q-td>
           <q-td key="status"
                 :props="props"
                 style="text-align:center">{{ props.row.status==1?'启用':'停用' }}</q-td>
@@ -244,8 +244,7 @@ export default {
     notify(type, message) {
       this.$q.notify({
         message: message,
-        type: type,
-        position: 'top-right'
+        type: type
       })
     },
     userSetting(id) {

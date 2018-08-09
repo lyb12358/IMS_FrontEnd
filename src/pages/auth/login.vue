@@ -213,8 +213,7 @@ export default {
     notify(type, message) {
       this.$q.notify({
         message: message,
-        type: type,
-        position: 'top-right'
+        type: type
       })
     },
     resetLogin() {
@@ -260,9 +259,8 @@ export default {
   bottom 0
   left 0
   right 0
-  background #48c6ef
-  background -webkit-linear-gradient(top left, #48c6ef 0%, #6f86d6 100%)
-  background linear-gradient(to bottom right, #48c6ef 0%, #6f86d6 100%)
+  background #50a3a2
+  background linear-gradient(to bottom right, #50a3a2 0%, #53e3a6 100%)
   height 100vh /* Allow spacing based on window height */
   margin 0
   min-height 240px
