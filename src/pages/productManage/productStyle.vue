@@ -423,13 +423,15 @@ import {
   getProdStyleList,
   getProdStyleById,
   addProdStyle,
-  updateProdStyle,
-  specDownload,
-  getProdFamilyList,
-  getProdClassList,
-  getProdPropList,
-  getProdLevelList
+  updateProdStyle
 } from 'src/api/product'
+import {
+  getProdCatList,
+  getProdClassListByParent,
+  getProdParamListByParent,
+  getProdSpeList
+} from 'src/api/productParam'
+import { specDownload } from 'src/api/productPlus'
 
 export default {
   data() {
