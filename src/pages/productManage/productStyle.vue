@@ -135,7 +135,7 @@
                 style="text-align:center">{{ props.row.levelLabel }}</q-td>
           <q-td key="status"
                 :props="props"
-                style="text-align:center">{{ props.row.status==1?'上架':'下架' }}</q-td>
+                style="text-align:center">{{ props.row.status?'上架':'下架' }}</q-td>
         </q-tr>
         <q-tr v-show="props.expand"
               :props="props">
@@ -462,12 +462,6 @@ export default {
       serverData: [],
       columns: [
         { name: 'thumbnail', align: 'left', label: '简图', field: 'thumbnail' },
-        {
-          name: 'departId',
-          align: 'left',
-          label: '所属部门',
-          field: 'departId'
-        },
         { name: 'prodStyle', align: 'left', label: '款号', field: 'prodStyle' },
         {
           name: 'styleName',
