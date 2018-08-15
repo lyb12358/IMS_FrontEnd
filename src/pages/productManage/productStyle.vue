@@ -157,10 +157,10 @@
                     :color="props.row.styleIsSync?'positive':'negative'" /></q-td>
           <q-td key="gmtCreate"
                 :props="props"
-                style="text-align:center">{{ props.row.gmtCreate}}</q-td>
+                style="text-align:center">{{ date.formatDate(props.row.gmtCreate,'YYYY-MM-DD HH:mm:ss') }}</q-td>
           <q-td key="gmtModified"
                 :props="props"
-                style="text-align:center">{{ props.row.gmtModified}}</q-td>
+                style="text-align:center">{{ date.formatDate(props.row.gmtModified,'YYYY-MM-DD HH:mm:ss') }}</q-td>
         </q-tr>
         <q-tr v-show="props.expand"
               :props="props">
