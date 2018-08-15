@@ -412,6 +412,7 @@
 </template>
 
 <script>
+import { date } from 'quasar'
 import {
   minLength,
   maxLength,
@@ -429,10 +430,9 @@ import {
   addProdCode,
   updateProdCode,
   getProdStyleByAny,
-  checkProdStyle,
-  excelDownload,
-  specDownload
+  checkProdStyle
 } from 'src/api/product'
+import { excelDownload, specDownload } from 'src/api/productPlus'
 
 export default {
   data() {

@@ -99,7 +99,7 @@
                 style="text-align:center">{{ props.row.comName }}</q-td>
           <q-td key="status"
                 :props="props"
-                style="text-align:center">{{ props.row.status==1?'启用':'停用' }}</q-td>
+                style="text-align:center">{{ props.row.status }}</q-td>
         </q-tr>
         <q-tr v-show="props.expand"
               :props="props">

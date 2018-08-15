@@ -1,6 +1,6 @@
 import { service } from 'src/plugins/axios'
 
-//user manage
+//user
 export function getUserList(searchForm) {
     return service({
         url: '/users',
@@ -9,7 +9,7 @@ export function getUserList(searchForm) {
     })
 }
 
-//role manage
+//role
 export function getRoleList(searchForm) {
     return service({
         url: '/roles',

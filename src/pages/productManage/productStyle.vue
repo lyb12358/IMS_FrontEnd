@@ -62,11 +62,11 @@
                   class="print-hide"
                   v-model="separator"
                   :options="[
-          { label: '水平框线', value: 'horizontal' },
-          { label: '竖直框线', value: 'vertical' },
-          { label: '网格框线', value: 'cell' },
-          { label: '无框线', value: 'none' }
-        ]"
+                    { label: '水平框线', value: 'horizontal' },
+                    { label: '竖直框线', value: 'vertical' },
+                    { label: '网格框线', value: 'cell' },
+                    { label: '无框线', value: 'none' }
+                  ]"
                   hide-underline />
         <q-btn flat
                rounded
@@ -96,16 +96,6 @@
       <template slot="body"
                 slot-scope="props">
         <q-tr :props="props">
-          <q-td key="thumbnail"
-                :props="props"
-                style="text-align:center">
-            <img :src="thumbnailCheck(props.row.id,props.row.thumbnail)"
-                 style="height: 80px; width: 140px;"></q-td>
-          <!-- <q-td key="id"
-                :props="props">{{ props.row.id }}</q-td> -->
-          <q-td key="departId"
-                :props="props"
-                style="text-align:center">{{ props.row.departLabel}}</q-td>
           <q-td key="prodStyle"
                 :props="props"
                 style="text-align:center">
@@ -115,27 +105,62 @@
                         unchecked-icon="mdi-plus"
                         class="q-mr-md" /> {{ props.row.prodStyle }}
           </q-td>
+          <q-td key="thumbnail"
+                :props="props"
+                style="text-align:center">
+            <img :src="thumbnailCheck(props.row.id,props.row.thumbnail)"
+                 style="height: 80px; width: 140px;"></q-td>
           <q-td key="styleName"
                 :props="props"
                 style="text-align:center">{{ props.row.styleName }}</q-td>
           <q-td key="prodFamily"
                 :props="props"
-                style="text-align:center">{{ props.row.familyLabel }}</q-td>
-          <q-td key="prodClass"
+                style="text-align:center">{{ props.row.familyName }}</q-td>
+          <q-td key="prodType"
                 :props="props"
-                style="text-align:center">{{ props.row.classLabel }}</q-td>
-          <q-td key="prodProp"
+                style="text-align:center">{{ props.row.typeName }}</q-td>
+          <q-td key="bigType"
                 :props="props"
-                style="text-align:center">{{ props.row.propLabel }}</q-td>
+                style="text-align:center">{{ props.row.bigName }}</q-td>
+          <q-td key="middleType"
+                :props="props"
+                style="text-align:center">{{ props.row.middleName }}</q-td>
+          <q-td key="smallType"
+                :props="props"
+                style="text-align:center">{{ props.row.smallName }}</q-td>
+          <q-td key="prodAttr"
+                :props="props"
+                style="text-align:center">{{ props.row.attrName}}</q-td>
+          <q-td key="prodYear"
+                :props="props"
+                style="text-align:center">{{ props.row.yearName}}</q-td>
+          <q-td key="prodSeason"
+                :props="props"
+                style="text-align:center">{{ props.row.seasonName}}</q-td>
+          <q-td key="prodUnit"
+                :props="props"
+                style="text-align:center">{{ props.row.unitName}}</q-td>
           <q-td key="prodMat"
                 :props="props"
                 style="text-align:center">{{ props.row.prodMat }}</q-td>
           <q-td key="prodLevel"
                 :props="props"
-                style="text-align:center">{{ props.row.levelLabel }}</q-td>
-          <q-td key="status"
+                style="text-align:center">{{ props.row.levelName }}</q-td>
+          <q-td key="designer"
                 :props="props"
-                style="text-align:center">{{ props.row.status?'上架':'下架' }}</q-td>
+                style="text-align:center">{{ props.row.designerName }}</q-td>
+          <q-td key="styleIsSync"
+                :props="props"
+                style="text-align:center">
+            <q-icon :name="props.row.styleIsSync?'mdi-check-circle':'mdi-sync-off'"
+                    size="1.5rem"
+                    :color="props.row.styleIsSync?'positive':'negative'" /></q-td>
+          <q-td key="gmtCreate"
+                :props="props"
+                style="text-align:center">{{ props.row.gmtCreate}}</q-td>
+          <q-td key="gmtModified"
+                :props="props"
+                style="text-align:center">{{ props.row.gmtModified}}</q-td>
         </q-tr>
         <q-tr v-show="props.expand"
               :props="props">
@@ -408,6 +433,7 @@
 </template>
 
 <script>
+import { date } from 'quasar'
 import {
   minLength,
   maxLength,
@@ -445,13 +471,16 @@ export default {
       },
       loading: false,
       visibleColumns: [
-        'thumbnail',
         'prodStyle',
-        'prodFamily',
-        'prodClass',
-        'prodLevel',
+        'thumbnail',
         'styleName',
-        'prodProp'
+        'prodFamily',
+        'prodType',
+        'bigType',
+        'middleType',
+        'smallType',
+        'prodAttr',
+        'styleIsSync'
       ],
       separator: 'horizontal',
       serverPagination: {
@@ -461,39 +490,24 @@ export default {
       },
       serverData: [],
       columns: [
-        { name: 'thumbnail', align: 'left', label: '简图', field: 'thumbnail' },
-        { name: 'prodStyle', align: 'left', label: '款号', field: 'prodStyle' },
-        {
-          name: 'styleName',
-          align: 'left',
-          label: '产品名称',
-          field: 'styleName'
-        },
-        {
-          name: 'prodFamily',
-          align: 'left',
-          label: '产品所属',
-          field: 'prodFamily'
-        },
-        {
-          name: 'prodClass',
-          align: 'left',
-          label: '产品类别',
-          field: 'prodClass'
-        },
-        {
-          name: 'prodProp',
-          align: 'left',
-          label: '产品属性',
-          field: 'prodProp'
-        },
-        {
-          name: 'prodLevel',
-          align: 'left',
-          label: '产品档次',
-          field: 'prodLevel'
-        },
-        { name: 'status', align: 'left', label: '状态', field: 'status' }
+        { name: 'prodStyle', label: '款号', field: 'prodStyle' },
+        { name: 'thumbnail', label: '简图', field: 'thumbnail' },
+        { name: 'styleName', label: '款名', field: 'styleName' },
+        { name: 'prodFamily', label: '产品归属', field: 'prodFamily' },
+        { name: 'prodType', label: '产品类别', field: 'prodType' },
+        { name: 'bigType', label: '大类', field: 'bigType' },
+        { name: 'middleType', label: '中类', field: 'middleType' },
+        { name: 'smallType', label: '小类', field: 'smallType' },
+        { name: 'prodAttr', label: '属性', field: 'prodAttr' },
+        { name: 'prodYear', label: '年份', field: 'prodYear' },
+        { name: 'prodSeason', label: '季节', field: 'prodSeason' },
+        { name: 'prodUnit', label: '单位', field: 'prodUnit' },
+        { name: 'prodMat', label: '材质', field: 'prodMat' },
+        { name: 'prodLevel', label: '档次', field: 'prodLevel' },
+        { name: 'designer', label: '设计师', field: 'designer' },
+        { name: 'styleIsSync', label: '是否同步', field: 'styleIsSync' },
+        { name: 'gmtCreate', label: '创建时间', field: 'gmtCreate' },
+        { name: 'gmtModified', label: '修改时间', field: 'gmtModified' }
       ],
       //modal
       mainStyleModalOpened: false,

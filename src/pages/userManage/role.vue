@@ -77,23 +77,23 @@
       <template slot="body"
                 slot-scope="props">
         <q-tr :props="props">
-          <q-td key="label"
+          <q-td key="name"
                 :props="props"
                 style="text-align:left">
             <q-checkbox color="secondary"
                         v-model="props.expand"
                         checked-icon="mdi-minus"
                         unchecked-icon="mdi-plus"
-                        class="q-mr-md" />{{ props.row.label}}</q-td>
+                        class="q-mr-md" />{{ props.row.name}}</q-td>
           <q-td key="remark"
                 :props="props"
                 style="text-align:center">{{ props.row.remark }}</q-td>
           <q-td key="comId"
                 :props="props"
-                style="text-align:center">{{ props.row.comLabel }}</q-td>
+                style="text-align:center">{{ props.row.comId }}</q-td>
           <q-td key="status"
                 :props="props"
-                style="text-align:center">{{ props.row.status==1?'启用':'停用' }}</q-td>
+                style="text-align:center">{{ props.row.status }}</q-td>
         </q-tr>
         <q-tr v-show="props.expand"
               :props="props">
@@ -146,7 +146,7 @@ export default {
         label: ''
       },
       loading: false,
-      visibleColumns: ['label', 'remark', 'comId', 'status'],
+      visibleColumns: ['name', 'remark', 'comId', 'status'],
       separator: 'horizontal',
       serverPagination: {
         page: 1,
@@ -155,7 +155,7 @@ export default {
       },
       serverData: [],
       columns: [
-        { name: 'label', label: '角色名称', field: 'label' },
+        { name: 'name', label: '角色名称', field: 'name' },
         { name: 'remark', label: '备注', field: 'remark' },
         {
           name: 'comId',
