@@ -157,10 +157,10 @@
                     :color="props.row.styleIsSync?'positive':'negative'" /></q-td>
           <q-td key="gmtCreate"
                 :props="props"
-                style="text-align:center">{{ date.formatDate(props.row.gmtCreate,'YYYY-MM-DD HH:mm:ss') }}</q-td>
+                style="text-align:center">{{ formatDate(props.row.gmtCreate) }}</q-td>
           <q-td key="gmtModified"
                 :props="props"
-                style="text-align:center">{{ date.formatDate(props.row.gmtModified,'YYYY-MM-DD HH:mm:ss') }}</q-td>
+                style="text-align:center">{{ formatDate(props.row.gmtModified) }}</q-td>
         </q-tr>
         <q-tr v-show="props.expand"
               :props="props">
@@ -433,6 +433,7 @@
 </template>
 
 <script>
+import { filter } from 'quasar'
 import { date } from 'quasar'
 import {
   minLength,
@@ -452,10 +453,10 @@ import {
   updateProdStyle
 } from 'src/api/product'
 import {
-  getProdCatList,
+  getProdClassList,
   getProdClassListByParent,
-  getProdParamListByParent,
-  getProdSpeList
+  getProdParamList,
+  getProdParamListByParent
 } from 'src/api/productParam'
 import { specDownload } from 'src/api/productPlus'
 
@@ -513,12 +514,6 @@ export default {
       mainStyleModalOpened: false,
       modalActionName: '',
       //modal content
-      departSelected: '',
-      departProps: [],
-      classSelected: '',
-      classProps: [],
-      departOpened: false,
-      classOpened: false,
       productStyle: {
         id: 0,
         departLabel: '',
@@ -534,9 +529,8 @@ export default {
         prodDesc: '',
         status: true
       },
-      familyOptions: [],
-      propOptions: [],
-      levelOptions: [],
+      classList: [],
+      paramList: [],
       //upload image
       expandId: 0,
       expandStyle: '',
@@ -566,20 +560,20 @@ export default {
     }
   },
   watch: {
-    //reset prodClass when prodFamily change
+    //reset prodClass when prodFamily changes
     'productStyle.prodFamily': function() {
       this.productStyle.prodClass = ''
       this.productStyle.classLabel = ''
     }
   },
   methods: {
+    formatDate(timeStamp) {
+      return date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss')
+    },
     resetSearchForm() {
       Object.assign(this.searchForm, this.$options.data.call(this).searchForm)
       this.$nextTick(() => {
-        this.serverPagination.page = 1
-        this.request({
-          pagination: this.serverPagination
-        })
+        this.search()
       })
     },
     search() {
@@ -598,11 +592,11 @@ export default {
       })
     },
     //modal input depart permission check
-    checkDepartPermission() {
-      if (this.myPermissions.indexOf('superAdmin') > -1) {
-        this.departOpened = true
-      }
-    },
+    // checkDepartPermission() {
+    //   if (this.myPermissions.indexOf('superAdmin') > -1) {
+    //     this.departOpened = true
+    //   }
+    // },
     //main modal function
     openMainStyleModal(action, id, departId) {
       this.$v.productStyle.$reset()
@@ -852,21 +846,11 @@ export default {
       pagination: this.serverPagination
     })
     //once mounted, fetch some product parameters
-    getOrgList().then(response => {
-      let data = response.data.data
-      this.departProps.push(data[0])
-      this.$nextTick(() => {
-        this.$refs.departTree.expandAll()
-      })
+    getProdClassList().then(response => {
+      this.classList = response.data.data
     })
-    getProdFamilyList().then(response => {
-      this.familyOptions = response.data.data
-    })
-    getProdPropList().then(response => {
-      this.propOptions = response.data.data
-    })
-    getProdLevelList().then(response => {
-      this.levelOptions = response.data.data
+    getProdParamList().then(response => {
+      this.paramList = response.data.data
     })
   }
 }

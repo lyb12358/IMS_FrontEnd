@@ -105,15 +105,6 @@
             <q-checkbox color="secondary"
                         v-model="props.selected" />
           </q-td> -->
-          <q-td key="id"
-                :props="props"
-                style="text-align:center">{{ props.row.id }}</q-td>
-          <q-td key="departId"
-                :props="props"
-                style="text-align:center">{{ props.row.departLabel }}</q-td>
-          <q-td key="prodStyle"
-                :props="props"
-                style="text-align:center">{{ props.row.prodStyle }}</q-td>
           <q-td key="prodCode"
                 :props="props"
                 style="text-align:center">
@@ -126,42 +117,57 @@
           <q-td key="prodName"
                 :props="props"
                 style="text-align:center">{{ props.row.prodName }}</q-td>
+          <q-td key="prodStyle"
+                :props="props"
+                style="text-align:center">{{ props.row.prodStyle }}</q-td>
           <q-td key="prodFamily"
                 :props="props"
-                style="text-align:center">{{ props.row.familyLabel}}</q-td>
-          <q-td key="prodClass"
+                style="text-align:center">{{ props.row.familyName }}</q-td>
+          <q-td key="prodType"
                 :props="props"
-                style="text-align:center">{{ props.row.classLabel }}</q-td>
-          <q-td key="prodProp"
+                style="text-align:center">{{ props.row.typeName }}</q-td>
+          <q-td key="bigType"
                 :props="props"
-                style="text-align:center">{{ props.row.propLabel }}</q-td>
-          <q-td key="prodLevel"
+                style="text-align:center">{{ props.row.bigName }}</q-td>
+          <q-td key="middleType"
                 :props="props"
-                style="text-align:center">{{ props.row.levelLabel }}</q-td>
-          <q-td key="prodMat"
+                style="text-align:center">{{ props.row.middleName }}</q-td>
+          <q-td key="smallType"
                 :props="props"
-                style="text-align:center">{{ props.row.prodMat }}</q-td>
-          <q-td key="prodSize"
+                style="text-align:center">{{ props.row.smallName }}</q-td>
+          <q-td key="prodAttr"
                 :props="props"
-                style="text-align:center">{{ props.row.prodSize }}</q-td>
+                style="text-align:center">{{ props.row.attrName}}</q-td>
           <q-td key="prodCat"
                 :props="props"
                 style="text-align:center">{{ props.row.prodCat }}</q-td>
-          <q-td key="weight"
+          <q-td key="prodSpe"
                 :props="props"
-                style="text-align:center">{{ props.row.weight/100 }}</q-td>
+                style="text-align:center">{{ props.row.prodSpe }}</q-td>
           <q-td key="retailPrice"
                 :props="props"
-                style="text-align:center">{{ props.row.retailPrice/100 }}
+                style="text-align:center">{{ props.row.retailPrice}}
           </q-td>
           <q-td key="supplyPrice"
                 :props="props"
-                style="text-align:center">{{ props.row.supplyPrice/100 }}
+                style="text-align:center">{{ props.row.supplyPrice }}
           </q-td>
           <q-td key="costPrice"
                 :props="props"
-                style="text-align:center">{{ props.row.costPrice/100 }}
+                style="text-align:center">{{ props.row.costPrice }}
           </q-td>
+          <q-td key="codeIsSync"
+                :props="props"
+                style="text-align:center">
+            <q-icon :name="props.row.codeIsSync?'mdi-check-circle':'mdi-sync-off'"
+                    size="1.5rem"
+                    :color="props.row.codeIsSync?'positive':'negative'" /></q-td>
+          <q-td key="gmtCreate"
+                :props="props"
+                style="text-align:center">{{ formatDate(props.row.gmtCreate) }}</q-td>
+          <q-td key="gmtModified"
+                :props="props"
+                style="text-align:center">{{ formatDate(props.row.gmtModified) }}</q-td>
         </q-tr>
         <q-tr v-show="props.expand"
               :props="props">
@@ -412,6 +418,7 @@
 </template>
 
 <script>
+import { filter } from 'quasar'
 import { date } from 'quasar'
 import {
   minLength,
@@ -463,72 +470,23 @@ export default {
       },
       serverData: [],
       columns: [
-        { name: 'id', align: 'left', label: 'id', field: 'id' },
-        {
-          name: 'departId',
-          align: 'left',
-          label: '所属部门',
-          field: 'departId'
-        },
-        { name: 'prodStyle', align: 'left', label: '款号', field: 'prodStyle' },
-        {
-          name: 'prodCode',
-          align: 'left',
-          label: '产品编号',
-          field: 'prodCode'
-        },
-        {
-          name: 'prodName',
-          align: 'left',
-          label: '产品名称',
-          field: 'prodName'
-        },
-        {
-          name: 'prodFamily',
-          align: 'left',
-          label: '产品所属',
-          field: 'prodFamily'
-        },
-        {
-          name: 'prodClass',
-          align: 'left',
-          label: '产品分类',
-          field: 'prodClass'
-        },
-        {
-          name: 'prodProp',
-          align: 'left',
-          label: '产品属性',
-          field: 'prodProp'
-        },
-        {
-          name: 'prodLevel',
-          align: 'left',
-          label: '产品档次',
-          field: 'prodLevel'
-        },
-        { name: 'prodMat', align: 'left', label: '面料', field: 'prodMat' },
-        { name: 'prodSize', align: 'left', label: '规格', field: 'prodSize' },
-        { name: 'prodCat', align: 'left', label: '品类', field: 'prodSize' },
-        { name: 'weight', align: 'left', label: '克重', field: 'prodSize' },
-        {
-          name: 'retailPrice',
-          align: 'left',
-          label: '零售价',
-          field: 'retailPrice'
-        },
-        {
-          name: 'supplyPrice',
-          align: 'left',
-          label: '供应价',
-          field: 'supplyPrice'
-        },
-        {
-          name: 'costPrice',
-          align: 'left',
-          label: '成本价',
-          field: 'costPrice'
-        }
+        { name: 'prodCode', label: '产品编号', field: 'prodCode' },
+        { name: 'prodName', label: '产品名称', field: 'prodCode' },
+        { name: 'prodStyle', label: '款号', field: 'prodStyle' },
+        { name: 'prodFamily', label: '产品归属', field: 'prodFamily' },
+        { name: 'prodType', label: '产品类别', field: 'prodType' },
+        { name: 'bigType', label: '大类', field: 'bigType' },
+        { name: 'middleType', label: '中类', field: 'middleType' },
+        { name: 'smallType', label: '小类', field: 'smallType' },
+        { name: 'prodAttr', label: '属性', field: 'prodAttr' },
+        { name: 'prodCat', label: '品类', field: 'prodCat' },
+        { name: 'prodSpe', label: '规格', field: 'prodSpe' },
+        { name: 'retailPrice', label: '零售价', field: 'retailPrice' },
+        { name: 'supplyPrice', label: '供应价', field: 'supplyPrice' },
+        { name: 'costPrice', label: '成本价', field: 'costPrice' },
+        { name: 'codeIsSync', label: '是否同步', field: 'codeIsSync' },
+        { name: 'gmtCreate', label: '创建时间', field: 'gmtCreate' },
+        { name: 'gmtModified', label: '修改时间', field: 'gmtModified' }
       ],
       //choose style dialog
       chooseStyleDialogOpend: false,
@@ -627,13 +585,13 @@ export default {
     }
   },
   methods: {
+    formatDate(timeStamp) {
+      return date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss')
+    },
     resetSearchForm() {
       Object.assign(this.searchForm, this.$options.data.call(this).searchForm)
       this.$nextTick(() => {
-        this.serverPagination.page = 1
-        this.request({
-          pagination: this.serverPagination
-        })
+        this.search()
       })
     },
     search() {
