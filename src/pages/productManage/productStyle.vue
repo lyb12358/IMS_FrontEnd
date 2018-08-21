@@ -274,11 +274,19 @@
         </q-toolbar>
         <div class="layout-padding">
           <div class="row gutter-sm">
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            <!-- <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.prodStyle.$error"
                        error-label="款号必填，且不超过10位">
                 <q-input v-model="productStyle.prodStyle"
                          :readonly="modalActionName==='修改产品款式'?true:false"
+                         class="no-margin"
+                         float-label="款号" />
+              </q-field>
+            </div> -->
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-field :error="$v.productStyle.prodStyle.$error"
+                       error-label="款号必填，且不超过10位">
+                <q-input v-model="productStyle.prodStyle"
                          class="no-margin"
                          float-label="款号" />
               </q-field>
@@ -291,30 +299,7 @@
                          float-label="款名" />
               </q-field>
             </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-input v-model="productStyle.departLabel"
-                       ref="departInput"
-                       readonly
-                       @focus="checkDepartPermission()"
-                       class="no-margin"
-                       float-label="所属部门" />
-            </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
-              <q-select v-model="productStyle.prodProp"
-                        float-label="产品属性"
-                        radio
-                        :options="propOptions" />
-            </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-field :error="$v.productStyle.prodFamily.$error"
-                       error-label="产品所属必填">
-                <q-select v-model="productStyle.prodFamily"
-                          float-label="产品所属"
-                          radio
-                          :options="familyOptions" />
-              </q-field>
-            </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            <!-- <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.classLabel.$error"
                        error-label="产品类别必填">
                 <q-input v-model="productStyle.classLabel"
@@ -324,25 +309,91 @@
                          class="no-margin"
                          float-label="产品类别" />
               </q-field>
+            </div> -->
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-field :error="$v.productStyle.prodFamily.$error"
+                       error-label="归属必填">
+                <q-select v-model="productStyle.prodFamily"
+                          float-label="归属"
+                          radio
+                          :options="prodFamilyOptions" />
+              </q-field>
+            </div>
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-field :error="$v.productStyle.prodType.$error"
+                       error-label="类别必填">
+                <q-select v-model="productStyle.prodType"
+                          float-label="类别"
+                          radio
+                          :options="prodTypeOptions" />
+              </q-field>
+            </div>
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-field :error="$v.productStyle.bigType.$error"
+                       error-label="大类必填">
+                <q-select v-model="productStyle.bigType"
+                          float-label="大类"
+                          radio
+                          :options="bigTypeOptions" />
+              </q-field>
+            </div>
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-field :error="$v.productStyle.middleType.$error"
+                       error-label="中类必填">
+                <q-select v-model="productStyle.middleType"
+                          float-label="中类"
+                          radio
+                          :options="middleTypeOptions" />
+              </q-field>
+            </div>
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-field :error="$v.productStyle.smallType.$error"
+                       error-label="小类必填">
+                <q-select v-model="productStyle.smallType"
+                          float-label="小类"
+                          radio
+                          :options="smallTypeOptions" />
+              </q-field>
+            </div>
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-select v-model="productStyle.prodAttr"
+                        float-label="属性"
+                        radio
+                        :options="prodAttrOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.prodMat.$error"
-                       error-label="材料名称这么长合适吗？">
+                       error-label="材质信息这么长合适吗？">
                 <q-input v-model="productStyle.prodMat"
                          class="no-margin"
-                         float-label="材料" />
+                         float-label="材质" />
               </q-field>
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.prodLevel"
                         float-label="档次"
                         radio
-                        :options="levelOptions" />
+                        :options="prodLevelOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-toggle v-model="productStyle.status"
-                        label="是否上架" />
+              <q-select v-model="productStyle.prodYear"
+                        float-label="年份"
+                        radio
+                        :options="prodYearOptions" />
             </div>
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-select v-model="productStyle.prodSeason"
+                        float-label="季节"
+                        radio
+                        :options="prodSeasonOptions" />
+            </div>
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-select v-model="productStyle.prodUnit"
+                        float-label="单位"
+                        radio
+                        :options="prodUnitOptions" />
+            </div>
+
             <div class="col-xs-12  col-sm-12 col-md-12">
               <q-input v-model="productStyle.prodDesc"
                        clearable
@@ -558,9 +609,8 @@ export default {
   validations: {
     productStyle: {
       prodStyle: { required, maxLength: maxLength(10) },
-      styleName: { required, maxLength: maxLength(15) },
+      styleName: { required, maxLength: maxLength(20) },
       prodFamily: { required },
-      classLabel: { required },
       prodMat: { maxLength: maxLength(20) }
     }
   },
