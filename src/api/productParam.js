@@ -9,10 +9,17 @@ export function getProdCatList(id) {
     })
 }
 // product_class类别
-// 获取产品类别(全级别)
+// 获取产品类别列表(全级别)
 export function getProdClassList() {
     return service({
-        url: '/prodClasses',
+        url: '/prodClasses/list',
+        method: 'get'
+    })
+}
+// 获取产品类别树(全级别)
+export function getProdClassTree() {
+    return service({
+        url: '/prodClasses/tree',
         method: 'get'
     })
 }
@@ -24,10 +31,17 @@ export function getProdClassListByParent(id) {
     })
 }
 // product_param参数
-// 获取产品参数(全部)
+// 获取产品参数列表(全部)
 export function getProdParamList() {
     return service({
-        url: '/prodParams',
+        url: '/prodParams/list',
+        method: 'get'
+    })
+}
+// 获取产品参数树(全部)
+export function getProdParamTree() {
+    return service({
+        url: '/prodParams/tree',
         method: 'get'
     })
 }

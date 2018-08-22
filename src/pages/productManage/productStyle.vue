@@ -131,6 +131,9 @@
           <q-td key="prodAttr"
                 :props="props"
                 style="text-align:center">{{ props.row.attrName}}</q-td>
+          <q-td key="prodMat"
+                :props="props"
+                style="text-align:center">{{ props.row.prodMat }}</q-td>
           <q-td key="prodYear"
                 :props="props"
                 style="text-align:center">{{ props.row.yearName}}</q-td>
@@ -140,9 +143,6 @@
           <q-td key="prodUnit"
                 :props="props"
                 style="text-align:center">{{ props.row.unitName}}</q-td>
-          <q-td key="prodMat"
-                :props="props"
-                style="text-align:center">{{ props.row.prodMat }}</q-td>
           <q-td key="prodLevel"
                 :props="props"
                 style="text-align:center">{{ props.row.levelName }}</q-td>
@@ -285,7 +285,7 @@
             </div> -->
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.prodStyle.$error"
-                       error-label="款号必填，且不超过10位">
+                       error-label="款号是必填项，且不超过10位">
                 <q-input v-model="productStyle.prodStyle"
                          class="no-margin"
                          float-label="款号" />
@@ -293,7 +293,7 @@
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.styleName.$error"
-                       error-label="款名必填，且不超过15位">
+                       error-label="款名是必填项，且不超过15位">
                 <q-input v-model="productStyle.styleName"
                          class="no-margin"
                          float-label="款名" />
@@ -312,7 +312,7 @@
             </div> -->
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.prodFamily.$error"
-                       error-label="归属必填">
+                       error-label="归属是必填项">
                 <q-select v-model="productStyle.prodFamily"
                           float-label="归属"
                           radio
@@ -321,7 +321,7 @@
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.prodType.$error"
-                       error-label="类别必填">
+                       error-label="类别是必填项">
                 <q-select v-model="productStyle.prodType"
                           float-label="类别"
                           radio
@@ -330,7 +330,7 @@
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.bigType.$error"
-                       error-label="大类必填">
+                       error-label="大类是必填项">
                 <q-select v-model="productStyle.bigType"
                           float-label="大类"
                           radio
@@ -338,22 +338,16 @@
               </q-field>
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-field :error="$v.productStyle.middleType.$error"
-                       error-label="中类必填">
-                <q-select v-model="productStyle.middleType"
-                          float-label="中类"
-                          radio
-                          :options="middleTypeOptions" />
-              </q-field>
+              <q-select v-model="productStyle.middleType"
+                        float-label="中类"
+                        radio
+                        :options="middleTypeOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-field :error="$v.productStyle.smallType.$error"
-                       error-label="小类必填">
-                <q-select v-model="productStyle.smallType"
-                          float-label="小类"
-                          radio
-                          :options="smallTypeOptions" />
-              </q-field>
+              <q-select v-model="productStyle.smallType"
+                        float-label="小类"
+                        radio
+                        :options="smallTypeOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.prodAttr"
@@ -363,17 +357,11 @@
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.prodMat.$error"
-                       error-label="材质信息这么长合适吗？">
+                       error-label="材质信息是不是太长了？">
                 <q-input v-model="productStyle.prodMat"
                          class="no-margin"
                          float-label="材质" />
               </q-field>
-            </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="productStyle.prodLevel"
-                        float-label="档次"
-                        radio
-                        :options="prodLevelOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.prodYear"
@@ -393,7 +381,18 @@
                         radio
                         :options="prodUnitOptions" />
             </div>
-
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-select v-model="productStyle.prodLevel"
+                        float-label="档次"
+                        radio
+                        :options="prodLevelOptions" />
+            </div>
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-select v-model="productStyle.designer"
+                        float-label="设计师"
+                        radio
+                        :options="designerOptions" />
+            </div>
             <div class="col-xs-12  col-sm-12 col-md-12">
               <q-input v-model="productStyle.prodDesc"
                        clearable
@@ -406,7 +405,7 @@
       </q-modal-layout>
     </q-modal>
     <!-- select department -->
-    <q-dialog v-model="departOpened"
+    <!-- <q-dialog v-model="departOpened"
               prevent-close
               noRefocus>
       <span slot="title">选择部门</span>
@@ -426,29 +425,7 @@
                @click="departOpened = false"
                label="取消" />
       </template>
-    </q-dialog>
-    <!-- select prodClass -->
-    <q-dialog v-model="classOpened"
-              prevent-close
-              noRefocus>
-      <span slot="title">选择产品类别</span>
-      <div slot="body">
-        <q-tree :nodes="classProps"
-                ref="classTree"
-                color="primary"
-                :selected.sync="classSelected"
-                node-key="id" />
-      </div>
-      <template slot="buttons"
-                slot-scope="props">
-        <q-btn color="primary"
-               @click="selectClass"
-               label="确定" />
-        <q-btn color="primary"
-               @click="classOpened = false"
-               label="取消" />
-      </template>
-    </q-dialog>
+    </q-dialog> -->
     <!-- upload image -->
     <q-dialog v-model="imageUploadDialog"
               prevent-close>
@@ -551,10 +528,10 @@ export default {
         { name: 'middleType', label: '中类', field: 'middleType' },
         { name: 'smallType', label: '小类', field: 'smallType' },
         { name: 'prodAttr', label: '属性', field: 'prodAttr' },
+        { name: 'prodMat', label: '材质', field: 'prodMat' },
         { name: 'prodYear', label: '年份', field: 'prodYear' },
         { name: 'prodSeason', label: '季节', field: 'prodSeason' },
         { name: 'prodUnit', label: '单位', field: 'prodUnit' },
-        { name: 'prodMat', label: '材质', field: 'prodMat' },
         { name: 'prodLevel', label: '档次', field: 'prodLevel' },
         { name: 'designer', label: '设计师', field: 'designer' },
         { name: 'styleIsSync', label: '是否同步', field: 'styleIsSync' },
@@ -569,35 +546,46 @@ export default {
         id: 0,
         prodStyle: '',
         styleName: '',
-        prodAttr: '',
-        attrName: '',
         prodFamily: '',
-        familyName: '',
+        //familyName: '',
         prodType: '',
-        typeName: '',
+        //typeName: '',
         bigType: '',
-        bigName: '',
+        //bigName: '',
         middleType: '',
-        middleName: '',
+        //middleName: '',
         smallType: '',
-        smallName: '',
-        prodYear: '',
-        yearName: '',
-        prodSeason: '',
-        seasonName: '',
-        prodUnit: '',
-        unitName: '',
+        //smallName: '',
+        prodAttr: '',
+        //attrName: '',
         prodMat: '',
+        prodYear: '',
+        //yearName: '',
+        prodSeason: '',
+        //seasonName: '',
+        prodUnit: '',
+        //unitName: '',
         prodLevel: '',
-        levelName: '',
+        //levelName: '',
         designer: '',
-        designerName: '',
+        //designerName: '',
         prodDesc: '',
         isDel: false,
         isSync: false
       },
       classList: [],
       paramList: [],
+      prodFamilyOptions: [],
+      prodTypeOptions: [],
+      bigTypeOptions: [],
+      middleTypeOptions: [],
+      smallTypeOptions: [],
+      prodAttrOptions: [],
+      prodYearOptions: [],
+      prodSeasonOptions: [],
+      prodUnitOptions: [],
+      prodLevelOptions: [],
+      designerOptions: [],
       //upload image
       expandId: 0,
       expandStyle: '',
@@ -611,6 +599,8 @@ export default {
       prodStyle: { required, maxLength: maxLength(10) },
       styleName: { required, maxLength: maxLength(20) },
       prodFamily: { required },
+      prodType: { required },
+      bigType: { required },
       prodMat: { maxLength: maxLength(20) }
     }
   },
@@ -626,10 +616,58 @@ export default {
     }
   },
   watch: {
-    //reset prodClass when prodFamily changes
-    'productStyle.prodFamily': function() {
-      this.productStyle.prodClass = ''
-      this.productStyle.classLabel = ''
+    //reset the prodClass when its changes
+    'productStyle.prodFamily': function(newVal, oldVal) {
+      if (this.mainStyleModalOpened) {
+        newVal += ''
+        this.prodTypeOptions = filter(newVal, {
+          field: 'parentId',
+          list: this.classList
+        })
+        this.bigTypeOptions = []
+        this.middleTypeOptions = []
+        this.smallTypesOptions = []
+        this.productStyle.prodType = ''
+        this.productStyle.bigType = ''
+        this.productStyle.middleType = ''
+        this.productStyle.smallType = ''
+      }
+    },
+    'productStyle.prodType': function(newVal, oldVal) {
+      if (this.mainStyleModalOpened) {
+        newVal += ''
+        this.bigTypeOptions = filter(newVal, {
+          field: 'parentId',
+          list: this.classList
+        })
+        this.middleTypeOptions = []
+        this.smallTypesOptions = []
+        this.productStyle.bigType = ''
+        this.productStyle.middleType = ''
+        this.productStyle.smallType = ''
+      }
+    },
+    'productStyle.bigType': function(newVal, oldVal) {
+      if (this.mainStyleModalOpened) {
+        newVal += ''
+        this.middleTypeOptions = filter(newVal, {
+          field: 'parentId',
+          list: this.classList
+        })
+        this.smallTypesOptions = []
+        this.productStyle.middleType = ''
+        this.productStyle.smallType = ''
+      }
+    },
+    'productStyle.middleType': function(newVal, oldVal) {
+      if (this.mainStyleModalOpened) {
+        newVal += ''
+        this.smallTypeOptions = filter(newVal, {
+          field: 'parentId',
+          list: this.classList
+        })
+        this.productStyle.smallType = ''
+      }
     }
   },
   methods: {
@@ -913,10 +951,19 @@ export default {
     })
     //once mounted, fetch some product parameters
     getProdClassList().then(response => {
-      this.classList = response.data.data
+      let data = response.data.data
+      this.classList = data
+      this.prodFamilyOptions = filter('0', { field: 'parentId', list: data })
     })
     getProdParamList().then(response => {
-      this.paramList = response.data.data
+      let data = response.data.data
+      this.paramList = data
+      this.prodAttrOptions = filter('606', { field: 'parentId', list: data })
+      this.prodYearOptions = filter('464', { field: 'parentId', list: data })
+      this.prodSeasonOptions = filter('465', { field: 'parentId', list: data })
+      this.prodUnitOptions = filter('458', { field: 'parentId', list: data })
+      this.prodLevelOptions = filter('486', { field: 'parentId', list: data })
+      this.designerOptions = filter('567', { field: 'parentId', list: data })
     })
   }
 }
