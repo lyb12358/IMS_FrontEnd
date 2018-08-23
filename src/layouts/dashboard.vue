@@ -21,7 +21,8 @@
       </q-toolbar>
     </q-layout-footer> -->
 
-    <q-layout-drawer v-model="leftDrawerOpen">
+    <q-layout-drawer v-model="leftDrawerOpen"
+                     :breakpoint="1500">
       <q-scroll-area style="width: 100%; height: 100%;">
         <q-list no-border
                 link

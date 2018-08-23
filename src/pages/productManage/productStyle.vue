@@ -378,6 +378,7 @@
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.prodUnit"
                         float-label="单位"
+                        filter
                         radio
                         :options="prodUnitOptions" />
             </div>
@@ -390,6 +391,7 @@
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.designer"
                         float-label="设计师"
+                        filter
                         radio
                         :options="designerOptions" />
             </div>
@@ -430,7 +432,7 @@
     <q-dialog v-model="imageUploadDialog"
               prevent-close>
       <span slot="title">上传产品图片</span>
-      <span slot="message">点击"+"，选择清晰度较高的图片，将作为本产品主要图片展示</span>
+      <span slot="message">点击"+"，选择清晰度较高的图片，将作为本款式主要图片展示</span>
       <div slot="body">
         <q-uploader ref="imageUpload"
                     :url="api+imageUploadUrl"
@@ -501,7 +503,7 @@ export default {
       loading: false,
       visibleColumns: [
         'prodStyle',
-        'thumbnail',
+        //'thumbnail',
         'styleName',
         'prodFamily',
         'prodType',
@@ -591,7 +593,7 @@ export default {
       expandStyle: '',
       expandName: '',
       imageUploadDialog: false,
-      imageUploadUrl: '/pic/upload'
+      imageUploadUrl: '/image/prodStyle'
     }
   },
   validations: {
@@ -619,11 +621,6 @@ export default {
     //reset the prodClass when its changes
     'productStyle.prodFamily': function(newVal, oldVal) {
       if (this.mainStyleModalOpened) {
-        newVal += ''
-        this.prodTypeOptions = filter(newVal, {
-          field: 'parentId',
-          list: this.classList
-        })
         this.bigTypeOptions = []
         this.middleTypeOptions = []
         this.smallTypesOptions = []
@@ -631,42 +628,47 @@ export default {
         this.productStyle.bigType = ''
         this.productStyle.middleType = ''
         this.productStyle.smallType = ''
+        newVal += ''
+        this.prodTypeOptions = filter(newVal, {
+          field: 'parentId',
+          list: this.classList
+        })
       }
     },
     'productStyle.prodType': function(newVal, oldVal) {
       if (this.mainStyleModalOpened) {
-        newVal += ''
-        this.bigTypeOptions = filter(newVal, {
-          field: 'parentId',
-          list: this.classList
-        })
         this.middleTypeOptions = []
         this.smallTypesOptions = []
         this.productStyle.bigType = ''
         this.productStyle.middleType = ''
         this.productStyle.smallType = ''
+        newVal += ''
+        this.bigTypeOptions = filter(newVal, {
+          field: 'parentId',
+          list: this.classList
+        })
       }
     },
     'productStyle.bigType': function(newVal, oldVal) {
       if (this.mainStyleModalOpened) {
+        this.smallTypesOptions = []
+        this.productStyle.middleType = ''
+        this.productStyle.smallType = ''
         newVal += ''
         this.middleTypeOptions = filter(newVal, {
           field: 'parentId',
           list: this.classList
         })
-        this.smallTypesOptions = []
-        this.productStyle.middleType = ''
-        this.productStyle.smallType = ''
       }
     },
     'productStyle.middleType': function(newVal, oldVal) {
       if (this.mainStyleModalOpened) {
+        this.productStyle.smallType = ''
         newVal += ''
         this.smallTypeOptions = filter(newVal, {
           field: 'parentId',
           list: this.classList
         })
-        this.productStyle.smallType = ''
       }
     }
   },
@@ -711,94 +713,89 @@ export default {
           this.$options.data.call(this).productStyle
         )
         this.$nextTick(() => {
-          this.productStyle.departLabel = this.myDepartName
-          this.productStyle.departId = this.myDepart
           this.mainStyleModalOpened = true
         })
       } else if (action === 'update') {
-        if (
-          departId != this.myDepart &&
-          this.myPermissions.indexOf('superAdmin') < 0
-        ) {
-          this.notify('warning', '无权维护非本部门产品')
-          return
-        }
+        // if (
+        //   departId != this.myDepart &&
+        //   this.myPermissions.indexOf('superAdmin') < 0
+        // ) {
+        //   this.notify('warning', '无权维护非本部门产品')
+        //   return
+        // }
         this.modalActionName = '修改产品款式'
         getProdStyleById(id).then(response => {
           let productStyle = response.data.data
-          if (productStyle.status == 1) {
-            productStyle.status = true
-          } else {
-            productStyle.status = false
-          }
           Object.assign(this.productStyle, productStyle)
+          // filter util need string parameter
+          let prodFamily = productStyle.prodFamily + ''
+          let prodType = productStyle.prodType + ''
+          let bigType = productStyle.bigType + ''
+          let middleType = productStyle.middleType + ''
+          this.prodTypeOptions = filter(prodFamily, {
+            field: 'parentId',
+            list: this.classList
+          })
+          this.bigTypeOptions = filter(prodType, {
+            field: 'parentId',
+            list: this.classList
+          })
+          this.middleTypeOptions = filter(bigType, {
+            field: 'parentId',
+            list: this.classList
+          })
+          this.smallTypeOptions = filter(middleType, {
+            field: 'parentId',
+            list: this.classList
+          })
           this.$nextTick(() => {
-            this.productStyle.classLabel = productStyle.classLabel
-            this.productStyle.prodClass = productStyle.prodClass
             this.mainStyleModalOpened = true
           })
         })
       }
     },
     //add product
-    selectDepart() {
-      if (this.departSelected == '') {
-        this.notify('warning', '请选择一个部门')
-        return
-      }
-      if (
-        this.$refs.departTree.getNodeByKey(this.departSelected).isParent == 1
-      ) {
-        this.notify('warning', '产品绑定到部门，而非公司')
-        this.departSelected = ''
-        return
-      }
-      this.productStyle.departId = this.$refs.departTree.getNodeByKey(
-        this.departSelected
-      ).id
-      this.productStyle.departLabel = this.$refs.departTree.getNodeByKey(
-        this.departSelected
-      ).label
-      this.departOpened = false
-    },
-    openClassDialog() {
-      if (this.productStyle.prodFamily != '') {
-        getProdClassList(this.productStyle.prodFamily).then(response => {
-          let data = response.data.data
-          this.classProps = data
-          this.classOpened = true
-        })
-      } else {
-        this.notify('warning', '请先选择产品所属')
-      }
-    },
-    selectClass() {
-      if (this.classSelected == '') {
-        this.notify('warning', '请选择一个类别')
-        return
-      }
-      if (this.$refs.classTree.getNodeByKey(this.classSelected).isParent == 1) {
-        this.notify('warning', '只能选择子类')
-        this.classSelected = ''
-        return
-      }
-      this.productStyle.prodClass = this.$refs.classTree.getNodeByKey(
-        this.classSelected
-      ).id
-      this.productStyle.classLabel = this.$refs.classTree.getNodeByKey(
-        this.classSelected
-      ).label
-      this.classOpened = false
-    },
+    // selectDepart() {
+    //   if (this.departSelected == '') {
+    //     this.notify('warning', '请选择一个部门')
+    //     return
+    //   }
+    //   if (
+    //     this.$refs.departTree.getNodeByKey(this.departSelected).isParent == 1
+    //   ) {
+    //     this.notify('warning', '产品绑定到部门，而非公司')
+    //     this.departSelected = ''
+    //     return
+    //   }
+    //   this.productStyle.departId = this.$refs.departTree.getNodeByKey(
+    //     this.departSelected
+    //   ).id
+    //   this.productStyle.departLabel = this.$refs.departTree.getNodeByKey(
+    //     this.departSelected
+    //   ).label
+    //   this.departOpened = false
+    // },
+    // selectClass() {
+    //   if (this.classSelected == '') {
+    //     this.notify('warning', '请选择一个类别')
+    //     return
+    //   }
+    //   if (this.$refs.classTree.getNodeByKey(this.classSelected).isParent == 1) {
+    //     this.notify('warning', '只能选择子类')
+    //     this.classSelected = ''
+    //     return
+    //   }
+    //   this.productStyle.prodClass = this.$refs.classTree.getNodeByKey(
+    //     this.classSelected
+    //   ).id
+    //   this.productStyle.classLabel = this.$refs.classTree.getNodeByKey(
+    //     this.classSelected
+    //   ).label
+    //   this.classOpened = false
+    // },
+
     //upload image
     openImageUpload(id, prodStyle, styleName, departId) {
-      if (
-        departId != this.myDepart &&
-        this.myPermissions.indexOf('superAdmin') < 0
-      ) {
-        this.notify('warning', '无权维护非本部门产品')
-        return
-      }
       this.expandId = id
       this.expandStyle = prodStyle
       this.expandName = styleName
@@ -834,7 +831,7 @@ export default {
     //check thumbnail
     thumbnailCheck(id, thumbnail) {
       if (!(thumbnail === null)) {
-        return this.api + '/image/' + id + '/' + thumbnail
+        return this.api + '/image/style' + id + '/' + thumbnail
       } else {
         return 'statics/sad.svg'
       }
@@ -845,18 +842,22 @@ export default {
         return
       }
       this.$v.productStyle.$reset()
-      addProdStyle(this.productStyle).then(response => {
-        let data = response.data
-        this.mainStyleModalOpened = false
-        Object.assign(
-          this.productStyle,
-          this.$options.data.call(this).productStyle
-        )
-        this.notify('positive', data.msg)
-        this.request({
-          pagination: this.serverPagination
+      this.productStyle.isDel = 0
+      this.productStyle.isSync = 0
+      addProdStyle(this.productStyle)
+        .then(response => {
+          let data = response.data
+          this.mainStyleModalOpened = false
+          Object.assign(
+            this.productStyle,
+            this.$options.data.call(this).productStyle
+          )
+          this.notify('positive', data.msg)
+          this.request({
+            pagination: this.serverPagination
+          })
         })
-      })
+        .catch(error => {})
     },
     modifyProdStyle() {
       this.$v.productStyle.$touch()
@@ -864,29 +865,28 @@ export default {
         return
       }
       this.$v.productStyle.$reset()
-      updateProdStyle(this.productStyle).then(response => {
-        let data = response.data
-        this.mainStyleModalOpened = false
-        Object.assign(
-          this.productStyle,
-          this.$options.data.call(this).productStyle
-        )
-        this.notify('positive', data.msg)
-        this.request({
-          pagination: this.serverPagination
+      this.productStyle.isSync = 0
+      updateProdStyle(this.productStyle)
+        .then(response => {
+          let data = response.data
+          this.mainStyleModalOpened = false
+          Object.assign(
+            this.productStyle,
+            this.$options.data.call(this).productStyle
+          )
+          this.notify('positive', data.msg)
+          this.request({
+            pagination: this.serverPagination
+          })
         })
-      })
+        .catch(error => {})
     },
     resetStyleModal() {
-      let departId = this.productStyle.departId
-      let departLabel = this.productStyle.departLabel
       Object.assign(
         this.productStyle,
         this.$options.data.call(this).productStyle
       )
       this.$nextTick(() => {
-        this.productStyle.departId = departId
-        this.productStyle.departLabel = departLabel
         this.$v.productStyle.$reset()
       })
     },
@@ -918,13 +918,10 @@ export default {
         departId != this.myDepart &&
         this.myPermissions.indexOf('superAdmin') < 0
       ) {
-        this.notify('warning', '无权维护非本部门产品')
+        this.notify('warning', '没有权限维护该产品')
         return
       }
-      this.notify(
-        'warning',
-        '老实说我还没确定好是逻辑删除还是物理删除，所以Beta版本暂不提供删除功能'
-      )
+      this.notify('warning', '产品删除了哦')
     },
     //dataTable request
     request({ pagination }) {
