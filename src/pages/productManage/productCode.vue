@@ -258,6 +258,7 @@
     <q-modal v-model="mainCodeModalOpened"
              no-backdrop-dismiss
              no-esc-dismiss
+             no-refocus
              :content-css="{minWidth: '80vw', minHeight: '80vh'}">
       <q-modal-layout footer-class="no-shadow">
         <q-toolbar slot="header">
@@ -439,6 +440,7 @@ import {
   getProdStyleByAny,
   checkProdStyle
 } from 'src/api/product'
+import { getProdParamList } from 'src/api/productParam'
 import { excelDownload, specDownload } from 'src/api/productPlus'
 
 export default {
@@ -497,63 +499,64 @@ export default {
       //modal content
       productStyle: {
         id: 0,
-        departLabel: '',
-        departId: '',
-        classLabel: '',
-        prodClass: '',
-        prodMat: '',
-        styleName: '',
         prodStyle: '',
+        styleName: '',
         prodFamily: '',
-        familyLabel: '',
-        prodProp: '',
-        propLabel: '',
+        familyName: '',
+        prodType: '',
+        typeName: '',
+        bigType: '',
+        bigName: '',
+        middleType: '',
+        middleName: '',
+        smallType: '',
+        smallName: '',
+        prodAttr: '',
+        attrName: '',
+        prodMat: '',
+        prodYear: '',
+        yearName: '',
+        prodSeason: '',
+        seasonName: '',
+        prodUnit: '',
+        unitName: '',
         prodLevel: '',
-        levelLabel: '',
+        levelName: '',
+        designer: '',
+        designerName: '',
         prodDesc: '',
-        status: true,
-        thumbnail: ''
+        isDel: false,
+        isSync: false
       },
       product: {
         id: 0,
+        styleId: 0,
         prodCode: '',
         prodName: '',
-        prodSize: '',
         prodCat: '',
+        prodSpe: '',
         retailPrice: 0,
         supplyPrice: 0,
         costPrice: 0,
-        weight: 0,
-        departLabel: '',
-        departId: '',
-        classLabel: '',
-        prodClass: '',
-        prodMat: '',
-        prodStyle: '',
-        prodFamily: '',
-        prodProp: '',
-        prodLevel: '',
-        prodDesc: '',
-        status: true,
-        styleId: ''
-      },
-      stockData: [
-        {
-          Symbol: 'AAPL',
-          Company: 'Apple Inc.',
-          Price: '132.54'
-        },
-        {
-          Symbol: 'INTC',
-          Company: 'Intel Corporation',
-          Price: '33.45'
-        },
-        {
-          Symbol: 'GOOG',
-          Company: 'Google Inc',
-          Price: '554.52'
-        }
-      ]
+        prodColor: '',
+        numModel: '',
+        netWeight: '',
+        boxNum: '',
+        boxModel: '',
+        boxVolume: '',
+        boxWeight: '',
+        boxWarn: '',
+        isRemind: false,
+        remark: '',
+        isSecurity: false,
+        isRate: false,
+        prodCycle: '',
+        tRetailPrice: '',
+        tSupplyPrice: '',
+        tCostPrice: '',
+        isDel: false,
+        isSync: false
+      }
     }
   },
   validations: {

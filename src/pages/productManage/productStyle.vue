@@ -232,6 +232,7 @@
     <q-modal v-model="mainStyleModalOpened"
              no-esc-dismiss
              no-backdrop-dismiss
+             no-refocus
              :content-css="{minWidth: '80vw', minHeight: '80vh'}">
       <q-modal-layout footer-class="no-shadow">
         <q-toolbar slot="header">
