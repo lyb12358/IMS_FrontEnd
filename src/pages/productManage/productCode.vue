@@ -777,10 +777,7 @@ export default {
         this.notify('warning', '无权维护非本部门产品')
         return
       }
-      this.notify(
-        'warning',
-        '老实说我还没确定好是逻辑删除还是物理删除，所以Beta版本暂不提供删除功能'
-      )
+      this.notify('warning', '删除了哦')
     },
     //dataTable request
     request({ pagination }) {
