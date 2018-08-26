@@ -1,8 +1,22 @@
 import { service } from 'src/plugins/axios'
 
 // product_cat品类
-// 获取品类列表
-export function getProdCatList(id) {
+// 获取产品品类列表(全部)
+export function getProdCatList() {
+    return service({
+        url: '/prodCats/list',
+        method: 'get'
+    })
+}
+// 获取产品品类树(全部)
+export function getProdCatTree() {
+    return service({
+        url: '/prodCats/tree',
+        method: 'get'
+    })
+}
+// 获取品类列表(对应大类)
+export function getProdCatListByParent(id) {
     return service({
         url: '/prodCats/CatType/' + id,
         method: 'get',
@@ -53,8 +67,22 @@ export function getProdParamListByParent(id) {
     })
 }
 // product_spe规格
-// 获取规格列表
-export function getProdSpeList(id) {
+// 获取产品规格列表(全部)
+export function getProdSpeList() {
+    return service({
+        url: '/prodSpes/list',
+        method: 'get'
+    })
+}
+// 获取产品规格树(全部)
+export function getProdSpeTree() {
+    return service({
+        url: '/prodSpes/tree',
+        method: 'get'
+    })
+}
+// 获取规格列表(对应大类)
+export function getProdSpeListByParent(id) {
     return service({
         url: '/prodSpes/speType/' + id,
         method: 'get',

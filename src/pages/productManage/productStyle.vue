@@ -517,7 +517,7 @@ export default {
       separator: 'horizontal',
       serverPagination: {
         page: 1,
-        rowsPerPage: 5,
+        rowsPerPage: 10,
         rowsNumber: 5 // specifying this determines pagination is server-side
       },
       serverData: [],
@@ -958,7 +958,10 @@ export default {
       this.paramList = data
       this.prodAttrOptions = filter('606', { field: 'parentId', list: data })
       this.prodYearOptions = filter('464', { field: 'parentId', list: data })
-      this.prodSeasonOptions = filter('465', { field: 'parentId', list: data })
+      this.prodSeasonOptions = filter('465', {
+        field: 'parentId',
+        list: data
+      })
       this.prodUnitOptions = filter('458', { field: 'parentId', list: data })
       this.prodLevelOptions = filter('486', { field: 'parentId', list: data })
       this.designerOptions = filter('567', { field: 'parentId', list: data })
