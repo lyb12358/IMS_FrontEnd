@@ -179,7 +179,7 @@
                    @click="openImageUpload(props.row.id,props.row.prodStyle,props.row.styleName,props.row.departId )">
               <q-tooltip>上传产品图片</q-tooltip>
             </q-btn>
-            <a :href="api+'/image/'+props.row.id+'/'+props.row.image"
+            <a :href="api+'/image/style/'+props.row.id+'/'+props.row.image"
                :download="props.row.styleName">
               <q-btn icon="mdi-image-area-close"
                      v-if="props.row.thumbnail!=null"
@@ -287,7 +287,7 @@
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.prodStyle.$error"
                        error-label="款号是必填项，且不超过10位">
-                <q-input v-model="productStyle.prodStyle"
+                <q-input v-model.trim="productStyle.prodStyle"
                          class="no-margin"
                          float-label="款号" />
               </q-field>
@@ -295,7 +295,7 @@
             <div class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.styleName.$error"
                        error-label="款名是必填项，且不超过15位">
-                <q-input v-model="productStyle.styleName"
+                <q-input v-model.trim="productStyle.styleName"
                          class="no-margin"
                          float-label="款名" />
               </q-field>
@@ -359,7 +359,7 @@
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.prodMat.$error"
                        error-label="材质信息是不是太长了？">
-                <q-input v-model="productStyle.prodMat"
+                <q-input v-model.trim="productStyle.prodMat"
                          class="no-margin"
                          float-label="材质" />
               </q-field>
@@ -397,7 +397,7 @@
                         :options="designerOptions" />
             </div>
             <div class="col-xs-12  col-sm-12 col-md-12">
-              <q-input v-model="productStyle.prodDesc"
+              <q-input v-model.trim="productStyle.prodDesc"
                        clearable
                        type="textarea"
                        float-label="产品描述"

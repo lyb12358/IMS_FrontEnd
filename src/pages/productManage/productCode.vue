@@ -114,9 +114,17 @@
                         unchecked-icon="mdi-plus"
                         class="q-mr-md" /> {{ props.row.prodCode }}
           </q-td>
+          <q-td key="thumbnail"
+                :props="props"
+                style="text-align:center">
+            <img :src="thumbnailCheck(props.row.id,props.row.codeThumbnail,props.row.styleThumbnail)"
+                 style="height: 80px; width: 140px;"></q-td>
           <q-td key="prodName"
                 :props="props"
                 style="text-align:center">{{ props.row.prodName }}</q-td>
+          <q-td key="prodCat"
+                :props="props"
+                style="text-align:center">{{ props.row.prodCat }}</q-td>
           <q-td key="prodStyle"
                 :props="props"
                 style="text-align:center">{{ props.row.prodStyle }}</q-td>
@@ -138,9 +146,6 @@
           <q-td key="prodAttr"
                 :props="props"
                 style="text-align:center">{{ props.row.attrName}}</q-td>
-          <q-td key="prodCat"
-                :props="props"
-                style="text-align:center">{{ props.row.prodCat }}</q-td>
           <q-td key="prodSpe"
                 :props="props"
                 style="text-align:center">{{ props.row.prodSpe }}</q-td>
@@ -186,10 +191,10 @@
                    @click="checkStyle(props.row.prodStyle)">
               <q-tooltip>增加同款式产品</q-tooltip>
             </q-btn>
-            <a :href="api+'/image/'+props.row.styleId+'/'+props.row.image"
+            <a :href="props.row.codeThumbnail!=null?api+'/image/code/'+props.row.styleId+'/'+props.row.codeImage:api+'/image/style/'+props.row.styleId+'/'+props.row.styleImage"
                :download="props.row.prodName">
               <q-btn icon="mdi-image-area-close"
-                     v-if="props.row.thumbnail!=null"
+                     v-if="props.row.codeThumbnail!=null|props.row.styleThumbnail!=null"
                      rounded
                      color="tertiary">
                 <q-tooltip>下载原图</q-tooltip>
@@ -238,11 +243,24 @@
     <!-- choose style -->
     <q-dialog v-model="chooseStyleDialogOpend"
               prevent-close>
-      <span slot="title">请输入产品所属款式</span>
+      <span slot="title">请先选择一个产品款式</span>
       <div slot="body">
-        <q-input v-model.trim="styleChoosed"
-                 float-label="产品款式"
-                 @keyup.enter="checkStyle(styleChoosed)" />
+        <q-input v-model.trim="prodStyleChoosed"
+                 float-label="款号">
+          <q-autocomplete @search="stylesearch"
+                          :min-characters="2"
+                          separator
+                          @selected="selected"
+                          :static-data="{field: 'sublabel', list: autoProdStyleList}" />
+        </q-input>
+        <q-input v-model.trim="styleNameChoosed"
+                 float-label="款名">
+          <q-autocomplete @search="search"
+                          :min-characters="2"
+                          separator
+                          @selected="selected"
+                          :static-data="{field: 'label', list: autoProdStyleList}" />
+        </q-input>
       </div>
       <template slot="buttons"
                 slot-scope="props">
@@ -304,7 +322,7 @@
             <div class="col-md-12">
               <q-collapsible>
                 <template slot="header">
-                  <q-item-side :image="thumbnailCheck(productCode.styleId, productStyle.thumbnail)"
+                  <q-item-side :image="thumbnailCheck(productStyle.id,null,productStyle.thumbnail)"
                                color="primary" />
                   <q-item-main :label="productStyle.styleName"
                                sublabel="点击可展开该款式详细内容" />
@@ -446,7 +464,8 @@ import {
   getProdSpeListByParent
 } from 'src/api/productParam'
 import { excelDownload, specDownload } from 'src/api/productPlus'
-
+//custom validate
+const validDecimal = value => value.toString().split('.')[1].length <= 2
 export default {
   data() {
     return {
@@ -479,7 +498,8 @@ export default {
       serverData: [],
       columns: [
         { name: 'prodCode', label: '产品编号', field: 'prodCode' },
-        { name: 'prodName', label: '产品名称', field: 'prodCode' },
+        { name: 'thumbnail', label: '简图', field: 'thumbnail' },
+        { name: 'prodName', label: '产品名称', field: 'prodName' },
         { name: 'prodCat', label: '品类', field: 'prodCat' },
         { name: 'prodStyle', label: '款号', field: 'prodStyle' },
         { name: 'prodFamily', label: '产品归属', field: 'prodFamily' },
@@ -498,7 +518,10 @@ export default {
       ],
       //choose style dialog
       chooseStyleDialogOpend: false,
-      styleChoosed: '',
+      prodStyleChoosed: '',
+      autoProdStyleList: [],
+      styleNameChoosed: '',
+      //autoStyleNameList: [],
       //modal
       mainCodeModalOpened: false,
       modalActionName: '',
@@ -574,20 +597,24 @@ export default {
     productCode: {
       prodCode: { required, maxLength: maxLength(20) },
       prodName: { required, maxLength: maxLength(15) },
-      prodSize: { maxLength: maxLength(20) },
-      prodCat: { maxLength: maxLength(20) },
-      weight: { decimal, minValue: minValue(0), maxValue: maxValue(999999) },
       retailPrice: {
         decimal,
+        validDecimal,
         minValue: minValue(0),
         maxValue: maxValue(999999)
       },
       supplyPrice: {
         decimal,
+        validDecimal,
         minValue: minValue(0),
         maxValue: maxValue(999999)
       },
-      costPrice: { decimal, minValue: minValue(0), maxValue: maxValue(999999) }
+      costPrice: {
+        decimal,
+        validDecimal,
+        minValue: minValue(0),
+        maxValue: maxValue(999999)
+      }
     }
   },
   computed: {
@@ -651,9 +678,11 @@ export default {
       })
     },
     //check thumbnail
-    thumbnailCheck(id, thumbnail) {
-      if (!(thumbnail === null)) {
-        return this.api + '/image/' + id + '/' + thumbnail
+    thumbnailCheck(id, codeThumbnail, styleThumbnail) {
+      if (!(codeThumbnail === null)) {
+        return this.api + '/image/code' + id + '/' + codeThumbnail
+      } else if (!(styleThumbnail === null)) {
+        return this.api + '/image/style' + id + '/' + styleThumbnail
       } else {
         return 'statics/sad.svg'
       }

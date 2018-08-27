@@ -110,7 +110,8 @@ module.exports = function (ctx) {
         'QRouteTab',
         'QInnerLoading',
         'QSpinnerGears',
-        'QAjaxBar'
+        'QAjaxBar',
+        'QAutocomplete'
       ],
       directives: [
         'Ripple',

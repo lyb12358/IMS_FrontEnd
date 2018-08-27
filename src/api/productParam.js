@@ -8,13 +8,6 @@ export function getProdCatList() {
         method: 'get'
     })
 }
-// 获取产品品类树(全部)
-export function getProdCatTree() {
-    return service({
-        url: '/prodCats/tree',
-        method: 'get'
-    })
-}
 // 获取品类列表(对应大类)
 export function getProdCatListByParent(id) {
     return service({
@@ -71,13 +64,6 @@ export function getProdParamListByParent(id) {
 export function getProdSpeList() {
     return service({
         url: '/prodSpes/list',
-        method: 'get'
-    })
-}
-// 获取产品规格树(全部)
-export function getProdSpeTree() {
-    return service({
-        url: '/prodSpes/tree',
         method: 'get'
     })
 }
