@@ -245,7 +245,7 @@
               prevent-close>
       <span slot="title">请先选择一个产品款式</span>
       <div slot="body">
-        <q-input v-model.trim="prodStyleChoosed"
+        <q-input v-model.trim="prodStyleAutoSearch.prodStyle"
                  float-label="款号">
           <q-autocomplete @search="stylesearch"
                           :min-characters="2"
@@ -253,7 +253,7 @@
                           @selected="selected"
                           :static-data="{field: 'sublabel', list: autoProdStyleList}" />
         </q-input>
-        <q-input v-model.trim="styleNameChoosed"
+        <q-input v-model.trim="prodStyleAutoSearch.styleName"
                  float-label="款名">
           <q-autocomplete @search="search"
                           :min-characters="2"
