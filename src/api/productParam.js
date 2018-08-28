@@ -2,14 +2,14 @@ import { service } from 'src/plugins/axios'
 
 // product_cat品类
 // 获取产品品类列表(全部)
-export function getProdCatList() {
+export function getProdCatOptions() {
     return service({
-        url: '/prodCats/list',
+        url: '/prodCats/options',
         method: 'get'
     })
 }
 // 获取品类列表(对应大类)
-export function getProdCatListByParent(id) {
+export function getProdCatOptionsByParent(id) {
     return service({
         url: '/prodCats/CatType/' + id,
         method: 'get',
@@ -17,9 +17,9 @@ export function getProdCatListByParent(id) {
 }
 // product_class类别
 // 获取产品类别列表(全级别)
-export function getProdClassList() {
+export function getProdClassOptions() {
     return service({
-        url: '/prodClasses/list',
+        url: '/prodClasses/options',
         method: 'get'
     })
 }
@@ -31,7 +31,7 @@ export function getProdClassTree() {
     })
 }
 // 获取产品类别(对应父类)
-export function getProdClassListByParent(id) {
+export function getProdClassOptionsByParent(id) {
     return service({
         url: '/prodClasses/ClassType/' + id,
         method: 'get',
@@ -39,9 +39,9 @@ export function getProdClassListByParent(id) {
 }
 // product_param参数
 // 获取产品参数列表(全部)
-export function getProdParamList() {
+export function getProdParamOptions() {
     return service({
-        url: '/prodParams/list',
+        url: '/prodParams/options',
         method: 'get'
     })
 }
@@ -53,7 +53,7 @@ export function getProdParamTree() {
     })
 }
 // 获取产品参数(对应父类)
-export function getProdParamListByParent(id) {
+export function getProdParamOptionsByParent(id) {
     return service({
         url: '/prodParams/ParamType/' + id,
         method: 'get',
@@ -61,14 +61,14 @@ export function getProdParamListByParent(id) {
 }
 // product_spe规格
 // 获取产品规格列表(全部)
-export function getProdSpeList() {
+export function getProdSpeOptions() {
     return service({
-        url: '/prodSpes/list',
+        url: '/prodSpes/options',
         method: 'get'
     })
 }
 // 获取规格列表(对应大类)
-export function getProdSpeListByParent(id) {
+export function getProdSpeOptionsByParent(id) {
     return service({
         url: '/prodSpes/speType/' + id,
         method: 'get',

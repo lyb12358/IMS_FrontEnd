@@ -1,16 +1,16 @@
 import { service } from 'src/plugins/axios'
 
 //product
-export function getProdList(searchForm) {
+export function getProdCodeList(searchForm) {
     return service({
-        url: '/prods',
+        url: '/prodCodes',
         method: 'post',
         data: searchForm
     })
 }
-export function getProdById(id) {
+export function getProdCodeById(id) {
     return service({
-        url: '/prods/prod/' + id,
+        url: '/prodCode/id/' + id,
         method: 'get',
     })
 }
@@ -37,30 +37,31 @@ export function getProdStyleList(searchForm) {
         data: searchForm
     })
 }
+export function getProdStyleOptions(productStyle) {
+    return service({
+        url: '/prodStyles/options',
+        method: 'post',
+        data: productStyle
+    })
+}
 export function getProdStyleById(id) {
     return service({
-        url: '/prodStyles/id/' + id,
+        url: '/prodStyle/id/' + id,
         method: 'get',
     })
 }
-export function checkProdStyle(prodStyle) {
-    return service({
-        url: '/prodStyles/prodStyle/' + prodStyle,
-        method: 'get',
-    })
-}
-export function addProdStyle(prodStyle) {
+export function addProdStyle(productStyle) {
     return service({
         url: '/prodStyle',
         method: 'post',
-        data: prodStyle
+        data: productStyle
     })
 }
-export function updateProdStyle(prodstyle) {
+export function updateProdStyle(productStyle) {
     return service({
         url: '/prodStyle',
         method: 'put',
-        data: prodstyle
+        data: productStyle
     })
 }
 

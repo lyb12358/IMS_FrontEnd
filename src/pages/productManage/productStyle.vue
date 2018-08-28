@@ -484,10 +484,10 @@ import {
   updateProdStyle
 } from 'src/api/product'
 import {
-  getProdClassList,
-  getProdClassListByParent,
-  getProdParamList,
-  getProdParamListByParent
+  getProdClassOptions,
+  getProdClassOptionsByParent,
+  getProdParamOptions,
+  getProdParamOptionsByParent
 } from 'src/api/productParam'
 import { specDownload } from 'src/api/productPlus'
 
@@ -832,7 +832,7 @@ export default {
     //check thumbnail
     thumbnailCheck(id, thumbnail) {
       if (!(thumbnail === null)) {
-        return this.api + '/image/style' + id + '/' + thumbnail
+        return this.api + '/image/style/' + id + '/' + thumbnail
       } else {
         return 'statics/sad.svg'
       }
@@ -948,12 +948,12 @@ export default {
       pagination: this.serverPagination
     })
     //once mounted, fetch some product parameters
-    getProdClassList().then(response => {
+    getProdClassOptions().then(response => {
       let data = response.data.data
       this.classList = data
       this.prodFamilyOptions = filter('0', { field: 'parentId', list: data })
     })
-    getProdParamList().then(response => {
+    getProdParamOptions().then(response => {
       let data = response.data.data
       this.paramList = data
       this.prodAttrOptions = filter('606', { field: 'parentId', list: data })
