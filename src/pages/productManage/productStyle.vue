@@ -817,7 +817,8 @@ export default {
     },
     // when image has just bean uploaded
     imageUploaded(file, xhr) {
-      this.notify('positive', '上传成功')
+      let response = JSON.parse(xhr.response)
+      this.notify('positive', response.msg)
       this.$refs.imageUpload.reset()
       this.imageUploadDialog = false
       this.request({

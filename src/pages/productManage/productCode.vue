@@ -117,7 +117,7 @@
           <q-td key="thumbnail"
                 :props="props"
                 style="text-align:center">
-            <img :src="thumbnailCheck(props.row.id,props.row.codeThumbnail,props.row.styleThumbnail)"
+            <img :src="thumbnailCheck(props.row.id,props.row.styleId,props.row.codeThumbnail,props.row.styleThumbnail)"
                  style="height: 80px; width: 140px;"></q-td>
           <q-td key="prodName"
                 :props="props"
@@ -181,7 +181,7 @@
                    icon="mdi-format-list-numbers"
                    rounded
                    color="primary"
-                   @click="openMainCodeModal('update',props.row.id,props.row.departId)">
+                   @click="openMainCodeModal('update',props.row.id)">
               <q-tooltip>修改该编号产品信息</q-tooltip>
             </q-btn>
             <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductCode') > -1"
@@ -191,7 +191,7 @@
                    @click="checkStyle(props.row.styleId)">
               <q-tooltip>增加同款式产品</q-tooltip>
             </q-btn>
-            <a :href="props.row.codeThumbnail!=null?api+'/image/code/'+props.row.styleId+'/'+props.row.codeImage:api+'/image/style/'+props.row.styleId+'/'+props.row.styleImage"
+            <a :href="props.row.codeThumbnail!=null?api+'/image/code/'+props.row.id+'/'+props.row.codeImage:api+'/image/style/'+props.row.styleId+'/'+props.row.styleImage"
                :download="props.row.prodName">
               <q-btn icon="mdi-image-area-close"
                      v-if="props.row.codeThumbnail!=null|props.row.styleThumbnail!=null"
@@ -247,9 +247,8 @@
       <span slot="title">请选择一个款式</span>
       <div slot="body">
         <q-field icon="mdi-sofa"
-                 helper="输入现有的款式名称"
                  label="款名"
-                 :label-width="2">
+                 :label-width="3">
           <q-input v-model.trim="prodStyleAutoSearch.styleName">
             <q-autocomplete @search="autoStyleNameSearch"
                             :min-characters="2"
@@ -261,7 +260,7 @@
       <template slot="buttons"
                 slot-scope="props">
         <q-btn color="primary"
-               @click="checkStyle(prodStyleAutoSearch)"
+               @click="checkStyle(prodStyleAutoSearch.id)"
                label="确定" />
         <q-btn color="primary"
                @click="closeChooseStyleDialog"
@@ -273,7 +272,7 @@
              no-backdrop-dismiss
              no-esc-dismiss
              no-refocus
-             :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+             :content-css="{minWidth: '100vw', minHeight: '100vh'}">
       <q-modal-layout footer-class="no-shadow">
         <q-toolbar slot="header">
           <q-btn flat
@@ -318,7 +317,7 @@
             <div class="col-md-12">
               <q-collapsible>
                 <template slot="header">
-                  <q-item-side :image="thumbnailCheck(productStyle.id,null,productStyle.thumbnail)"
+                  <q-item-side :image="thumbnailCheck(null,productStyle.styleId,null,productStyle.thumbnail)"
                                color="primary" />
                   <q-item-main :label="productStyle.styleName"
                                sublabel="点击可展开该款式详细内容" />
@@ -375,14 +374,16 @@
               </q-field>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4">
-              <q-field :error="$v.productCode.prodCat.$error"
-                       error-label="不超过20位">
-                <q-input v-model="productCode.prodCat"
-                         class="no-margin"
-                         float-label="品类" />
-              </q-field>
+              <q-select v-model="productCode.prodCat"
+                        float-label="品类"
+                        radio
+                        :options="prodCatOptions" />
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-select v-model="productCode.prodSpe"
+                        float-label="规格"
+                        radio
+                        :options="prodSpeOptions" />
             </div>
             <div class="col-xs-12 col-sm-6 col-md-4">
               <q-field :error="$v.productCode.retailPrice.$error"
@@ -407,6 +408,97 @@
                          class="no-margin"
                          float-label="成本价" />
               </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-select v-model="productCode.prodColor"
+                        float-label="颜色"
+                        radio
+                        :options="prodColorOptions" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-input v-model="productCode.numModel"
+                       class="no-margin"
+                       float-label="件数" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-input v-model="productCode.netWeight"
+                       class="no-margin"
+                       float-label="克重" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-input v-model="productCode.boxNum"
+                       class="no-margin"
+                       float-label="装箱数" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-input v-model="productCode.boxModel"
+                       class="no-margin"
+                       float-label="装箱规格" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-input v-model="productCode.boxVolume"
+                       class="no-margin"
+                       float-label="装箱体积" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-input v-model="productCode.boxWeight"
+                       class="no-margin"
+                       float-label="箱重量" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-field :error="$v.productCode.boxWarn.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.boxWarn"
+                         class="no-margin"
+                         float-label="散货预警量" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-field :error="$v.productCode.prodCycle.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.prodCycle"
+                         class="no-margin"
+                         float-label="生产周期" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-field :error="$v.productCode.tRetailPrice.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.tRetailPrice"
+                         class="no-margin"
+                         float-label="三等品零售价" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-field :error="$v.productCode.tSupplyPrice.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.tSupplyPrice"
+                         class="no-margin"
+                         float-label="三等品供应价" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-field :error="$v.productCode.tCostPrice.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.tCostPrice"
+                         class="no-margin"
+                         float-label="三等品成本价" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <q-toggle v-model="productCode.isRemind"
+                        label="是否库存提醒" />
+              <q-toggle v-model="productCode.isSecurity"
+                        label="是否有防伪码" />
+              <q-toggle v-model="productCode.isRate"
+                        label="是否计算周转率" />
+            </div>
+            <div class="col-xs-12  col-sm-12 col-md-12">
+              <q-input v-model.trim="productCode.remark"
+                       clearable
+                       type="textarea"
+                       float-label="备注"
+                       :max-height="100" />
             </div>
           </div>
         </div>
@@ -445,7 +537,7 @@ import {
 } from 'src/api/productParam'
 import { excelDownload, specDownload } from 'src/api/productPlus'
 //custom validate
-const validDecimal = value => value.toString().split('.')[1].length <= 2
+//const validDecimal = value => value.toString().split('.')[1].length <= 2
 export default {
   data() {
     return {
@@ -535,6 +627,7 @@ export default {
         designer: '',
         designerName: '',
         prodDesc: '',
+        thumbnail: '',
         isDel: false,
         isSync: false
       },
@@ -578,22 +671,35 @@ export default {
     productCode: {
       prodCode: { required, maxLength: maxLength(20) },
       prodName: { required, maxLength: maxLength(15) },
-      prodCat: { required, maxLength: maxLength(20) },
       retailPrice: {
         decimal,
-        validDecimal,
         minValue: minValue(0),
         maxValue: maxValue(999999)
       },
       supplyPrice: {
         decimal,
-        validDecimal,
         minValue: minValue(0),
         maxValue: maxValue(999999)
       },
       costPrice: {
         decimal,
-        validDecimal,
+        minValue: minValue(0),
+        maxValue: maxValue(999999)
+      },
+      boxWarn: { decimal },
+      prodCycle: { decimal },
+      tRetailPrice: {
+        decimal,
+        minValue: minValue(0),
+        maxValue: maxValue(999999)
+      },
+      tSupplyPrice: {
+        decimal,
+        minValue: minValue(0),
+        maxValue: maxValue(999999)
+      },
+      tCostPrice: {
+        decimal,
         minValue: minValue(0),
         maxValue: maxValue(999999)
       }
@@ -605,6 +711,24 @@ export default {
     },
     myDepart() {
       return this.$store.getters['user/userInfo'].departId
+    }
+  },
+  watch: {
+    //reset cat and spe when bigType changes
+    'productCode.bigType': function(newVal, oldVal) {
+      if (this.mainCodeModalOpened) {
+        this.productCode.prodCat = ''
+        this.productCode.prodSpe = ''
+        getProdSpeOptionsByParent(id).then(response => {
+          let data=response.data.data
+          this.prodSpeOptions=data
+        })
+        newVal += ''
+        this.prodCatOptions = filter(newVal, {
+          field: 'classId',
+          list: this.catList
+        })
+      }
     }
   },
   methods: {
@@ -663,43 +787,46 @@ export default {
       this.chooseStyleDialogOpened = false
     },
     checkStyle(id) {
-      if (this.prodStyleAutoSearch.id === '' && id === null) {
+      if (id == '') {
         this.notify('warning', '请先选择一个现有的款式')
         return
       }
-      getProdStyleById(id === null ? this.prodStyleAutoSearch.id : id).then(
-        response => {
-          Object.assign(
-            this.productCode,
-            this.$options.data.call(this).productCode
-          )
-          Object.assign(
-            this.productStyle,
-            this.$options.data.call(this).productStyle
-          )
-          let productStyle = response.data.data
-          // let departId = productStyle.departId
-          // if (
-          //   departId != this.myDepart &&
-          //   this.myPermissions.indexOf('superAdmin') < 0
-          // ) {
-          //   this.notify('warning', '无权维护非本部门产品')
-          //   return
-          // }
-          this.chooseStyleDialogOpened = false
-          Object.assign(this.productStyle, productStyle)
-          // this.$nextTick(() => {
-          // })
-          this.openMainCodeModal('add')
-        }
-      )
+      console.log(id)
+      getProdStyleById(id).then(response => {
+        Object.assign(
+          this.productCode,
+          this.$options.data.call(this).productCode
+        )
+        Object.assign(
+          this.productStyle,
+          this.$options.data.call(this).productStyle
+        )
+        let productStyle = response.data.data
+        // let departId = productStyle.departId
+        // if (
+        //   departId != this.myDepart &&
+        //   this.myPermissions.indexOf('superAdmin') < 0
+        // ) {
+        //   this.notify('warning', '无权维护非本部门产品')
+        //   return
+        // }
+        this.chooseStyleDialogOpened = false
+        Object.assign(this.productStyle, productStyle)
+        Object.assign(
+          this.prodStyleAutoSearch,
+          this.$options.data.call(this).prodStyleAutoSearch
+        )
+        // this.$nextTick(() => {
+        // })
+        this.openMainCodeModal('add')
+      })
     },
     //check thumbnail
-    thumbnailCheck(id, codeThumbnail, styleThumbnail) {
+    thumbnailCheck(id, styleId, codeThumbnail, styleThumbnail) {
       if (!(codeThumbnail === null) && !(codeThumbnail === '')) {
         return this.api + '/image/code/' + id + '/' + codeThumbnail
       } else if (!(styleThumbnail === null) && !(styleThumbnail === '')) {
-        return this.api + '/image/style/' + id + '/' + styleThumbnail
+        return this.api + '/image/style/' + styleId + '/' + styleThumbnail
       } else {
         return 'statics/sad.svg'
       }
@@ -727,9 +854,21 @@ export default {
           Object.assign(this.productStyle, product)
           Object.assign(this.productCode, product)
           this.$nextTick(() => {
+            this.productStyle.thumbnail = this.productStyle.styleThumbnail
+            this.productStyle.id = this.productStyle.styleId
             this.mainCodeModalOpened = true
           })
         })
+        let prodCat=this.productCode.prodCat+''
+        this.prodCatOptions = filter(prodCat, {
+          field: 'classId',
+          list: this.catList
+        })
+        getProdSpeOptionsByParent(id).then(response => {
+          let data=response.data.data
+          this.prodSpeOptions=data
+        })
+
       }
     },
     newProdCode() {
@@ -782,7 +921,6 @@ export default {
       Object.assign(this.productCode, this.$options.data.call(this).productCode)
       this.$nextTick(() => {
         this.productCode.styleId = this.productStyle.id
-        this.productCode.departId = this.productStyle.departId
         this.productCode.prodStyle = this.productStyle.prodStyle
         this.productCode.prodName = this.productStyle.styleName
         this.$v.productCode.$reset()
