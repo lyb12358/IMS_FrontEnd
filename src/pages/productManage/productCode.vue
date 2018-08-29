@@ -719,9 +719,9 @@ export default {
       if (this.mainCodeModalOpened) {
         this.productCode.prodCat = ''
         this.productCode.prodSpe = ''
-        getProdSpeOptionsByParent(id).then(response => {
-          let data=response.data.data
-          this.prodSpeOptions=data
+        getProdSpeOptionsByParent(newVal).then(response => {
+          let data = response.data.data
+          this.prodSpeOptions = data
         })
         newVal += ''
         this.prodCatOptions = filter(newVal, {
@@ -859,16 +859,15 @@ export default {
             this.mainCodeModalOpened = true
           })
         })
-        let prodCat=this.productCode.prodCat+''
+        let prodCat = this.productCode.prodCat + ''
         this.prodCatOptions = filter(prodCat, {
           field: 'classId',
           list: this.catList
         })
         getProdSpeOptionsByParent(id).then(response => {
-          let data=response.data.data
-          this.prodSpeOptions=data
+          let data = response.data.data
+          this.prodSpeOptions = data
         })
-
       }
     },
     newProdCode() {

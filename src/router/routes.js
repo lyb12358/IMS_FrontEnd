@@ -12,6 +12,7 @@ export default [
       { path: 'productStyle', name: 'productStyle', component: () => import('pages/productManage/productStyle'), meta: { title: '产品款式管理', requiresAuth: true, auth: 'view_productStyle' } },
       { path: 'productCat', name: 'productCat', component: () => import('pages/productManage/productCat'), meta: { title: '产品类别管理', requiresAuth: true, auth: 'view_productCat' } },
       { path: 'productCard', name: 'productCard', component: () => import('pages/productManage/productCard'), meta: { title: '产品卡片', requiresAuth: false } },
+      { path: 'material', name: 'material', component: () => import('pages/productManage/material'), meta: { title: '物料管理', requiresAuth: false } },
       { path: 'user', name: 'user', component: () => import('pages/userManage/user'), meta: { title: '用户', requiresAuth: true, auth: 'view_user' } },
       { path: 'role', name: 'role', component: () => import('pages/userManage/role'), meta: { title: '角色', requiresAuth: true, auth: 'view_role' } },
       { path: 'changeLog', name: 'changeLog', component: () => import('pages/changeLog'), meta: { title: '更新日志', requiresAuth: true, auth: 'view_changeLog' } }
