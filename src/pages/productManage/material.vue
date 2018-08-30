@@ -176,7 +176,7 @@
                    rounded
                    color="secondary"
                    @click="openImageUpload(props.row.id,props.row.prodStyle,props.row.styleName,props.row.departId )">
-              <q-tooltip>上传产品图片</q-tooltip>
+              <q-tooltip>上传物料图片</q-tooltip>
             </q-btn>
             <a :href="api+'/image/style/'+props.row.id+'/'+props.row.image"
                :download="props.row.styleName">
