@@ -169,14 +169,14 @@
                    icon="mdi-format-list-numbers"
                    rounded
                    color="primary"
-                   @click="openMainStyleModal('update',props.row.id,props.row.departId)">
+                   @click="openMainStyleModal('update',props.row.id)">
               <q-tooltip>修改款式信息</q-tooltip>
             </q-btn>
             <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
                    icon="mdi-image-plus"
                    rounded
                    color="secondary"
-                   @click="openImageUpload(props.row.id,props.row.prodStyle,props.row.styleName,props.row.departId )">
+                   @click="openImageUpload(props.row.id,props.row.prodStyle,props.row.styleName)">
               <q-tooltip>上传产品图片</q-tooltip>
             </q-btn>
             <a :href="api+'/image/style/'+props.row.id+'/'+props.row.image"
@@ -621,7 +621,7 @@ export default {
   watch: {
     //reset the prodClass when its changes
     'productStyle.prodFamily': function(newVal, oldVal) {
-      if (this.mainStyleModalOpened) {
+      if (this.mainStyleModalOpened && newVal != '') {
         this.bigTypeOptions = []
         this.middleTypeOptions = []
         this.smallTypesOptions = []
@@ -637,7 +637,7 @@ export default {
       }
     },
     'productStyle.prodType': function(newVal, oldVal) {
-      if (this.mainStyleModalOpened) {
+      if (this.mainStyleModalOpened && newVal != '') {
         this.middleTypeOptions = []
         this.smallTypesOptions = []
         this.productStyle.bigType = ''
@@ -651,7 +651,7 @@ export default {
       }
     },
     'productStyle.bigType': function(newVal, oldVal) {
-      if (this.mainStyleModalOpened) {
+      if (this.mainStyleModalOpened && newVal != '') {
         this.smallTypesOptions = []
         this.productStyle.middleType = ''
         this.productStyle.smallType = ''
@@ -663,7 +663,7 @@ export default {
       }
     },
     'productStyle.middleType': function(newVal, oldVal) {
-      if (this.mainStyleModalOpened) {
+      if (this.mainStyleModalOpened && newVal != '') {
         this.productStyle.smallType = ''
         newVal += ''
         this.smallTypeOptions = filter(newVal, {
@@ -705,7 +705,7 @@ export default {
     //   }
     // },
     //main modal function
-    openMainStyleModal(action, id, departId) {
+    openMainStyleModal(action, id) {
       this.$v.productStyle.$reset()
       if (action === 'add') {
         this.modalActionName = '新增产品款式'
@@ -796,7 +796,7 @@ export default {
     // },
 
     //upload image
-    openImageUpload(id, prodStyle, styleName, departId) {
+    openImageUpload(id, prodStyle, styleName) {
       this.expandId = id
       this.expandStyle = prodStyle
       this.expandName = styleName

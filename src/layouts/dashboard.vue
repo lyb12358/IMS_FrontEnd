@@ -117,6 +117,12 @@
               <q-item-main label="产品款式管理" />
             </q-item>
             <q-item link
+                    v-if="checkAuth('view_productStyle')"
+                    @click.native="$router.push('material')"
+                    class="q-ml-xl">
+              <q-item-main label="物料管理" />
+            </q-item>
+            <q-item link
                     v-if="checkAuth('view_productCat')"
                     @click.native="notify('warning','施工中~')"
                     class="q-ml-xl">

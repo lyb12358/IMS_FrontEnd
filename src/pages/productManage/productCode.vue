@@ -356,7 +356,7 @@
             </div>
           </div>
           <div class="row gutter-sm">
-            <div class="col-xs-12  col-sm-6 col-md-4">
+            <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productCode.prodCode.$error"
                        error-label="编号必填，且不超过20位">
                 <q-input v-model="productCode.prodCode"
@@ -365,7 +365,7 @@
                          float-label="编号" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.prodName.$error"
                        error-label="名称必填，且不超过15位">
                 <q-input v-model="productCode.prodName"
@@ -373,19 +373,19 @@
                          float-label="名称" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-select v-model="productCode.prodCat"
                         float-label="品类"
                         radio
                         :options="prodCatOptions" />
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-select v-model="productCode.prodSpe"
                         float-label="规格"
                         radio
                         :options="prodSpeOptions" />
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.retailPrice.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.retailPrice"
@@ -393,7 +393,7 @@
                          float-label="零售价" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.supplyPrice.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.supplyPrice"
@@ -401,7 +401,7 @@
                          float-label="供应价" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.costPrice.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.costPrice"
@@ -409,43 +409,49 @@
                          float-label="成本价" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-select v-model="productCode.prodColor"
                         float-label="颜色"
                         radio
                         :options="prodColorOptions" />
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
-              <q-input v-model="productCode.numModel"
-                       class="no-margin"
-                       float-label="件数" />
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.numModel.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.numModel"
+                         class="no-margin"
+                         float-label="件数" />
+              </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-input v-model="productCode.netWeight"
                        class="no-margin"
                        float-label="克重" />
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
-              <q-input v-model="productCode.boxNum"
-                       class="no-margin"
-                       float-label="装箱数" />
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.boxNum.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.boxNum"
+                         class="no-margin"
+                         float-label="装箱数" />
+              </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-input v-model="productCode.boxModel"
                        class="no-margin"
                        float-label="装箱规格" />
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-input v-model="productCode.boxVolume"
                        class="no-margin"
                        float-label="装箱体积" />
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-input v-model="productCode.boxWeight"
                        class="no-margin"
                        float-label="箱重量" />
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.boxWarn.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.boxWarn"
@@ -453,7 +459,7 @@
                          float-label="散货预警量" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.prodCycle.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.prodCycle"
@@ -461,7 +467,7 @@
                          float-label="生产周期" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.tRetailPrice.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.tRetailPrice"
@@ -469,7 +475,7 @@
                          float-label="三等品零售价" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.tSupplyPrice.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.tSupplyPrice"
@@ -477,7 +483,7 @@
                          float-label="三等品供应价" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.tCostPrice.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.tCostPrice"
@@ -485,7 +491,7 @@
                          float-label="三等品成本价" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-toggle v-model="productCode.isRemind"
                         label="是否库存提醒" />
               <q-toggle v-model="productCode.isSecurity"
@@ -686,8 +692,10 @@ export default {
         minValue: minValue(0),
         maxValue: maxValue(999999)
       },
-      boxWarn: { decimal },
-      prodCycle: { decimal },
+      numModel: { integer },
+      boxNum: { integer },
+      boxWarn: { integer },
+      prodCycle: { integer },
       tRetailPrice: {
         decimal,
         minValue: minValue(0),
@@ -715,21 +723,21 @@ export default {
   },
   watch: {
     //reset cat and spe when bigType changes
-    'productCode.bigType': function(newVal, oldVal) {
-      if (this.mainCodeModalOpened) {
-        this.productCode.prodCat = ''
-        this.productCode.prodSpe = ''
-        getProdSpeOptionsByParent(newVal).then(response => {
-          let data = response.data.data
-          this.prodSpeOptions = data
-        })
-        newVal += ''
-        this.prodCatOptions = filter(newVal, {
-          field: 'classId',
-          list: this.catList
-        })
-      }
-    }
+    // 'productCode.bigType': function(newVal, oldVal) {
+    //   if (this.mainCodeModalOpened) {
+    //     this.productCode.prodCat = ''
+    //     this.productCode.prodSpe = ''
+    //     getProdSpeOptionsByParent(newVal).then(response => {
+    //       let data = response.data.data
+    //       this.prodSpeOptions = data
+    //     })
+    //     newVal += ''
+    //     this.prodCatOptions = filter(newVal, {
+    //       field: 'classId',
+    //       list: this.catList
+    //     })
+    //   }
+    // }
   },
   methods: {
     formatDate(timeStamp) {
@@ -840,6 +848,16 @@ export default {
         this.productCode.prodStyle = this.productStyle.prodStyle
         this.productCode.prodName = this.productStyle.styleName
         this.mainCodeModalOpened = true
+        let bigType = this.productStyle.bigType
+        getProdSpeOptionsByParent(bigType).then(response => {
+          let data = response.data.data
+          this.prodSpeOptions = data
+        })
+        bigType += ''
+        this.prodCatOptions = filter(bigType, {
+          field: 'classId',
+          list: this.catList
+        })
       } else if (action === 'update') {
         // if (
         //   departId != this.myDepart &&
@@ -859,14 +877,15 @@ export default {
             this.mainCodeModalOpened = true
           })
         })
-        let prodCat = this.productCode.prodCat + ''
-        this.prodCatOptions = filter(prodCat, {
-          field: 'classId',
-          list: this.catList
-        })
-        getProdSpeOptionsByParent(id).then(response => {
+        let bigType = this.productStyle.bigType
+        getProdSpeOptionsByParent(bigType).then(response => {
           let data = response.data.data
           this.prodSpeOptions = data
+        })
+        bigType += ''
+        this.prodCatOptions = filter(bigType, {
+          field: 'classId',
+          list: this.catList
         })
       }
     },

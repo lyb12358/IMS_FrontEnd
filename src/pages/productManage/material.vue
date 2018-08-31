@@ -109,15 +109,9 @@
                 style="text-align:center">
             <img :src="thumbnailCheck(props.row.id,props.row.thumbnail)"
                  style="height: 80px; width: 140px;"></q-td>
-          <q-td key="styleName"
+          <q-td key="matName"
                 :props="props"
-                style="text-align:center">{{ props.row.styleName }}</q-td>
-          <q-td key="prodFamily"
-                :props="props"
-                style="text-align:center">{{ props.row.familyName }}</q-td>
-          <q-td key="prodType"
-                :props="props"
-                style="text-align:center">{{ props.row.typeName }}</q-td>
+                style="text-align:center">{{ props.row.matName }}</q-td>
           <q-td key="bigType"
                 :props="props"
                 style="text-align:center">{{ props.row.bigName }}</q-td>
@@ -127,33 +121,39 @@
           <q-td key="smallType"
                 :props="props"
                 style="text-align:center">{{ props.row.smallName }}</q-td>
-          <q-td key="prodAttr"
+          <q-td key="retailPrice"
+                :props="props"
+                style="text-align:center">{{ props.row.retailPrice}}
+          </q-td>
+          <q-td key="supplyPrice"
+                :props="props"
+                style="text-align:center">{{ props.row.supplyPrice }}
+          </q-td>
+          <q-td key="costPrice"
+                :props="props"
+                style="text-align:center">{{ props.row.costPrice }}
+          </q-td>
+          <q-td key="matAttr"
                 :props="props"
                 style="text-align:center">{{ props.row.attrName}}</q-td>
-          <q-td key="prodMat"
-                :props="props"
-                style="text-align:center">{{ props.row.prodMat }}</q-td>
-          <q-td key="prodYear"
+          <q-td key="matYear"
                 :props="props"
                 style="text-align:center">{{ props.row.yearName}}</q-td>
-          <q-td key="prodSeason"
+          <q-td key="matColor"
                 :props="props"
-                style="text-align:center">{{ props.row.seasonName}}</q-td>
-          <q-td key="prodUnit"
+                style="text-align:center">{{ props.row.colorName}}</q-td>
+          <q-td key="matUnit"
                 :props="props"
                 style="text-align:center">{{ props.row.unitName}}</q-td>
-          <q-td key="prodLevel"
+          <q-td key="numModel"
                 :props="props"
-                style="text-align:center">{{ props.row.levelName }}</q-td>
-          <q-td key="designer"
-                :props="props"
-                style="text-align:center">{{ props.row.designerName }}</q-td>
-          <q-td key="styleIsSync"
+                style="text-align:center">{{ props.row.numModel }}</q-td>
+          <q-td key="isSync"
                 :props="props"
                 style="text-align:center">
-            <q-icon :name="props.row.styleIsSync?'mdi-check-circle':'mdi-sync-off'"
+            <q-icon :name="props.row.isSync?'mdi-check-circle':'mdi-sync-off'"
                     size="1.5rem"
-                    :color="props.row.styleIsSync?'positive':'negative'" /></q-td>
+                    :color="props.row.isSync?'positive':'negative'" /></q-td>
           <q-td key="gmtCreate"
                 :props="props"
                 style="text-align:center">{{ formatDate(props.row.gmtCreate) }}</q-td>
@@ -168,18 +168,18 @@
                    icon="mdi-format-list-numbers"
                    rounded
                    color="primary"
-                   @click="openMainMatModal('update',props.row.id,props.row.departId)">
+                   @click="openMainMatModal('update',props.row.id)">
               <q-tooltip>修改物料信息</q-tooltip>
             </q-btn>
             <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
                    icon="mdi-image-plus"
                    rounded
                    color="secondary"
-                   @click="openImageUpload(props.row.id,props.row.prodStyle,props.row.styleName,props.row.departId )">
+                   @click="openImageUpload(props.row.id,props.row.matCode,props.row.matName)">
               <q-tooltip>上传物料图片</q-tooltip>
             </q-btn>
-            <a :href="api+'/image/style/'+props.row.id+'/'+props.row.image"
-               :download="props.row.styleName">
+            <a :href="api+'/image/mat/'+props.row.id+'/'+props.row.image"
+               :download="props.row.matName">
               <q-btn icon="mdi-image-area-close"
                      v-if="props.row.thumbnail!=null"
                      rounded
@@ -190,14 +190,14 @@
             <q-btn icon="mdi-clipboard-arrow-down"
                    rounded
                    color="orange"
-                   @click="downloadSpec(props.row.id,props.row.styleName )">
-              <q-tooltip>下载产品说明书</q-tooltip>
+                   @click="downloadSpec(props.row.id,props.row.matName )">
+              <q-tooltip>下载物料说明书</q-tooltip>
             </q-btn>
             <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
                    icon="mdi-delete"
                    rounded
                    color="negative"
-                   @click="deleteProdStyle(props.row.id)">
+                   @click="deleteMat(props.row.id)">
               <q-tooltip>删除</q-tooltip>
             </q-btn>
           </q-td>
@@ -228,7 +228,7 @@
       </div>
     </q-table>
     <!-- 新建物料modal -->
-    <q-modal v-model="mainStyleModalOpened"
+    <q-modal v-model="mainMatModalOpened"
              no-esc-dismiss
              no-backdrop-dismiss
              no-refocus
@@ -251,19 +251,19 @@
                  style="margin:0 2rem">
               <q-btn color="primary"
                      label="确定"
-                     @click="modifyProdStyle" />
+                     @click="modifyMat" />
             </div>
             <div v-if="modalActionName==='新增物料'"
                  style="margin:0 2rem">
               <q-btn color="primary"
                      label="确定"
-                     @click="newProdStyle" />
+                     @click="newMat" />
             </div>
             <div v-if="modalActionName==='新增物料'"
                  style="margin:0 2rem">
               <q-btn color="primary"
                      label="重置"
-                     @click="resetStyleModal" />
+                     @click="resetMatModal" />
             </div>
             <div style="margin:0 2rem">
               <q-btn color="primary"
@@ -276,27 +276,27 @@
           <div class="row gutter-sm">
             <!-- <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.prodStyle.$error"
-                       error-label="款号必填，且不超过10位">
+                       error-label="物料编号必填，且不超过10位">
                 <q-input v-model="productStyle.prodStyle"
                          :readonly="modalActionName==='修改物料'?true:false"
                          class="no-margin"
-                         float-label="款号" />
+                         float-label="物料编号" />
               </q-field>
             </div> -->
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-field :error="$v.productStyle.prodStyle.$error"
-                       error-label="款号是必填项，且不超过10位">
-                <q-input v-model.trim="productStyle.prodStyle"
+              <q-field :error="$v.material.matCode.$error"
+                       error-label="物料编号是必填项，且不超过10位">
+                <q-input v-model.trim="material.matCode"
                          class="no-margin"
-                         float-label="款号" />
+                         float-label="物料编号" />
               </q-field>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
-              <q-field :error="$v.productStyle.styleName.$error"
-                       error-label="款名是必填项，且不超过15位">
-                <q-input v-model.trim="productStyle.styleName"
+              <q-field :error="$v.material.matName.$error"
+                       error-label="物料名称是必填项，且不超过15位">
+                <q-input v-model.trim="material.matName"
                          class="no-margin"
-                         float-label="款名" />
+                         float-label="物料名称" />
               </q-field>
             </div>
             <!-- <div class="col-xs-12  col-sm-6 col-md-3">
@@ -311,96 +311,100 @@
               </q-field>
             </div> -->
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-field :error="$v.productStyle.prodFamily.$error"
-                       error-label="归属是必填项">
-                <q-select v-model="productStyle.prodFamily"
-                          float-label="归属"
-                          radio
-                          :options="prodFamilyOptions" />
-              </q-field>
-            </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-field :error="$v.productStyle.prodType.$error"
-                       error-label="类别是必填项">
-                <q-select v-model="productStyle.prodType"
-                          float-label="类别"
-                          radio
-                          :options="prodTypeOptions" />
-              </q-field>
-            </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-field :error="$v.productStyle.bigType.$error"
+              <q-field :error="$v.material.bigType.$error"
                        error-label="大类是必填项">
-                <q-select v-model="productStyle.bigType"
+                <q-select v-model="material.bigType"
                           float-label="大类"
                           radio
                           :options="bigTypeOptions" />
               </q-field>
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="productStyle.middleType"
-                        float-label="中类"
-                        radio
-                        :options="middleTypeOptions" />
-            </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="productStyle.smallType"
-                        float-label="小类"
-                        radio
-                        :options="smallTypeOptions" />
-            </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="productStyle.prodAttr"
-                        float-label="属性"
-                        radio
-                        :options="prodAttrOptions" />
-            </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-field :error="$v.productStyle.prodMat.$error"
-                       error-label="材质信息是不是太长了？">
-                <q-input v-model.trim="productStyle.prodMat"
-                         class="no-margin"
-                         float-label="材质" />
+              <q-field :error="$v.material.middleType.$error"
+                       error-label="中类是必填项">
+                <q-select v-model="material.middleType"
+                          float-label="中类"
+                          radio
+                          :options="middleTypeOptions" />
               </q-field>
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="productStyle.prodYear"
+              <q-field :error="$v.material.smallType.$error"
+                       error-label="小类是必填项">
+                <q-select v-model="material.smallType"
+                          float-label="小类"
+                          radio
+                          :options="smallTypeOptions" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-select v-model="material.matCat"
+                        float-label="品类"
+                        radio
+                        :options="matCatOptions" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-select v-model="material.matSpe"
+                        float-label="规格"
+                        radio
+                        :options="matSpeOptions" />
+            </div>
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-select v-model="material.matAttr"
+                        float-label="属性"
+                        radio
+                        :options="matAttrOptions" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.material.retailPrice.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="material.retailPrice"
+                         class="no-margin"
+                         float-label="零售价" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.material.supplyPrice.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="material.supplyPrice"
+                         class="no-margin"
+                         float-label="供应价" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.material.costPrice.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="material.costPrice"
+                         class="no-margin"
+                         float-label="成本价" />
+              </q-field>
+            </div>
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-select v-model="material.matYear"
                         float-label="年份"
                         radio
-                        :options="prodYearOptions" />
+                        :options="matYearOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="productStyle.prodSeason"
-                        float-label="季节"
-                        radio
-                        :options="prodSeasonOptions" />
-            </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="productStyle.prodUnit"
+              <q-select v-model="material.prodUnit"
                         float-label="单位"
                         filter
                         radio
-                        :options="prodUnitOptions" />
+                        :options="matUnitOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="productStyle.prodLevel"
-                        float-label="档次"
+              <q-select v-model="material.matColor"
+                        float-label="颜色"
                         radio
-                        :options="prodLevelOptions" />
+                        :options="matColorOptions" />
             </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="productStyle.designer"
-                        float-label="设计师"
-                        filter
-                        radio
-                        :options="designerOptions" />
-            </div>
-            <div class="col-xs-12  col-sm-12 col-md-12">
-              <q-input v-model.trim="productStyle.prodDesc"
-                       clearable
-                       type="textarea"
-                       float-label="产品描述"
-                       :max-height="100" />
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.material.numModel.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="material.numModel"
+                         class="no-margin"
+                         float-label="件数" />
+              </q-field>
             </div>
           </div>
         </div>
@@ -431,15 +435,15 @@
     <!-- upload image -->
     <q-dialog v-model="imageUploadDialog"
               prevent-close>
-      <span slot="title">上传产品图片</span>
+      <span slot="title">上传物料图片</span>
       <span slot="message">点击"+"，选择清晰度较高的图片，将作为本物料主要图片展示</span>
       <div slot="body">
         <q-uploader ref="imageUpload"
                     :url="api+imageUploadUrl"
                     :additionalFields="[
                       {'name':'id','value':this.expandId},
-                      {'name':'prodStyle','value':this.expandStyle},
-                      {'name':'styleName','value':this.expandName}]"
+                      {'name':'matCode','value':this.expandStyle},
+                      {'name':'matName','value':this.expandName}]"
                     clearable
                     auto-expand
                     hide-upload-button
@@ -476,17 +480,14 @@ import {
   required
 } from 'vuelidate/lib/validators'
 import { getOrgList } from 'src/api/organization'
-import {
-  getProdStyleList,
-  getProdStyleById,
-  addProdStyle,
-  updateProdStyle
-} from 'src/api/product'
+import { getMatList, getMatById, addMat, updateMat } from 'src/api/material'
 import {
   getProdClassOptions,
   getProdClassOptionsByParent,
   getProdParamOptions,
-  getProdParamOptionsByParent
+  getProdParamOptionsByParent,
+  getProdCatOptions,
+  getProdSpeOptionsByParent
 } from 'src/api/productParam'
 import { specDownload } from 'src/api/productPlus'
 
@@ -497,20 +498,18 @@ export default {
       searchForm: {
         page: 0,
         row: 0,
-        prodStyle: '',
-        styleName: ''
+        matCode: '',
+        matName: ''
       },
       loading: false,
       visibleColumns: [
         'matCode',
         //'thumbnail',
         'matName',
-        'prodFamily',
-        'prodType',
         'bigType',
         'middleType',
         'smallType',
-        'prodAttr',
+        'matAttr',
         'styleIsSync'
       ],
       separator: 'horizontal',
@@ -542,69 +541,76 @@ export default {
         { name: 'gmtModified', label: '修改时间', field: 'gmtModified' }
       ],
       //modal
-      mainStyleModalOpened: false,
+      mainMatModalOpened: false,
       modalActionName: '',
       //modal content
-      productStyle: {
+      material: {
         id: 0,
-        prodStyle: '',
-        styleName: '',
-        prodFamily: '',
-        //familyName: '',
-        prodType: '',
-        //typeName: '',
+        matCode: '',
+        matName: '',
+        matFamily: 267,
+        matType: 36,
         bigType: '',
-        //bigName: '',
         middleType: '',
-        //middleName: '',
         smallType: '',
-        //smallName: '',
-        prodAttr: '',
-        //attrName: '',
-        prodMat: '',
-        prodYear: '',
-        //yearName: '',
-        prodSeason: '',
-        //seasonName: '',
-        prodUnit: '',
-        //unitName: '',
-        prodLevel: '',
-        //levelName: '',
-        designer: '',
-        //designerName: '',
-        prodDesc: '',
+        matAttr: '',
+        matCat: '',
+        matSpe: '',
+        retailPrice: 0,
+        supplyPrice: 0,
+        costPrice: 0,
+        matYear: '',
+        matUnit: '',
+        matColor: '',
+        numModel: '',
         isDel: false,
         isSync: false
       },
       classList: [],
       paramList: [],
-      prodFamilyOptions: [],
-      prodTypeOptions: [],
+      catList: [],
+      matCatOptions: [],
+      matSpeOptions: [],
       bigTypeOptions: [],
       middleTypeOptions: [],
       smallTypeOptions: [],
-      prodAttrOptions: [],
-      prodYearOptions: [],
-      prodSeasonOptions: [],
-      prodUnitOptions: [],
-      prodLevelOptions: [],
-      designerOptions: [],
+      matCatOptions: [],
+      matSpeOptions: [],
+      matAttrOptions: [],
+      matYearOptions: [],
+      matColorOptions: [],
+      matUnitOptions: [],
       //upload image
       expandId: 0,
       expandStyle: '',
       expandName: '',
       imageUploadDialog: false,
-      imageUploadUrl: '/image/prodStyle'
+      imageUploadUrl: '/image/mat'
     }
   },
   validations: {
-    productStyle: {
-      prodStyle: { required, maxLength: maxLength(10) },
-      styleName: { required, maxLength: maxLength(20) },
-      prodFamily: { required },
-      prodType: { required },
+    material: {
+      matCode: { required, maxLength: maxLength(10) },
+      matName: { required, maxLength: maxLength(20) },
       bigType: { required },
-      prodMat: { maxLength: maxLength(20) }
+      middleType: { required },
+      smallType: { required },
+      numModel: { integer },
+      retailPrice: {
+        decimal,
+        minValue: minValue(0),
+        maxValue: maxValue(999999)
+      },
+      supplyPrice: {
+        decimal,
+        minValue: minValue(0),
+        maxValue: maxValue(999999)
+      },
+      costPrice: {
+        decimal,
+        minValue: minValue(0),
+        maxValue: maxValue(999999)
+      }
     }
   },
   computed: {
@@ -619,52 +625,34 @@ export default {
     }
   },
   watch: {
-    //reset the prodClass when its changes
-    'productStyle.prodFamily': function(newVal, oldVal) {
-      if (this.mainStyleModalOpened) {
-        this.bigTypeOptions = []
-        this.middleTypeOptions = []
-        this.smallTypesOptions = []
-        this.productStyle.prodType = ''
-        this.productStyle.bigType = ''
-        this.productStyle.middleType = ''
-        this.productStyle.smallType = ''
-        newVal += ''
-        this.prodTypeOptions = filter(newVal, {
-          field: 'parentId',
-          list: this.classList
+    //reset the matClass when its changes
+    'material.bigType': function(newVal, oldVal) {
+      if (this.mainMatModalOpened&& newVal != '') {
+        console.log(1)
+        this.smallTypeOptions = []
+        this.material.middleType = ''
+        this.material.smallType = ''
+        this.material.matCat = ''
+        this.material.matSpe = ''
+        getProdSpeOptionsByParent(newVal).then(response => {
+          let data = response.data.data
+          this.matSpeOptions = data
         })
-      }
-    },
-    'productStyle.prodType': function(newVal, oldVal) {
-      if (this.mainStyleModalOpened) {
-        this.middleTypeOptions = []
-        this.smallTypesOptions = []
-        this.productStyle.bigType = ''
-        this.productStyle.middleType = ''
-        this.productStyle.smallType = ''
-        newVal += ''
-        this.bigTypeOptions = filter(newVal, {
-          field: 'parentId',
-          list: this.classList
-        })
-      }
-    },
-    'productStyle.bigType': function(newVal, oldVal) {
-      if (this.mainStyleModalOpened) {
-        this.smallTypesOptions = []
-        this.productStyle.middleType = ''
-        this.productStyle.smallType = ''
         newVal += ''
         this.middleTypeOptions = filter(newVal, {
           field: 'parentId',
           list: this.classList
         })
+        this.matCatOptions = filter(newVal, {
+          field: 'classId',
+          list: this.catList
+        })
       }
     },
-    'productStyle.middleType': function(newVal, oldVal) {
-      if (this.mainStyleModalOpened) {
-        this.productStyle.smallType = ''
+    'material.middleType': function(newVal, oldVal) {
+      if (this.mainMatModalOpened && newVal != '') {
+        console.log(2)
+        this.material.smallType = ''
         newVal += ''
         this.smallTypeOptions = filter(newVal, {
           field: 'parentId',
@@ -705,16 +693,13 @@ export default {
     //   }
     // },
     //main modal function
-    openMainMatModal(action, id, departId) {
-      this.$v.productStyle.$reset()
+    openMainMatModal(action, id) {
+      this.$v.material.$reset()
       if (action === 'add') {
         this.modalActionName = '新增物料'
-        Object.assign(
-          this.productStyle,
-          this.$options.data.call(this).productStyle
-        )
+        Object.assign(this.material, this.$options.data.call(this).material)
         this.$nextTick(() => {
-          this.mainStyleModalOpened = true
+          this.mainMatModalOpened = true
         })
       } else if (action === 'update') {
         // if (
@@ -725,19 +710,19 @@ export default {
         //   return
         // }
         this.modalActionName = '修改物料'
-        getProdStyleById(id).then(response => {
-          let productStyle = response.data.data
-          Object.assign(this.productStyle, productStyle)
-          // filter util need string parameter
-          let prodFamily = productStyle.prodFamily + ''
-          let prodType = productStyle.prodType + ''
-          let bigType = productStyle.bigType + ''
-          let middleType = productStyle.middleType + ''
-          this.prodTypeOptions = filter(prodFamily, {
-            field: 'parentId',
-            list: this.classList
+        getMatById(id).then(response => {
+          let material = response.data.data
+          Object.assign(this.material, material)
+          let bigType = material.bigType
+          getProdSpeOptionsByParent(bigType).then(response => {
+            let data = response.data.data
+            this.matSpeOptions = data
           })
-          this.bigTypeOptions = filter(prodType, {
+          // filter util need string parameter
+          let matType = material.matType + ''
+          bigType += ''
+          let middleType = material.middleType + ''
+          this.bigTypeOptions = filter(matType, {
             field: 'parentId',
             list: this.classList
           })
@@ -749,8 +734,12 @@ export default {
             field: 'parentId',
             list: this.classList
           })
+          this.matCatOptions = filter(bigType, {
+            field: 'classId',
+            list: this.catList
+          })
           this.$nextTick(() => {
-            this.mainStyleModalOpened = true
+            this.mainMatModalOpened = true
           })
         })
       }
@@ -796,10 +785,10 @@ export default {
     // },
 
     //upload image
-    openImageUpload(id, prodStyle, styleName, departId) {
+    openImageUpload(id, matCode, matName) {
       this.expandId = id
-      this.expandStyle = prodStyle
-      this.expandName = styleName
+      this.expandStyle = matCode
+      this.expandName = matName
       this.imageUploadDialog = true
     },
     addImageFile(files) {
@@ -833,27 +822,24 @@ export default {
     //check thumbnail
     thumbnailCheck(id, thumbnail) {
       if (!(thumbnail === null)) {
-        return this.api + '/image/style/' + id + '/' + thumbnail
+        return this.api + '/image/mat/' + id + '/' + thumbnail
       } else {
         return 'statics/sad.svg'
       }
     },
-    newProdStyle() {
-      this.$v.productStyle.$touch()
-      if (this.$v.productStyle.$invalid) {
+    newMat() {
+      this.$v.material.$touch()
+      if (this.$v.material.$invalid) {
         return
       }
-      this.$v.productStyle.$reset()
-      this.productStyle.isDel = 0
-      this.productStyle.isSync = 0
-      addProdStyle(this.productStyle)
+      this.$v.material.$reset()
+      this.material.isDel = 0
+      this.material.isSync = 0
+      addMat(this.material)
         .then(response => {
           let data = response.data
-          this.mainStyleModalOpened = false
-          Object.assign(
-            this.productStyle,
-            this.$options.data.call(this).productStyle
-          )
+          this.mainMatModalOpened = false
+          Object.assign(this.material, this.$options.data.call(this).material)
           this.notify('positive', data.msg)
           this.request({
             pagination: this.serverPagination
@@ -861,21 +847,18 @@ export default {
         })
         .catch(error => {})
     },
-    modifyProdStyle() {
-      this.$v.productStyle.$touch()
-      if (this.$v.productStyle.$invalid) {
+    modifyMat() {
+      this.$v.material.$touch()
+      if (this.$v.material.$invalid) {
         return
       }
-      this.$v.productStyle.$reset()
-      this.productStyle.isSync = 0
-      updateProdStyle(this.productStyle)
+      this.$v.material.$reset()
+      this.material.isSync = 0
+      updateMat(this.material)
         .then(response => {
           let data = response.data
-          this.mainStyleModalOpened = false
-          Object.assign(
-            this.productStyle,
-            this.$options.data.call(this).productStyle
-          )
+          this.mainMatModalOpened = false
+          Object.assign(this.material, this.$options.data.call(this).material)
           this.notify('positive', data.msg)
           this.request({
             pagination: this.serverPagination
@@ -883,19 +866,16 @@ export default {
         })
         .catch(error => {})
     },
-    resetStyleModal() {
-      Object.assign(
-        this.productStyle,
-        this.$options.data.call(this).productStyle
-      )
+    resetMatModal() {
+      Object.assign(this.material, this.$options.data.call(this).material)
       this.$nextTick(() => {
-        this.$v.productStyle.$reset()
+        this.$v.material.$reset()
       })
     },
     //download specification
     downloadSpec(id, name) {
       specDownload(id).then(response => {
-        this.fileDownload(response.data, name + '产品说明书.pdf')
+        this.fileDownload(response.data, name + '物料说明书.pdf')
       })
     },
     // public method to download file
@@ -915,22 +895,22 @@ export default {
       document.body.removeChild(link)
     },
     // delete prodStyle
-    deleteProdStyle(departId) {
+    deleteMat(departId) {
       if (
         departId != this.myDepart &&
         this.myPermissions.indexOf('superAdmin') < 0
       ) {
-        this.notify('warning', '没有权限维护该产品')
+        this.notify('warning', '没有权限维护该物料')
         return
       }
-      this.notify('warning', '产品删除了哦')
+      this.notify('warning', '物料删除了哦')
     },
     //dataTable request
     request({ pagination }) {
       this.loading = true
       this.searchForm.page = pagination.page
       this.searchForm.row = pagination.rowsPerPage
-      getProdStyleList(this.searchForm)
+      getMatList(this.searchForm)
         .then(response => {
           let data = response.data.data
           this.serverPagination = pagination
@@ -952,20 +932,19 @@ export default {
     getProdClassOptions().then(response => {
       let data = response.data.data
       this.classList = data
-      this.prodFamilyOptions = filter('0', { field: 'parentId', list: data })
     })
     getProdParamOptions().then(response => {
       let data = response.data.data
       this.paramList = data
-      this.prodAttrOptions = filter('606', { field: 'parentId', list: data })
-      this.prodYearOptions = filter('464', { field: 'parentId', list: data })
-      this.prodSeasonOptions = filter('465', {
-        field: 'parentId',
-        list: data
-      })
-      this.prodUnitOptions = filter('458', { field: 'parentId', list: data })
-      this.prodLevelOptions = filter('486', { field: 'parentId', list: data })
-      this.designerOptions = filter('567', { field: 'parentId', list: data })
+      this.matAttrOptions = filter('606', { field: 'parentId', list: data })
+      this.matYearOptions = filter('464', { field: 'parentId', list: data })
+      this.matUnitOptions = filter('458', { field: 'parentId', list: data })
+      this.matColorOptions = filter('466', { field: 'parentId', list: data })
+    })
+    //fetch all the categories
+    getProdCatOptions().then(response => {
+      let data = response.data.data
+      this.catList = data
     })
   }
 }
