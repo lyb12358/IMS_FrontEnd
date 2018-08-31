@@ -39,7 +39,7 @@
                class="q-ma-xs"
                color="primary"
                @click="openMainMatModal('add',0)">
-          <q-tooltip>新建款式</q-tooltip>
+          <q-tooltip>新建物料</q-tooltip>
         </q-btn>
         <!-- <q-btn icon="mdi-file-excel"
                rounded
@@ -169,7 +169,7 @@
                    rounded
                    color="primary"
                    @click="openMainMatModal('update',props.row.id,props.row.departId)">
-              <q-tooltip>修改款式信息</q-tooltip>
+              <q-tooltip>修改物料信息</q-tooltip>
             </q-btn>
             <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
                    icon="mdi-image-plus"
@@ -227,7 +227,7 @@
                @click="props.nextPage" />
       </div>
     </q-table>
-    <!-- 新建款式modal -->
+    <!-- 新建物料modal -->
     <q-modal v-model="mainStyleModalOpened"
              no-esc-dismiss
              no-backdrop-dismiss
@@ -247,19 +247,19 @@
         <q-toolbar slot="footer"
                    inverted>
           <div class="col-12 row justify-center ">
-            <div v-if="modalActionName==='修改产品款式'"
+            <div v-if="modalActionName==='修改物料'"
                  style="margin:0 2rem">
               <q-btn color="primary"
                      label="确定"
                      @click="modifyProdStyle" />
             </div>
-            <div v-if="modalActionName==='新增产品款式'"
+            <div v-if="modalActionName==='新增物料'"
                  style="margin:0 2rem">
               <q-btn color="primary"
                      label="确定"
                      @click="newProdStyle" />
             </div>
-            <div v-if="modalActionName==='新增产品款式'"
+            <div v-if="modalActionName==='新增物料'"
                  style="margin:0 2rem">
               <q-btn color="primary"
                      label="重置"
@@ -278,7 +278,7 @@
               <q-field :error="$v.productStyle.prodStyle.$error"
                        error-label="款号必填，且不超过10位">
                 <q-input v-model="productStyle.prodStyle"
-                         :readonly="modalActionName==='修改产品款式'?true:false"
+                         :readonly="modalActionName==='修改物料'?true:false"
                          class="no-margin"
                          float-label="款号" />
               </q-field>
@@ -432,7 +432,7 @@
     <q-dialog v-model="imageUploadDialog"
               prevent-close>
       <span slot="title">上传产品图片</span>
-      <span slot="message">点击"+"，选择清晰度较高的图片，将作为本款式主要图片展示</span>
+      <span slot="message">点击"+"，选择清晰度较高的图片，将作为本物料主要图片展示</span>
       <div slot="body">
         <q-uploader ref="imageUpload"
                     :url="api+imageUploadUrl"
@@ -708,7 +708,7 @@ export default {
     openMainMatModal(action, id, departId) {
       this.$v.productStyle.$reset()
       if (action === 'add') {
-        this.modalActionName = '新增产品款式'
+        this.modalActionName = '新增物料'
         Object.assign(
           this.productStyle,
           this.$options.data.call(this).productStyle
@@ -724,7 +724,7 @@ export default {
         //   this.notify('warning', '无权维护非本部门产品')
         //   return
         // }
-        this.modalActionName = '修改产品款式'
+        this.modalActionName = '修改物料'
         getProdStyleById(id).then(response => {
           let productStyle = response.data.data
           Object.assign(this.productStyle, productStyle)
