@@ -124,7 +124,7 @@
             </q-item>
             <q-item link
                     v-if="checkAuth('view_productCat')"
-                    @click.native="notify('warning','施工中~')"
+                    @click.native="$router.push('productCat')"
                     class="q-ml-xl">
               <q-item-main label="类别管理" />
             </q-item>

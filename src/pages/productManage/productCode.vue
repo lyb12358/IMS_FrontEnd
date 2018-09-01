@@ -149,6 +149,9 @@
           <q-td key="prodSpe"
                 :props="props"
                 style="text-align:center">{{ props.row.speName }}</q-td>
+          <q-td key="prodColor"
+                :props="props"
+                style="text-align:center">{{ props.row.colorName }}</q-td>
           <q-td key="retailPrice"
                 :props="props"
                 style="text-align:center">{{ props.row.retailPrice}}
@@ -411,7 +414,7 @@
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
               <q-select v-model="productCode.prodColor"
-                        float-label="颜色"
+                        float-label="花色"
                         radio
                         :options="prodColorOptions" />
             </div>
@@ -587,6 +590,7 @@ export default {
         { name: 'smallType', label: '小类', field: 'smallType' },
         { name: 'prodAttr', label: '属性', field: 'prodAttr' },
         { name: 'prodSpe', label: '规格', field: 'prodSpe' },
+        { name: 'prodColor', label: '花色', field: 'prodColor' },
         { name: 'retailPrice', label: '零售价', field: 'retailPrice' },
         { name: 'supplyPrice', label: '供应价', field: 'supplyPrice' },
         { name: 'costPrice', label: '成本价', field: 'costPrice' },

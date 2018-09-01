@@ -418,7 +418,7 @@
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="material.matColor"
-                        float-label="颜色"
+                        float-label="花色"
                         radio
                         :options="matColorOptions" />
             </div>
@@ -561,7 +561,7 @@ export default {
         { name: 'costPrice', label: '成本价', field: 'costPrice' },
         { name: 'matAttr', label: '属性', field: 'matAttr' },
         { name: 'matYear', label: '年份', field: 'matYear' },
-        { name: 'matColor', label: '颜色', field: 'matColor' },
+        { name: 'matColor', label: '花色', field: 'matColor' },
         { name: 'matUnit', label: '单位', field: 'matUnit' },
         { name: 'numModel', label: '件数', field: 'numModel' },
         { name: 'isSync', label: '是否同步', field: 'isSync' },
