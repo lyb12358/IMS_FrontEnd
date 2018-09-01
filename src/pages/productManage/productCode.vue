@@ -895,8 +895,11 @@ export default {
         return
       }
       this.$v.productCode.$reset()
-      this.mainCodeModalOpened = false
+      this.productCode.isDel = 0
+      this.productCode.isSync = 0
+      this.productCode.gmtCreate = Date.now()
       addProdCode(this.productCode).then(response => {
+        this.mainCodeModalOpened = false
         let data = response.data
         Object.assign(
           this.productCode,
@@ -918,8 +921,11 @@ export default {
         return
       }
       this.$v.productCode.$reset()
-      this.mainCodeModalOpened = false
+      this.productCode.isSync = 0
+      this.productCode.gmtCreate = ''
+      this.productCode.gmtModified = ''
       updateProdCode(this.productCode).then(response => {
+        this.mainCodeModalOpened = false
         let data = response.data
         Object.assign(
           this.productCode,

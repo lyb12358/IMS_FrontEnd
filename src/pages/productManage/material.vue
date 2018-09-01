@@ -39,7 +39,7 @@
                class="q-ma-xs"
                color="primary"
                @click="openMainMatModal('add',0)">
-          <q-tooltip>新建物料</q-tooltip>
+          <q-tooltip>新建</q-tooltip>
         </q-btn>
         <!-- <q-btn icon="mdi-file-excel"
                rounded
@@ -112,6 +112,12 @@
           <q-td key="matName"
                 :props="props"
                 style="text-align:center">{{ props.row.matName }}</q-td>
+          <q-td key="matFamily"
+                :props="props"
+                style="text-align:center">{{ props.row.familyName }}</q-td>
+          <q-td key="matType"
+                :props="props"
+                style="text-align:center">{{ props.row.typeName }}</q-td>
           <q-td key="bigType"
                 :props="props"
                 style="text-align:center">{{ props.row.bigName }}</q-td>
@@ -169,14 +175,14 @@
                    rounded
                    color="primary"
                    @click="openMainMatModal('update',props.row.id)">
-              <q-tooltip>修改物料信息</q-tooltip>
+              <q-tooltip>修改物料辅料信息</q-tooltip>
             </q-btn>
             <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
                    icon="mdi-image-plus"
                    rounded
                    color="secondary"
                    @click="openImageUpload(props.row.id,props.row.matCode,props.row.matName)">
-              <q-tooltip>上传物料图片</q-tooltip>
+              <q-tooltip>上传图片</q-tooltip>
             </q-btn>
             <a :href="api+'/image/mat/'+props.row.id+'/'+props.row.image"
                :download="props.row.matName">
@@ -187,12 +193,12 @@
                 <q-tooltip>下载原图</q-tooltip>
               </q-btn>
             </a>
-            <q-btn icon="mdi-clipboard-arrow-down"
+            <!-- <q-btn icon="mdi-clipboard-arrow-down"
                    rounded
                    color="orange"
                    @click="downloadSpec(props.row.id,props.row.matName )">
               <q-tooltip>下载物料说明书</q-tooltip>
-            </q-btn>
+            </q-btn> -->
             <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
                    icon="mdi-delete"
                    rounded
@@ -247,19 +253,19 @@
         <q-toolbar slot="footer"
                    inverted>
           <div class="col-12 row justify-center ">
-            <div v-if="modalActionName==='修改物料'"
+            <div v-if="modalActionName==='修改'"
                  style="margin:0 2rem">
               <q-btn color="primary"
                      label="确定"
                      @click="modifyMat" />
             </div>
-            <div v-if="modalActionName==='新增物料'"
+            <div v-if="modalActionName==='新增'"
                  style="margin:0 2rem">
               <q-btn color="primary"
                      label="确定"
                      @click="newMat" />
             </div>
-            <div v-if="modalActionName==='新增物料'"
+            <div v-if="modalActionName==='新增'"
                  style="margin:0 2rem">
               <q-btn color="primary"
                      label="重置"
@@ -285,18 +291,18 @@
             </div> -->
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.material.matCode.$error"
-                       error-label="物料编号是必填项，且不超过10位">
+                       error-label="编号是必填项，且不超过15位">
                 <q-input v-model.trim="material.matCode"
                          class="no-margin"
-                         float-label="物料编号" />
+                         float-label="编号" />
               </q-field>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.material.matName.$error"
-                       error-label="物料名称是必填项，且不超过15位">
+                       error-label="名称是必填项，且不超过15位">
                 <q-input v-model.trim="material.matName"
                          class="no-margin"
-                         float-label="物料名称" />
+                         float-label="名称" />
               </q-field>
             </div>
             <!-- <div class="col-xs-12  col-sm-6 col-md-3">
@@ -310,6 +316,24 @@
                          float-label="产品类别" />
               </q-field>
             </div> -->
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-field :error="$v.material.matFamily.$error"
+                       error-label="归属是必填项">
+                <q-select v-model="material.matFamily"
+                          float-label="归属"
+                          radio
+                          :options="matFamilyOptions" />
+              </q-field>
+            </div>
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-field :error="$v.material.matType.$error"
+                       error-label="归属是必填项">
+                <q-select v-model="material.matType"
+                          float-label="类别"
+                          radio
+                          :options="matTypeOptions" />
+              </q-field>
+            </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.material.bigType.$error"
                        error-label="大类是必填项">
@@ -435,8 +459,8 @@
     <!-- upload image -->
     <q-dialog v-model="imageUploadDialog"
               prevent-close>
-      <span slot="title">上传物料图片</span>
-      <span slot="message">点击"+"，选择清晰度较高的图片，将作为本物料主要图片展示</span>
+      <span slot="title">上传图片</span>
+      <span slot="message">点击"+"，选择清晰度较高的图片，将作为主要图片展示</span>
       <div slot="body">
         <q-uploader ref="imageUpload"
                     :url="api+imageUploadUrl"
@@ -506,6 +530,8 @@ export default {
         'matCode',
         //'thumbnail',
         'matName',
+        'matFamily',
+        'matType',
         'bigType',
         'middleType',
         'smallType',
@@ -520,9 +546,11 @@ export default {
       },
       serverData: [],
       columns: [
-        { name: 'matCode', label: '物料编号', field: 'matCode' },
+        { name: 'matCode', label: '编号', field: 'matCode' },
         { name: 'thumbnail', label: '简图', field: 'thumbnail' },
-        { name: 'matName', label: '物料名称', field: 'matName' },
+        { name: 'matName', label: '名称', field: 'matName' },
+        { name: 'matFamily', label: '归属', field: 'matFamily' },
+        { name: 'matType', label: '类别', field: 'matType' },
         { name: 'bigType', label: '大类', field: 'bigType' },
         { name: 'middleType', label: '中类', field: 'middleType' },
         { name: 'smallType', label: '小类', field: 'smallType' },
@@ -548,8 +576,8 @@ export default {
         id: 0,
         matCode: '',
         matName: '',
-        matFamily: 267,
-        matType: 36,
+        matFamily: '',
+        matType: '',
         bigType: '',
         middleType: '',
         smallType: '',
@@ -567,6 +595,8 @@ export default {
         isSync: false
       },
       classList: [],
+      matFamilyOptions: [],
+      matTypeOptions: [],
       paramList: [],
       catList: [],
       matCatOptions: [],
@@ -590,8 +620,10 @@ export default {
   },
   validations: {
     material: {
-      matCode: { required, maxLength: maxLength(10) },
+      matCode: { required, maxLength: maxLength(15) },
       matName: { required, maxLength: maxLength(20) },
+      matFamily: { required },
+      matType: { required },
       bigType: { required },
       middleType: { required },
       smallType: { required },
@@ -625,10 +657,47 @@ export default {
     }
   },
   watch: {
-    //reset the matClass when its changes
+    //reset the matClass when it changes
+    'material.matFamily': function(newVal, oldVal) {
+      if (this.mainMatModalOpened && newVal != '') {
+        this.bigTypeOptions = []
+        this.middleTypeOptions = []
+        this.smallTypeOptions = []
+        this.matCatOptions = []
+        this.matSpeOptions = []
+        this.material.matType = ''
+        this.material.bigType = ''
+        this.material.middleType = ''
+        this.material.smallType = ''
+        this.material.matCat = ''
+        this.material.matSpe = ''
+        newVal += ''
+        this.matTypeOptions = filter(newVal, {
+          field: 'parentId',
+          list: this.classList
+        })
+      }
+    },
+    'material.matType': function(newVal, oldVal) {
+      if (this.mainMatModalOpened && newVal != '') {
+        this.middleTypeOptions = []
+        this.smallTypeOptions = []
+        this.matCatOptions = []
+        this.matSpeOptions = []
+        this.material.bigType = ''
+        this.material.middleType = ''
+        this.material.smallType = ''
+        this.material.matCat = ''
+        this.material.matSpe = ''
+        newVal += ''
+        this.bigTypeOptions = filter(newVal, {
+          field: 'parentId',
+          list: this.classList
+        })
+      }
+    },
     'material.bigType': function(newVal, oldVal) {
-      if (this.mainMatModalOpened&& newVal != '') {
-        console.log(1)
+      if (this.mainMatModalOpened && newVal != '') {
         this.smallTypeOptions = []
         this.material.middleType = ''
         this.material.smallType = ''
@@ -651,7 +720,6 @@ export default {
     },
     'material.middleType': function(newVal, oldVal) {
       if (this.mainMatModalOpened && newVal != '') {
-        console.log(2)
         this.material.smallType = ''
         newVal += ''
         this.smallTypeOptions = filter(newVal, {
@@ -696,7 +764,7 @@ export default {
     openMainMatModal(action, id) {
       this.$v.material.$reset()
       if (action === 'add') {
-        this.modalActionName = '新增物料'
+        this.modalActionName = '新增'
         Object.assign(this.material, this.$options.data.call(this).material)
         this.$nextTick(() => {
           this.mainMatModalOpened = true
@@ -709,7 +777,7 @@ export default {
         //   this.notify('warning', '无权维护非本部门产品')
         //   return
         // }
-        this.modalActionName = '修改物料'
+        this.modalActionName = '修改'
         getMatById(id).then(response => {
           let material = response.data.data
           Object.assign(this.material, material)
@@ -719,9 +787,14 @@ export default {
             this.matSpeOptions = data
           })
           // filter util need string parameter
+          let matFamily = material.matFamily + ''
           let matType = material.matType + ''
           bigType += ''
           let middleType = material.middleType + ''
+          this.matTypeOptions = filter(matFamily, {
+            field: 'parentId',
+            list: this.classList
+          })
           this.bigTypeOptions = filter(matType, {
             field: 'parentId',
             list: this.classList
@@ -835,6 +908,7 @@ export default {
       this.$v.material.$reset()
       this.material.isDel = 0
       this.material.isSync = 0
+      this.material.gmtCreate = Date.now()
       addMat(this.material)
         .then(response => {
           let data = response.data
@@ -854,6 +928,8 @@ export default {
       }
       this.$v.material.$reset()
       this.material.isSync = 0
+      this.material.gmtCreate = ''
+      this.material.gmtModified = ''
       updateMat(this.material)
         .then(response => {
           let data = response.data
@@ -900,10 +976,10 @@ export default {
         departId != this.myDepart &&
         this.myPermissions.indexOf('superAdmin') < 0
       ) {
-        this.notify('warning', '没有权限维护该物料')
+        this.notify('warning', '没有权限维护')
         return
       }
-      this.notify('warning', '物料删除了哦')
+      this.notify('warning', '删除了哦')
     },
     //dataTable request
     request({ pagination }) {
@@ -932,6 +1008,7 @@ export default {
     getProdClassOptions().then(response => {
       let data = response.data.data
       this.classList = data
+      this.matFamilyOptions = filter('0', { field: 'parentId', list: data })
     })
     getProdParamOptions().then(response => {
       let data = response.data.data

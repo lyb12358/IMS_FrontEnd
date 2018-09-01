@@ -619,12 +619,12 @@ export default {
     }
   },
   watch: {
-    //reset the prodClass when its changes
+    //reset the prodClass when it changes
     'productStyle.prodFamily': function(newVal, oldVal) {
       if (this.mainStyleModalOpened && newVal != '') {
         this.bigTypeOptions = []
         this.middleTypeOptions = []
-        this.smallTypesOptions = []
+        this.smallTypeOptions = []
         this.productStyle.prodType = ''
         this.productStyle.bigType = ''
         this.productStyle.middleType = ''
@@ -639,7 +639,7 @@ export default {
     'productStyle.prodType': function(newVal, oldVal) {
       if (this.mainStyleModalOpened && newVal != '') {
         this.middleTypeOptions = []
-        this.smallTypesOptions = []
+        this.smallTypeOptions = []
         this.productStyle.bigType = ''
         this.productStyle.middleType = ''
         this.productStyle.smallType = ''
@@ -652,7 +652,7 @@ export default {
     },
     'productStyle.bigType': function(newVal, oldVal) {
       if (this.mainStyleModalOpened && newVal != '') {
-        this.smallTypesOptions = []
+        this.smallTypeOptions = []
         this.productStyle.middleType = ''
         this.productStyle.smallType = ''
         newVal += ''
@@ -846,6 +846,7 @@ export default {
       this.$v.productStyle.$reset()
       this.productStyle.isDel = 0
       this.productStyle.isSync = 0
+      this.productStyle.gmtCreate = Date.now()
       addProdStyle(this.productStyle)
         .then(response => {
           let data = response.data
@@ -868,6 +869,8 @@ export default {
       }
       this.$v.productStyle.$reset()
       this.productStyle.isSync = 0
+      this.productStyle.gmtCreate = ''
+      this.productStyle.gmtModified = ''
       updateProdStyle(this.productStyle)
         .then(response => {
           let data = response.data
