@@ -168,7 +168,7 @@
             <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
                    icon="mdi-format-list-numbers"
                    rounded
-                   color="primary"
+                   color="orange"
                    @click="openMainStyleModal('update',props.row.id)">
               <q-tooltip>修改款式信息</q-tooltip>
             </q-btn>
@@ -188,12 +188,12 @@
                 <q-tooltip>下载原图</q-tooltip>
               </q-btn>
             </a>
-            <q-btn icon="mdi-clipboard-arrow-down"
+            <!-- <q-btn icon="mdi-clipboard-arrow-down"
                    rounded
-                   color="orange"
+                   color="primary"
                    @click="downloadSpec(props.row.id,props.row.styleName )">
               <q-tooltip>下载产品说明书</q-tooltip>
-            </q-btn>
+            </q-btn> -->
             <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
                    icon="mdi-delete"
                    rounded
@@ -846,6 +846,7 @@ export default {
       this.$v.productStyle.$reset()
       this.productStyle.isDel = 0
       this.productStyle.isSync = 0
+      this.productStyle.status = 1
       this.productStyle.gmtCreate = Date.now()
       addProdStyle(this.productStyle)
         .then(response => {

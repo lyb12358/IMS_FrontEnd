@@ -1,6 +1,6 @@
 <template>
   <q-page padding
-          class="card-examples row items-start">
+          class="card-examples row justify-center">
     <q-card inline
             class="bigger q-ma-sm">
       <q-card-media>
@@ -107,10 +107,9 @@ export default {
 
 <style scoped lang="stylus">
 .card-examples
-  .q-card
-    width 300px
   .bigger
     width 450px
+    max-height 250px
     max-width 90vw
   @media (max-width: $breakpoint-xs-max)
     .q-card

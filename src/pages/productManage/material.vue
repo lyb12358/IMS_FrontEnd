@@ -173,7 +173,7 @@
             <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
                    icon="mdi-format-list-numbers"
                    rounded
-                   color="primary"
+                   color="orange"
                    @click="openMainMatModal('update',props.row.id)">
               <q-tooltip>修改物料辅料信息</q-tooltip>
             </q-btn>
@@ -906,6 +906,7 @@ export default {
         return
       }
       this.$v.material.$reset()
+      this.material.status = 1
       this.material.isDel = 0
       this.material.isSync = 0
       this.material.gmtCreate = Date.now()

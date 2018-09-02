@@ -38,7 +38,7 @@
                 IMS
               </div>
               <div class="caption q-ml-lg">
-                v0.5.1
+                v0.9
               </div>
             </div>
             <q-item-separator />

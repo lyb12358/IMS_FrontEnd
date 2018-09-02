@@ -183,7 +183,7 @@
             <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductCode') > -1"
                    icon="mdi-format-list-numbers"
                    rounded
-                   color="primary"
+                   color="orange"
                    @click="openMainCodeModal('update',props.row.id)">
               <q-tooltip>修改该编号产品信息</q-tooltip>
             </q-btn>
@@ -205,7 +205,7 @@
             </a>
             <q-btn icon="mdi-clipboard-arrow-down"
                    rounded
-                   color="orange"
+                   color="primary"
                    @click="downloadSpec(props.row.styleId,props.row.prodName )">
               <q-tooltip>下载产品说明书</q-tooltip>
             </q-btn>
@@ -900,6 +900,7 @@ export default {
       }
       this.$v.productCode.$reset()
       this.productCode.isDel = 0
+      this.productCode.status = 1
       this.productCode.isSync = 0
       this.productCode.gmtCreate = Date.now()
       addProdCode(this.productCode).then(response => {
