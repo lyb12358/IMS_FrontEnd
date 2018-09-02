@@ -6,7 +6,7 @@
            class="row">
         <div class="col-xs-6 col-sm-4">
           <div class="card text-center text-primary"
-               @click="show(category)">
+               @click="openClassModel()">
             <q-icon name="settings" />
             <p class="caption">产品类别</p>
           </div>
@@ -178,11 +178,11 @@
                 slot-scope="props">
         <q-btn v-if="paramDialogAction=='add'"
                color="primary"
-               @click="newProdParam(productParam)"
+               @click="newProdParam()"
                label="确定" />
         <q-btn v-if="paramDialogAction=='update'"
                color="primary"
-               @click="modifyProdParam(productParam)"
+               @click="modifyProdParam()"
                label="确定" />
         <q-btn color="primary"
                v-close-overlay
@@ -295,6 +295,81 @@
       </q-modal-layout>
     </q-modal>
     <!-- cat、spe dialog -->
+    <q-dialog v-model="CSDialogOpened"
+              no-refocus
+              prevent-close>
+      <span slot="title">输入名称</span>
+      <div slot="body">
+        <q-field icon="mdi-rename-box"
+                 label="名称"
+                 :label-width="3">
+          <q-input v-model.trim="productCS.name">
+          </q-input>
+        </q-field>
+      </div>
+      <template slot="buttons"
+                slot-scope="props">
+        <q-btn v-if="CSDialogAction=='add'"
+               color="primary"
+               @click="newProdCS()"
+               label="确定" />
+        <q-btn v-if="CSDialogAction=='update'"
+               color="primary"
+               @click="modifyProdCS()"
+               label="确定" />
+        <q-btn color="primary"
+               v-close-overlay
+               label="取消" />
+      </template>
+    </q-dialog>
+    <!-- class modal -->
+    <q-modal v-model="classModalOpened"
+             no-esc-dismiss
+             no-backdrop-dismiss
+             no-refocus
+             :content-css="{minWidth: '25vw', minHeight: '70vh'}">
+      <q-modal-layout footer-class="no-shadow">
+        <q-toolbar slot="header">
+          <q-btn flat
+                 round
+                 dense
+                 v-close-overlay
+                 icon="mdi-arrow-left" />
+          <q-toolbar-title>
+            产品类别
+          </q-toolbar-title>
+        </q-toolbar>
+        <q-toolbar slot="footer"
+                   inverted>
+          <div class="col-12 row justify-center ">
+            <div style="margin:0 1.5rem">
+              <q-btn color="primary"
+                     @click="$refs.classTree.expandAll()"
+                     label="全部展开" />
+            </div>
+            <div style="margin:0 1.5rem">
+              <q-btn color="primary"
+                     @click="$refs.classTree.collapseAll()"
+                     label="全部收缩" />
+            </div>
+            <div style="margin:0 1.5rem">
+              <q-btn color="primary"
+                     v-close-overlay
+                     label="取消" />
+            </div>
+          </div>
+        </q-toolbar>
+        <div class="layout-padding">
+          <div class="row justify-center">
+            <q-tree :nodes="classTreeData"
+                    ref="classTree"
+                    color="primary"
+                    :selected.sync="classSelected"
+                    node-key="id" />
+          </div>
+        </div>
+      </q-modal-layout>
+    </q-modal>
   </q-page>
 </template>
 
@@ -303,6 +378,7 @@ import {
   getProdCatListByParent,
   addProdCat,
   updateProdCat,
+  getProdClassTree,
   getProdClassTreeOnBigType,
   getProdParamListByParent,
   addProdParam,
@@ -346,7 +422,16 @@ export default {
         { name: 'name', label: '名称', field: 'name' },
         { name: 'isSync', label: '是否同步', field: 'isSync' },
         { name: 'operation', label: '操作', field: 'operation' }
-      ]
+      ],
+      productCS: {
+        id: 0,
+        classId: 0,
+        name: ''
+      },
+      //prodClass
+      classTreeData: [],
+      classSelected: '',
+      classModalOpened: false
     }
   },
   computed: {},
@@ -467,6 +552,95 @@ export default {
     },
     deleteCS(name) {
       this.notify('warning', '删除了' + name)
+    },
+    openCSDialog(action, productCS) {
+      if (action == 'add') {
+        this.CSDialogAction = 'add'
+        Object.assign(this.productCS, this.$options.data.call(this).productCS)
+        this.productCS.classId = this.CSSelected
+        this.CSDialogOpened = true
+      } else if (action == 'update') {
+        this.CSDialogAction = 'update'
+        Object.assign(this.productCS, productCS)
+        this.CSDialogOpened = true
+      }
+    },
+    newProdCS() {
+      this.productCS.isSync = 1
+      this.productCS.status = 1
+      this.productCS.isDel = 0
+      this.productCS.orderId = 0
+      if (this.CSModalName == '产品品类') {
+        addProdCat(this.productCS)
+          .then(response => {
+            let data = response.data
+            this.CSDialogOpened = false
+            Object.assign(
+              this.productCS,
+              this.$options.data.call(this).productCS
+            )
+            this.notify('positive', data.msg)
+            this.fetchCSData()
+          })
+          .catch(error => {})
+      } else {
+        addProdSpe(this.productCS)
+          .then(response => {
+            let data = response.data
+            this.CSDialogOpened = false
+            Object.assign(
+              this.productCS,
+              this.$options.data.call(this).productCS
+            )
+            this.notify('positive', data.msg)
+            this.fetchCSData()
+          })
+          .catch(error => {})
+      }
+    },
+    modifyProdCS() {
+      if (this.CSModalName == '产品品类') {
+        updateProdCat(this.productCS)
+          .then(response => {
+            let data = response.data
+            this.CSDialogOpened = false
+            Object.assign(
+              this.productCS,
+              this.$options.data.call(this).productCS
+            )
+            this.notify('positive', data.msg)
+            this.fetchCSData()
+          })
+          .catch(error => {})
+      } else {
+        updateProdSpe(this.productCS)
+          .then(response => {
+            let data = response.data
+            this.CSDialogOpened = false
+            Object.assign(
+              this.productCS,
+              this.$options.data.call(this).productCS
+            )
+            this.notify('positive', data.msg)
+            this.fetchCSData()
+          })
+          .catch(error => {})
+      }
+    },
+    //prodClass
+    openClassModel() {
+      this.classModalOpened = true
+      getProdClassTree()
+        .then(response => {
+          let data = response.data.data
+          for (let i = 0; i < data.length; i++) {
+            this.classTreeData.push(data[i])
+          }
+          this.$nextTick(() => {
+            this.$refs.classTree.collapseAll()
+          })
+        })
+        .catch(error => {})
     }
   }
 }
