@@ -66,6 +66,22 @@ export function getProdClassOptionsByParent(id) {
         method: 'get',
     })
 }
+// 添加产品类别
+export function addProdClass(prodClass) {
+    return service({
+        url: '/prodClass',
+        method: 'post',
+        data: prodClass
+    })
+}
+// 修改产品类别
+export function updateProdClass(prodClass) {
+    return service({
+        url: '/prodClass',
+        method: 'put',
+        data: prodClass
+    })
+}
 // product_param参数
 // 获取产品参数列表(全部)
 export function getProdParamOptions() {

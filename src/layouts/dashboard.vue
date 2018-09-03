@@ -240,11 +240,11 @@ export default {
     }
   },
   mounted() {
-    this.$q.notify({
-      message: '除了产品管理的两个页面，其他基本是摆设，不用去点',
-      color: 'tertiary',
-      avatar: 'statics/logo/xiuxian.jpg'
-    })
+    // this.$q.notify({
+    //   message: '除了产品管理的两个页面，其他基本是摆设，不用去点',
+    //   color: 'tertiary',
+    //   avatar: 'statics/logo/xiuxian.jpg'
+    // })
   }
 }
 </script>

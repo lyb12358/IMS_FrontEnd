@@ -327,7 +327,7 @@
              no-esc-dismiss
              no-backdrop-dismiss
              no-refocus
-             :content-css="{minWidth: '25vw', minHeight: '70vh'}">
+             :content-css="{minWidth: '25vw', minHeight: '50vh'}">
       <q-modal-layout footer-class="no-shadow">
         <q-toolbar slot="header">
           <q-btn flat
@@ -342,17 +342,57 @@
         <q-toolbar slot="footer"
                    inverted>
           <div class="col-12 row justify-center ">
-            <div style="margin:0 1.5rem">
+            <div style="margin:0 0.5rem"
+                 v-if="classSelected!=null&&classSelected!=''">
+              <q-btn-dropdown color="primary"
+                              label="操作">
+                <q-list link>
+                  <q-item v-close-overlay
+                          @click.native="openClassDialog('add')">
+                    <q-item-side icon="mdi-plus-box"
+                                 color="primary" />
+                    <q-item-main>
+                      <q-item-tile label>增加{{classNode.label}}同级类别</q-item-tile>
+                    </q-item-main>
+                  </q-item>
+                  <q-item v-close-overlay
+                          @click.native="openClassDialog('expand')">
+                    <q-item-side icon="mdi-library-plus"
+                                 color="secondary" />
+                    <q-item-main>
+                      <q-item-tile label>增加{{classNode.label}}子类别</q-item-tile>
+                    </q-item-main>
+                  </q-item>
+                  <q-item v-close-overlay
+                          @click.native="openClassDialog('update')">
+                    <q-item-side icon="mdi-format-list-numbers"
+                                 color="orange" />
+                    <q-item-main>
+                      <q-item-tile label>修改{{classNode.label}}</q-item-tile>
+                    </q-item-main>
+                  </q-item>
+                  <q-item v-close-overlay
+                          @click.native="deleteProdClass(classNode.label)">
+                    <q-item-side icon="mdi-delete"
+                                 color="negative" />
+                    <q-item-main>
+                      <q-item-tile label>删除{{classNode.label}}</q-item-tile>
+                    </q-item-main>
+                  </q-item>
+                </q-list>
+              </q-btn-dropdown>
+            </div>
+            <div style="margin:0 0.5rem">
               <q-btn color="primary"
                      @click="$refs.classTree.expandAll()"
                      label="全部展开" />
             </div>
-            <div style="margin:0 1.5rem">
+            <div style="margin:0 0.5rem">
               <q-btn color="primary"
                      @click="$refs.classTree.collapseAll()"
                      label="全部收缩" />
             </div>
-            <div style="margin:0 1.5rem">
+            <div style="margin:0 0.5rem">
               <q-btn color="primary"
                      v-close-overlay
                      label="取消" />
@@ -363,13 +403,49 @@
           <div class="row justify-center">
             <q-tree :nodes="classTreeData"
                     ref="classTree"
-                    color="primary"
                     :selected.sync="classSelected"
-                    node-key="id" />
+                    node-key="id">
+              <div slot="default-header"
+                   slot-scope="prop"
+                   class="row items-center">
+                <q-chip class="q-mr-sm"
+                        :color="checkColor(prop.node.depth)"
+                        small>{{checkClassType(prop.node.depth)}}</q-chip>
+                <div class="text-weight-bold">{{ prop.node.label }}</div>
+              </div>
+            </q-tree>
           </div>
         </div>
       </q-modal-layout>
     </q-modal>
+    <!-- prodClass dialog -->
+    <q-dialog v-model="classDialogOpened"
+              no-refocus
+              prevent-close>
+      <span slot="title">输入名称</span>
+      <div slot="body">
+        <q-field icon="mdi-rename-box"
+                 label="名称"
+                 :label-width="3">
+          <q-input v-model.trim="productClass.name">
+          </q-input>
+        </q-field>
+      </div>
+      <template slot="buttons"
+                slot-scope="props">
+        <q-btn v-if="classDialogAction=='add'|classDialogAction=='expand'"
+               color="primary"
+               @click="newProdClass()"
+               label="确定" />
+        <q-btn v-if="classDialogAction=='update'"
+               color="primary"
+               @click="modifyProdClass()"
+               label="确定" />
+        <q-btn color="primary"
+               v-close-overlay
+               label="取消" />
+      </template>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -380,6 +456,8 @@ import {
   updateProdCat,
   getProdClassTree,
   getProdClassTreeOnBigType,
+  addProdClass,
+  updateProdClass,
   getProdParamListByParent,
   addProdParam,
   updateProdParam,
@@ -431,10 +509,22 @@ export default {
       //prodClass
       classTreeData: [],
       classSelected: '',
-      classModalOpened: false
+      classModalOpened: false,
+      classDialogOpened: false,
+      classDialogAction: '',
+      productClass: {
+        id: 0,
+        parentId: '',
+        name: '',
+        depth: ''
+      }
     }
   },
-  computed: {},
+  computed: {
+    classNode: function() {
+        return this.$refs.classTree.getNodeByKey(this.classSelected)==null?{ label: 1 }:this.$refs.classTree.getNodeByKey(this.classSelected)
+    }
+  },
   watch: {
     CSSelected: function(newVal, oldVal) {
       if (this.CSModalOpened && newVal != '' && newVal != null) {
@@ -630,14 +720,114 @@ export default {
     //prodClass
     openClassModel() {
       this.classModalOpened = true
+      this.classTreeData = []
       getProdClassTree()
         .then(response => {
           let data = response.data.data
           for (let i = 0; i < data.length; i++) {
             this.classTreeData.push(data[i])
           }
-          this.$nextTick(() => {
-            this.$refs.classTree.collapseAll()
+        })
+        .catch(error => {})
+      this.$nextTick(() => {
+        this.$refs.classTree.collapseAll()
+      })
+    },
+    checkColor(depth) {
+      if (depth == 1) {
+        return 'primary'
+      } else if (depth == 2) {
+        return 'secondary'
+      } else if (depth == 3) {
+        return 'tertiary'
+      } else if (depth == 4) {
+        return 'info'
+      } else {
+        return 'warning'
+      }
+    },
+    checkClassType(depth) {
+      if (depth == 1) {
+        return '归属'
+      } else if (depth == 2) {
+        return '类别'
+      } else if (depth == 3) {
+        return '大类'
+      } else if (depth == 4) {
+        return '中类'
+      } else {
+        return '小类'
+      }
+    },
+    deleteProdClass(name) {
+      this.notify('warning', '删除了' + name)
+    },
+    openClassDialog(action) {
+      if (action == 'add') {
+        this.classDialogAction = 'add'
+        Object.assign(
+          this.productClass,
+          this.$options.data.call(this).productClass
+        )
+        this.productClass.parentId = this.classNode.parentId
+        this.productClass.depth = this.classNode.depth
+        this.classDialogOpened = true
+      } else if (action == 'expand') {
+        this.classDialogAction = 'expand'
+        Object.assign(
+          this.productClass,
+          this.$options.data.call(this).productClass
+        )
+        this.productClass.parentId = this.classNode.id
+        this.productClass.depth = this.classNode.depth + 1
+        this.classDialogOpened = true
+      } else {
+        this.classDialogAction = 'update'
+        Object.assign(this.productClass, this.classNode)
+        this.productClass.name = this.classNode.label
+        this.classDialogOpened = true
+      }
+    },
+    newProdClass() {
+      this.productClass.isSync = 1
+      this.productClass.status = 1
+      this.productClass.isDel = 0
+      this.productClass.orderId = 0
+      addProdClass(this.productClass)
+        .then(response => {
+          let data = response.data
+          this.classDialogOpened = false
+          Object.assign(
+            this.productClass,
+            this.$options.data.call(this).productClass
+          )
+          this.notify('positive', data.msg)
+          this.classTreeData = []
+          getProdClassTree().then(response => {
+            let data = response.data.data
+            for (let i = 0; i < data.length; i++) {
+              this.classTreeData.push(data[i])
+            }
+          })
+        })
+        .catch(error => {})
+    },
+    modifyProdClass() {
+      updateProdClass(this.productClass)
+        .then(response => {
+          let data = response.data
+          this.classDialogOpened = false
+          Object.assign(
+            this.productClass,
+            this.$options.data.call(this).productClass
+          )
+          this.notify('positive', data.msg)
+          this.classTreeData = []
+          getProdClassTree().then(response => {
+            let data = response.data.data
+            for (let i = 0; i < data.length; i++) {
+              this.classTreeData.push(data[i])
+            }
           })
         })
         .catch(error => {})
