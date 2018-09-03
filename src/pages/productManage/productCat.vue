@@ -356,6 +356,7 @@
                     </q-item-main>
                   </q-item>
                   <q-item v-close-overlay
+                          v-if="classNode.depth<5"
                           @click.native="openClassDialog('expand')">
                     <q-item-side icon="mdi-library-plus"
                                  color="secondary" />
@@ -522,7 +523,9 @@ export default {
   },
   computed: {
     classNode: function() {
-        return this.$refs.classTree.getNodeByKey(this.classSelected)==null?{ label: 1 }:this.$refs.classTree.getNodeByKey(this.classSelected)
+      return this.$refs.classTree.getNodeByKey(this.classSelected) == null
+        ? { label: 1 }
+        : this.$refs.classTree.getNodeByKey(this.classSelected)
     }
   },
   watch: {
