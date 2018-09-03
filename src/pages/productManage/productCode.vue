@@ -190,9 +190,16 @@
             <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductCode') > -1"
                    icon="mdi-playlist-plus"
                    rounded
-                   color="secondary"
+                   color="brown"
                    @click="checkStyle(props.row.styleId)">
               <q-tooltip>增加同款式产品</q-tooltip>
+            </q-btn>
+            <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
+                   icon="mdi-image-plus"
+                   rounded
+                   color="secondary"
+                   @click="openImageUpload(props.row.id,props.row.prodCode,props.row.prodName)">
+              <q-tooltip>上传图片</q-tooltip>
             </q-btn>
             <a :href="props.row.codeThumbnail!=null?api+'/image/code/'+props.row.id+'/'+props.row.codeImage:api+'/image/style/'+props.row.styleId+'/'+props.row.styleImage"
                :download="props.row.prodName">
@@ -320,7 +327,7 @@
             <div class="col-md-12">
               <q-collapsible>
                 <template slot="header">
-                  <q-item-side :image="thumbnailCheck(null,productStyle.styleId,null,productStyle.thumbnail)"
+                  <q-item-side :image="thumbnailCheck(null,productStyle.id,null,productStyle.thumbnail)"
                                color="primary" />
                   <q-item-main :label="productStyle.styleName"
                                sublabel="点击可展开该款式详细内容" />
@@ -513,6 +520,36 @@
         </div>
       </q-modal-layout>
     </q-modal>
+    <!-- upload image -->
+    <q-dialog v-model="imageUploadDialog"
+              prevent-close>
+      <span slot="title">上传图片</span>
+      <span slot="message">点击"+"，选择清晰度较高的图片，将作为主要图片展示</span>
+      <div slot="body">
+        <q-uploader ref="imageUpload"
+                    :url="api+imageUploadUrl"
+                    :additionalFields="[
+                      {'name':'id','value':this.expandId},
+                      {'name':'prodCode','value':this.expandStyle},
+                      {'name':'prodName','value':this.expandName}]"
+                    clearable
+                    auto-expand
+                    hide-upload-button
+                    float-label="上传图片"
+                    @uploaded="imageUploaded"
+                    @fail="imageUploadedFail"
+                    @add="addImageFile" />
+      </div>
+      <template slot="buttons"
+                slot-scope="props">
+        <q-btn color="primary"
+               label="上传"
+               @click="imageUpload" />
+        <q-btn color="primary"
+               label="取消"
+               @click="imageUploadCancel" />
+      </template>
+    </q-dialog>
   </q-page>
 
 </template>
@@ -674,7 +711,13 @@ export default {
       prodColorOptions: [],
       catList: [],
       prodCatOptions: [],
-      prodSpeOptions: []
+      prodSpeOptions: [],
+      //upload image
+      expandId: 0,
+      expandStyle: '',
+      expandName: '',
+      imageUploadDialog: false,
+      imageUploadUrl: '/image/prodCode'
     }
   },
   validations: {
@@ -803,7 +846,6 @@ export default {
         this.notify('warning', '请先选择一个现有的款式')
         return
       }
-      console.log(id)
       getProdStyleById(id).then(response => {
         Object.assign(
           this.productCode,
@@ -954,6 +996,41 @@ export default {
         this.productCode.prodName = this.productStyle.styleName
         this.$v.productCode.$reset()
       })
+    },
+    //upload image
+    openImageUpload(id, prodCode, prodName) {
+      this.expandId = id
+      this.expandStyle = prodCode
+      this.expandName = prodName
+      this.imageUploadDialog = true
+    },
+    addImageFile(files) {
+      if (files[0].size > 5 * 1024 * 1024) {
+        this.$refs.imageUpload.reset()
+        this.notify('warning', '图片不能大于5MB')
+      }
+    },
+    imageUpload() {
+      this.$refs.imageUpload.upload()
+    },
+    imageUploadCancel() {
+      this.$refs.imageUpload.reset()
+      this.imageUploadDialog = false
+    },
+    // when image has just bean uploaded
+    imageUploaded(file, xhr) {
+      let response = JSON.parse(xhr.response)
+      this.notify('positive', response.msg)
+      this.$refs.imageUpload.reset()
+      this.imageUploadDialog = false
+      this.request({
+        pagination: this.serverPagination
+      })
+    },
+    // when it has encountered error while uploading
+    imageUploadedFail(file, xhr) {
+      let response = JSON.parse(xhr.response)
+      this.notify('negative', response.data.msg)
     },
     //download excel
     downloadExcel() {
