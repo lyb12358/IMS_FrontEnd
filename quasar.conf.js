@@ -112,7 +112,8 @@ module.exports = function (ctx) {
         'QSpinnerGears',
         'QAjaxBar',
         'QAutocomplete',
-        'QBtnDropdown'
+        'QBtnDropdown',
+        'QOptionGroup'
       ],
       directives: [
         'Ripple',

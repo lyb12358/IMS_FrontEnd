@@ -11,7 +11,7 @@ export default ({ router, store, Vue }) => {
         if (store.getters['user/permissions'].length === 0) {
           store.dispatch('user/GetInfo').then(response => {
             const permissions = store.getters['user/permissions']
-            if (to.meta.requiresAuth && (permissions.indexOf('superAdmin') < 0)) {
+            if (to.meta.requiresAuth && (permissions.indexOf(1) < 0)) {
               if (permissions.indexOf(to.meta.auth) > -1) {
                 next()
               } else {
@@ -37,7 +37,7 @@ export default ({ router, store, Vue }) => {
           })
         } else {
           const permissions = store.getters['user/permissions']
-          if (to.meta.requiresAuth && (permissions.indexOf('superAdmin') < 0)) {
+          if (to.meta.requiresAuth && (permissions.indexOf(1) < 0)) {
             if (permissions.indexOf(to.meta.auth) > -1) {
               next()
             } else {

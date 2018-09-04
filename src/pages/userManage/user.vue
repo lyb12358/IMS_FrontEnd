@@ -38,7 +38,7 @@
                rounded
                class="q-ma-xs"
                color="primary"
-               @click="openMainUserModal('add',0)">
+               @click="notify('warning','暂未开放注册')">
           <q-tooltip>新建</q-tooltip>
         </q-btn>
       </div>
@@ -82,33 +82,30 @@
         <q-tr :props="props">
           <q-td key="account"
                 :props="props"
-                style="text-align:center">
-            <q-checkbox color="secondary"
-                        v-model="props.expand"
-                        checked-icon="mdi-minus"
-                        unchecked-icon="mdi-plus"
-                        class="q-mr-md" />{{ props.row.account}}</q-td>
+                style="text-align:center">{{ props.row.account}}</q-td>
           <q-td key="name"
                 :props="props"
                 style="text-align:center">{{ props.row.name}}</q-td>
-          <q-td key="departId"
+          <q-td key="roleName"
                 :props="props"
-                style="text-align:center">{{ props.row.departName}}</q-td>
-          <q-td key="comId"
-                :props="props"
-                style="text-align:center">{{ props.row.comName }}</q-td>
+                style="text-align:center">{{ props.row.roleName}}</q-td>
           <q-td key="status"
                 :props="props"
                 style="text-align:center">{{ props.row.status }}</q-td>
-        </q-tr>
-        <q-tr v-show="props.expand"
-              :props="props">
-          <q-td colspan="100%">
+          <q-td key="operation"
+                :props="props"
+                style="text-align:center">
             <q-btn icon="mdi-settings"
                    rounded
-                   color="secondary"
-                   @click="userSetting(props.row.id)">
-              <q-tooltip>用户设置</q-tooltip>
+                   color="primary"
+                   @click="openRoleModel(props.row.id)">
+              <q-tooltip>角色管理</q-tooltip>
+            </q-btn>
+            <q-btn icon="mdi-eraser-variant"
+                   rounded
+                   color="dark"
+                   @click="resetPassword(props.row.id,props.row.name)">
+              <q-tooltip>重置密码</q-tooltip>
             </q-btn>
             <q-btn icon="mdi-delete"
                    rounded
@@ -192,11 +189,56 @@
         </div>
       </q-modal-layout>
     </q-modal>
+    <!-- role manage -->
+    <q-modal v-model="mainUserRoleModalOpened"
+             no-backdrop-dismiss
+             no-esc-dismiss
+             :content-css="{minWidth: '50vw', minHeight: '50vh'}">
+      <q-modal-layout footer-class="no-shadow">
+        <q-toolbar slot="header">
+          <q-btn flat
+                 round
+                 dense
+                 v-close-overlay
+                 icon="mdi-arrow-left" />
+          <q-toolbar-title>
+            用户拥有的角色
+          </q-toolbar-title>
+        </q-toolbar>
+        <q-toolbar slot="footer"
+                   inverted>
+          <div class="col-12 row justify-center ">
+            <div style="margin:0 2rem">
+              <q-btn color="primary"
+                     label="确定"
+                     @click="modifyUseRole" />
+            </div>
+            <div style="margin:0 2rem">
+              <q-btn color="primary"
+                     v-close-overlay
+                     label="取消" />
+            </div>
+          </div>
+        </q-toolbar>
+        <div class="layout-padding">
+          <q-option-group color="secondary"
+                          type="checkbox"
+                          v-model="roleList"
+                          :options="roleOptions" />
+        </div>
+      </q-modal-layout>
+    </q-modal>
   </q-page>
 </template>
 
 <script>
-import { getUserList } from 'src/api/userManage'
+import {
+  getUserList,
+  updatePassword,
+  getRoleOptions,
+  getUserRole,
+  updateUserRole
+} from 'src/api/userManage'
 export default {
   data() {
     return {
@@ -208,7 +250,7 @@ export default {
         name: ''
       },
       loading: false,
-      visibleColumns: ['account', 'name', 'departId', 'comId', 'status'],
+      visibleColumns: ['account', 'name', 'roleName', 'status', 'operation'],
       separator: 'horizontal',
       serverPagination: {
         page: 1,
@@ -219,25 +261,22 @@ export default {
       columns: [
         { name: 'account', label: '账号', field: 'account' },
         { name: 'name', label: '名称', field: 'name' },
-        {
-          name: 'departId',
-          label: '所属部门',
-          field: 'departId'
-        },
-        {
-          name: 'comId',
-          label: '所属公司',
-          field: 'comId'
-        },
+        { name: 'roleName', label: '角色', field: 'roleName' },
         {
           name: 'status',
           label: '状态',
           field: 'status'
-        }
+        },
+        { name: 'operation', label: '操作', field: 'operation' }
       ],
       //main modal
       mainUserModalOpened: false,
-      modalActionName: ''
+      modalActionName: '',
+      //role manage
+      mainUserRoleModalOpened: false,
+      userIdChosen: '',
+      roleOptions: [],
+      roleList: []
     }
   },
   methods: {
@@ -247,7 +286,7 @@ export default {
         type: type
       })
     },
-    userSetting(id) {
+    roleManage(id) {
       this.notify('warning', 'Ok,Ok~')
     },
     deleteUser(id) {
@@ -278,6 +317,53 @@ export default {
     newUSer() {},
     modifyUser() {},
     resetUserModal() {},
+    //user operation
+    resetPassword(id, name) {
+      this.$q
+        .dialog({
+          title: '重置密码',
+          message: '你确定要重置' + name + '的密码吗？',
+          ok: '确定',
+          cancel: '取消'
+        })
+        .then(() => {
+          updatePassword(id, '123456').then(response => {
+            let data = response.data
+            this.notify('positive', data.msg)
+          })
+        })
+    },
+    //role manage
+    openRoleModel(id) {
+      this.userIdChosen = id
+      getRoleOptions()
+        .then(response => {
+          let data = response.data.data
+          this.roleOptions = data
+        })
+        .catch(error => {})
+      getUserRole(id)
+        .then(response => {
+          let data = response.data.data
+          this.roleList = data
+        })
+        .catch(error => {})
+      this.$nextTick(() => {
+        this.mainUserRoleModalOpened = true
+      })
+    },
+    modifyUseRole() {
+      updateUserRole(this.userIdChosen, this.roleList)
+        .then(response => {
+          let data = response.data
+          this.notify('positive', data.msg)
+          this.mainUserRoleModalOpened = false
+          this.request({
+            pagination: this.serverPagination
+          })
+        })
+        .catch(error => {})
+    },
     //dataTable request
     request({ pagination }) {
       this.loading = true

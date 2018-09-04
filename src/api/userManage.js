@@ -8,6 +8,13 @@ export function getUserList(searchForm) {
         data: searchForm
     })
 }
+// 修改密码
+export function updatePassword(id, password) {
+    return service({
+        url: '/user/' + id + '/newPassword/' + password,
+        method: 'get'
+    })
+}
 
 //role
 export function getRoleList(searchForm) {
@@ -15,5 +22,60 @@ export function getRoleList(searchForm) {
         url: '/roles',
         method: 'post',
         data: searchForm
+    })
+}
+// 添加角色
+export function addRole(role) {
+    return service({
+        url: '/role',
+        method: 'post',
+        data: role
+    })
+}
+// 修改角色
+export function updateRole(role) {
+    return service({
+        url: '/role',
+        method: 'put',
+        data: role
+    })
+}
+// 获取角色options
+export function getRoleOptions() {
+    return service({
+        url: '/roles/options',
+        method: 'get'
+    })
+}
+// user role
+// 获取用户拥有的角色
+export function getUserRole(id) {
+    return service({
+        url: '/userRole/' + id,
+        method: 'get'
+    })
+}
+// 批量更新用户拥有的角色
+export function updateUserRole(id, list) {
+    return service({
+        url: '/userRole/' + id,
+        method: 'post',
+        data: list
+    })
+}
+// role permission
+// 获取角色拥有的权限
+export function getRolePermission(id) {
+    return service({
+        url: '/rolePermission/' + id,
+        method: 'get'
+    })
+}
+// 批量更新角色拥有的权限
+export function updateRolePermission(id, list) {
+    return service({
+        url: '/rolePermission/' + id,
+        method: 'post',
+        data: list
     })
 }

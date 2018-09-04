@@ -19,6 +19,11 @@ export function GetInfo({ commit, state }) {
     getInfoByToken(state.token).then(response => {
       const data = response.data.data
       commit('SetPermissions', data.permissions)
+      commit('SetCheckCodePermission', data.checkCodePermission)
+      commit('SetUpdateCodePermission', data.updateCodePermission)
+      commit('SetCheckStylePermission', data.checkStylePermission)
+      commit('SetUpdateStylePermission', data.updateStylePermission)
+      commit('SetMaintainProductPermission', data.maintainProductPermission)
       commit('SetUserInfo', data)
       resolve(response)
     }).catch(error => {
@@ -33,6 +38,11 @@ export function Logout({ commit, state }) {
     logout(state.token).then(() => {
       commit('SetToken', '')
       commit('SetPermissions', [])
+      commit('SetCheckCodePermission', [])
+      commit('SetUpdateCodePermission', [])
+      commit('SetCheckStylePermission', [])
+      commit('SetUpdateStylePermission', [])
+      commit('SetMaintainProductPermission', [])
       commit('SetUserInfo', {})
       removeStorageToken()
       resolve()
@@ -46,6 +56,11 @@ export function FedLogout({ commit }) {
   return new Promise(resolve => {
     commit('SetToken', '')
     commit('SetPermissions', [])
+    commit('SetCheckCodePermission', [])
+    commit('SetUpdateCodePermission', [])
+    commit('SetCheckStylePermission', [])
+    commit('SetUpdateStylePermission', [])
+    commit('SetMaintainProductPermission', [])
     commit('SetUserInfo', {})
     removeStorageToken()
     resolve()
