@@ -35,7 +35,7 @@
                rounded
                class="q-ma-xs"
                color="primary"
-               @click="openMainRoleModal('add',0)">
+               @click="openRoleDialog">
           <q-tooltip>新建</q-tooltip>
         </q-btn>
       </div>
@@ -128,11 +128,42 @@
                @click="props.nextPage" />
       </div>
     </q-table>
+    <!-- role dialog -->
+    <q-dialog v-model="roleDialogOpened"
+              no-refocus
+              prevent-close>
+      <span slot="title">输入角色名称</span>
+      <div slot="body">
+        <q-field icon="mdi-rename-box"
+                 label="名称"
+                 :label-width="3"
+                 :error="$v.role.name.$error"
+                 error-label="角色名不为空，且不超过15位">
+          <q-input v-model.trim="role.name">
+          </q-input>
+        </q-field>
+      </div>
+      <template slot="buttons"
+                slot-scope="props">
+        <q-btn v-if="roleDialogAction=='add'"
+               color="primary"
+               @click="newRole()"
+               label="确定" />
+        <q-btn v-if="roleDialogAction=='update'"
+               color="primary"
+               @click="modifyRole()"
+               label="确定" />
+        <q-btn color="primary"
+               v-close-overlay
+               label="取消" />
+      </template>
+    </q-dialog>
   </q-page>
 </template>
 
 <script>
 import { getRoleList } from 'src/api/userManage'
+import { maxLength, required } from 'vuelidate/lib/validators'
 export default {
   data() {
     return {
@@ -160,7 +191,18 @@ export default {
           field: 'status'
         },
         { name: 'operation', label: '操作', field: 'operation' }
-      ]
+      ],
+      //role manage
+      roleDialogOpened: false,
+      role: {
+        name: '',
+        remark: ''
+      }
+    }
+  },
+  validations: {
+    role: {
+      name: { required, maxLength: maxLength(15) }
     }
   },
   methods: {
@@ -206,6 +248,7 @@ export default {
         })
     },
     //permission manage
+    openRoleDialog() {},
     roleSetting(id) {}
   },
   mounted() {

@@ -169,7 +169,9 @@
       <div slot="body">
         <q-field icon="mdi-rename-box"
                  label="名称"
-                 :label-width="3">
+                 :label-width="3"
+                 :error="$v.productParam.name.$error"
+                 error-label="参数名不为空，且不超过15位">
           <q-input v-model.trim="productParam.name">
           </q-input>
         </q-field>
@@ -302,7 +304,9 @@
       <div slot="body">
         <q-field icon="mdi-rename-box"
                  label="名称"
-                 :label-width="3">
+                 :label-width="3"
+                 :error="$v.productCS.name.$error"
+                 error-label="名称不为空，且不超过15位">
           <q-input v-model.trim="productCS.name">
           </q-input>
         </q-field>
@@ -427,7 +431,9 @@
       <div slot="body">
         <q-field icon="mdi-rename-box"
                  label="名称"
-                 :label-width="3">
+                 :label-width="3"
+                 :error="$v.productClass.name.$error"
+                 error-label="类别名称不为空，且不超过15位">
           <q-input v-model.trim="productClass.name">
           </q-input>
         </q-field>
@@ -466,6 +472,7 @@ import {
   addProdSpe,
   updateProdSpe
 } from 'src/api/productParam'
+import { maxLength, required } from 'vuelidate/lib/validators'
 export default {
   data() {
     return {
@@ -521,6 +528,17 @@ export default {
       }
     }
   },
+  validations: {
+    productParam: {
+      name: { required, maxLength: maxLength(15) }
+    },
+    productCS: {
+      name: { required, maxLength: maxLength(15) }
+    },
+    productClass: {
+      name: { required, maxLength: maxLength(15) }
+    }
+  },
   computed: {
     classNode: function() {
       return this.$refs.classTree.getNodeByKey(this.classSelected) == null
@@ -560,6 +578,7 @@ export default {
       this.notify('warning', '删除了' + name)
     },
     openParamDialog(action, productParam) {
+      this.$v.productParam.$reset()
       if (action == 'add') {
         this.paramDialogAction = 'add'
         Object.assign(
@@ -575,6 +594,11 @@ export default {
       }
     },
     newProdParam() {
+      this.$v.productParam.$touch()
+      if (this.$v.productParam.$invalid) {
+        return
+      }
+      this.$v.productParam.$reset()
       this.productParam.isSync = 1
       this.productParam.status = 1
       this.productParam.isDel = 0
@@ -593,6 +617,11 @@ export default {
         .catch(error => {})
     },
     modifyProdParam() {
+      this.$v.productParam.$touch()
+      if (this.$v.productParam.$invalid) {
+        return
+      }
+      this.$v.productParam.$reset()
       updateProdParam(this.productParam)
         .then(response => {
           let data = response.data
@@ -647,6 +676,7 @@ export default {
       this.notify('warning', '删除了' + name)
     },
     openCSDialog(action, productCS) {
+      this.$v.productCS.$reset()
       if (action == 'add') {
         this.CSDialogAction = 'add'
         Object.assign(this.productCS, this.$options.data.call(this).productCS)
@@ -659,6 +689,11 @@ export default {
       }
     },
     newProdCS() {
+      this.$v.productCS.$touch()
+      if (this.$v.productCS.$invalid) {
+        return
+      }
+      this.$v.productCS.$reset()
       this.productCS.isSync = 1
       this.productCS.status = 1
       this.productCS.isDel = 0
@@ -692,6 +727,11 @@ export default {
       }
     },
     modifyProdCS() {
+      this.$v.productCS.$touch()
+      if (this.$v.productCS.$invalid) {
+        return
+      }
+      this.$v.productCS.$reset()
       if (this.CSModalName == '产品品类') {
         updateProdCat(this.productCS)
           .then(response => {
@@ -766,6 +806,7 @@ export default {
       this.notify('warning', '删除了' + name)
     },
     openClassDialog(action) {
+      this.$v.productClass.$reset()
       if (action == 'add') {
         this.classDialogAction = 'add'
         Object.assign(
@@ -792,6 +833,11 @@ export default {
       }
     },
     newProdClass() {
+      this.$v.productClass.$touch()
+      if (this.$v.productClass.$invalid) {
+        return
+      }
+      this.$v.productClass.$reset()
       this.productClass.isSync = 1
       this.productClass.status = 1
       this.productClass.isDel = 0
@@ -816,6 +862,11 @@ export default {
         .catch(error => {})
     },
     modifyProdClass() {
+      this.$v.productClass.$touch()
+      if (this.$v.productClass.$invalid) {
+        return
+      }
+      this.$v.productClass.$reset()
       updateProdClass(this.productClass)
         .then(response => {
           let data = response.data
