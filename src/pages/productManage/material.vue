@@ -34,7 +34,8 @@
                @click="search()">
           <q-tooltip>搜索</q-tooltip>
         </q-btn>
-        <q-btn icon="mdi-new-box"
+        <q-btn v-if="checkAuth(28)"
+               icon="mdi-new-box"
                rounded
                class="q-ma-xs"
                color="primary"
@@ -170,21 +171,22 @@
         <q-tr v-show="props.expand"
               :props="props">
           <q-td colspan="100%">
-            <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
+            <q-btn v-if="checkAuth(29)"
                    icon="mdi-format-list-numbers"
                    rounded
                    color="orange"
                    @click="openMainMatModal('update',props.row.id)">
               <q-tooltip>修改物料辅料信息</q-tooltip>
             </q-btn>
-            <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
+            <q-btn v-if="checkAuth(30)"
                    icon="mdi-image-plus"
                    rounded
                    color="secondary"
                    @click="openImageUpload(props.row.id,props.row.matCode,props.row.matName)">
               <q-tooltip>上传图片</q-tooltip>
             </q-btn>
-            <a :href="api+'/image/mat/'+props.row.id+'/'+props.row.image"
+            <a v-if="checkAuth(31)"
+               :href="api+'/image/mat/'+props.row.id+'/'+props.row.image"
                :download="props.row.matName">
               <q-btn icon="mdi-image-area-close"
                      v-if="props.row.thumbnail!=null"
@@ -199,7 +201,7 @@
                    @click="downloadSpec(props.row.id,props.row.matName )">
               <q-tooltip>下载物料说明书</q-tooltip>
             </q-btn> -->
-            <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
+            <q-btn v-if="checkAuth(33)"
                    icon="mdi-delete"
                    rounded
                    color="negative"
@@ -646,14 +648,11 @@ export default {
     }
   },
   computed: {
-    myPermissions() {
+    permissions() {
       return this.$store.getters['user/permissions']
     },
-    myDepart() {
-      return this.$store.getters['user/userInfo'].departId
-    },
-    myDepartName() {
-      return this.$store.getters['user/userInfo'].departLabel
+    maintainProductPermission() {
+      return this.$store.getters['user/maintainProductPermission']
     }
   },
   watch: {
@@ -730,6 +729,16 @@ export default {
     }
   },
   methods: {
+    checkAuth(auth) {
+      if (this.permissions.indexOf(1) > -1) {
+        return true
+      }
+      if (this.permissions.indexOf(auth) > -1) {
+        return true
+      } else {
+        return false
+      }
+    },
     formatDate(timeStamp) {
       return date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss')
     },
@@ -780,6 +789,13 @@ export default {
         this.modalActionName = '修改'
         getMatById(id).then(response => {
           let material = response.data.data
+          //check matType permission
+          let mt = material.matType
+          mt += ''
+          if (this.maintainProductPermission.indexOf(mt) < 0) {
+            this.notify('warning', '无权维护该类别物料及辅料')
+            return
+          }
           Object.assign(this.material, material)
           let bigType = material.bigType
           getProdSpeOptionsByParent(bigType).then(response => {
@@ -901,6 +917,13 @@ export default {
       }
     },
     newMat() {
+      //check matType permission
+      let mt = this.material.matType
+      mt += ''
+      if (this.maintainProductPermission.indexOf(mt) < 0) {
+        this.notify('warning', '无权维护该类别物料及辅料')
+        return
+      }
       this.$v.material.$touch()
       if (this.$v.material.$invalid) {
         return
@@ -971,15 +994,8 @@ export default {
       URL.revokeObjectURL(link.href)
       document.body.removeChild(link)
     },
-    // delete prodStyle
-    deleteMat(departId) {
-      if (
-        departId != this.myDepart &&
-        this.myPermissions.indexOf('superAdmin') < 0
-      ) {
-        this.notify('warning', '没有权限维护')
-        return
-      }
+    // delete mat
+    deleteMat() {
       this.notify('warning', '删除了哦')
     },
     //dataTable request

@@ -91,7 +91,10 @@
                 style="text-align:center">{{ props.row.roleName}}</q-td>
           <q-td key="status"
                 :props="props"
-                style="text-align:center">{{ props.row.status }}</q-td>
+                style="text-align:center">
+            <q-icon :name="props.row.status==1?'mdi-check-circle':'mdi-close-circle'"
+                    size="1.5rem"
+                    :color="props.row.status==1?'positive':'negative'" /></q-td>
           <q-td key="operation"
                 :props="props"
                 style="text-align:center">

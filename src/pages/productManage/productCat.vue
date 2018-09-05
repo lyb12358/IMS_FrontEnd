@@ -4,63 +4,64 @@
     <div class="row justify-center ">
       <div style="width: 850px; max-width: 90vw;"
            class="row">
-        <div class="col-xs-6 col-sm-4">
+        <div class="col-xs-6 col-sm-4"
+        v-if="checkAuth(35)">
           <div class="card text-center text-primary"
                @click="openClassModel()">
             <q-icon name="settings" />
             <p class="caption">产品类别</p>
           </div>
         </div>
-        <div class="col-xs-6 col-sm-4">
+        <div class="col-xs-6 col-sm-4" v-if="checkAuth(36)">
           <div class="card text-center text-primary"
                @click="openParamModel(606,'产品属性')">
             <q-icon name="settings" />
             <p class="caption">产品属性</p>
           </div>
         </div>
-        <div class="col-xs-6 col-sm-4">
+        <div class="col-xs-6 col-sm-4" v-if="checkAuth(37)">
           <div class="card text-center text-primary"
                @click="openCSModel('prodCat')">
             <q-icon name="settings" />
             <p class="caption">产品品类</p>
           </div>
         </div>
-        <div class="col-xs-6 col-sm-4">
+        <div class="col-xs-6 col-sm-4" v-if="checkAuth(38)">
           <div class="card text-center text-primary"
                @click="openCSModel('prodSpe')">
             <q-icon name="settings" />
             <p class="caption">产品规格</p>
           </div>
         </div>
-        <div class="col-xs-6 col-sm-4">
+        <div class="col-xs-6 col-sm-4" v-if="checkAuth(39)">
           <div class="card text-center text-primary"
                @click="openParamModel(464,'产品年份')">
             <q-icon name="settings" />
             <p class="caption">产品年份</p>
           </div>
         </div>
-        <div class="col-xs-6 col-sm-4">
+        <div class="col-xs-6 col-sm-4" v-if="checkAuth(40)">
           <div class="card text-center text-primary"
                @click="openParamModel(465,'产品季节')">
             <q-icon name="settings" />
             <p class="caption">产品季节</p>
           </div>
         </div>
-        <div class="col-xs-6 col-sm-4">
+        <div class="col-xs-6 col-sm-4" v-if="checkAuth(41)">
           <div class="card text-center text-primary"
                @click="openParamModel(466,'产品花色')">
             <q-icon name="mdi-palette" />
             <p class="caption">产品花色</p>
           </div>
         </div>
-        <div class="col-xs-6 col-sm-4">
+        <div class="col-xs-6 col-sm-4" v-if="checkAuth(42)">
           <div class="card text-center text-primary"
                @click="openParamModel(486,'产品档次')">
             <q-icon name="mdi-triangle" />
             <p class="caption">产品档次</p>
           </div>
         </div>
-        <div class="col-xs-6 col-sm-4">
+        <div class="col-xs-6 col-sm-4" v-if="checkAuth(43)">
           <div class="card text-center text-primary"
                @click="openParamModel(567,'产品设计师')">
             <q-icon name="mdi-face" />
@@ -549,6 +550,9 @@ export default {
     }
   },
   computed: {
+    permissions() {
+      return this.$store.getters['user/permissions']
+    },
     classNode: function() {
       return this.$refs.classTree.getNodeByKey(this.classSelected) == null
         ? { label: 1 }
@@ -563,6 +567,16 @@ export default {
     }
   },
   methods: {
+    checkAuth(auth) {
+      if (this.permissions.indexOf(1) > -1) {
+        return true
+      }
+      if (this.permissions.indexOf(auth) > -1) {
+        return true
+      } else {
+        return false
+      }
+    },
     notify(type, message) {
       this.$q.notify({
         message: message,

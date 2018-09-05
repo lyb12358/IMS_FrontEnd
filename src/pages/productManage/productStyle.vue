@@ -34,7 +34,7 @@
                @click="search()">
           <q-tooltip>搜索</q-tooltip>
         </q-btn>
-        <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
+        <q-btn v-if="checkAuth(20)"
                icon="mdi-new-box"
                rounded
                class="q-ma-xs"
@@ -87,6 +87,7 @@
       <q-tr slot="header"
             slot-scope="props">
         <q-th v-for="col in props.cols"
+              v-if="checkStyle(col.name)"
               :key="col.name"
               :props="props"
               style="text-align:center">
@@ -96,7 +97,8 @@
       <template slot="body"
                 slot-scope="props">
         <q-tr :props="props">
-          <q-td key="prodStyle"
+          <q-td v-if="checkStyle('prodStyle')"
+                key="prodStyle"
                 :props="props"
                 style="text-align:center">
             <q-checkbox color="secondary"
@@ -105,81 +107,99 @@
                         unchecked-icon="mdi-plus"
                         class="q-mr-md" /> {{ props.row.prodStyle }}
           </q-td>
-          <q-td key="thumbnail"
+          <q-td v-if="checkStyle('thumbnail')"
+                key="thumbnail"
                 :props="props"
                 style="text-align:center">
             <img :src="thumbnailCheck(props.row.id,props.row.thumbnail)"
                  style="height: 80px; width: 140px;"></q-td>
-          <q-td key="styleName"
+          <q-td v-if="checkStyle('styleName')"
+                key="styleName"
                 :props="props"
                 style="text-align:center">{{ props.row.styleName }}</q-td>
-          <q-td key="prodFamily"
+          <q-td v-if="checkStyle('prodFamily')"
+                key="prodFamily"
                 :props="props"
                 style="text-align:center">{{ props.row.familyName }}</q-td>
-          <q-td key="prodType"
+          <q-td v-if="checkStyle('prodFamily')"
+                key="prodType"
                 :props="props"
                 style="text-align:center">{{ props.row.typeName }}</q-td>
-          <q-td key="bigType"
+          <q-td v-if="checkStyle('bigType')"
+                key="bigType"
                 :props="props"
                 style="text-align:center">{{ props.row.bigName }}</q-td>
-          <q-td key="middleType"
+          <q-td v-if="checkStyle('middleType')"
+                key="middleType"
                 :props="props"
                 style="text-align:center">{{ props.row.middleName }}</q-td>
-          <q-td key="smallType"
+          <q-td v-if="checkStyle('smallType')"
+                key="smallType"
                 :props="props"
                 style="text-align:center">{{ props.row.smallName }}</q-td>
-          <q-td key="prodAttr"
+          <q-td v-if="checkStyle('prodAttr')"
+                key="prodAttr"
                 :props="props"
                 style="text-align:center">{{ props.row.attrName}}</q-td>
-          <q-td key="prodMat"
+          <q-td v-if="checkStyle('prodMat')"
+                key="prodMat"
                 :props="props"
                 style="text-align:center">{{ props.row.prodMat }}</q-td>
-          <q-td key="prodYear"
+          <q-td v-if="checkStyle('prodYear')"
+                key="prodYear"
                 :props="props"
                 style="text-align:center">{{ props.row.yearName}}</q-td>
-          <q-td key="prodSeason"
+          <q-td v-if="checkStyle('prodSeason')"
+                key="prodSeason"
                 :props="props"
                 style="text-align:center">{{ props.row.seasonName}}</q-td>
-          <q-td key="prodUnit"
+          <q-td v-if="checkStyle('prodUnit')"
+                key="prodUnit"
                 :props="props"
                 style="text-align:center">{{ props.row.unitName}}</q-td>
-          <q-td key="prodLevel"
+          <q-td v-if="checkStyle('prodLevel')"
+                key="prodLevel"
                 :props="props"
                 style="text-align:center">{{ props.row.levelName }}</q-td>
-          <q-td key="designer"
+          <q-td v-if="checkStyle('designer')"
+                key="designer"
                 :props="props"
                 style="text-align:center">{{ props.row.designerName }}</q-td>
-          <q-td key="styleIsSync"
+          <q-td v-if="checkStyle('styleIsSync')"
+                key="styleIsSync"
                 :props="props"
                 style="text-align:center">
             <q-icon :name="props.row.styleIsSync?'mdi-check-circle':'mdi-sync-off'"
                     size="1.5rem"
                     :color="props.row.styleIsSync?'positive':'negative'" /></q-td>
-          <q-td key="gmtCreate"
+          <q-td v-if="checkStyle('gmtCreate')"
+                key="gmtCreate"
                 :props="props"
                 style="text-align:center">{{ formatDate(props.row.gmtCreate) }}</q-td>
-          <q-td key="gmtModified"
+          <q-td v-if="checkStyle('gmtModified')"
+                key="gmtModified"
                 :props="props"
                 style="text-align:center">{{ formatDate(props.row.gmtModified) }}</q-td>
         </q-tr>
         <q-tr v-show="props.expand"
               :props="props">
           <q-td colspan="100%">
-            <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
+            <q-btn v-if="checkAuth(21)"
                    icon="mdi-format-list-numbers"
                    rounded
                    color="orange"
                    @click="openMainStyleModal('update',props.row.id)">
               <q-tooltip>修改款式信息</q-tooltip>
             </q-btn>
-            <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
+            <q-btn v-if="checkAuth(22)"
                    icon="mdi-image-plus"
                    rounded
                    color="secondary"
                    @click="openImageUpload(props.row.id,props.row.prodStyle,props.row.styleName)">
               <q-tooltip>上传产品图片</q-tooltip>
             </q-btn>
-            <a :href="api+'/image/style/'+props.row.id+'/'+props.row.image"
+            <a v-if="checkAuth(23)"
+               :href="api+'/image/style/'+props.row.id+'/'+props.row.image"
                :download="props.row.styleName">
               <q-btn icon="mdi-image-area-close"
                      v-if="props.row.thumbnail!=null"
@@ -194,7 +214,7 @@
                    @click="downloadSpec(props.row.id,props.row.styleName )">
               <q-tooltip>下载产品说明书</q-tooltip>
             </q-btn> -->
-            <q-btn v-if="myPermissions.indexOf('superAdmin') > -1 | myPermissions.indexOf('modifyProductStyle') > -1"
+            <q-btn v-if="checkAuth(25)"
                    icon="mdi-delete"
                    rounded
                    color="negative"
@@ -504,7 +524,6 @@ export default {
       loading: false,
       visibleColumns: [
         'prodStyle',
-        //'thumbnail',
         'styleName',
         'prodFamily',
         'prodType',
@@ -608,15 +627,33 @@ export default {
     }
   },
   computed: {
-    myPermissions() {
+    permissions() {
       return this.$store.getters['user/permissions']
     },
-    myDepart() {
-      return this.$store.getters['user/userInfo'].departId
+    checkStylePermission() {
+      return this.$store.getters['user/checkStylePermission']
     },
-    myDepartName() {
-      return this.$store.getters['user/userInfo'].departLabel
+    maintainProductPermission() {
+      return this.$store.getters['user/maintainProductPermission']
     }
+    // columns() {
+    //   let columnsComputed = this.columnsModel
+    //   for (let i = 0; i < columnsComputed.length; i++) {
+    //     if (this.checkStylePermission.indexOf(columnsComputed[i].name) < 0) {
+    //       columnsComputed.splice(i, 1)
+    //     }
+    //   }
+    //   return columnsComputed
+    // },
+    // visibleColumns() {
+    //   let visibleColumnsComputed = this.visibleColumnsModel
+    //   for (let i = 0; i < visibleColumnsComputed.length; i++) {
+    //     if (this.checkStylePermission.indexOf(visibleColumnsComputed[i]) < 0) {
+    //       visibleColumnsComputed.splice(i, 1)
+    //     }
+    //   }
+    //   return visibleColumnsComputed
+    // }
   },
   watch: {
     //reset the prodClass when it changes
@@ -674,6 +711,26 @@ export default {
     }
   },
   methods: {
+    checkAuth(auth) {
+      if (this.permissions.indexOf(1) > -1) {
+        return true
+      }
+      if (this.permissions.indexOf(auth) > -1) {
+        return true
+      } else {
+        return false
+      }
+    },
+    checkStyle(auth) {
+      if (this.permissions.indexOf(1) > -1) {
+        return true
+      }
+      if (this.checkStylePermission.indexOf(auth) > -1) {
+        return true
+      } else {
+        return false
+      }
+    },
     formatDate(timeStamp) {
       return date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss')
     },
@@ -727,6 +784,13 @@ export default {
         this.modalActionName = '修改产品款式'
         getProdStyleById(id).then(response => {
           let productStyle = response.data.data
+          //check prodType permission
+          let pt = productStyle.prodType
+          pt += ''
+          if (this.maintainProductPermission.indexOf(pt) < 0) {
+            this.notify('warning', '无权维护该类别产品')
+            return
+          }
           Object.assign(this.productStyle, productStyle)
           // filter util need string parameter
           let prodFamily = productStyle.prodFamily + ''
@@ -839,6 +903,13 @@ export default {
       }
     },
     newProdStyle() {
+      //check prodType permission
+      let pt = this.productStyle.prodType
+      pt += ''
+      if (this.maintainProductPermission.indexOf(pt) < 0) {
+        this.notify('warning', '无权维护该类别产品')
+        return
+      }
       this.$v.productStyle.$touch()
       if (this.$v.productStyle.$invalid) {
         return
@@ -921,14 +992,7 @@ export default {
       document.body.removeChild(link)
     },
     // delete prodStyle
-    deleteProdStyle(departId) {
-      if (
-        departId != this.myDepart &&
-        this.myPermissions.indexOf('superAdmin') < 0
-      ) {
-        this.notify('warning', '没有权限维护该产品')
-        return
-      }
+    deleteProdStyle() {
       this.notify('warning', '产品删除了哦')
     },
     //dataTable request
@@ -950,6 +1014,8 @@ export default {
     }
   },
   mounted() {
+    console.log(this.visibleColumns)
+    console.log(this.columns)
     // once mounted, we need to trigger the initial server data fetch
     this.request({
       pagination: this.serverPagination
