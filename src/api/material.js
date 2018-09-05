@@ -28,6 +28,13 @@ export function updateMat(material) {
         data: material
     })
 }
+//记数
+export function matCount() {
+    return service({
+        url: '/mat/count',
+        method: 'get',
+    })
+}
 
 
 

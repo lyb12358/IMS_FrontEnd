@@ -943,7 +943,8 @@ export default {
       this.$v.productCode.$reset()
       this.productCode.isDel = 0
       this.productCode.status = 1
-      this.productCode.isSync = 0
+      //fix
+      this.productCode.isSync = 1
       this.productCode.gmtCreate = Date.now()
       addProdCode(this.productCode).then(response => {
         this.mainCodeModalOpened = false
@@ -968,7 +969,8 @@ export default {
         return
       }
       this.$v.productCode.$reset()
-      this.productCode.isSync = 0
+      //fix
+      this.productCode.isSync = 1
       this.productCode.gmtCreate = ''
       this.productCode.gmtModified = ''
       updateProdCode(this.productCode).then(response => {

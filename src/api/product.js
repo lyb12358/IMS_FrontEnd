@@ -64,6 +64,19 @@ export function updateProdStyle(productStyle) {
         data: productStyle
     })
 }
+//记数
+export function codeCount() {
+    return service({
+        url: '/prodCode/count',
+        method: 'get',
+    })
+}
+export function styleCount() {
+    return service({
+        url: '/prodStyle/count',
+        method: 'get',
+    })
+}
 
 
 

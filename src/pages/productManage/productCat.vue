@@ -226,7 +226,16 @@
                         ref="CSTree"
                         color="primary"
                         :selected.sync="CSSelected"
-                        node-key="id" />
+                        node-key="id" >
+                <div slot="default-header"
+                   slot-scope="prop"
+                   class="row items-center">
+                <q-chip class="q-mr-sm"
+                        :color="checkColor(prop.node.depth)"
+                        small>{{checkClassType(prop.node.depth)}}</q-chip>
+                <div class="text-weight-bold">{{ prop.node.label }}</div>
+              </div>
+                </q-tree>
               </q-scroll-area>
             </div>
             <div class="col-xs-12 col-sm-6">

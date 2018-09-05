@@ -15,7 +15,7 @@
         <div class="text-faded">产品款式数量</div>
       </q-card-title>
       <q-card-main style="margin-left:50px;">
-        <p style="margin-left:50px;font-weight:500;font-size:4em;">10</p>
+        <p style="margin-left:50px;font-weight:500;font-size:4em;">{{styleNum}}</p>
       </q-card-main>
       <q-card-separator />
       <q-card-actions>
@@ -38,7 +38,9 @@
         <div class="text-faded">产品编号数量</div>
       </q-card-title>
       <q-card-main style="margin-left:50px;">
-        <p style="margin-left:50px;font-weight:500;font-size:4em;">20</p>
+        <p style="margin-left:50px;font-weight:500;font-size:4em;">
+          {{codeNum}}
+        </p>
       </q-card-main>
       <q-card-separator />
       <q-card-actions>
@@ -58,33 +60,10 @@
                size="2.5rem"
                class="absolute"
                style="top: 0; right: 8px; transform: translateY(-20%);" />
-        <div class="text-faded">内部系统接口使用次数</div>
+        <div class="text-faded">物料辅料数量</div>
       </q-card-title>
       <q-card-main style="margin-left:50px;">
-        <p style="margin-left:50px;font-weight:500;font-size:4em;">9999</p>
-      </q-card-main>
-      <q-card-separator />
-      <q-card-actions>
-        <q-btn flat
-               label="刷新"
-               icon="refresh" />
-      </q-card-actions>
-    </q-card>
-    <q-card inline
-            class="bigger q-ma-sm">
-      <q-card-media>
-      </q-card-media>
-      <q-card-title class="relative-position">
-        <q-btn color="primary"
-               round
-               icon="mdi-power-socket"
-               size="2.5rem"
-               class="absolute"
-               style="top: 0; right: 8px; transform: translateY(-20%);" />
-        <div class="text-faded">外部系统接口调用次数</div>
-      </q-card-title>
-      <q-card-main style="margin-left:50px;">
-        <p style="margin-left:50px;font-weight:500;font-size:4em;">9999</p>
+        <p style="margin-left:50px;font-weight:500;font-size:4em;">{{matNum}}</p>
       </q-card-main>
       <q-card-separator />
       <q-card-actions>
@@ -98,9 +77,33 @@
 
 
 <script>
+import { codeCount, styleCount } from 'src/api/product'
+import { matCount } from 'src/api/material'
 export default {
   data() {
-    return {}
+    return {
+      codeNum: '',
+      styleNum: '',
+      matNum: ''
+    }
+  },
+  method: {},
+  mounted() {
+    codeCount()
+      .then(response => {
+        this.codeNum = response.data.data
+      })
+      .catch(error => {})
+    styleCount()
+      .then(response => {
+        this.styleNum = response.data.data
+      })
+      .catch(error => {})
+    matCount()
+      .then(response => {
+        this.matNum = response.data.data
+      })
+      .catch(error => {})
   }
 }
 </script>

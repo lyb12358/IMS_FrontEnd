@@ -845,7 +845,8 @@ export default {
       }
       this.$v.productStyle.$reset()
       this.productStyle.isDel = 0
-      this.productStyle.isSync = 0
+      //fix
+      this.productStyle.isSync = 1
       this.productStyle.status = 1
       this.productStyle.gmtCreate = Date.now()
       addProdStyle(this.productStyle)
@@ -869,7 +870,8 @@ export default {
         return
       }
       this.$v.productStyle.$reset()
-      this.productStyle.isSync = 0
+      //fix
+      this.productStyle.isSync = 1
       this.productStyle.gmtCreate = ''
       this.productStyle.gmtModified = ''
       updateProdStyle(this.productStyle)
