@@ -787,7 +787,7 @@ export default {
           //check prodType permission
           let pt = productStyle.prodType
           pt += ''
-          if (this.maintainProductPermission.indexOf(pt) < 0) {
+          if (this.permissions.indexOf(1) <0&&this.maintainProductPermission.indexOf(pt) < 0) {
             this.notify('warning', '无权维护该类别产品')
             return
           }
@@ -906,7 +906,7 @@ export default {
       //check prodType permission
       let pt = this.productStyle.prodType
       pt += ''
-      if (this.maintainProductPermission.indexOf(pt) < 0) {
+      if (this.permissions.indexOf(1) <0&&this.maintainProductPermission.indexOf(pt) < 0) {
         this.notify('warning', '无权维护该类别产品')
         return
       }

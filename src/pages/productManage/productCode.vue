@@ -107,9 +107,8 @@
             <q-checkbox color="secondary"
                         v-model="props.selected" />
           </q-td> -->
-          <q-td 
-          v-if="checkCode('prodCode')"
-          key="prodCode"
+          <q-td v-if="checkCode('prodCode')"
+                key="prodCode"
                 :props="props"
                 style="text-align:center">
             <q-checkbox color="secondary"
@@ -118,102 +117,84 @@
                         unchecked-icon="mdi-plus"
                         class="q-mr-md" /> {{ props.row.prodCode }}
           </q-td>
-          <q-td 
-          v-if="checkCode('thumbnail')"
-          key="thumbnail"
+          <q-td v-if="checkCode('thumbnail')"
+                key="thumbnail"
                 :props="props"
                 style="text-align:center">
             <img :src="thumbnailCheck(props.row.id,props.row.styleId,props.row.codeThumbnail,props.row.styleThumbnail)"
                  style="height: 80px; width: 140px;"></q-td>
-          <q-td 
-          v-if="checkCode('prodName')"
-          key="prodName"
+          <q-td v-if="checkCode('prodName')"
+                key="prodName"
                 :props="props"
                 style="text-align:center">{{ props.row.prodName }}</q-td>
-          <q-td 
-          v-if="checkCode('prodCat')"
-          key="prodCat"
+          <q-td v-if="checkCode('prodCat')"
+                key="prodCat"
                 :props="props"
                 style="text-align:center">{{ props.row.catName }}</q-td>
-          <q-td 
-          v-if="checkCode('prodStyle')"
-          key="prodStyle"
+          <q-td v-if="checkCode('prodStyle')"
+                key="prodStyle"
                 :props="props"
                 style="text-align:center">{{ props.row.prodStyle }}</q-td>
-          <q-td 
-          v-if="checkCode('prodFamily')"
-          key="prodFamily"
+          <q-td v-if="checkCode('prodFamily')"
+                key="prodFamily"
                 :props="props"
                 style="text-align:center">{{ props.row.familyName }}</q-td>
-          <q-td 
-          v-if="checkCode('prodType')"
-          key="prodType"
+          <q-td v-if="checkCode('prodType')"
+                key="prodType"
                 :props="props"
                 style="text-align:center">{{ props.row.typeName }}</q-td>
-          <q-td 
-          v-if="checkCode('bigType')"
-          key="bigType"
+          <q-td v-if="checkCode('bigType')"
+                key="bigType"
                 :props="props"
                 style="text-align:center">{{ props.row.bigName }}</q-td>
-          <q-td 
-          v-if="checkCode('middleType')"
-          key="middleType"
+          <q-td v-if="checkCode('middleType')"
+                key="middleType"
                 :props="props"
                 style="text-align:center">{{ props.row.middleName }}</q-td>
-          <q-td 
-          v-if="checkCode('smallType')"
-          key="smallType"
+          <q-td v-if="checkCode('smallType')"
+                key="smallType"
                 :props="props"
                 style="text-align:center">{{ props.row.smallName }}</q-td>
-          <q-td 
-          v-if="checkCode('prodAttr')"
-          key="prodAttr"
+          <q-td v-if="checkCode('prodAttr')"
+                key="prodAttr"
                 :props="props"
                 style="text-align:center">{{ props.row.attrName}}</q-td>
-          <q-td 
-          v-if="checkCode('prodSpe')"
-          key="prodSpe"
+          <q-td v-if="checkCode('prodSpe')"
+                key="prodSpe"
                 :props="props"
                 style="text-align:center">{{ props.row.speName }}</q-td>
-          <q-td 
-          v-if="checkCode('prodColor')"
-          key="prodColor"
+          <q-td v-if="checkCode('prodColor')"
+                key="prodColor"
                 :props="props"
                 style="text-align:center">{{ props.row.colorName }}</q-td>
-          <q-td 
-          v-if="checkCode('retailPrice')"
-          key="retailPrice"
+          <q-td v-if="checkCode('retailPrice')"
+                key="retailPrice"
                 :props="props"
                 style="text-align:center">{{ props.row.retailPrice}}
           </q-td>
-          <q-td 
-          v-if="checkCode('supplyPrice')"
-          key="supplyPrice"
+          <q-td v-if="checkCode('supplyPrice')"
+                key="supplyPrice"
                 :props="props"
                 style="text-align:center">{{ props.row.supplyPrice }}
           </q-td>
-          <q-td 
-          v-if="checkCode('costPrice')"
-          key="costPrice"
+          <q-td v-if="checkCode('costPrice')"
+                key="costPrice"
                 :props="props"
                 style="text-align:center">{{ props.row.costPrice }}
           </q-td>
-          <q-td 
-          v-if="checkCode('codeIsSync')"
-          key="codeIsSync"
+          <q-td v-if="checkCode('codeIsSync')"
+                key="codeIsSync"
                 :props="props"
                 style="text-align:center">
             <q-icon :name="props.row.codeIsSync?'mdi-check-circle':'mdi-sync-off'"
                     size="1.5rem"
                     :color="props.row.codeIsSync?'positive':'negative'" /></q-td>
-          <q-td 
-          v-if="checkCode('gmtCreate')"
-          key="gmtCreate"
+          <q-td v-if="checkCode('gmtCreate')"
+                key="gmtCreate"
                 :props="props"
                 style="text-align:center">{{ formatDate(props.row.gmtCreate) }}</q-td>
-          <q-td 
-          v-if="checkCode('gmtModified')"
-          key="gmtModified"
+          <q-td v-if="checkCode('gmtModified')"
+                key="gmtModified"
                 :props="props"
                 style="text-align:center">{{ formatDate(props.row.gmtModified) }}</q-td>
         </q-tr>
@@ -255,7 +236,7 @@
                    icon="mdi-clipboard-arrow-down"
                    rounded
                    color="primary"
-                   @click="downloadSpec(props.row.styleId,props.row.prodName )">
+                   @click="downloadSpec(props.row.id,props.row.prodName )">
               <q-tooltip>下载产品说明书</q-tooltip>
             </q-btn>
             <q-btn v-if="checkAuth(17)"
@@ -727,9 +708,9 @@ export default {
         prodName: '',
         prodCat: '',
         prodSpe: '',
-        retailPrice: 0,
-        supplyPrice: 0,
-        costPrice: 0,
+        retailPrice: '',
+        supplyPrice: '',
+        costPrice: '',
         prodColor: '',
         numModel: '',
         netWeight: '',
@@ -767,16 +748,19 @@ export default {
       prodCode: { required, maxLength: maxLength(20) },
       prodName: { required, maxLength: maxLength(15) },
       retailPrice: {
+        required,
         decimal,
         minValue: minValue(0),
         maxValue: maxValue(999999)
       },
       supplyPrice: {
+        required,
         decimal,
         minValue: minValue(0),
         maxValue: maxValue(999999)
       },
       costPrice: {
+        required,
         decimal,
         minValue: minValue(0),
         maxValue: maxValue(999999)
@@ -978,12 +962,15 @@ export default {
         //   return
         // }
         this.modalActionName = '修改产品信息'
-        let xx=getProdCodeById(id).then(response => {
+        let xx = getProdCodeById(id).then(response => {
           let product = response.data.data
           //check prodType permission
           let pt = product.prodType
           pt += ''
-          if (this.maintainProductPermission.indexOf(pt) < 0) {
+          if (
+            this.permissions.indexOf(1) < 0 &&
+            this.maintainProductPermission.indexOf(pt) < 0
+          ) {
             this.notify('warning', '无权维护该类别产品')
             return false
           }
@@ -995,7 +982,9 @@ export default {
             this.mainCodeModalOpened = true
           })
         })
-        if(xx){return }
+        if (xx) {
+          return
+        }
         let bigType = this.productStyle.bigType
         getProdSpeOptionsByParent(bigType).then(response => {
           let data = response.data.data
@@ -1012,7 +1001,10 @@ export default {
       //check prodType permission
       let pt = this.productCode.prodType
       pt += ''
-      if (this.maintainProductPermission.indexOf(pt) < 0) {
+      if (
+        this.permissions.indexOf(1) < 0 &&
+        this.maintainProductPermission.indexOf(pt) < 0
+      ) {
         this.notify('warning', '无权维护该类别产品')
         return
       }

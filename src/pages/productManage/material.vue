@@ -792,7 +792,10 @@ export default {
           //check matType permission
           let mt = material.matType
           mt += ''
-          if (this.maintainProductPermission.indexOf(mt) < 0) {
+          if (
+            this.permissions.indexOf(1) < 0 &&
+            this.maintainProductPermission.indexOf(mt) < 0
+          ) {
             this.notify('warning', '无权维护该类别物料及辅料')
             return
           }
@@ -920,7 +923,10 @@ export default {
       //check matType permission
       let mt = this.material.matType
       mt += ''
-      if (this.maintainProductPermission.indexOf(mt) < 0) {
+      if (
+        this.permissions.indexOf(1) < 0 &&
+        this.maintainProductPermission.indexOf(mt) < 0
+      ) {
         this.notify('warning', '无权维护该类别物料及辅料')
         return
       }

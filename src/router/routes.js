@@ -12,8 +12,8 @@ export default [
       { path: 'comManage', name: 'comManage', component: () => import('pages/orgManage/comManage'), meta: { title: '部门管理', requiresAuth: true, auth: 5 } },
       { path: 'productCode', name: 'productCode', component: () => import('pages/productManage/productCode'), meta: { title: '产品编号管理', requiresAuth: true, auth: 6 } },
       { path: 'productStyle', name: 'productStyle', component: () => import('pages/productManage/productStyle'), meta: { title: '产品款式管理', requiresAuth: true, auth: 7 } },
-      { path: 'productCat', name: 'productCat', component: () => import('pages/productManage/productCat'), meta: { title: '产品类别管理', requiresAuth: true, auth: 8 } },
-      { path: 'material', name: 'material', component: () => import('pages/productManage/material'), meta: { title: '物料辅料管理', requiresAuth: true, auth: 9 } },
+      { path: 'material', name: 'material', component: () => import('pages/productManage/material'), meta: { title: '物料辅料管理', requiresAuth: true, auth: 8 } },
+      { path: 'productCat', name: 'productCat', component: () => import('pages/productManage/productCat'), meta: { title: '产品类别管理', requiresAuth: true, auth: 9 } },
       { path: 'productCard', name: 'productCard', component: () => import('pages/productManage/productCard'), meta: { title: '产品卡片', requiresAuth: false } },
       { path: 'changeLog', name: 'changeLog', component: () => import('pages/changeLog'), meta: { title: '更新日志', requiresAuth: true, auth: 'view_changeLog' } }
     ]
