@@ -617,7 +617,7 @@ export default {
       expandStyle: '',
       expandName: '',
       imageUploadDialog: false,
-      imageUploadUrl: '/image/mat'
+      imageUploadUrl: '/imageUpload/mat'
     }
   },
   validations: {

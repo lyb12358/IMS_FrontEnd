@@ -740,7 +740,7 @@ export default {
       expandStyle: '',
       expandName: '',
       imageUploadDialog: false,
-      imageUploadUrl: '/image/prodCode'
+      imageUploadUrl: '/imageUpload/prodCode'
     }
   },
   validations: {
