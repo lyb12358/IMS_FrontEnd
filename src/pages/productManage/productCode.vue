@@ -117,8 +117,8 @@
                         unchecked-icon="mdi-plus"
                         class="q-mr-md" /> {{ props.row.prodCode }}
           </q-td>
-          <q-td v-if="checkCode('thumbnail')"
-                key="thumbnail"
+          <q-td v-if="checkCode('codeThumbnail')"
+                key="codeThumbnail"
                 :props="props"
                 style="text-align:center">
             <img :src="thumbnailCheck(props.row.id,props.row.styleId,props.row.codeThumbnail,props.row.styleThumbnail)"
@@ -639,7 +639,7 @@ export default {
       serverData: [],
       columns: [
         { name: 'prodCode', label: '产品编号', field: 'prodCode' },
-        { name: 'thumbnail', label: '简图', field: 'thumbnail' },
+        { name: 'codeThumbnail', label: '简图', field: 'codeThumbnail' },
         { name: 'prodName', label: '产品名称', field: 'prodName' },
         { name: 'prodCat', label: '品类', field: 'prodCat' },
         { name: 'prodStyle', label: '款号', field: 'prodStyle' },
