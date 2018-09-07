@@ -524,6 +524,7 @@ export default {
       loading: false,
       visibleColumns: [
         'prodStyle',
+        'thumbnail',
         'styleName',
         'prodFamily',
         'prodType',

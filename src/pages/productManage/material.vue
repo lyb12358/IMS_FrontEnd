@@ -530,7 +530,7 @@ export default {
       loading: false,
       visibleColumns: [
         'matCode',
-        //'thumbnail',
+        'thumbnail',
         'matName',
         'matFamily',
         'matType',

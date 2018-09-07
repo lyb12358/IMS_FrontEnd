@@ -620,6 +620,7 @@ export default {
       loading: false,
       visibleColumns: [
         'prodCode',
+        'codeThumbnail',
         'prodName',
         'prodCat',
         'bigType',

@@ -7,6 +7,7 @@
       </q-card-media>
       <q-card-title class="relative-position">
         <q-btn color="primary"
+               @click="$router.push('productStyle')"
                round
                icon="mdi-database"
                size="2.5rem"
@@ -30,6 +31,7 @@
       </q-card-media>
       <q-card-title class="relative-position">
         <q-btn color="primary"
+               @click="$router.push('productCode')"
                round
                icon="mdi-database"
                size="2.5rem"
@@ -55,8 +57,9 @@
       </q-card-media>
       <q-card-title class="relative-position">
         <q-btn color="primary"
+               @click="$router.push('material')"
                round
-               icon="mdi-power-socket"
+               icon="mdi-database"
                size="2.5rem"
                class="absolute"
                style="top: 0; right: 8px; transform: translateY(-20%);" />
