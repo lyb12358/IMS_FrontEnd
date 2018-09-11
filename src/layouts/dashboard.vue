@@ -22,6 +22,8 @@
     </q-layout-footer> -->
 
     <q-layout-drawer v-model="leftDrawerOpen"
+                     :content-style="{ background:'#3db6b8 url(assets/background.jpg)',backgroundBlendMode:'multiply'}"
+                     :content-class="['text-white']"
                      :breakpoint="1500">
       <q-scroll-area style="width: 100%; height: 100%;">
         <q-list no-border
@@ -33,7 +35,7 @@
                  style="height: 100px">
               <!-- <img src="~assets/logo.png"
                    style="height: 75px; width 75px;"> -->
-              <div class="text-italic force-color"
+              <div class="text-italic"
                    style="font-weight:800;font-size:3em;">
                 IMS
               </div>
@@ -69,13 +71,13 @@
           </q-card>
           <q-item @click.native="$router.push('/')">
             <q-item-side icon="mdi-home"
-                         color="primary" />
+                         color="white" />
             <q-item-main label="主页" />
           </q-item>
           <q-collapsible v-if="checkAuth(3)|checkAuth(4)">
             <template slot="header">
               <q-item-side icon="mdi-account-multiple"
-                           color="primary" />
+                           color="white" />
               <q-item-main label="用户管理" />
             </template>
             <q-item link
@@ -94,7 +96,7 @@
           <q-collapsible v-if="checkAuth(5)">
             <template slot="header">
               <q-item-side icon="mdi-domain"
-                           color="primary" />
+                           color="white" />
               <q-item-main label="组织管理" />
             </template>
             <q-item link
@@ -107,7 +109,7 @@
           <q-collapsible v-if="checkAuth(6)|checkAuth(7)|checkAuth(8)|checkAuth(9)">
             <template slot="header">
               <q-item-side icon="mdi-layers"
-                           color="primary" />
+                           color="white" />
               <q-item-main label="产品管理" />
             </template>
             <q-item link
@@ -144,19 +146,19 @@
           <q-item v-if="checkAuth(10)"
                   @click.native="$router.push('changeLog')">
             <q-item-side icon="mdi-book-open"
-                         color="primary" />
+                         color="white" />
             <q-item-main label="更新日志" />
           </q-item>
           <q-item-separator />
           <q-list-header>外部链接</q-list-header>
           <q-item @click.native="openURL('http://hao.china-beyond.com/')">
             <q-item-side icon="mdi-compass"
-                         color="primary" />
+                         color="white" />
             <q-item-main label="导航" />
           </q-item>
           <q-item @click.native="openURL('http://beyond-oa.com/')">
             <q-item-side icon="mdi-briefcase"
-                         color="primary" />
+                         color="white" />
             <q-item-main label="OA" />
           </q-item>
         </q-list>

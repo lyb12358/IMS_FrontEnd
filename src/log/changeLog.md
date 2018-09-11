@@ -1,4 +1,6 @@
 ![logo](statics/logo/logo.png)
+## 20180911
+* 优化了插入毛利率字段时后台的逻辑判断
 ## 20180910
 * 开始文档的编写，规划使用markdown的形式，通过docsify部署在github上
 ## 20180907

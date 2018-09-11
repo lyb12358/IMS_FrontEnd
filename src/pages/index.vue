@@ -10,7 +10,7 @@
                @click="$router.push('productStyle')"
                round
                icon="mdi-database"
-               size="2.5rem"
+               size="2rem"
                class="absolute"
                style="top: 0; right: 8px; transform: translateY(-20%);" />
         <div class="text-faded">产品款式数量</div>
@@ -34,7 +34,7 @@
                @click="$router.push('productCode')"
                round
                icon="mdi-database"
-               size="2.5rem"
+               size="2rem"
                class="absolute"
                style="top: 0; right: 8px; transform: translateY(-20%);" />
         <div class="text-faded">产品编号数量</div>
@@ -60,7 +60,7 @@
                @click="$router.push('material')"
                round
                icon="mdi-database"
-               size="2.5rem"
+               size="2rem"
                class="absolute"
                style="top: 0; right: 8px; transform: translateY(-20%);" />
         <div class="text-faded">物料辅料数量</div>
@@ -114,8 +114,8 @@ export default {
 <style scoped lang="stylus">
 .card-examples
   .bigger
-    width 450px
-    max-height 250px
+    width 400px
+    max-height 220px
     max-width 90vw
   @media (max-width: $breakpoint-xs-max)
     .q-card
