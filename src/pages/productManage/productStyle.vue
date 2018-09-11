@@ -253,7 +253,7 @@
              no-esc-dismiss
              no-backdrop-dismiss
              no-refocus
-             :content-css="{minWidth: '80vw', minHeight: '80vh'}">
+             :content-css="{minWidth: '100vw', minHeight: '100vh'}">
       <q-modal-layout footer-class="no-shadow">
         <q-toolbar slot="header">
           <q-btn flat
@@ -320,17 +320,6 @@
                          float-label="款名" />
               </q-field>
             </div>
-            <!-- <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-field :error="$v.productStyle.classLabel.$error"
-                       error-label="产品类别必填">
-                <q-input v-model="productStyle.classLabel"
-                         ref="classInput"
-                         readonly
-                         @focus="openClassDialog()"
-                         class="no-margin"
-                         float-label="产品类别" />
-              </q-field>
-            </div> -->
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.prodFamily.$error"
                        error-label="归属是必填项">
@@ -354,6 +343,7 @@
                        error-label="大类是必填项">
                 <q-select v-model="productStyle.bigType"
                           float-label="大类"
+                          filter
                           radio
                           :options="bigTypeOptions" />
               </q-field>
@@ -361,18 +351,21 @@
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.middleType"
                         float-label="中类"
+                        filter
                         radio
                         :options="middleTypeOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.smallType"
                         float-label="小类"
+                        filter
                         radio
                         :options="smallTypeOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.prodAttr"
                         float-label="属性"
+                        filter
                         radio
                         :options="prodAttrOptions" />
             </div>
@@ -387,6 +380,7 @@
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.prodYear"
                         float-label="年份"
+                        filter
                         radio
                         :options="prodYearOptions" />
             </div>
@@ -420,8 +414,8 @@
               <q-input v-model.trim="productStyle.prodDesc"
                        clearable
                        type="textarea"
-                       float-label="产品描述"
-                       :max-height="100" />
+                       float-label="产品描述(FAB)"
+                       :max-height="300" />
             </div>
           </div>
         </div>

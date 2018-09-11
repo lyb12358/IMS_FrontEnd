@@ -341,6 +341,7 @@
                        error-label="大类是必填项">
                 <q-select v-model="material.bigType"
                           float-label="大类"
+                          filter
                           radio
                           :options="bigTypeOptions" />
               </q-field>
@@ -350,6 +351,7 @@
                        error-label="中类是必填项">
                 <q-select v-model="material.middleType"
                           float-label="中类"
+                          filter
                           radio
                           :options="middleTypeOptions" />
               </q-field>
@@ -359,6 +361,7 @@
                        error-label="小类是必填项">
                 <q-select v-model="material.smallType"
                           float-label="小类"
+                          filter
                           radio
                           :options="smallTypeOptions" />
               </q-field>
@@ -366,12 +369,14 @@
             <div class="col-xs-12 col-sm-6 col-md-3">
               <q-select v-model="material.matCat"
                         float-label="品类"
+                        filter
                         radio
                         :options="matCatOptions" />
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
               <q-select v-model="material.matSpe"
                         float-label="规格"
+                        filter
                         radio
                         :options="matSpeOptions" />
             </div>
@@ -408,6 +413,7 @@
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="material.matYear"
                         float-label="年份"
+                        filter
                         radio
                         :options="matYearOptions" />
             </div>
@@ -421,6 +427,7 @@
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="material.matColor"
                         float-label="花色"
+                        filter
                         radio
                         :options="matColorOptions" />
             </div>

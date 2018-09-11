@@ -409,12 +409,14 @@
             <div class="col-xs-12 col-sm-6 col-md-3">
               <q-select v-model="productCode.prodCat"
                         float-label="品类"
+                        filter
                         radio
                         :options="prodCatOptions" />
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
               <q-select v-model="productCode.prodSpe"
                         float-label="规格"
+                        filter
                         radio
                         :options="prodSpeOptions" />
             </div>
@@ -445,6 +447,7 @@
             <div class="col-xs-12 col-sm-6 col-md-3">
               <q-select v-model="productCode.prodColor"
                         float-label="花色"
+                        filter
                         radio
                         :options="prodColorOptions" />
             </div>

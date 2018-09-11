@@ -1,4 +1,6 @@
 ![logo](statics/logo/logo.png)
+## 20180910
+* 开始文档的编写，规划使用markdown的形式，通过docsify部署在github上
 ## 20180907
 * 修复产品类别无法同步的bug
 * 修改请求超时时间到30秒
