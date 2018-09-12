@@ -13,6 +13,20 @@
           {{$route.meta.title}}
           <div slot="subtitle">IT Center</div>
         </q-toolbar-title>
+        <q-btn flat
+               round
+               dense
+               @click="openPasswordDialog()"
+               icon="mdi-format-list-numbers">
+          <q-tooltip>修改密码</q-tooltip>
+        </q-btn>
+        <q-btn flat
+               round
+               dense
+               @click="logout()"
+               icon="mdi-logout">
+          <q-tooltip>登出</q-tooltip>
+        </q-btn>
       </q-toolbar>
     </q-layout-header>
 
@@ -24,7 +38,7 @@
     <q-layout-drawer v-model="leftDrawerOpen"
                      :content-style="{ background:'#3db6b8 url(assets/background.jpg)',backgroundBlendMode:'multiply'}"
                      :content-class="['text-white']"
-                     :breakpoint="1500">
+                     :breakpoint="1200">
       <q-scroll-area style="width: 100%; height: 100%;">
         <q-list no-border
                 link
@@ -39,8 +53,8 @@
                    style="font-weight:800;font-size:3em;">
                 IMS
               </div>
-              <div class="caption q-ml-lg">
-                v0.9
+              <div class="caption q-ml-lg text-white">
+                v0.91
               </div>
             </div>
             <q-item-separator />
@@ -53,7 +67,7 @@
               <!-- <q-item-main>
               <q-item-tile label>角色：管理员</q-item-tile>
             </q-item-main> -->
-              <q-btn flat
+              <!-- <q-btn flat
                      color="orange"
                      icon="mdi-format-list-numbers"
                      @click="openPasswordDialog()">
@@ -64,7 +78,7 @@
                      icon="mdi-logout"
                      @click="logout()">
                 <q-tooltip>登出</q-tooltip>
-              </q-btn>
+              </q-btn> -->
               <!-- <q-item-side icon="mdi-logout"
                        color="primary" /> -->
             </q-item>
