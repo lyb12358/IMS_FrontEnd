@@ -36,7 +36,7 @@
     </q-layout-footer> -->
 
     <q-layout-drawer v-model="leftDrawerOpen"
-                     :content-style="{ background:'#3db6b8 url(assets/background.jpg)',backgroundBlendMode:'multiply'}"
+                     :content-style="{ background:'#3db6b8 url(statics/background.jpg)',backgroundBlendMode:'multiply'}"
                      :content-class="['text-white']"
                      :breakpoint="1200">
       <q-scroll-area style="width: 100%; height: 100%;">
@@ -164,7 +164,12 @@
             <q-item-main label="更新日志" />
           </q-item>
           <q-item-separator />
-          <q-list-header>外部链接</q-list-header>
+          <q-list-header class="text-white">外部链接</q-list-header>
+          <q-item @click.native="openURL('https://lyb12358.github.io/IMS/')">
+            <q-item-side icon="mdi-library-books"
+                         color="white" />
+            <q-item-main label="说明书" />
+          </q-item>
           <q-item @click.native="openURL('http://hao.china-beyond.com/')">
             <q-item-side icon="mdi-compass"
                          color="white" />
@@ -334,11 +339,12 @@ export default {
     }
   },
   mounted() {
-    // this.$q.notify({
-    //   message: '除了产品管理的两个页面，其他基本是摆设，不用去点',
-    //   color: 'tertiary',
-    //   avatar: 'statics/logo/xiuxian.jpg'
-    // })
+    this.$q.notify({
+      message: '改了菜单栏样式，你可能会觉得丑，但记住，这是暂时的~',
+      color: 'tertiary',
+      position: 'bottom-right',
+      avatar: 'statics/logo/xiuxian.jpg'
+    })
   }
 }
 </script>
