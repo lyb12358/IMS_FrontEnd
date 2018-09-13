@@ -43,6 +43,7 @@
           <q-tooltip>新建</q-tooltip>
         </q-btn>
         <q-btn v-if="checkAuth(18)"
+               :loading="excelLoading"
                icon="mdi-file-excel"
                rounded
                class="q-ma-xs"
@@ -127,7 +128,7 @@
                 key="prodName"
                 :props="props"
                 style="text-align:center">{{ props.row.prodName }}</q-td>
-          <q-td v-if="checkCode('prodCat')"
+          <q-td v-if="checkCode('catName')"
                 key="prodCat"
                 :props="props"
                 style="text-align:center">{{ props.row.catName }}</q-td>
@@ -135,35 +136,35 @@
                 key="prodStyle"
                 :props="props"
                 style="text-align:center">{{ props.row.prodStyle }}</q-td>
-          <q-td v-if="checkCode('prodFamily')"
+          <q-td v-if="checkCode('familyName')"
                 key="prodFamily"
                 :props="props"
                 style="text-align:center">{{ props.row.familyName }}</q-td>
-          <q-td v-if="checkCode('prodType')"
+          <q-td v-if="checkCode('typeName')"
                 key="prodType"
                 :props="props"
                 style="text-align:center">{{ props.row.typeName }}</q-td>
-          <q-td v-if="checkCode('bigType')"
+          <q-td v-if="checkCode('bigName')"
                 key="bigType"
                 :props="props"
                 style="text-align:center">{{ props.row.bigName }}</q-td>
-          <q-td v-if="checkCode('middleType')"
+          <q-td v-if="checkCode('middleName')"
                 key="middleType"
                 :props="props"
                 style="text-align:center">{{ props.row.middleName }}</q-td>
-          <q-td v-if="checkCode('smallType')"
+          <q-td v-if="checkCode('smallName')"
                 key="smallType"
                 :props="props"
                 style="text-align:center">{{ props.row.smallName }}</q-td>
-          <q-td v-if="checkCode('prodAttr')"
+          <q-td v-if="checkCode('attrName')"
                 key="prodAttr"
                 :props="props"
                 style="text-align:center">{{ props.row.attrName}}</q-td>
-          <q-td v-if="checkCode('prodSpe')"
+          <q-td v-if="checkCode('speName')"
                 key="prodSpe"
                 :props="props"
                 style="text-align:center">{{ props.row.speName }}</q-td>
-          <q-td v-if="checkCode('prodColor')"
+          <q-td v-if="checkCode('colorName')"
                 key="prodColor"
                 :props="props"
                 style="text-align:center">{{ props.row.colorName }}</q-td>
@@ -607,7 +608,7 @@ import {
   getProdCatOptions,
   getProdSpeOptionsByParent
 } from 'src/api/productParam'
-import { excelDownload, specDownload } from 'src/api/productPlus'
+import { specDownload, codeExport } from 'src/api/productPlus'
 //custom validate
 //const validDecimal = value => value.toString().split('.')[1].length <= 2
 export default {
@@ -621,6 +622,7 @@ export default {
         prodName: ''
       },
       loading: false,
+      excelLoading: false,
       visibleColumns: [
         'prodCode',
         'codeThumbnail',
@@ -1112,8 +1114,10 @@ export default {
     },
     //download excel
     downloadExcel() {
-      excelDownload().then(response => {
+      this.excelLoading = true
+      codeExport(this.searchForm).then(response => {
         this.fileDownload(response.data, 'sss.xls')
+        this.excelLoading = false
       })
     },
     //download specification

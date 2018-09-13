@@ -1,11 +1,12 @@
 import { service } from 'src/plugins/axios'
 
 
-export function excelDownload() {
+export function codeExport(searchForm) {
     return service({
-        url: '/test/excel',
-        method: 'get',
-        responseType: 'blob'
+        url: '/excel/prodCodes',
+        method: 'post',
+        responseType: 'blob',
+        data: searchForm
     })
 }
 export function specDownload(id) {
