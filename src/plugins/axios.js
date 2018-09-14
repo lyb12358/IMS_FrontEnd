@@ -6,7 +6,7 @@ import { getStorageToken } from 'src/utils/storageControl'
 
 const service = axios.create({
   baseURL: process.env.API,
-  timeout: 30000
+  timeout: 60000
 })
 
 // request interceptors

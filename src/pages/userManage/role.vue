@@ -162,10 +162,12 @@
                 slot-scope="props">
         <q-btn v-if="roleDialogAction=='add'"
                color="primary"
+               :loading="newRoleLoading"
                @click="newRole()"
                label="确定" />
         <q-btn v-if="roleDialogAction=='update'"
                color="primary"
+               :loading="modifyRoleLoading"
                @click="modifyRole()"
                label="确定" />
         <q-btn color="primary"
@@ -194,6 +196,7 @@
           <div class="col-12 row justify-center ">
             <div style="margin:0 2rem">
               <q-btn color="primary"
+              :loading="modifyPermissionLoading"
                      label="确定"
                      @click="modifyPermission" />
             </div>
@@ -686,6 +689,9 @@ export default {
         name: ''
       },
       loading: false,
+      newRoleLoading:false,
+      modifyRoleLoading:false,
+      modifyPermissionLoading:false,
       visibleColumns: ['name', 'remark', 'status', 'operation'],
       separator: 'horizontal',
       serverPagination: {
@@ -787,17 +793,21 @@ export default {
         return
       }
       this.$v.role.$reset()
+      this.newRoleLoading=true
       addRole(this.role)
         .then(response => {
           let data = response.data
           this.roleDialogOpened = false
+          this.newRoleLoading=false
           Object.assign(this.role, this.$options.data.call(this).role)
           this.notify('positive', data.msg)
           this.request({
             pagination: this.serverPagination
           })
         })
-        .catch(error => {})
+        .catch(error => {
+          this.newRoleLoading=false
+        })
     },
     modifyRole() {
       this.$v.role.$touch()
@@ -805,17 +815,21 @@ export default {
         return
       }
       this.$v.role.$reset()
+      this.modifyRoleLoading=true
       updateRole(this.role)
         .then(response => {
           let data = response.data
           this.roleDialogOpened = false
+          this.modifyRoleLoading=false
           Object.assign(this.role, this.$options.data.call(this).role)
           this.notify('positive', data.msg)
           this.request({
             pagination: this.serverPagination
           })
         })
-        .catch(error => {})
+        .catch(error => {
+          this.modifyRoleLoading=false
+        })
     },
     //permission manage
     permissionSetting(id) {
@@ -834,6 +848,7 @@ export default {
         .catch(error => {})
     },
     modifyPermission() {
+      this.modifyPermissionLoading=true
       updateRolePermission(this.roleId, this.rolePermission)
         .then(response => {
           let data = response.data
@@ -841,8 +856,11 @@ export default {
           this.roleId = ''
           this.rolePermission = []
           this.mainRoleModalOpened = false
+          this.modifyPermissionLoading=false
         })
-        .catch(error => {})
+        .catch(error => {
+          this.modifyPermissionLoading=false
+        })
     }
   },
   mounted() {

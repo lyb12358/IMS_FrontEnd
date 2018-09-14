@@ -258,12 +258,14 @@
             <div v-if="modalActionName==='修改'"
                  style="margin:0 2rem">
               <q-btn color="primary"
+              :loading="modifyLoading"
                      label="确定"
                      @click="modifyMat" />
             </div>
             <div v-if="modalActionName==='新增'"
                  style="margin:0 2rem">
               <q-btn color="primary"
+              :loading="newLoading"
                      label="确定"
                      @click="newMat" />
             </div>
@@ -535,6 +537,8 @@ export default {
         matName: ''
       },
       loading: false,
+      modifyLoading:false,
+      newLoading:false,
       visibleColumns: [
         'matCode',
         'thumbnail',
@@ -942,6 +946,7 @@ export default {
         return
       }
       this.$v.material.$reset()
+      this.newLoading=true
       this.material.status = 1
       this.material.isDel = 0
       this.material.isSync = 0
@@ -950,13 +955,16 @@ export default {
         .then(response => {
           let data = response.data
           this.mainMatModalOpened = false
+          this.newLoading=false
           Object.assign(this.material, this.$options.data.call(this).material)
           this.notify('positive', data.msg)
           this.request({
             pagination: this.serverPagination
           })
         })
-        .catch(error => {})
+        .catch(error => {
+          this.newLoading=false
+        })
     },
     modifyMat() {
       this.$v.material.$touch()
@@ -964,6 +972,7 @@ export default {
         return
       }
       this.$v.material.$reset()
+      this.modifyLoading=true
       this.material.isSync = 0
       this.material.gmtCreate = ''
       this.material.gmtModified = ''
@@ -971,13 +980,16 @@ export default {
         .then(response => {
           let data = response.data
           this.mainMatModalOpened = false
+          this.modifyLoading=false
           Object.assign(this.material, this.$options.data.call(this).material)
           this.notify('positive', data.msg)
           this.request({
             pagination: this.serverPagination
           })
         })
-        .catch(error => {})
+        .catch(error => {
+          this.modifyLoading=false
+        })
     },
     resetMatModal() {
       Object.assign(this.material, this.$options.data.call(this).material)

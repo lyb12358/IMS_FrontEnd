@@ -5,63 +5,71 @@
       <div style="width: 850px; max-width: 90vw;"
            class="row">
         <div class="col-xs-6 col-sm-4"
-        v-if="checkAuth(35)">
+             v-if="checkAuth(35)">
           <div class="card text-center text-primary"
                @click="openClassModel()">
             <q-icon name="settings" />
             <p class="caption">产品类别</p>
           </div>
         </div>
-        <div class="col-xs-6 col-sm-4" v-if="checkAuth(36)">
+        <div class="col-xs-6 col-sm-4"
+             v-if="checkAuth(36)">
           <div class="card text-center text-primary"
                @click="openParamModel(606,'产品属性')">
             <q-icon name="settings" />
             <p class="caption">产品属性</p>
           </div>
         </div>
-        <div class="col-xs-6 col-sm-4" v-if="checkAuth(37)">
+        <div class="col-xs-6 col-sm-4"
+             v-if="checkAuth(37)">
           <div class="card text-center text-primary"
                @click="openCSModel('prodCat')">
             <q-icon name="settings" />
             <p class="caption">产品品类</p>
           </div>
         </div>
-        <div class="col-xs-6 col-sm-4" v-if="checkAuth(38)">
+        <div class="col-xs-6 col-sm-4"
+             v-if="checkAuth(38)">
           <div class="card text-center text-primary"
                @click="openCSModel('prodSpe')">
             <q-icon name="settings" />
             <p class="caption">产品规格</p>
           </div>
         </div>
-        <div class="col-xs-6 col-sm-4" v-if="checkAuth(39)">
+        <div class="col-xs-6 col-sm-4"
+             v-if="checkAuth(39)">
           <div class="card text-center text-primary"
                @click="openParamModel(464,'产品年份')">
             <q-icon name="settings" />
             <p class="caption">产品年份</p>
           </div>
         </div>
-        <div class="col-xs-6 col-sm-4" v-if="checkAuth(40)">
+        <div class="col-xs-6 col-sm-4"
+             v-if="checkAuth(40)">
           <div class="card text-center text-primary"
                @click="openParamModel(465,'产品季节')">
             <q-icon name="settings" />
             <p class="caption">产品季节</p>
           </div>
         </div>
-        <div class="col-xs-6 col-sm-4" v-if="checkAuth(41)">
+        <div class="col-xs-6 col-sm-4"
+             v-if="checkAuth(41)">
           <div class="card text-center text-primary"
                @click="openParamModel(466,'产品花色')">
             <q-icon name="mdi-palette" />
             <p class="caption">产品花色</p>
           </div>
         </div>
-        <div class="col-xs-6 col-sm-4" v-if="checkAuth(42)">
+        <div class="col-xs-6 col-sm-4"
+             v-if="checkAuth(42)">
           <div class="card text-center text-primary"
                @click="openParamModel(486,'产品档次')">
             <q-icon name="mdi-triangle" />
             <p class="caption">产品档次</p>
           </div>
         </div>
-        <div class="col-xs-6 col-sm-4" v-if="checkAuth(43)">
+        <div class="col-xs-6 col-sm-4"
+             v-if="checkAuth(43)">
           <div class="card text-center text-primary"
                @click="openParamModel(567,'产品设计师')">
             <q-icon name="mdi-face" />
@@ -181,10 +189,12 @@
                 slot-scope="props">
         <q-btn v-if="paramDialogAction=='add'"
                color="primary"
+               :loading="newParamLoading"
                @click="newProdParam()"
                label="确定" />
         <q-btn v-if="paramDialogAction=='update'"
                color="primary"
+               :loading="modifyParamLoading"
                @click="modifyProdParam()"
                label="确定" />
         <q-btn color="primary"
@@ -227,15 +237,15 @@
                         ref="CSTree"
                         color="primary"
                         :selected.sync="CSSelected"
-                        node-key="id" >
-                <div slot="default-header"
-                   slot-scope="prop"
-                   class="row items-center">
-                <q-chip class="q-mr-sm"
-                        :color="checkColor(prop.node.depth)"
-                        small>{{checkClassType(prop.node.depth)}}</q-chip>
-                <div class="text-weight-bold">{{ prop.node.label }}</div>
-              </div>
+                        node-key="id">
+                  <div slot="default-header"
+                       slot-scope="prop"
+                       class="row items-center">
+                    <q-chip class="q-mr-sm"
+                            :color="checkColor(prop.node.depth)"
+                            small>{{checkClassType(prop.node.depth)}}</q-chip>
+                    <div class="text-weight-bold">{{ prop.node.label }}</div>
+                  </div>
                 </q-tree>
               </q-scroll-area>
             </div>
@@ -325,10 +335,12 @@
                 slot-scope="props">
         <q-btn v-if="CSDialogAction=='add'"
                color="primary"
+               :loading="newCSLoading"
                @click="newProdCS()"
                label="确定" />
         <q-btn v-if="CSDialogAction=='update'"
                color="primary"
+               :loading="modifyCSLoading"
                @click="modifyProdCS()"
                label="确定" />
         <q-btn color="primary"
@@ -452,10 +464,12 @@
                 slot-scope="props">
         <q-btn v-if="classDialogAction=='add'|classDialogAction=='expand'"
                color="primary"
+               :loading="newClassLoading"
                @click="newProdClass()"
                label="确定" />
         <q-btn v-if="classDialogAction=='update'"
                color="primary"
+               :loading="modifyClassLoading"
                @click="modifyProdClass()"
                label="确定" />
         <q-btn color="primary"
@@ -486,6 +500,13 @@ import { maxLength, required } from 'vuelidate/lib/validators'
 export default {
   data() {
     return {
+      //dialog loading
+      newParamLoading: false,
+      modifyParamLoading: false,
+      newCSLoading: false,
+      modifyCSLoading: false,
+      newClassLoading: false,
+      modifyClassLoading: false,
       //prodParam
       paramModalOpened: false,
       paramFilter: '',
@@ -622,6 +643,7 @@ export default {
         return
       }
       this.$v.productParam.$reset()
+      this.newParamLoading = true
       this.productParam.isSync = 1
       this.productParam.status = 1
       this.productParam.isDel = 0
@@ -630,6 +652,7 @@ export default {
         .then(response => {
           let data = response.data
           this.paramDialogOpened = false
+          this.newParamLoading = false
           Object.assign(
             this.productParam,
             this.$options.data.call(this).productParam
@@ -637,7 +660,9 @@ export default {
           this.notify('positive', data.msg)
           this.fetchParamData()
         })
-        .catch(error => {})
+        .catch(error => {
+          this.newParamLoading = false
+        })
     },
     modifyProdParam() {
       this.$v.productParam.$touch()
@@ -645,10 +670,12 @@ export default {
         return
       }
       this.$v.productParam.$reset()
+      this.modifyParamLoading = true
       updateProdParam(this.productParam)
         .then(response => {
           let data = response.data
           this.paramDialogOpened = false
+          this.modifyParamLoading = false
           Object.assign(
             this.productParam,
             this.$options.data.call(this).productParam
@@ -656,7 +683,9 @@ export default {
           this.notify('positive', data.msg)
           this.fetchParamData()
         })
-        .catch(error => {})
+        .catch(error => {
+          this.modifyParamLoading = false
+        })
     },
     //prodCat、prodSpe
     openCSModel(type) {
@@ -717,6 +746,7 @@ export default {
         return
       }
       this.$v.productCS.$reset()
+      this.newCSLoading = true
       this.productCS.isSync = 1
       this.productCS.status = 1
       this.productCS.isDel = 0
@@ -726,6 +756,7 @@ export default {
           .then(response => {
             let data = response.data
             this.CSDialogOpened = false
+            this.newCSLoading = false
             Object.assign(
               this.productCS,
               this.$options.data.call(this).productCS
@@ -733,12 +764,15 @@ export default {
             this.notify('positive', data.msg)
             this.fetchCSData()
           })
-          .catch(error => {})
+          .catch(error => {
+            this.newCSLoading = false
+          })
       } else {
         addProdSpe(this.productCS)
           .then(response => {
             let data = response.data
             this.CSDialogOpened = false
+            this.newCSLoading = false
             Object.assign(
               this.productCS,
               this.$options.data.call(this).productCS
@@ -746,7 +780,9 @@ export default {
             this.notify('positive', data.msg)
             this.fetchCSData()
           })
-          .catch(error => {})
+          .catch(error => {
+            this.newCSLoading = false
+          })
       }
     },
     modifyProdCS() {
@@ -755,11 +791,13 @@ export default {
         return
       }
       this.$v.productCS.$reset()
+      this.modifyCSLoading = true
       if (this.CSModalName == '产品品类') {
         updateProdCat(this.productCS)
           .then(response => {
             let data = response.data
             this.CSDialogOpened = false
+            this.modifyCSLoading = false
             Object.assign(
               this.productCS,
               this.$options.data.call(this).productCS
@@ -767,12 +805,15 @@ export default {
             this.notify('positive', data.msg)
             this.fetchCSData()
           })
-          .catch(error => {})
+          .catch(error => {
+            this.modifyCSLoading = false
+          })
       } else {
         updateProdSpe(this.productCS)
           .then(response => {
             let data = response.data
             this.CSDialogOpened = false
+            this.modifyCSLoading = false
             Object.assign(
               this.productCS,
               this.$options.data.call(this).productCS
@@ -780,7 +821,9 @@ export default {
             this.notify('positive', data.msg)
             this.fetchCSData()
           })
-          .catch(error => {})
+          .catch(error => {
+            this.modifyCSLoading = false
+          })
       }
     },
     //prodClass
@@ -861,6 +904,7 @@ export default {
         return
       }
       this.$v.productClass.$reset()
+      this.newClassLoading = true
       this.productClass.isSync = 1
       this.productClass.status = 1
       this.productClass.isDel = 0
@@ -869,6 +913,7 @@ export default {
         .then(response => {
           let data = response.data
           this.classDialogOpened = false
+          this.newClassLoading = false
           Object.assign(
             this.productClass,
             this.$options.data.call(this).productClass
@@ -882,7 +927,9 @@ export default {
             }
           })
         })
-        .catch(error => {})
+        .catch(error => {
+          this.newClassLoading = false
+        })
     },
     modifyProdClass() {
       this.$v.productClass.$touch()
@@ -890,10 +937,12 @@ export default {
         return
       }
       this.$v.productClass.$reset()
+      this.modifyClassLoading = true
       updateProdClass(this.productClass)
         .then(response => {
           let data = response.data
           this.classDialogOpened = false
+          this.modifyClassLoading = false
           Object.assign(
             this.productClass,
             this.$options.data.call(this).productClass
@@ -907,7 +956,9 @@ export default {
             }
           })
         })
-        .catch(error => {})
+        .catch(error => {
+          this.modifyClassLoading = false
+        })
     }
   }
 }

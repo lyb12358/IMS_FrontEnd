@@ -324,12 +324,14 @@
             <div v-if="modalActionName==='修改产品信息'"
                  style="margin:0 2rem">
               <q-btn color="primary"
+                     :loading="modifyLoading"
                      label="确定"
                      @click="modifyProdCode" />
             </div>
             <div v-if="modalActionName==='新增产品信息'"
                  style="margin:0 2rem">
               <q-btn color="primary"
+                     :loading="newLoading"
                      label="确定"
                      @click="newProdCode" />
             </div>
@@ -623,6 +625,8 @@ export default {
       },
       loading: false,
       excelLoading: false,
+      modifyLoading: false,
+      newLoading: false,
       visibleColumns: [
         'prodCode',
         'codeThumbnail',
@@ -1019,27 +1023,33 @@ export default {
         return
       }
       this.$v.productCode.$reset()
+      this.newLoading = true
       this.productCode.isDel = 0
       this.productCode.status = 1
       //fix
       this.productCode.isSync = 1
       this.productCode.gmtCreate = Date.now()
-      addProdCode(this.productCode).then(response => {
-        this.mainCodeModalOpened = false
-        let data = response.data
-        Object.assign(
-          this.productCode,
-          this.$options.data.call(this).productCode
-        )
-        Object.assign(
-          this.productStyle,
-          this.$options.data.call(this).productStyle
-        )
-        this.notify('positive', data.msg)
-        this.request({
-          pagination: this.serverPagination
+      addProdCode(this.productCode)
+        .then(response => {
+          this.mainCodeModalOpened = false
+          this.newLoading = false
+          let data = response.data
+          Object.assign(
+            this.productCode,
+            this.$options.data.call(this).productCode
+          )
+          Object.assign(
+            this.productStyle,
+            this.$options.data.call(this).productStyle
+          )
+          this.notify('positive', data.msg)
+          this.request({
+            pagination: this.serverPagination
+          })
         })
-      })
+        .catch(error => {
+          this.newLoading = false
+        })
     },
     modifyProdCode() {
       this.$v.productCode.$touch()
@@ -1047,26 +1057,32 @@ export default {
         return
       }
       this.$v.productCode.$reset()
+      this.modifyLoading = true
       //fix
       this.productCode.isSync = 1
       this.productCode.gmtCreate = ''
       this.productCode.gmtModified = ''
-      updateProdCode(this.productCode).then(response => {
-        this.mainCodeModalOpened = false
-        let data = response.data
-        Object.assign(
-          this.productCode,
-          this.$options.data.call(this).productCode
-        )
-        Object.assign(
-          this.productStyle,
-          this.$options.data.call(this).productStyle
-        )
-        this.notify('positive', data.msg)
-        this.request({
-          pagination: this.serverPagination
+      updateProdCode(this.productCode)
+        .then(response => {
+          this.mainCodeModalOpened = false
+          this.modifyLoading = false
+          let data = response.data
+          Object.assign(
+            this.productCode,
+            this.$options.data.call(this).productCode
+          )
+          Object.assign(
+            this.productStyle,
+            this.$options.data.call(this).productStyle
+          )
+          this.notify('positive', data.msg)
+          this.request({
+            pagination: this.serverPagination
+          })
         })
-      })
+        .catch(error => {
+          this.modifyLoading = false
+        })
     },
     resetCodeModal() {
       Object.assign(this.productCode, this.$options.data.call(this).productCode)
@@ -1118,7 +1134,9 @@ export default {
       codeExport(this.searchForm).then(response => {
         this.fileDownload(response.data, 'sss.xls')
         this.excelLoading = false
-      })
+      }).catch(error => {
+          this.excelLoading=false
+        })
     },
     //download specification
     downloadSpec(id, name) {

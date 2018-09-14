@@ -15,7 +15,7 @@ export default [
       { path: 'material', name: 'material', component: () => import('pages/productManage/material'), meta: { title: '物料辅料管理', requiresAuth: true, auth: 8 } },
       { path: 'productCat', name: 'productCat', component: () => import('pages/productManage/productCat'), meta: { title: '产品类别管理', requiresAuth: true, auth: 9 } },
       { path: 'productCard', name: 'productCard', component: () => import('pages/productManage/productCard'), meta: { title: '产品卡片', requiresAuth: false } },
-      { path: 'changeLog', name: 'changeLog', component: () => import('pages/changeLog'), meta: { title: '更新日志', requiresAuth: true, auth: 'view_changeLog' } }
+      { path: 'changeLog', name: 'changeLog', component: () => import('pages/changeLog'), meta: { title: '更新日志', requiresAuth: true, auth: 10 } }
     ]
   },
   {

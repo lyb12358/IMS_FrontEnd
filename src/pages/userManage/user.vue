@@ -164,12 +164,14 @@
             <div v-if="modalActionName==='修改用户'"
                  style="margin:0 2rem">
               <q-btn color="primary"
+                     :loading="modifyUserLoading"
                      label="确定"
                      @click="modifyUser" />
             </div>
             <div v-if="modalActionName==='新增用户'"
                  style="margin:0 2rem">
               <q-btn color="primary"
+                     :loading="newUserLoading"
                      label="确定"
                      @click="newUser" />
             </div>
@@ -213,6 +215,7 @@
           <div class="col-12 row justify-center ">
             <div style="margin:0 2rem">
               <q-btn color="primary"
+                     :loading="modifyUserRoleLoading"
                      label="确定"
                      @click="modifyUseRole" />
             </div>
@@ -253,6 +256,9 @@ export default {
         name: ''
       },
       loading: false,
+      newUserLoading: false,
+      modifyUserLoading: false,
+      modifyUserRoleLoading: false,
       visibleColumns: ['account', 'name', 'roleName', 'status', 'operation'],
       separator: 'horizontal',
       serverPagination: {
@@ -356,16 +362,20 @@ export default {
       })
     },
     modifyUseRole() {
+      this.modifyUserRoleLoading = true
       updateUserRole(this.userIdChosen, this.roleList)
         .then(response => {
           let data = response.data
           this.notify('positive', data.msg)
           this.mainUserRoleModalOpened = false
+          this.modifyUserRoleLoading = false
           this.request({
             pagination: this.serverPagination
           })
         })
-        .catch(error => {})
+        .catch(error => {
+          this.modifyUserRoleLoading = false
+        })
     },
     //dataTable request
     request({ pagination }) {

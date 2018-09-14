@@ -271,12 +271,14 @@
             <div v-if="modalActionName==='修改产品款式'"
                  style="margin:0 2rem">
               <q-btn color="primary"
+              :loading="modifyLoading"
                      label="确定"
                      @click="modifyProdStyle" />
             </div>
             <div v-if="modalActionName==='新增产品款式'"
                  style="margin:0 2rem">
               <q-btn color="primary"
+              :loading="newLoading"
                      label="确定"
                      @click="newProdStyle" />
             </div>
@@ -516,6 +518,8 @@ export default {
         styleName: ''
       },
       loading: false,
+      modifyLoading:false,
+      newLoading:false,
       visibleColumns: [
         'prodStyle',
         'thumbnail',
@@ -916,6 +920,7 @@ export default {
         return
       }
       this.$v.productStyle.$reset()
+      this.newLoading=true
       this.productStyle.isDel = 0
       //fix
       this.productStyle.isSync = 1
@@ -925,6 +930,7 @@ export default {
         .then(response => {
           let data = response.data
           this.mainStyleModalOpened = false
+          this.newLoading=false
           Object.assign(
             this.productStyle,
             this.$options.data.call(this).productStyle
@@ -934,7 +940,9 @@ export default {
             pagination: this.serverPagination
           })
         })
-        .catch(error => {})
+        .catch(error => {
+          this.newLoading=false
+        })
     },
     modifyProdStyle() {
       this.$v.productStyle.$touch()
@@ -942,6 +950,7 @@ export default {
         return
       }
       this.$v.productStyle.$reset()
+      this.modifyLoading=true
       //fix
       this.productStyle.isSync = 1
       this.productStyle.gmtCreate = ''
@@ -950,6 +959,7 @@ export default {
         .then(response => {
           let data = response.data
           this.mainStyleModalOpened = false
+          this.modifyLoading=false
           Object.assign(
             this.productStyle,
             this.$options.data.call(this).productStyle
@@ -959,7 +969,9 @@ export default {
             pagination: this.serverPagination
           })
         })
-        .catch(error => {})
+        .catch(error => {
+          this.modifyLoading=false
+        })
     },
     resetStyleModal() {
       Object.assign(
