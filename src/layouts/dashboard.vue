@@ -7,6 +7,7 @@
                round
                @click="leftDrawerOpen = !leftDrawerOpen">
           <q-icon name="mdi-menu" />
+          <q-tooltip>显示/隐藏菜单栏</q-tooltip>
         </q-btn>
 
         <q-toolbar-title style="font-weight:bold">
@@ -25,7 +26,7 @@
                dense
                @click="logout()"
                icon="mdi-logout">
-          <q-tooltip>登出</q-tooltip>
+          <q-tooltip>退出登录</q-tooltip>
         </q-btn>
       </q-toolbar>
     </q-layout-header>

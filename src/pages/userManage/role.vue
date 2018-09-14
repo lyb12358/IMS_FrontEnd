@@ -794,6 +794,8 @@ export default {
       }
       this.$v.role.$reset()
       this.newRoleLoading=true
+      //fix
+      this.role.status=1
       addRole(this.role)
         .then(response => {
           let data = response.data

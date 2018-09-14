@@ -1,7 +1,7 @@
 <template>
   <q-page no-padding>
     <div class="row justify-center">
-      <vue-simple-markdown style="max-width:600px"
+      <vue-simple-markdown style="max-width:800px"
                            :source="changeLog"></vue-simple-markdown>
     </div>
   </q-page>

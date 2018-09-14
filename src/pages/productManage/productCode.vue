@@ -1132,7 +1132,7 @@ export default {
     downloadExcel() {
       this.excelLoading = true
       codeExport(this.searchForm).then(response => {
-        this.fileDownload(response.data, 'sss.xls')
+        this.fileDownload(response.data, '产品编号导出'+this.formatDate(Date.now())+'.xls')
         this.excelLoading = false
       }).catch(error => {
           this.excelLoading=false
