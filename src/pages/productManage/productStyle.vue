@@ -15,9 +15,11 @@
            slot-scope="props"
            class="row print-hide">
         <q-input class="q-mt-ml q-mr-sm"
+                 @keyup.enter="search"
                  v-model="searchForm.prodStyle"
                  float-label="款号" />
         <q-input class="q-mt-ml q-mr-sm"
+                 @keyup.enter="search"
                  v-model="searchForm.styleName"
                  float-label="款名" />
         <q-btn icon="mdi-eraser"
@@ -31,7 +33,7 @@
                rounded
                class="q-ma-xs"
                color="secondary"
-               @click="search()">
+               @click="search">
           <q-tooltip>搜索</q-tooltip>
         </q-btn>
         <q-btn v-if="checkAuth(20)"
@@ -271,14 +273,14 @@
             <div v-if="modalActionName==='修改产品款式'"
                  style="margin:0 2rem">
               <q-btn color="primary"
-              :loading="modifyLoading"
+                     :loading="modifyLoading"
                      label="确定"
                      @click="modifyProdStyle" />
             </div>
             <div v-if="modalActionName==='新增产品款式'"
                  style="margin:0 2rem">
               <q-btn color="primary"
-              :loading="newLoading"
+                     :loading="newLoading"
                      label="确定"
                      @click="newProdStyle" />
             </div>
@@ -518,8 +520,8 @@ export default {
         styleName: ''
       },
       loading: false,
-      modifyLoading:false,
-      newLoading:false,
+      modifyLoading: false,
+      newLoading: false,
       visibleColumns: [
         'prodStyle',
         'thumbnail',
@@ -920,7 +922,7 @@ export default {
         return
       }
       this.$v.productStyle.$reset()
-      this.newLoading=true
+      this.newLoading = true
       this.productStyle.isDel = 0
       //fix
       this.productStyle.isSync = 1
@@ -930,7 +932,7 @@ export default {
         .then(response => {
           let data = response.data
           this.mainStyleModalOpened = false
-          this.newLoading=false
+          this.newLoading = false
           Object.assign(
             this.productStyle,
             this.$options.data.call(this).productStyle
@@ -941,7 +943,7 @@ export default {
           })
         })
         .catch(error => {
-          this.newLoading=false
+          this.newLoading = false
         })
     },
     modifyProdStyle() {
@@ -950,7 +952,7 @@ export default {
         return
       }
       this.$v.productStyle.$reset()
-      this.modifyLoading=true
+      this.modifyLoading = true
       //fix
       this.productStyle.isSync = 1
       this.productStyle.gmtCreate = ''
@@ -959,7 +961,7 @@ export default {
         .then(response => {
           let data = response.data
           this.mainStyleModalOpened = false
-          this.modifyLoading=false
+          this.modifyLoading = false
           Object.assign(
             this.productStyle,
             this.$options.data.call(this).productStyle
@@ -970,7 +972,7 @@ export default {
           })
         })
         .catch(error => {
-          this.modifyLoading=false
+          this.modifyLoading = false
         })
     },
     resetStyleModal() {

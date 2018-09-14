@@ -15,6 +15,7 @@
            slot-scope="props"
            class="row print-hide">
         <q-input class="q-mt-ml q-mr-sm"
+                 @keyup.enter="search"
                  v-model="searchForm.name"
                  float-label="角色" />
         <q-btn icon="mdi-eraser"
@@ -28,7 +29,7 @@
                rounded
                class="q-ma-xs"
                color="secondary"
-               @click="search()">
+               @click="search">
           <q-tooltip>搜索</q-tooltip>
         </q-btn>
         <q-btn icon="mdi-new-box"
@@ -196,7 +197,7 @@
           <div class="col-12 row justify-center ">
             <div style="margin:0 2rem">
               <q-btn color="primary"
-              :loading="modifyPermissionLoading"
+                     :loading="modifyPermissionLoading"
                      label="确定"
                      @click="modifyPermission" />
             </div>
@@ -689,9 +690,9 @@ export default {
         name: ''
       },
       loading: false,
-      newRoleLoading:false,
-      modifyRoleLoading:false,
-      modifyPermissionLoading:false,
+      newRoleLoading: false,
+      modifyRoleLoading: false,
+      modifyPermissionLoading: false,
       visibleColumns: ['name', 'remark', 'status', 'operation'],
       separator: 'horizontal',
       serverPagination: {
@@ -793,14 +794,14 @@ export default {
         return
       }
       this.$v.role.$reset()
-      this.newRoleLoading=true
+      this.newRoleLoading = true
       //fix
-      this.role.status=1
+      this.role.status = 1
       addRole(this.role)
         .then(response => {
           let data = response.data
           this.roleDialogOpened = false
-          this.newRoleLoading=false
+          this.newRoleLoading = false
           Object.assign(this.role, this.$options.data.call(this).role)
           this.notify('positive', data.msg)
           this.request({
@@ -808,7 +809,7 @@ export default {
           })
         })
         .catch(error => {
-          this.newRoleLoading=false
+          this.newRoleLoading = false
         })
     },
     modifyRole() {
@@ -817,12 +818,12 @@ export default {
         return
       }
       this.$v.role.$reset()
-      this.modifyRoleLoading=true
+      this.modifyRoleLoading = true
       updateRole(this.role)
         .then(response => {
           let data = response.data
           this.roleDialogOpened = false
-          this.modifyRoleLoading=false
+          this.modifyRoleLoading = false
           Object.assign(this.role, this.$options.data.call(this).role)
           this.notify('positive', data.msg)
           this.request({
@@ -830,7 +831,7 @@ export default {
           })
         })
         .catch(error => {
-          this.modifyRoleLoading=false
+          this.modifyRoleLoading = false
         })
     },
     //permission manage
@@ -850,7 +851,7 @@ export default {
         .catch(error => {})
     },
     modifyPermission() {
-      this.modifyPermissionLoading=true
+      this.modifyPermissionLoading = true
       updateRolePermission(this.roleId, this.rolePermission)
         .then(response => {
           let data = response.data
@@ -858,10 +859,10 @@ export default {
           this.roleId = ''
           this.rolePermission = []
           this.mainRoleModalOpened = false
-          this.modifyPermissionLoading=false
+          this.modifyPermissionLoading = false
         })
         .catch(error => {
-          this.modifyPermissionLoading=false
+          this.modifyPermissionLoading = false
         })
     }
   },

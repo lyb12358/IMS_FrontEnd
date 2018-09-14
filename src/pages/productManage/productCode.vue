@@ -15,9 +15,11 @@
            slot-scope="props"
            class="row print-hide">
         <q-input class="q-mt-ml q-mr-sm"
+                 @keyup.enter="search"
                  v-model="searchForm.prodCode"
                  float-label="产品编号" />
         <q-input class="q-mt-ml q-mr-sm"
+                 @keyup.enter="search"
                  v-model="searchForm.prodName"
                  float-label="产品名称" />
         <q-btn icon="mdi-eraser"
@@ -31,7 +33,7 @@
                rounded
                class="q-ma-xs"
                color="secondary"
-               @click="search()">
+               @click="search">
           <q-tooltip>搜索</q-tooltip>
         </q-btn>
         <q-btn icon="mdi-new-box"
@@ -1131,11 +1133,16 @@ export default {
     //download excel
     downloadExcel() {
       this.excelLoading = true
-      codeExport(this.searchForm).then(response => {
-        this.fileDownload(response.data, '产品编号导出'+this.formatDate(Date.now())+'.xls')
-        this.excelLoading = false
-      }).catch(error => {
-          this.excelLoading=false
+      codeExport(this.searchForm)
+        .then(response => {
+          this.fileDownload(
+            response.data,
+            '产品编号导出' + this.formatDate(Date.now()) + '.xls'
+          )
+          this.excelLoading = false
+        })
+        .catch(error => {
+          this.excelLoading = false
         })
     },
     //download specification

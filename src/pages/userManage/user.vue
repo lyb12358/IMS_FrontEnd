@@ -15,9 +15,11 @@
            slot-scope="props"
            class="row print-hide">
         <q-input class="q-mt-ml q-mr-sm"
+                 @keyup.enter="search"
                  v-model="searchForm.account"
                  float-label="账号" />
         <q-input class="q-mt-ml q-mr-sm"
+                 @keyup.enter="search"
                  v-model="searchForm.name"
                  float-label="姓名" />
         <q-btn icon="mdi-eraser"
@@ -31,7 +33,7 @@
                rounded
                class="q-ma-xs"
                color="secondary"
-               @click="search()">
+               @click="search">
           <q-tooltip>搜索</q-tooltip>
         </q-btn>
         <q-btn icon="mdi-new-box"

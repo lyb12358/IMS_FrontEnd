@@ -15,9 +15,11 @@
            slot-scope="props"
            class="row print-hide">
         <q-input class="q-mt-ml q-mr-sm"
+                 @keyup.enter="search"
                  v-model="searchForm.prodStyle"
                  float-label="物料编号" />
         <q-input class="q-mt-ml q-mr-sm"
+                 @keyup.enter="search"
                  v-model="searchForm.styleName"
                  float-label="物料名称" />
         <q-btn icon="mdi-eraser"
@@ -31,7 +33,7 @@
                rounded
                class="q-ma-xs"
                color="secondary"
-               @click="search()">
+               @click="search">
           <q-tooltip>搜索</q-tooltip>
         </q-btn>
         <q-btn v-if="checkAuth(28)"
@@ -258,14 +260,14 @@
             <div v-if="modalActionName==='修改'"
                  style="margin:0 2rem">
               <q-btn color="primary"
-              :loading="modifyLoading"
+                     :loading="modifyLoading"
                      label="确定"
                      @click="modifyMat" />
             </div>
             <div v-if="modalActionName==='新增'"
                  style="margin:0 2rem">
               <q-btn color="primary"
-              :loading="newLoading"
+                     :loading="newLoading"
                      label="确定"
                      @click="newMat" />
             </div>
@@ -349,24 +351,24 @@
               </q-field>
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-field :error="$v.material.middleType.$error"
-                       error-label="中类是必填项">
-                <q-select v-model="material.middleType"
-                          float-label="中类"
-                          filter
-                          radio
-                          :options="middleTypeOptions" />
-              </q-field>
+              <!-- <q-field :error="$v.material.middleType.$error"
+                       error-label="中类是必填项"> -->
+              <q-select v-model="material.middleType"
+                        float-label="中类"
+                        filter
+                        radio
+                        :options="middleTypeOptions" />
+              <!-- </q-field> -->
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-field :error="$v.material.smallType.$error"
-                       error-label="小类是必填项">
-                <q-select v-model="material.smallType"
-                          float-label="小类"
-                          filter
-                          radio
-                          :options="smallTypeOptions" />
-              </q-field>
+              <!-- <q-field :error="$v.material.smallType.$error"
+                       error-label="小类是必填项"> -->
+              <q-select v-model="material.smallType"
+                        float-label="小类"
+                        filter
+                        radio
+                        :options="smallTypeOptions" />
+              <!-- </q-field> -->
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
               <q-select v-model="material.matCat"
@@ -537,8 +539,8 @@ export default {
         matName: ''
       },
       loading: false,
-      modifyLoading:false,
-      newLoading:false,
+      modifyLoading: false,
+      newLoading: false,
       visibleColumns: [
         'matCode',
         'thumbnail',
@@ -638,8 +640,8 @@ export default {
       matFamily: { required },
       matType: { required },
       bigType: { required },
-      middleType: { required },
-      smallType: { required },
+      // middleType: { required },
+      // smallType: { required },
       numModel: { integer },
       retailPrice: {
         decimal,
@@ -946,7 +948,7 @@ export default {
         return
       }
       this.$v.material.$reset()
-      this.newLoading=true
+      this.newLoading = true
       this.material.status = 1
       this.material.isDel = 0
       this.material.isSync = 0
@@ -955,7 +957,7 @@ export default {
         .then(response => {
           let data = response.data
           this.mainMatModalOpened = false
-          this.newLoading=false
+          this.newLoading = false
           Object.assign(this.material, this.$options.data.call(this).material)
           this.notify('positive', data.msg)
           this.request({
@@ -963,7 +965,7 @@ export default {
           })
         })
         .catch(error => {
-          this.newLoading=false
+          this.newLoading = false
         })
     },
     modifyMat() {
@@ -972,7 +974,7 @@ export default {
         return
       }
       this.$v.material.$reset()
-      this.modifyLoading=true
+      this.modifyLoading = true
       this.material.isSync = 0
       this.material.gmtCreate = ''
       this.material.gmtModified = ''
@@ -980,7 +982,7 @@ export default {
         .then(response => {
           let data = response.data
           this.mainMatModalOpened = false
-          this.modifyLoading=false
+          this.modifyLoading = false
           Object.assign(this.material, this.$options.data.call(this).material)
           this.notify('positive', data.msg)
           this.request({
@@ -988,7 +990,7 @@ export default {
           })
         })
         .catch(error => {
-          this.modifyLoading=false
+          this.modifyLoading = false
         })
     },
     resetMatModal() {
