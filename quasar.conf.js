@@ -113,7 +113,8 @@ module.exports = function (ctx) {
         'QAjaxBar',
         'QAutocomplete',
         'QBtnDropdown',
-        'QOptionGroup'
+        'QOptionGroup',
+        'QPopupEdit'
       ],
       directives: [
         'Ripple',
