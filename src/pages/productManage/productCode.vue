@@ -14,44 +14,40 @@
       <div slot="top-left"
            slot-scope="props"
            class="row print-hide">
-        <q-input class="q-mt-ml q-mr-sm"
+        <!-- <q-input class="q-mt-ml q-mr-sm"
                  @keyup.enter="search"
                  v-model="searchForm.prodCode"
                  float-label="产品编号" />
         <q-input class="q-mt-ml q-mr-sm"
                  @keyup.enter="search"
                  v-model="searchForm.prodName"
-                 float-label="产品名称" />
+                 float-label="产品名称" /> -->
         <q-btn icon="mdi-eraser"
+               label="重置当前搜索"
                rounded
-               class="q-ma-xs"
                color="dark"
                @click="resetSearchForm()">
-          <q-tooltip>重置</q-tooltip>
         </q-btn>
         <q-btn icon="mdi-magnify"
+               label="搜索"
                rounded
-               class="q-ma-xs"
                color="secondary"
-               @click="search">
-          <q-tooltip>搜索</q-tooltip>
-        </q-btn>
-        <q-btn icon="mdi-new-box"
-               v-if="checkAuth(12)"
-               rounded
-               class="q-ma-xs"
-               color="primary"
-               @click="openChooseStyleDialog">
-          <q-tooltip>新建</q-tooltip>
+               @click="searchFormDialogOpened=true">
         </q-btn>
         <q-btn v-if="checkAuth(18)"
                :loading="excelLoading"
-               icon="mdi-file-excel"
+               label="导出"
                rounded
-               class="q-ma-xs"
+               icon="mdi-file-excel"
                color="tertiary"
                @click="downloadExcel()">
-          <q-tooltip>导出</q-tooltip>
+        </q-btn>
+        <q-btn icon="mdi-new-box"
+               v-if="checkAuth(12)"
+               label="新建"
+               rounded
+               color="primary"
+               @click="openChooseStyleDialog">
         </q-btn>
       </div>
       <template slot="top-right"
@@ -276,6 +272,99 @@
                @click="props.nextPage" />
       </div>
     </q-table>
+    <!-- search dialog -->
+    <q-modal v-model="searchFormDialogOpened"
+             no-backdrop-dismiss
+             no-esc-dismiss
+             no-refocus
+             :content-css="{maxWidth: '50vw', minHeight: '60vh'}">
+      <q-modal-layout footer-class="no-shadow">
+        <q-toolbar slot="header">
+          <q-btn flat
+                 round
+                 dense
+                 v-close-overlay
+                 icon="mdi-arrow-left" />
+          <q-toolbar-title>
+            搜索项
+          </q-toolbar-title>
+        </q-toolbar>
+        <q-toolbar slot="footer"
+                   inverted>
+          <div class="col-12 row justify-center ">
+            <div style="margin:0 1rem">
+              <q-btn color="primary"
+                     label="确定"
+                     @click="confirmSearchForm" />
+            </div>
+            <div style="margin:0 1rem">
+              <q-btn color="primary"
+                     label="重置"
+                     @click="resetSearchForm" />
+            </div>
+            <div style="margin:0 1rem">
+              <q-btn color="primary"
+                     v-close-overlay
+                     label="取消" />
+            </div>
+          </div>
+        </q-toolbar>
+        <div class="layout-padding">
+          <div class="row gutter-sm">
+            <div class="col-xs-12  col-sm-6 ">
+              <q-input v-model="searchForm.prodCode"
+                       class="no-margin"
+                       float-label="编号" />
+            </div>
+            <div class="col-xs-12 col-sm-6 ">
+              <q-input v-model="searchForm.prodName"
+                       class="no-margin"
+                       float-label="名称" />
+            </div>
+            <div class="col-xs-12 col-sm-6 ">
+              <q-input v-model="searchForm.typeName"
+                       class="no-margin"
+                       float-label="类别" />
+            </div>
+            <div class="col-xs-12 col-sm-6 ">
+              <q-input v-model="searchForm.attrName"
+                       class="no-margin"
+                       float-label="属性" />
+            </div>
+            <div class="col-xs-12 col-sm-6 ">
+              <q-input v-model="searchForm.bigName"
+                       class="no-margin"
+                       float-label="大类" />
+            </div>
+            <div class="col-xs-12 col-sm-6 ">
+              <q-input v-model="searchForm.middleName"
+                       class="no-margin"
+                       float-label="中类" />
+            </div>
+            <div class="col-xs-12 col-sm-6 ">
+              <q-input v-model="searchForm.prodName"
+                       class="no-margin"
+                       float-label="添加时间大于等于" />
+            </div>
+            <div class="col-xs-12 col-sm-6 ">
+              <q-input v-model="searchForm.prodName"
+                       class="no-margin"
+                       float-label="添加时间小于等于" />
+            </div>
+            <div class="col-xs-12 col-sm-6 ">
+              <q-input v-model="searchForm.prodName"
+                       class="no-margin"
+                       float-label="修改时间大于等于" />
+            </div>
+            <div class="col-xs-12 col-sm-6 ">
+              <q-input v-model="searchForm.prodName"
+                       class="no-margin"
+                       float-label="修改时间小于等于" />
+            </div>
+          </div>
+        </div>
+      </q-modal-layout>
+    </q-modal>
     <!-- choose style -->
     <q-dialog v-model="chooseStyleDialogOpened"
               no-refocus
@@ -619,11 +708,16 @@ export default {
   data() {
     return {
       api: process.env.API,
+      searchFormDialogOpened: false,
       searchForm: {
         page: 0,
         row: 0,
         prodCode: '',
-        prodName: ''
+        prodName: '',
+        typeName:'',
+        attrName:'',
+        bigName:'',
+        middleName:''
       },
       loading: false,
       excelLoading: false,

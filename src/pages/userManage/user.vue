@@ -200,7 +200,7 @@
     <q-modal v-model="mainUserRoleModalOpened"
              no-backdrop-dismiss
              no-esc-dismiss
-             :content-css="{minWidth: '50vw', minHeight: '50vh'}">
+             :content-css="{maxWidth: '50vw', minHeight: '50vh'}">
       <q-modal-layout footer-class="no-shadow">
         <q-toolbar slot="header">
           <q-btn flat
@@ -229,7 +229,8 @@
           </div>
         </q-toolbar>
         <div class="layout-padding">
-          <q-option-group color="secondary"
+          <q-option-group inline
+                          color="secondary"
                           type="checkbox"
                           v-model="roleList"
                           :options="roleOptions" />
