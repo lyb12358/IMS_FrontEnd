@@ -115,7 +115,8 @@ module.exports = function (ctx) {
         'QBtnDropdown',
         'QBtnGroup',
         'QOptionGroup',
-        'QPopupEdit'
+        'QPopupEdit',
+        'QDatetime'
       ],
       directives: [
         'Ripple',
@@ -129,7 +130,8 @@ module.exports = function (ctx) {
       ],
       config: {
         notify: {
-          position: 'top-right'
+          position: 'top',
+          timeout: 1500
         }
       },
       i18n: 'zh-hans',

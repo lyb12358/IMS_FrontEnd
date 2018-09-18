@@ -14,19 +14,12 @@
       <div slot="top-left"
            slot-scope="props"
            class="row print-hide">
-        <!-- <q-input class="q-mt-ml q-mr-sm"
-                 @keyup.enter="search"
-                 v-model="searchForm.prodCode"
-                 float-label="产品编号" />
-        <q-input class="q-mt-ml q-mr-sm"
-                 @keyup.enter="search"
-                 v-model="searchForm.prodName"
-                 float-label="产品名称" /> -->
-        <q-btn icon="mdi-eraser"
+        <q-btn v-show="resetBtnExist"
+               icon="mdi-eraser"
                label="重置当前搜索"
                rounded
                color="dark"
-               @click="resetSearchForm()">
+               @click="resetSearchFormAndSearch">
         </q-btn>
         <q-btn icon="mdi-magnify"
                label="搜索"
@@ -40,7 +33,7 @@
                rounded
                icon="mdi-file-excel"
                color="tertiary"
-               @click="downloadExcel()">
+               @click="downloadExcel">
         </q-btn>
         <q-btn icon="mdi-new-box"
                v-if="checkAuth(12)"
@@ -286,16 +279,17 @@
                  v-close-overlay
                  icon="mdi-arrow-left" />
           <q-toolbar-title>
-            搜索项
+            搜索项（请注意，搜索项的值同样会对导出生效）
           </q-toolbar-title>
         </q-toolbar>
         <q-toolbar slot="footer"
                    inverted>
           <div class="col-12 row justify-center ">
             <div style="margin:0 1rem">
-              <q-btn color="primary"
+              <q-btn v-show="searchBtnExist"
+                     color="primary"
                      label="确定"
-                     @click="confirmSearchForm" />
+                     @click="search" />
             </div>
             <div style="margin:0 1rem">
               <q-btn color="primary"
@@ -312,54 +306,62 @@
         <div class="layout-padding">
           <div class="row gutter-sm">
             <div class="col-xs-12  col-sm-6 ">
-              <q-input v-model="searchForm.prodCode"
+              <q-input v-model.trim="searchForm.prodCode"
                        class="no-margin"
                        float-label="编号" />
             </div>
             <div class="col-xs-12 col-sm-6 ">
-              <q-input v-model="searchForm.prodName"
+              <q-input v-model.trim="searchForm.prodName"
                        class="no-margin"
                        float-label="名称" />
             </div>
             <div class="col-xs-12 col-sm-6 ">
-              <q-input v-model="searchForm.typeName"
+              <q-input v-model.trim="searchForm.typeName"
                        class="no-margin"
                        float-label="类别" />
             </div>
             <div class="col-xs-12 col-sm-6 ">
-              <q-input v-model="searchForm.attrName"
+              <q-input v-model.trim="searchForm.attrName"
                        class="no-margin"
                        float-label="属性" />
             </div>
             <div class="col-xs-12 col-sm-6 ">
-              <q-input v-model="searchForm.bigName"
+              <q-input v-model.trim="searchForm.bigName"
                        class="no-margin"
                        float-label="大类" />
             </div>
             <div class="col-xs-12 col-sm-6 ">
-              <q-input v-model="searchForm.middleName"
+              <q-input v-model.trim="searchForm.middleName"
                        class="no-margin"
                        float-label="中类" />
             </div>
             <div class="col-xs-12 col-sm-6 ">
-              <q-input v-model="searchForm.prodName"
-                       class="no-margin"
-                       float-label="添加时间大于等于" />
+              <q-datetime v-model="searchForm.gmtCreateStart"
+                          ref="gmtCreateStart"
+                          float-label="添加时间大于等于"
+                          clearable
+                          type="date" />
             </div>
             <div class="col-xs-12 col-sm-6 ">
-              <q-input v-model="searchForm.prodName"
-                       class="no-margin"
-                       float-label="添加时间小于等于" />
+              <q-datetime v-model="searchForm.gmtCreateEnd"
+                          ref="gmtCreateEnd"
+                          float-label="添加时间小于等于"
+                          clearable
+                          type="date" />
             </div>
             <div class="col-xs-12 col-sm-6 ">
-              <q-input v-model="searchForm.prodName"
-                       class="no-margin"
-                       float-label="修改时间大于等于" />
+              <q-datetime v-model="searchForm.gmtModifiedStart"
+                          ref="gmtModifiedStart"
+                          float-label="修改时间大于等于"
+                          clearable
+                          type="date" />
             </div>
             <div class="col-xs-12 col-sm-6 ">
-              <q-input v-model="searchForm.prodName"
-                       class="no-margin"
-                       float-label="修改时间小于等于" />
+              <q-datetime v-model="searchForm.gmtModifiedEnd"
+                          ref="gmtModifiedEnd"
+                          float-label="修改时间小于等于"
+                          clearable
+                          type="date" />
             </div>
           </div>
         </div>
@@ -708,16 +710,22 @@ export default {
   data() {
     return {
       api: process.env.API,
+      resetBtnExist: false,
+      searchBtnExist: false,
       searchFormDialogOpened: false,
       searchForm: {
         page: 0,
         row: 0,
         prodCode: '',
         prodName: '',
-        typeName:'',
-        attrName:'',
-        bigName:'',
-        middleName:''
+        typeName: '',
+        attrName: '',
+        bigName: '',
+        middleName: '',
+        gmtCreateStart: null,
+        gmtCreateEnd: null,
+        gmtModifiedStart: null,
+        gmtModifiedEnd: null
       },
       loading: false,
       excelLoading: false,
@@ -904,22 +912,28 @@ export default {
     }
   },
   watch: {
-    //reset cat and spe when bigType changes
-    // 'productCode.bigType': function(newVal, oldVal) {
-    //   if (this.mainCodeModalOpened) {
-    //     this.productCode.prodCat = ''
-    //     this.productCode.prodSpe = ''
-    //     getProdSpeOptionsByParent(newVal).then(response => {
-    //       let data = response.data.data
-    //       this.prodSpeOptions = data
-    //     })
-    //     newVal += ''
-    //     this.prodCatOptions = filter(newVal, {
-    //       field: 'classId',
-    //       list: this.catList
-    //     })
-    //   }
-    // }
+    //control v-show of reset btn
+    searchForm: {
+      deep: true,
+      handler: function(newVal, oldVal) {
+        if (
+          (newVal.prodCode != '') |
+          (newVal.prodName != '') |
+          (newVal.typeName != '') |
+          (newVal.attrName != '') |
+          (newVal.bigName != '') |
+          (newVal.middleName != '') |
+          (newVal.gmtCreateStart != null) |
+          (newVal.gmtCreateEnd != null) |
+          (newVal.gmtModifiedStart != null) |
+          (newVal.gmtModifiedEnd != null)
+        ) {
+          this.searchBtnExist = true
+        } else {
+          this.searchBtnExist = false
+        }
+      }
+    }
   },
   methods: {
     checkAuth(auth) {
@@ -947,15 +961,21 @@ export default {
     },
     resetSearchForm() {
       Object.assign(this.searchForm, this.$options.data.call(this).searchForm)
+    },
+    resetSearchFormAndSearch() {
+      this.resetSearchForm()
       this.$nextTick(() => {
         this.search()
+        this.resetBtnExist = false
       })
     },
     search() {
+      this.searchFormDialogOpened = false
       this.serverPagination.page = 1
       this.request({
         pagination: this.serverPagination
       })
+      this.resetBtnExist = true
     },
     printSth() {
       window.print()
@@ -1226,6 +1246,10 @@ export default {
     },
     //download excel
     downloadExcel() {
+      if(!this.searchBtnExist){
+        this.notify('warning','搜索项没有输入，不允许导出操作！')
+        return
+      }
       this.excelLoading = true
       codeExport(this.searchForm)
         .then(response => {

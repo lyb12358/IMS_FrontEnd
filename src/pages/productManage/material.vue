@@ -14,35 +14,25 @@
       <div slot="top-left"
            slot-scope="props"
            class="row print-hide">
-        <q-input class="q-mt-ml q-mr-sm"
-                 @keyup.enter="search"
-                 v-model="searchForm.prodStyle"
-                 float-label="物料编号" />
-        <q-input class="q-mt-ml q-mr-sm"
-                 @keyup.enter="search"
-                 v-model="searchForm.styleName"
-                 float-label="物料名称" />
-        <q-btn icon="mdi-eraser"
+        <q-btn v-show="resetBtnExist"
+               icon="mdi-eraser"
+               label="重置当前搜索"
                rounded
-               class="q-ma-xs"
                color="dark"
-               @click="resetSearchForm()">
-          <q-tooltip>重置</q-tooltip>
+               @click="resetSearchFormAndSearch">
         </q-btn>
         <q-btn icon="mdi-magnify"
+               label="搜索"
                rounded
-               class="q-ma-xs"
                color="secondary"
-               @click="search">
-          <q-tooltip>搜索</q-tooltip>
+               @click="searchFormDialogOpened=true">
         </q-btn>
         <q-btn v-if="checkAuth(28)"
                icon="mdi-new-box"
+               label="新建"
                rounded
-               class="q-ma-xs"
                color="primary"
                @click="openMainMatModal('add',0)">
-          <q-tooltip>新建</q-tooltip>
         </q-btn>
         <!-- <q-btn icon="mdi-file-excel"
                rounded
@@ -237,6 +227,103 @@
                @click="props.nextPage" />
       </div>
     </q-table>
+    <!-- search dialog -->
+    <q-modal v-model="searchFormDialogOpened"
+             no-backdrop-dismiss
+             no-esc-dismiss
+             no-refocus
+             :content-css="{maxWidth: '50vw', minHeight: '60vh'}">
+      <q-modal-layout footer-class="no-shadow">
+        <q-toolbar slot="header">
+          <q-btn flat
+                 round
+                 dense
+                 v-close-overlay
+                 icon="mdi-arrow-left" />
+          <q-toolbar-title>
+            搜索项
+          </q-toolbar-title>
+        </q-toolbar>
+        <q-toolbar slot="footer"
+                   inverted>
+          <div class="col-12 row justify-center ">
+            <div style="margin:0 1rem">
+              <q-btn v-show="searchBtnExist"
+                     color="primary"
+                     label="确定"
+                     @click="search" />
+            </div>
+            <div style="margin:0 1rem">
+              <q-btn color="primary"
+                     label="重置"
+                     @click="resetSearchForm" />
+            </div>
+            <div style="margin:0 1rem">
+              <q-btn color="primary"
+                     v-close-overlay
+                     label="取消" />
+            </div>
+          </div>
+        </q-toolbar>
+        <div class="layout-padding">
+          <div class="row gutter-sm">
+            <div class="col-xs-12  col-sm-6 ">
+              <q-input v-model.trim="searchForm.matCode"
+                       class="no-margin"
+                       float-label="编号" />
+            </div>
+            <div class="col-xs-12 col-sm-6 ">
+              <q-input v-model.trim="searchForm.matName"
+                       class="no-margin"
+                       float-label="名称" />
+            </div>
+            <!-- <div class="col-xs-12 col-sm-6 ">
+              <q-input v-model.trim="searchForm.typeName"
+                       class="no-margin"
+                       float-label="类别" />
+            </div> -->
+            <div class="col-xs-12 col-sm-6 ">
+              <q-input v-model.trim="searchForm.bigName"
+                       class="no-margin"
+                       float-label="大类" />
+            </div>
+            <div class="col-xs-12 col-sm-6 ">
+              <q-input v-model.trim="searchForm.middleName"
+                       class="no-margin"
+                       float-label="中类" />
+            </div>
+            <div class="col-xs-12 col-sm-6 ">
+              <q-datetime v-model="searchForm.gmtCreateStart"
+                          ref="gmtCreateStart"
+                          float-label="添加时间大于等于"
+                          clearable
+                          type="date" />
+            </div>
+            <div class="col-xs-12 col-sm-6 ">
+              <q-datetime v-model="searchForm.gmtCreateEnd"
+                          ref="gmtCreateEnd"
+                          float-label="添加时间小于等于"
+                          clearable
+                          type="date" />
+            </div>
+            <div class="col-xs-12 col-sm-6 ">
+              <q-datetime v-model="searchForm.gmtModifiedStart"
+                          ref="gmtModifiedStart"
+                          float-label="修改时间大于等于"
+                          clearable
+                          type="date" />
+            </div>
+            <div class="col-xs-12 col-sm-6 ">
+              <q-datetime v-model="searchForm.gmtModifiedEnd"
+                          ref="gmtModifiedEnd"
+                          float-label="修改时间小于等于"
+                          clearable
+                          type="date" />
+            </div>
+          </div>
+        </div>
+      </q-modal-layout>
+    </q-modal>
     <!-- 新建物料modal -->
     <q-modal v-model="mainMatModalOpened"
              no-esc-dismiss
@@ -532,11 +619,21 @@ export default {
   data() {
     return {
       api: process.env.API,
+      resetBtnExist: false,
+      searchBtnExist: false,
+      searchFormDialogOpened: false,
       searchForm: {
         page: 0,
         row: 0,
         matCode: '',
-        matName: ''
+        matName: '',
+        typeName: '',
+        bigName: '',
+        middleName: '',
+        gmtCreateStart: null,
+        gmtCreateEnd: null,
+        gmtModifiedStart: null,
+        gmtModifiedEnd: null
       },
       loading: false,
       modifyLoading: false,
@@ -669,6 +766,28 @@ export default {
     }
   },
   watch: {
+    //control v-show of reset btn
+    searchForm: {
+      deep: true,
+      handler: function(newVal, oldVal) {
+        if (
+          (newVal.matCode != '') |
+          (newVal.matName != '') |
+          (newVal.typeName != '') |
+          (newVal.attrName != '') |
+          (newVal.bigName != '') |
+          (newVal.middleName != '') |
+          (newVal.gmtCreateStart != null) |
+          (newVal.gmtCreateEnd != null) |
+          (newVal.gmtModifiedStart != null) |
+          (newVal.gmtModifiedEnd != null)
+        ) {
+          this.searchBtnExist = true
+        } else {
+          this.searchBtnExist = false
+        }
+      }
+    },
     //reset the matClass when it changes
     'material.matFamily': function(newVal, oldVal) {
       if (this.mainMatModalOpened && newVal != '') {
@@ -757,15 +876,21 @@ export default {
     },
     resetSearchForm() {
       Object.assign(this.searchForm, this.$options.data.call(this).searchForm)
+    },
+    resetSearchFormAndSearch() {
+      this.resetSearchForm()
       this.$nextTick(() => {
         this.search()
+        this.resetBtnExist = false
       })
     },
     search() {
+      this.searchFormDialogOpened = false
       this.serverPagination.page = 1
       this.request({
         pagination: this.serverPagination
       })
+      this.resetBtnExist = true
     },
     printSth() {
       window.print()
