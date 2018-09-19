@@ -2,7 +2,7 @@
   <q-page padding>
     <q-table ref="table"
              :data="serverData"
-             :columns="columns"
+             :columns="columnsComputed"
              row-key="id"
              :visible-columns="visibleColumns"
              :separator="separator"
@@ -42,7 +42,7 @@
                          class="q-mr-sm print-hide"
                          label="筛选列"
                          v-model="visibleColumns"
-                         :columns="columns" />
+                         :columns="columnsComputed" />
         <q-select color="secondary"
                   class="print-hide"
                   v-model="separator"
@@ -103,27 +103,27 @@
                 :props="props"
                 style="text-align:center">{{ props.row.styleName }}</q-td>
           <q-td v-if="checkStyle('familyName')"
-                key="prodFamily"
+                key="familyName"
                 :props="props"
                 style="text-align:center">{{ props.row.familyName }}</q-td>
           <q-td v-if="checkStyle('typeName')"
-                key="prodType"
+                key="typeName"
                 :props="props"
                 style="text-align:center">{{ props.row.typeName }}</q-td>
           <q-td v-if="checkStyle('bigName')"
-                key="bigType"
+                key="bigName"
                 :props="props"
                 style="text-align:center">{{ props.row.bigName }}</q-td>
           <q-td v-if="checkStyle('middleName')"
-                key="middleType"
+                key="middleName"
                 :props="props"
                 style="text-align:center">{{ props.row.middleName }}</q-td>
           <q-td v-if="checkStyle('smallName')"
-                key="smallType"
+                key="smallName"
                 :props="props"
                 style="text-align:center">{{ props.row.smallName }}</q-td>
           <q-td v-if="checkStyle('attrName')"
-                key="prodAttr"
+                key="attrName"
                 :props="props"
                 style="text-align:center">{{ props.row.attrName}}</q-td>
           <q-td v-if="checkStyle('prodMat')"
@@ -131,23 +131,23 @@
                 :props="props"
                 style="text-align:center">{{ props.row.prodMat }}</q-td>
           <q-td v-if="checkStyle('yearName')"
-                key="prodYear"
+                key="yearName"
                 :props="props"
                 style="text-align:center">{{ props.row.yearName}}</q-td>
           <q-td v-if="checkStyle('seasonName')"
-                key="prodSeason"
+                key="seasonName"
                 :props="props"
                 style="text-align:center">{{ props.row.seasonName}}</q-td>
           <q-td v-if="checkStyle('unitName')"
-                key="prodUnit"
+                key="unitName"
                 :props="props"
                 style="text-align:center">{{ props.row.unitName}}</q-td>
           <q-td v-if="checkStyle('levelName')"
-                key="prodLevel"
+                key="levelName"
                 :props="props"
                 style="text-align:center">{{ props.row.levelName }}</q-td>
           <q-td v-if="checkStyle('designerName')"
-                key="designer"
+                key="designerName"
                 :props="props"
                 style="text-align:center">{{ props.row.designerName }}</q-td>
           <q-td v-if="checkStyle('styleIsSync')"
@@ -622,12 +622,12 @@ export default {
         'prodStyle',
         'thumbnail',
         'styleName',
-        'prodFamily',
-        'prodType',
-        'bigType',
-        'middleType',
-        'smallType',
-        'prodAttr',
+        'familyName',
+        'typeName',
+        'bigName',
+        'middleName',
+        'smallName',
+        'attrName',
         'styleIsSync'
       ],
       separator: 'horizontal',
@@ -641,18 +641,18 @@ export default {
         { name: 'prodStyle', label: '款号', field: 'prodStyle' },
         { name: 'thumbnail', label: '简图', field: 'thumbnail' },
         { name: 'styleName', label: '款名', field: 'styleName' },
-        { name: 'prodFamily', label: '产品归属', field: 'prodFamily' },
-        { name: 'prodType', label: '产品类别', field: 'prodType' },
-        { name: 'bigType', label: '大类', field: 'bigType' },
-        { name: 'middleType', label: '中类', field: 'middleType' },
-        { name: 'smallType', label: '小类', field: 'smallType' },
-        { name: 'prodAttr', label: '属性', field: 'prodAttr' },
+        { name: 'familyName', label: '产品归属', field: 'familyName' },
+        { name: 'typeName', label: '产品类别', field: 'typeName' },
+        { name: 'bigName', label: '大类', field: 'bigName' },
+        { name: 'middleName', label: '中类', field: 'middleName' },
+        { name: 'smallName', label: '小类', field: 'smallName' },
+        { name: 'attrName', label: '属性', field: 'attrName' },
         { name: 'prodMat', label: '材质', field: 'prodMat' },
-        { name: 'prodYear', label: '年份', field: 'prodYear' },
-        { name: 'prodSeason', label: '季节', field: 'prodSeason' },
-        { name: 'prodUnit', label: '单位', field: 'prodUnit' },
-        { name: 'prodLevel', label: '档次', field: 'prodLevel' },
-        { name: 'designer', label: '设计师', field: 'designer' },
+        { name: 'yearName', label: '年份', field: 'yearName' },
+        { name: 'seasonName', label: '季节', field: 'seasonName' },
+        { name: 'unitName', label: '单位', field: 'unitName' },
+        { name: 'levelName', label: '档次', field: 'levelName' },
+        { name: 'designerName', label: '设计师', field: 'designerName' },
         { name: 'styleIsSync', label: '是否同步', field: 'styleIsSync' },
         { name: 'gmtCreate', label: '创建时间', field: 'gmtCreate' },
         { name: 'gmtModified', label: '修改时间', field: 'gmtModified' }
@@ -732,25 +732,16 @@ export default {
     },
     maintainProductPermission() {
       return this.$store.getters['user/maintainProductPermission']
+    },
+    columnsComputed() {
+      let columnsComputed = []
+      for (let i = 0; i < this.columns.length; i++) {
+        if (this.checkStylePermission.indexOf(this.columns[i].name) >= 0) {
+          columnsComputed.push(this.columns[i])
+        }
+      }
+      return columnsComputed
     }
-    // columns() {
-    //   let columnsComputed = this.columnsModel
-    //   for (let i = 0; i < columnsComputed.length; i++) {
-    //     if (this.checkStylePermission.indexOf(columnsComputed[i].name) < 0) {
-    //       columnsComputed.splice(i, 1)
-    //     }
-    //   }
-    //   return columnsComputed
-    // },
-    // visibleColumns() {
-    //   let visibleColumnsComputed = this.visibleColumnsModel
-    //   for (let i = 0; i < visibleColumnsComputed.length; i++) {
-    //     if (this.checkStylePermission.indexOf(visibleColumnsComputed[i]) < 0) {
-    //       visibleColumnsComputed.splice(i, 1)
-    //     }
-    //   }
-    //   return visibleColumnsComputed
-    // }
   },
   watch: {
     //control v-show of reset btn
@@ -1153,8 +1144,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.visibleColumns)
-    console.log(this.columns)
     // once mounted, we need to trigger the initial server data fetch
     this.request({
       pagination: this.serverPagination

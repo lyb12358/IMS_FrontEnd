@@ -2,7 +2,7 @@
   <q-page padding>
     <q-table ref="table"
              :data="serverData"
-             :columns="columns"
+             :columns="columnsComputed"
              row-key="id"
              :visible-columns="visibleColumns"
              :separator="separator"
@@ -50,7 +50,7 @@
                          class="q-mr-sm print-hide"
                          label="筛选列"
                          v-model="visibleColumns"
-                         :columns="columns" />
+                         :columns="columnsComputed" />
         <q-select color="secondary"
                   class="print-hide"
                   v-model="separator"
@@ -120,7 +120,7 @@
                 :props="props"
                 style="text-align:center">{{ props.row.prodName }}</q-td>
           <q-td v-if="checkCode('catName')"
-                key="prodCat"
+                key="catName"
                 :props="props"
                 style="text-align:center">{{ props.row.catName }}</q-td>
           <q-td v-if="checkCode('prodStyle')"
@@ -128,35 +128,35 @@
                 :props="props"
                 style="text-align:center">{{ props.row.prodStyle }}</q-td>
           <q-td v-if="checkCode('familyName')"
-                key="prodFamily"
+                key="familyName"
                 :props="props"
                 style="text-align:center">{{ props.row.familyName }}</q-td>
           <q-td v-if="checkCode('typeName')"
-                key="prodType"
+                key="typeName"
                 :props="props"
                 style="text-align:center">{{ props.row.typeName }}</q-td>
           <q-td v-if="checkCode('bigName')"
-                key="bigType"
+                key="bigName"
                 :props="props"
                 style="text-align:center">{{ props.row.bigName }}</q-td>
           <q-td v-if="checkCode('middleName')"
-                key="middleType"
+                key="middleName"
                 :props="props"
                 style="text-align:center">{{ props.row.middleName }}</q-td>
           <q-td v-if="checkCode('smallName')"
-                key="smallType"
+                key="smallName"
                 :props="props"
                 style="text-align:center">{{ props.row.smallName }}</q-td>
           <q-td v-if="checkCode('attrName')"
-                key="prodAttr"
+                key="attrName"
                 :props="props"
                 style="text-align:center">{{ props.row.attrName}}</q-td>
           <q-td v-if="checkCode('speName')"
-                key="prodSpe"
+                key="speName"
                 :props="props"
                 style="text-align:center">{{ props.row.speName }}</q-td>
           <q-td v-if="checkCode('colorName')"
-                key="prodColor"
+                key="colorName"
                 :props="props"
                 style="text-align:center">{{ props.row.colorName }}</q-td>
           <q-td v-if="checkCode('retailPrice')"
@@ -174,6 +174,107 @@
                 :props="props"
                 style="text-align:center">{{ props.row.costPrice }}
           </q-td>
+          <q-td v-if="checkCode('numModel')"
+                key="numModel"
+                :props="props"
+                style="text-align:center">{{ props.row.numModel }}
+          </q-td>
+          <q-td v-if="checkCode('netWeight')"
+                key="netWeight"
+                :props="props"
+                style="text-align:center">{{ props.row.netWeight }}
+          </q-td>
+          <q-td v-if="checkCode('boxNum')"
+                key="boxNum"
+                :props="props"
+                style="text-align:center">{{ props.row.boxNum }}
+          </q-td>
+          <q-td v-if="checkCode('boxModel')"
+                key="boxModel"
+                :props="props"
+                style="text-align:center">{{ props.row.boxModel }}
+          </q-td>
+          <q-td v-if="checkCode('boxVolume')"
+                key="boxVolume"
+                :props="props"
+                style="text-align:center">{{ props.row.boxVolume }}
+          </q-td>
+          <q-td v-if="checkCode('boxWeight')"
+                key="boxWeight"
+                :props="props"
+                style="text-align:center">{{ props.row.boxWeight }}
+          </q-td>
+          <q-td v-if="checkCode('boxWarn')"
+                key="boxWarn"
+                :props="props"
+                style="text-align:center">{{ props.row.boxWarn }}
+          </q-td>
+          <q-td v-if="checkCode('isRemind')"
+                key="isRemind"
+                :props="props"
+                style="text-align:center">{{ props.row.isRemind?'是':'否' }}
+          </q-td>
+          <q-td v-if="checkCode('isSecurity')"
+                key="isSecurity"
+                :props="props"
+                style="text-align:center">{{ props.row.isSecurity?'是':'否' }}
+          </q-td>
+          <q-td v-if="checkCode('isRate')"
+                key="isRate"
+                :props="props"
+                style="text-align:center">{{ props.row.isRate?'是':'否' }}
+          </q-td>
+          <q-td v-if="checkCode('prodCycle')"
+                key="prodCycle"
+                :props="props"
+                style="text-align:center">{{ props.row.prodCycle }}
+          </q-td>
+          <q-td v-if="checkCode('tRetailPrice')"
+                key="tRetailPrice"
+                :props="props"
+                style="text-align:center">{{ props.row.tRetailPrice }}
+          </q-td>
+          <q-td v-if="checkCode('tSupplyPrice')"
+                key="tSupplyPrice"
+                :props="props"
+                style="text-align:center">{{ props.row.tSupplyPrice }}
+          </q-td>
+          <q-td v-if="checkCode('tCostPrice')"
+                key="tCostPrice"
+                :props="props"
+                style="text-align:center">{{ props.row.tCostPrice }}
+          </q-td>
+          <q-td v-if="checkCode('yearName')"
+                key="yearName"
+                :props="props"
+                style="text-align:center">{{ props.row.yearName }}
+          </q-td>
+          <q-td v-if="checkCode('seasonName')"
+                key="seasonName"
+                :props="props"
+                style="text-align:center">{{ props.row.seasonName }}
+          </q-td>
+          <q-td v-if="checkCode('unitName')"
+                key="unitName"
+                :props="props"
+                style="text-align:center">{{ props.row.unitName }}
+          </q-td>
+          <q-td v-if="checkCode('prodMat')"
+                key="prodMat"
+                :props="props"
+                style="text-align:center">{{ props.row.prodMat }}
+          </q-td>
+          <q-td v-if="checkCode('levelName')"
+                key="levelName"
+                :props="props"
+                style="text-align:center">{{ props.row.levelName }}
+          </q-td>
+          <q-td v-if="checkCode('designerName')"
+                key="designerName"
+                :props="props"
+                style="text-align:center">{{ props.row.designerName }}
+          </q-td>
+
           <q-td v-if="checkCode('codeIsSync')"
                 key="codeIsSync"
                 :props="props"
@@ -735,10 +836,11 @@ export default {
         'prodCode',
         'codeThumbnail',
         'prodName',
-        'prodCat',
-        'bigType',
-        'middleType',
-        'smallType',
+        'catName',
+        'speName',
+        'typeName',
+        'middleName',
+        'smallName',
         'retailPrice',
         'supplyPrice',
         'costPrice',
@@ -755,19 +857,38 @@ export default {
         { name: 'prodCode', label: '产品编号', field: 'prodCode' },
         { name: 'codeThumbnail', label: '简图', field: 'codeThumbnail' },
         { name: 'prodName', label: '产品名称', field: 'prodName' },
-        { name: 'prodCat', label: '品类', field: 'prodCat' },
+        { name: 'catName', label: '品类', field: 'catName' },
         { name: 'prodStyle', label: '款号', field: 'prodStyle' },
-        { name: 'prodFamily', label: '产品归属', field: 'prodFamily' },
-        { name: 'prodType', label: '产品类别', field: 'prodType' },
-        { name: 'bigType', label: '大类', field: 'bigType' },
-        { name: 'middleType', label: '中类', field: 'middleType' },
-        { name: 'smallType', label: '小类', field: 'smallType' },
-        { name: 'prodAttr', label: '属性', field: 'prodAttr' },
-        { name: 'prodSpe', label: '规格', field: 'prodSpe' },
-        { name: 'prodColor', label: '花色', field: 'prodColor' },
+        { name: 'familyName', label: '产品归属', field: 'familyName' },
+        { name: 'typeName', label: '产品类别', field: 'typeName' },
+        { name: 'bigName', label: '大类', field: 'bigName' },
+        { name: 'middleName', label: '中类', field: 'middleName' },
+        { name: 'smallName', label: '小类', field: 'smallName' },
+        { name: 'attrName', label: '属性', field: 'attrName' },
+        { name: 'speName', label: '规格', field: 'speName' },
+        { name: 'colorName', label: '花色', field: 'colorName' },
         { name: 'retailPrice', label: '零售价', field: 'retailPrice' },
         { name: 'supplyPrice', label: '供应价', field: 'supplyPrice' },
         { name: 'costPrice', label: '成本价', field: 'costPrice' },
+        { name: 'numModel', label: '件数', field: 'numModel' },
+        { name: 'boxNum', label: '装箱数', field: 'boxNum' },
+        { name: 'boxModel', label: '装箱规格', field: 'boxModel' },
+        { name: 'boxVolume', label: '装箱体积', field: 'boxVolume' },
+        { name: 'boxWeight', label: '箱重量', field: 'boxWeight' },
+        { name: 'boxWarn', label: '散货预警量', field: 'boxWarn' },
+        { name: 'isRemind', label: '库存提醒', field: 'isRemind' },
+        { name: 'isSecurity', label: '是否防伪码', field: 'isSecurity' },
+        { name: 'isRate', label: '计算周转率', field: 'isRate' },
+        { name: 'prodCycle', label: '生产周期(天)', field: 'prodCycle' },
+        { name: 'tRetailPrice', label: '三等品零售价', field: 'tRetailPrice' },
+        { name: 'tSupplyPrice', label: '三等品供应价', field: 'tSupplyPrice' },
+        { name: 'tCostPrice', label: '三等品成本价', field: 'tCostPrice' },
+        { name: 'yearName', label: '年份', field: 'yearName' },
+        { name: 'seasonName', label: '季节', field: 'seasonName' },
+        { name: 'unitName', label: '单位', field: 'unitName' },
+        { name: 'prodMat', label: '材质', field: 'prodMat' },
+        { name: 'levelName', label: '档次', field: 'levelName' },
+        { name: 'designerName', label: '设计师', field: 'designerName' },
         { name: 'codeIsSync', label: '是否同步', field: 'codeIsSync' },
         { name: 'gmtCreate', label: '创建时间', field: 'gmtCreate' },
         { name: 'gmtModified', label: '修改时间', field: 'gmtModified' }
@@ -909,6 +1030,15 @@ export default {
     },
     maintainProductPermission() {
       return this.$store.getters['user/maintainProductPermission']
+    },
+    columnsComputed() {
+      let columnsComputed = []
+      for (let i = 0; i < this.columns.length; i++) {
+        if (this.checkCodePermission.indexOf(this.columns[i].name) >= 0) {
+          columnsComputed.push(this.columns[i])
+        }
+      }
+      return columnsComputed
     }
   },
   watch: {
@@ -1246,8 +1376,8 @@ export default {
     },
     //download excel
     downloadExcel() {
-      if(!this.searchBtnExist){
-        this.notify('warning','搜索项没有输入，不允许导出操作！')
+      if (!this.searchBtnExist) {
+        this.notify('warning', '搜索项没有输入，不允许导出操作！')
         return
       }
       this.excelLoading = true
