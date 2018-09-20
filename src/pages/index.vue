@@ -6,7 +6,7 @@
       <q-card-media>
       </q-card-media>
       <q-card-title class="relative-position">
-        <q-btn color="primary"
+        <q-btn :color="brandColor"
                @click="$router.push('productStyle')"
                round
                icon="mdi-database"
@@ -30,7 +30,7 @@
       <q-card-media>
       </q-card-media>
       <q-card-title class="relative-position">
-        <q-btn color="primary"
+        <q-btn :color="brandColor"
                @click="$router.push('productCode')"
                round
                icon="mdi-database"
@@ -56,7 +56,7 @@
       <q-card-media>
       </q-card-media>
       <q-card-title class="relative-position">
-        <q-btn color="primary"
+        <q-btn :color="brandColor"
                @click="$router.push('material')"
                round
                icon="mdi-database"
@@ -88,6 +88,11 @@ export default {
       codeNum: '',
       styleNum: '',
       matNum: ''
+    }
+  },
+  computed: {
+    brandColor() {
+      return this.$store.getters['user/brandColor']
     }
   },
   method: {},

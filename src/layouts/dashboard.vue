@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-layout-header>
-      <q-toolbar color="primary">
+      <q-toolbar :color="brandColor">
         <q-btn flat
                dense
                round
@@ -14,19 +14,52 @@
           {{$route.meta.title}}
           <div slot="subtitle">IT Center</div>
         </q-toolbar-title>
+        <q-btn-dropdown flat
+                        label="主题"
+                        icon="mdi-palette">
+          <q-list link
+                  class="no-padding">
+            <q-item v-close-overlay
+                    class="bg-blue-5"
+                    @click.native="brandFlag=1">
+              <q-item-main>
+                <q-item-tile label>静谧幽兰</q-item-tile>
+              </q-item-main>
+            </q-item>
+            <q-item v-close-overlay
+                    class="bg-amber-4"
+                    @click.native="brandFlag=2">
+              <q-item-main>
+                <q-item-tile label>凡尔赛</q-item-tile>
+              </q-item-main>
+            </q-item>
+            <q-item v-close-overlay
+                    class="bg-pink-4"
+                    @click.native="brandFlag=3">
+              <q-item-main>
+                <q-item-tile label>霞缛云嫣</q-item-tile>
+              </q-item-main>
+            </q-item>
+            <q-item v-close-overlay
+                    class="bg-deep-purple-4"
+                    @click.native="brandFlag=4">
+              <q-item-main>
+                <q-item-tile label>奢语夜魅</q-item-tile>
+              </q-item-main>
+            </q-item>
+            <q-item v-close-overlay
+                    class="bg-light-green-6"
+                    @click.native="brandFlag=5">
+              <q-item-main>
+                <q-item-tile label>潮流素客</q-item-tile>
+              </q-item-main>
+            </q-item>
+          </q-list>
+        </q-btn-dropdown>
         <q-btn flat
-               round
-               dense
-               @click="openPasswordDialog()"
-               icon="mdi-format-list-numbers">
-          <q-tooltip>修改密码</q-tooltip>
-        </q-btn>
-        <q-btn flat
-               round
-               dense
+               label="退出"
                @click="logout()"
                icon="mdi-logout">
-          <q-tooltip>退出登录</q-tooltip>
         </q-btn>
       </q-toolbar>
     </q-layout-header>
@@ -37,10 +70,10 @@
     </q-layout-footer> -->
 
     <q-layout-drawer v-model="leftDrawerOpen"
-                     :content-style="{ background:'#3db6b8 url(statics/background.jpg)',backgroundBlendMode:'multiply'}"
+                     :content-style="backImage"
                      :content-class="['text-white']"
                      :breakpoint="1200">
-      <q-scroll-area style="width: 100%; height: 100%;">
+      <q-scroll-area :style="backColor">
         <q-list no-border
                 link
                 inset-delimiter
@@ -52,7 +85,7 @@
                    style="height: 75px; width 75px;"> -->
               <div class="text-italic"
                    style="font-weight:800;font-size:3em;">
-                IMS
+                CMS
               </div>
               <div class="caption q-ml-lg text-white">
                 v0.92
@@ -68,20 +101,11 @@
               <!-- <q-item-main>
               <q-item-tile label>角色：管理员</q-item-tile>
             </q-item-main> -->
-              <!-- <q-btn flat
-                     color="orange"
-                     icon="mdi-format-list-numbers"
+              <q-btn flat
+                     icon="mdi-settings"
                      @click="openPasswordDialog()">
                 <q-tooltip>修改密码</q-tooltip>
               </q-btn>
-              <q-btn flat
-                     color="primary"
-                     icon="mdi-logout"
-                     @click="logout()">
-                <q-tooltip>登出</q-tooltip>
-              </q-btn> -->
-              <!-- <q-item-side icon="mdi-logout"
-                       color="primary" /> -->
             </q-item>
           </q-card>
           <q-item @click.native="$router.push('/')">
@@ -240,6 +264,7 @@ export default {
   name: 'dashboard',
   data() {
     return {
+      brandFlag: 1,
       leftDrawerOpen: true,
       passwordDialogOpened: false,
       user: {
@@ -268,6 +293,35 @@ export default {
     userId() {
       return this.$store.getters['user/userInfo'].id
     },
+    brandColor() {
+      return this.$store.getters['user/brandColor']
+    },
+    backImage() {
+      if (this.brandFlag == 1) {
+        return { background: 'url(statics/10422.jpg) no-repeat' }
+      } else if (this.brandFlag == 2) {
+        return { background: 'url(statics/10092.jpg) no-repeat' }
+      } else if (this.brandFlag == 3) {
+        return { background: 'url(statics/10112.jpg) no-repeat' }
+      } else if (this.brandFlag == 4) {
+        return { background: 'url(statics/10322.jpg) no-repeat' }
+      } else if (this.brandFlag == 5) {
+        return { background: 'url(statics/12832.jpg) no-repeat' }
+      }
+    },
+    backColor() {
+      if (this.brandFlag == 1) {
+        return 'width: 100%; height: 100%;background-color:rgba(33,150,243,0.6);'
+      } else if (this.brandFlag == 2) {
+        return 'width: 100%; height: 100%;background-color:rgba(255,213,79,0.6);'
+      } else if (this.brandFlag == 3) {
+        return 'width: 100%; height: 100%;background-color:rgba(240,98,146,0.6);'
+      } else if (this.brandFlag == 4) {
+        return 'width: 100%; height: 100%;background-color:rgba(149,117,205,0.7);'
+      } else if (this.brandFlag == 5) {
+        return 'width: 100%; height: 100%;background-color:rgba(139,195,74,0.6);'
+      }
+    },
     // departName() {
     //   return this.$store.getters['user/userInfo'].departName
     // },
@@ -279,6 +333,23 @@ export default {
         return 'statics/logo/personal_logo.jpg'
       } else {
         return 'statics/sad.svg'
+      }
+    }
+  },
+  watch: {
+    brandFlag: function(newVal, oldVal) {
+      if (newVal == 1) {
+        this.$store.commit('user/SetBrandColor', 'blue-5')
+      } else if (newVal == 2) {
+        this.$store.commit('user/SetBrandColor', 'amber-4')
+      } else if (newVal == 3) {
+        this.$store.commit('user/SetBrandColor', 'pink-4')
+      } else if (newVal == 4) {
+        this.$store.commit('user/SetBrandColor', 'deep-purple-4')
+      } else if (newVal == 5) {
+        this.$store.commit('user/SetBrandColor', 'light-green-6')
+      } else {
+        this.$store.commit('user/SetBrandColor', 'blue-5')
       }
     }
   },
@@ -341,8 +412,9 @@ export default {
   },
   mounted() {
     this.$q.notify({
-      message: '改了菜单栏样式，你可能会觉得丑，但记住，这是暂时的~',
+      message: '主题功能正式上线！右上角开始体验 :)',
       color: 'tertiary',
+      timeout: 5000,
       position: 'bottom-right',
       avatar: 'statics/logo/xiuxian.jpg'
     })

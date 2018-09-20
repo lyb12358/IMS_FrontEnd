@@ -22,3 +22,6 @@ export const SetMaintainProductPermission = (state, maintainProductPermission) =
 export const SetUserInfo = (state, userInfo) => {
   state.userInfo = userInfo
 }
+export const SetBrandColor = (state, brandColor) => {
+  state.brandColor = brandColor
+}

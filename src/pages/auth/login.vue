@@ -26,7 +26,7 @@
                        ref="account" />
             </q-field>
             <q-field icon="mdi-textbox-password"
-                     class="q-mt-lg"
+                     class="q-mt-lg no-margin"
                      :error="$v.user.password.$error"
                      error-label="密码至少6位">
               <q-input v-model="user.password"

@@ -1255,7 +1255,7 @@ export default {
     },
     newProdCode() {
       //check prodType permission
-      let pt = this.productCode.prodType
+      let pt = this.productStyle.prodType
       pt += ''
       if (
         this.permissions.indexOf(1) < 0 &&

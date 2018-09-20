@@ -1,6 +1,10 @@
 <template>
   <q-page no-padding>
     <div class="row justify-center">
+      <img src="statics/icons/icon-128x128.png"
+           style="margin-top:1.5rem">
+    </div>
+    <div class="row justify-center">
       <vue-simple-markdown style="max-width:800px"
                            :source="changeLog"></vue-simple-markdown>
     </div>
