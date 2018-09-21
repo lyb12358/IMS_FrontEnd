@@ -27,7 +27,7 @@
               </q-item-main>
             </q-item>
             <q-item v-close-overlay
-                    class="bg-amber-4"
+                    class="bg-amber-6"
                     @click.native="brandFlag=2">
               <q-item-main>
                 <q-item-tile label>凡尔赛</q-item-tile>
@@ -341,7 +341,7 @@ export default {
       if (newVal == 1) {
         this.$store.commit('user/SetBrandColor', 'blue-5')
       } else if (newVal == 2) {
-        this.$store.commit('user/SetBrandColor', 'amber-4')
+        this.$store.commit('user/SetBrandColor', 'amber-6')
       } else if (newVal == 3) {
         this.$store.commit('user/SetBrandColor', 'pink-4')
       } else if (newVal == 4) {

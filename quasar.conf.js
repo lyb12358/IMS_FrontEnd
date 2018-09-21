@@ -38,7 +38,7 @@ module.exports = function (ctx) {
           API: JSON.stringify('/api')
         }
         : { // and on build (production):
-          API: JSON.stringify('http://10.98.10.20:8080')
+          API: JSON.stringify('http://localhost:8080')
         }
     },
     devServer: {
@@ -49,7 +49,7 @@ module.exports = function (ctx) {
       proxy: {
         // proxy all requests starting with /api to jsonplaceholder
         '/api': {
-          target: 'http://10.98.10.20:8080',
+          target: 'http://localhost:8080',
           changeOrigin: true,
           pathRewrite: {
             '^/api': ''
