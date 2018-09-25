@@ -393,7 +393,8 @@
                          float-label="款号" />
               </q-field>
             </div> -->
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            <div v-show="checkStyleModified(138)"
+                 class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.prodStyle.$error"
                        error-label="款号是必填项，且不超过10位">
                 <q-input v-model.trim="productStyle.prodStyle"
@@ -401,15 +402,17 @@
                          float-label="款号" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkStyleModified(139)"
+                 class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.styleName.$error"
-                       error-label="款名是必填项，且不超过15位">
+                       error-label="款名是必填项，且不超过30位">
                 <q-input v-model.trim="productStyle.styleName"
                          class="no-margin"
                          float-label="款名" />
               </q-field>
             </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            <div v-show="checkStyleModified(141)"
+                 class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.prodFamily.$error"
                        error-label="归属是必填项">
                 <q-select v-model="productStyle.prodFamily"
@@ -418,7 +421,8 @@
                           :options="prodFamilyOptions" />
               </q-field>
             </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            <div v-show="checkStyleModified(142)"
+                 class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.prodType.$error"
                        error-label="类别是必填项">
                 <q-select v-model="productStyle.prodType"
@@ -427,7 +431,8 @@
                           :options="prodTypeOptions" />
               </q-field>
             </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            <div v-show="checkStyleModified(143)"
+                 class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.bigType.$error"
                        error-label="大类是必填项">
                 <q-select v-model="productStyle.bigType"
@@ -437,28 +442,32 @@
                           :options="bigTypeOptions" />
               </q-field>
             </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            <div v-show="checkStyleModified(144)"
+                 class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.middleType"
                         float-label="中类"
                         filter
                         radio
                         :options="middleTypeOptions" />
             </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            <div v-show="checkStyleModified(145)"
+                 class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.smallType"
                         float-label="小类"
                         filter
                         radio
                         :options="smallTypeOptions" />
             </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            <div v-show="checkStyleModified(140)"
+                 class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.prodAttr"
                         float-label="属性"
                         filter
                         radio
                         :options="prodAttrOptions" />
             </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            <div v-show="checkStyleModified(149)"
+                 class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.prodMat.$error"
                        error-label="材质信息是不是太长了？">
                 <q-input v-model.trim="productStyle.prodMat"
@@ -466,40 +475,46 @@
                          float-label="材质" />
               </q-field>
             </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            <div v-show="checkStyleModified(146)"
+                 class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.prodYear"
                         float-label="年份"
                         filter
                         radio
                         :options="prodYearOptions" />
             </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            <div v-show="checkStyleModified(147)"
+                 class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.prodSeason"
                         float-label="季节"
                         radio
                         :options="prodSeasonOptions" />
             </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            <div v-show="checkStyleModified(148)"
+                 class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.prodUnit"
                         float-label="单位"
                         filter
                         radio
                         :options="prodUnitOptions" />
             </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            <div v-show="checkStyleModified(150)"
+                 class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.prodLevel"
                         float-label="档次"
                         radio
                         :options="prodLevelOptions" />
             </div>
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            <div v-show="checkStyleModified(151)"
+                 class="col-xs-12  col-sm-6 col-md-3">
               <q-select v-model="productStyle.designer"
                         float-label="设计师"
                         filter
                         radio
                         :options="designerOptions" />
             </div>
-            <div class="col-xs-12  col-sm-12 col-md-12">
+            <div v-show="checkStyleModified(152)"
+                 class="col-xs-12  col-sm-12 col-md-12">
               <q-input v-model.trim="productStyle.prodDesc"
                        clearable
                        type="textarea"
@@ -716,7 +731,7 @@ export default {
   validations: {
     productStyle: {
       prodStyle: { required, maxLength: maxLength(10) },
-      styleName: { required, maxLength: maxLength(20) },
+      styleName: { required, maxLength: maxLength(30) },
       prodFamily: { required },
       prodType: { required },
       bigType: { required },
@@ -836,6 +851,20 @@ export default {
         return true
       }
       if (this.checkStylePermission.indexOf(auth) > -1) {
+        return true
+      } else {
+        return false
+      }
+    },
+    //check if user have right to modify specific element
+    checkStyleModified(auth) {
+      if (this.permissions.indexOf(1) > -1) {
+        return true
+      }
+      if (
+        (this.modalActionName === '新增产品款式') |
+        (this.permissions.indexOf(auth) > -1)
+      ) {
         return true
       } else {
         return false

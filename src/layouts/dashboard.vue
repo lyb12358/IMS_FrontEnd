@@ -20,7 +20,7 @@
           <q-list link
                   class="no-padding">
             <q-item v-close-overlay
-                    class="bg-blue-5"
+                    class="bg-light-blue-5"
                     @click.native="brandFlag=1">
               <q-item-main>
                 <q-item-tile label>静谧幽兰</q-item-tile>
@@ -264,7 +264,7 @@ export default {
   name: 'dashboard',
   data() {
     return {
-      brandFlag: 1,
+      brandFlag: 5,
       leftDrawerOpen: true,
       passwordDialogOpened: false,
       user: {
@@ -311,7 +311,7 @@ export default {
     },
     backColor() {
       if (this.brandFlag == 1) {
-        return 'width: 100%; height: 100%;background-color:rgba(33,150,243,0.6);'
+        return 'width: 100%; height: 100%;background-color:rgba(41,182,246,0.6);'
       } else if (this.brandFlag == 2) {
         return 'width: 100%; height: 100%;background-color:rgba(255,213,79,0.6);'
       } else if (this.brandFlag == 3) {
@@ -339,7 +339,7 @@ export default {
   watch: {
     brandFlag: function(newVal, oldVal) {
       if (newVal == 1) {
-        this.$store.commit('user/SetBrandColor', 'blue-5')
+        this.$store.commit('user/SetBrandColor', 'light-blue-6')
       } else if (newVal == 2) {
         this.$store.commit('user/SetBrandColor', 'amber-6')
       } else if (newVal == 3) {
@@ -349,7 +349,7 @@ export default {
       } else if (newVal == 5) {
         this.$store.commit('user/SetBrandColor', 'light-green-6')
       } else {
-        this.$store.commit('user/SetBrandColor', 'blue-5')
+        this.$store.commit('user/SetBrandColor', 'light-green-6')
       }
     }
   },

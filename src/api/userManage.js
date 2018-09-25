@@ -79,3 +79,11 @@ export function updateRolePermission(id, list) {
         data: list
     })
 }
+//permission
+//获取所有权限
+export function getStaticPermissionList(id) {
+    return service({
+        url: '/permissions/' + id,
+        method: 'get'
+    })
+}

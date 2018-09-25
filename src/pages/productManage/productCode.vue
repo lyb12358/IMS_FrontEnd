@@ -586,7 +586,7 @@
             </div>
           </div>
           <div class="row gutter-sm">
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(94)" class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productCode.prodCode.$error"
                        error-label="编号必填，且不超过20位">
                 <q-input v-model="productCode.prodCode"
@@ -595,29 +595,29 @@
                          float-label="编号" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(95)" class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.prodName.$error"
-                       error-label="名称必填，且不超过15位">
+                       error-label="名称必填，且不超过30位">
                 <q-input v-model="productCode.prodName"
                          class="no-margin"
                          float-label="名称" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(96)" class="col-xs-12 col-sm-6 col-md-3">
               <q-select v-model="productCode.prodCat"
                         float-label="品类"
                         filter
                         radio
                         :options="prodCatOptions" />
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(97)" class="col-xs-12 col-sm-6 col-md-3">
               <q-select v-model="productCode.prodSpe"
                         float-label="规格"
                         filter
                         radio
                         :options="prodSpeOptions" />
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(98)" class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.retailPrice.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.retailPrice"
@@ -625,7 +625,7 @@
                          float-label="零售价" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(99)" class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.supplyPrice.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.supplyPrice"
@@ -633,7 +633,7 @@
                          float-label="供应价" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(100)" class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.costPrice.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.costPrice"
@@ -641,14 +641,14 @@
                          float-label="成本价" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(101)" class="col-xs-12 col-sm-6 col-md-3">
               <q-select v-model="productCode.prodColor"
                         float-label="花色"
                         filter
                         radio
                         :options="prodColorOptions" />
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(102)" class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.numModel.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.numModel"
@@ -656,12 +656,12 @@
                          float-label="件数" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(103)" class="col-xs-12 col-sm-6 col-md-3">
               <q-input v-model="productCode.netWeight"
                        class="no-margin"
                        float-label="克重" />
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(104)" class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.boxNum.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.boxNum"
@@ -669,22 +669,22 @@
                          float-label="装箱数" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(105)" class="col-xs-12 col-sm-6 col-md-3">
               <q-input v-model="productCode.boxModel"
                        class="no-margin"
                        float-label="装箱规格" />
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(106)" class="col-xs-12 col-sm-6 col-md-3">
               <q-input v-model="productCode.boxVolume"
                        class="no-margin"
                        float-label="装箱体积" />
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(107)" class="col-xs-12 col-sm-6 col-md-3">
               <q-input v-model="productCode.boxWeight"
                        class="no-margin"
                        float-label="箱重量" />
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(108)" class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.boxWarn.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.boxWarn"
@@ -692,7 +692,7 @@
                          float-label="散货预警量" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(113)" class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.prodCycle.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.prodCycle"
@@ -700,7 +700,7 @@
                          float-label="生产周期" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(114)" class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.tRetailPrice.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.tRetailPrice"
@@ -708,7 +708,7 @@
                          float-label="三等品零售价" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(115)" class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.tSupplyPrice.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.tSupplyPrice"
@@ -716,7 +716,7 @@
                          float-label="三等品供应价" />
               </q-field>
             </div>
-            <div class="col-xs-12 col-sm-6 col-md-3">
+            <div v-show="checkCodeModified(116)" class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.tCostPrice.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.tCostPrice"
@@ -725,14 +725,14 @@
               </q-field>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
-              <q-toggle v-model="productCode.isRemind"
+              <q-toggle v-show="checkCodeModified(109)" v-model="productCode.isRemind"
                         label="是否库存提醒" />
-              <q-toggle v-model="productCode.isSecurity"
+              <q-toggle v-show="checkCodeModified(111)" v-model="productCode.isSecurity"
                         label="是否有防伪码" />
-              <q-toggle v-model="productCode.isRate"
+              <q-toggle v-show="checkCodeModified(112)" v-model="productCode.isRate"
                         label="是否计算周转率" />
             </div>
-            <div class="col-xs-12  col-sm-12 col-md-12">
+            <div v-show="checkCodeModified(110)" class="col-xs-12  col-sm-12 col-md-12">
               <q-input v-model.trim="productCode.remark"
                        clearable
                        type="textarea"
@@ -981,7 +981,7 @@ export default {
   validations: {
     productCode: {
       prodCode: { required, maxLength: maxLength(20) },
-      prodName: { required, maxLength: maxLength(15) },
+      prodName: { required, maxLength: maxLength(30) },
       retailPrice: {
         required,
         decimal,
@@ -1086,6 +1086,17 @@ export default {
         return false
       }
     },
+    //check if user have right to modify specific element
+    checkCodeModified(auth) {
+      if (this.permissions.indexOf(1) > -1) {
+        return true
+      }
+      if (this.modalActionName==='新增产品信息'|this.permissions.indexOf(auth) > -1) {
+        return true
+      } else {
+        return false
+      }
+    },
     formatDate(timeStamp) {
       return date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss')
     },
@@ -1152,6 +1163,17 @@ export default {
         return
       }
       getProdStyleById(id).then(response => {
+        let productStyle = response.data.data
+        //check prodType permission
+        let pt = productStyle.prodType
+        pt += ''
+        if (
+          this.permissions.indexOf(1) < 0 &&
+          this.maintainProductPermission.indexOf(pt) < 0
+        ) {
+          this.notify('warning', '无权维护该类别产品')
+          return false
+        }
         Object.assign(
           this.productCode,
           this.$options.data.call(this).productCode
@@ -1160,7 +1182,6 @@ export default {
           this.productStyle,
           this.$options.data.call(this).productStyle
         )
-        let productStyle = response.data.data
         // let departId = productStyle.departId
         // if (
         //   departId != this.myDepart &&

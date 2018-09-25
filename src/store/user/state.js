@@ -8,5 +8,5 @@ export default {
   updateStylePermission: [],
   maintainProductPermission: [],
   userInfo: {},
-  brandColor: 'blue-5'
+  brandColor: 'light-green-6'
 }
