@@ -180,7 +180,7 @@
                    icon="mdi-image-plus"
                    rounded
                    color="secondary"
-                   @click="openImageUpload(props.row.id,props.row.prodStyle,props.row.styleName)">
+                   @click="openImageUpload(props.row.id,props.row.prodStyle,props.row.styleName,props.row.prodType)">
               <q-tooltip>上传产品图片</q-tooltip>
             </q-btn>
             <a v-if="checkAuth(23)"
@@ -750,9 +750,13 @@ export default {
     },
     columnsComputed() {
       let columnsComputed = []
-      for (let i = 0; i < this.columns.length; i++) {
-        if (this.checkStylePermission.indexOf(this.columns[i].name) >= 0) {
-          columnsComputed.push(this.columns[i])
+      if (this.permissions.indexOf(1) > -1) {
+        columnsComputed = this.columns
+      } else {
+        for (let i = 0; i < this.columns.length; i++) {
+          if (this.checkStylePermission.indexOf(this.columns[i].name) >= 0) {
+            columnsComputed.push(this.columns[i])
+          }
         }
       }
       return columnsComputed
@@ -1008,7 +1012,17 @@ export default {
     // },
 
     //upload image
-    openImageUpload(id, prodStyle, styleName) {
+    openImageUpload(id, prodStyle, styleName,prodType) {
+      //check prodType permission
+      let pt = prodType
+      pt += ''
+      if (
+        this.permissions.indexOf(1) < 0 &&
+        this.maintainProductPermission.indexOf(pt) < 0
+      ) {
+        this.notify('warning', '无权维护该类别产品')
+        return
+      }
       this.expandId = id
       this.expandStyle = prodStyle
       this.expandName = styleName
@@ -1181,7 +1195,14 @@ export default {
     getProdClassOptions().then(response => {
       let data = response.data.data
       this.classList = data
-      this.prodFamilyOptions = filter('0', { field: 'parentId', list: data })
+      let list = filter('0', { field: 'parentId', list: data })
+      // abandon mat
+      for (let i = 0; i < list.length; i++) {
+        let id = list[i].value
+        if ((id != 267) & (id != 697)) {
+          this.prodFamilyOptions.push(list[i])
+        }
+      }
     })
     getProdParamOptions().then(response => {
       let data = response.data.data

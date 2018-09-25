@@ -1177,7 +1177,14 @@ export default {
     getProdClassOptions().then(response => {
       let data = response.data.data
       this.classList = data
-      this.matFamilyOptions = filter('0', { field: 'parentId', list: data })
+      let list = filter('0', { field: 'parentId', list: data })
+      // abandon prod
+      for (let i = 0; i < list.length; i++) {
+        let id = list[i].value
+        if ((id == 267) | (id == 697)) {
+          this.matFamilyOptions.push(list[i])
+        }
+      }
     })
     getProdParamOptions().then(response => {
       let data = response.data.data
