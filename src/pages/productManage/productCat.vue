@@ -621,6 +621,7 @@ export default {
       this.paramFilter = ''
       this.paramId = id
       this.paramModalName = name
+      this.paramData=[]
       this.fetchParamData()
       this.paramModalOpened = true
     },
