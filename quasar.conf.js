@@ -116,7 +116,9 @@ module.exports = function (ctx) {
         'QBtnGroup',
         'QOptionGroup',
         'QPopupEdit',
-        'QDatetime'
+        'QDatetime',
+        'QTimeline',
+        'QTimelineEntry'
       ],
       directives: [
         'Ripple',
