@@ -1132,6 +1132,7 @@ export default {
       this.modifyLoading = true
       //fix
       this.productStyle.isSync = 1
+      this.productStyle.status = 1
       this.productStyle.gmtCreate = ''
       this.productStyle.gmtModified = ''
       updateProdStyle(this.productStyle)

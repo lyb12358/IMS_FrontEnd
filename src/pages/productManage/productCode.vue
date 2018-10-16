@@ -1416,6 +1416,7 @@ export default {
       this.modifyLoading = true
       //fix
       this.productCode.isSync = 1
+      this.productCode.status = 1
       this.productCode.gmtCreate = ''
       this.productCode.gmtModified = ''
       updateProdCode(this.productCode)

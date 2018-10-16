@@ -242,7 +242,8 @@
              no-refocus
              :content-css="{maxWidth: '50vw', minHeight: '60vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header" :color="brandColor">
+        <q-toolbar slot="header"
+                   :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -339,7 +340,8 @@
              no-refocus
              :content-css="{minWidth: '80vw', minHeight: '80vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header" :color="brandColor">
+        <q-toolbar slot="header"
+                   :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -601,7 +603,8 @@
              no-refocus
              :content-css="{minWidth: '50vw', minHeight: '50vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header" :color="brandColor">
+        <q-toolbar slot="header"
+                   :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -1135,7 +1138,7 @@ export default {
       this.newLoading = true
       this.material.status = 1
       this.material.isDel = 0
-      this.material.isSync = 0
+      this.material.isSync = 1
       this.material.gmtCreate = Date.now()
       addMat(this.material)
         .then(response => {
@@ -1159,7 +1162,8 @@ export default {
       }
       this.$v.material.$reset()
       this.modifyLoading = true
-      this.material.isSync = 0
+      this.material.isSync = 1
+      this.material.status = 1
       this.material.gmtCreate = ''
       this.material.gmtModified = ''
       updateMat(this.material)
