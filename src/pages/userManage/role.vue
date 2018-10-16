@@ -89,7 +89,8 @@
                 style="text-align:center">
             <q-icon :name="props.row.status==1?'mdi-check-circle':'mdi-close-circle'"
                     size="1.5rem"
-                    :color="props.row.status==1?'positive':'negative'" /></q-td>
+                    :color="props.row.status==1?'positive':'negative'" />
+          </q-td>
           <q-td key="operation"
                 :props="props"
                 style="text-align:center">
@@ -182,7 +183,7 @@
              no-esc-dismiss
              :content-css="{minWidth: '100vw', minHeight: '100vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header">
+        <q-toolbar slot="header" :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -239,7 +240,7 @@
                   <q-btn-group>
                     <q-btn label="全选查看权限"
                            color="secondary"
-                            dense
+                           dense
                            @click="checkAllPermission(staticCheckCodePermission)">
                     </q-btn>
                     <q-btn label="取消查看权限"
@@ -257,7 +258,7 @@
                            dense
                            @click="uncheckAllPermission(staticModifyCodePermission)">
                     </q-btn>
-                    </q-btn-group>
+                  </q-btn-group>
                   <div class="gutter-sm">
                     <q-checkbox v-model="rolePermission"
                                 label="产品编号管理页面"
@@ -291,6 +292,14 @@
                                 label="导出产品编号"
                                 color="secondary"
                                 :val=18 />
+                    <q-checkbox v-model="rolePermission"
+                                label="查看编号日志"
+                                color="secondary"
+                                :val=162 />
+                    <q-checkbox v-model="rolePermission"
+                                label="查看编号日志快照"
+                                color="secondary"
+                                :val=163 />
                     <br>
                     <q-checkbox v-model="rolePermission"
                                 label="查看产品编号"
@@ -563,7 +572,7 @@
                   <q-btn-group>
                     <q-btn label="全选查看权限"
                            color="secondary"
-                            dense
+                           dense
                            @click="checkAllPermission(staticCheckStylePermission)">
                     </q-btn>
                     <q-btn label="取消查看权限"
@@ -581,7 +590,7 @@
                            dense
                            @click="uncheckAllPermission(staticModifyStylePermission)">
                     </q-btn>
-                    </q-btn-group>
+                  </q-btn-group>
                   <div class="gutter-sm">
                     <q-checkbox v-model="rolePermission"
                                 label="产品款式管理页面"
@@ -611,6 +620,14 @@
                                 label="导出产品款式"
                                 color="secondary"
                                 :val=26 /> -->
+                    <q-checkbox v-model="rolePermission"
+                                label="查看款式日志"
+                                color="secondary"
+                                :val=164 />
+                    <q-checkbox v-model="rolePermission"
+                                label="查看款式日志快照"
+                                color="secondary"
+                                :val=165 />
                     <br>
                     <q-checkbox v-model="rolePermission"
                                 label="查看款号"
@@ -781,6 +798,14 @@
                                 label="导出物料辅料"
                                 color="secondary"
                                 :val=34 /> -->
+                    <q-checkbox v-model="rolePermission"
+                                label="查看物料日志"
+                                color="secondary"
+                                :val=166 />
+                    <q-checkbox v-model="rolePermission"
+                                label="查看物料日志快照"
+                                color="secondary"
+                                :val=167 />
                   </div>
                 </q-collapsible>
                 <q-collapsible label="类别管理(点击展开)">
@@ -945,6 +970,11 @@ export default {
   validations: {
     role: {
       name: { required, maxLength: maxLength(15) }
+    }
+  },
+  computed: {
+    brandColor() {
+      return this.$store.getters['user/brandColor']
     }
   },
   methods: {

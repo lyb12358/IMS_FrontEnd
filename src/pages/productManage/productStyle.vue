@@ -156,7 +156,8 @@
                 style="text-align:center">
             <q-icon :name="props.row.styleIsSync?'mdi-check-circle':'mdi-sync-off'"
                     size="1.5rem"
-                    :color="props.row.styleIsSync?'positive':'negative'" /></q-td>
+                    :color="props.row.styleIsSync?'positive':'negative'" />
+          </q-td>
           <q-td v-if="checkStyle('gmtCreate')"
                 key="gmtCreate"
                 :props="props"
@@ -199,6 +200,13 @@
                    @click="downloadSpec(props.row.id,props.row.styleName )">
               <q-tooltip>下载产品说明书</q-tooltip>
             </q-btn> -->
+            <q-btn v-if="checkAuth(164)"
+                   icon="mdi-pencil-box"
+                   rounded
+                   color="info"
+                   @click="openProdLogModal(1,props.row.id)">
+              <q-tooltip>查看日志</q-tooltip>
+            </q-btn>
             <q-btn v-if="checkAuth(25)"
                    icon="mdi-delete"
                    rounded
@@ -233,14 +241,14 @@
                @click="props.nextPage" />
       </div>
     </q-table>
-    <!-- search dialog -->
+    <!-- search modal -->
     <q-modal v-model="searchFormDialogOpened"
              no-backdrop-dismiss
              no-esc-dismiss
              no-refocus
              :content-css="{maxWidth: '50vw', minHeight: '60vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header">
+        <q-toolbar slot="header" :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -342,7 +350,7 @@
              no-refocus
              :content-css="{minWidth: '100vw', minHeight: '100vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header">
+        <q-toolbar slot="header" :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -577,6 +585,50 @@
                @click="imageUploadCancel" />
       </template>
     </q-dialog>
+    <!-- prodLog -->
+    <q-modal v-model="prodLogModalOpened"
+             no-esc-dismiss
+             no-backdrop-dismiss
+             no-refocus
+             :content-css="{minWidth: '50vw', minHeight: '50vh'}">
+      <q-modal-layout footer-class="no-shadow">
+        <q-toolbar slot="header" :color="brandColor">
+          <q-btn flat
+                 round
+                 dense
+                 v-close-overlay
+                 icon="mdi-arrow-left" />
+          <q-toolbar-title>
+            产品日志
+          </q-toolbar-title>
+        </q-toolbar>
+        <q-toolbar slot="footer"
+                   inverted>
+          <div class="col-12 row justify-center ">
+            <q-btn color="primary"
+                   v-close-overlay
+                   label="取消" />
+          </div>
+        </q-toolbar>
+        <div class="layout-padding"
+             style="max-width: 800px">
+          <q-timeline style="padding: 0 24px;">
+            <q-timeline-entry v-for="log in timelineBeanList"
+                              :key="log.id"
+                              :title="log.title"
+                              :color="log.color"
+                              :subtitle="log.subtitle">
+              <q-collapsible v-if="checkAuth(165)"
+                             indent
+                             icon="mdi-camera"
+                             label="产品快照">
+                <div>{{log.detail}}</div>
+              </q-collapsible>
+            </q-timeline-entry>
+          </q-timeline>
+        </div>
+      </q-modal-layout>
+    </q-modal>
   </q-page>
 
 </template>
@@ -608,6 +660,7 @@ import {
   getProdParamOptionsByParent
 } from 'src/api/productParam'
 import { specDownload } from 'src/api/productPlus'
+import { getProdLogList } from 'src/api/log'
 
 export default {
   data() {
@@ -672,10 +725,10 @@ export default {
         { name: 'gmtCreate', label: '创建时间', field: 'gmtCreate' },
         { name: 'gmtModified', label: '修改时间', field: 'gmtModified' }
       ],
-      //modal
+      //main modal
       mainStyleModalOpened: false,
       modalActionName: '',
-      //modal content
+      //main modal content
       productStyle: {
         id: 0,
         prodStyle: '',
@@ -725,7 +778,10 @@ export default {
       expandStyle: '',
       expandName: '',
       imageUploadDialog: false,
-      imageUploadUrl: '/imageUpload/prodStyle'
+      imageUploadUrl: '/imageUpload/prodStyle',
+      //prodLog
+      prodLogModalOpened: false,
+      timelineBeanList: []
     }
   },
   validations: {
@@ -760,6 +816,9 @@ export default {
         }
       }
       return columnsComputed
+    },
+    brandColor() {
+      return this.$store.getters['user/brandColor']
     }
   },
   watch: {
@@ -971,48 +1030,8 @@ export default {
         })
       }
     },
-    //add product
-    // selectDepart() {
-    //   if (this.departSelected == '') {
-    //     this.notify('warning', '请选择一个部门')
-    //     return
-    //   }
-    //   if (
-    //     this.$refs.departTree.getNodeByKey(this.departSelected).isParent == 1
-    //   ) {
-    //     this.notify('warning', '产品绑定到部门，而非公司')
-    //     this.departSelected = ''
-    //     return
-    //   }
-    //   this.productStyle.departId = this.$refs.departTree.getNodeByKey(
-    //     this.departSelected
-    //   ).id
-    //   this.productStyle.departLabel = this.$refs.departTree.getNodeByKey(
-    //     this.departSelected
-    //   ).label
-    //   this.departOpened = false
-    // },
-    // selectClass() {
-    //   if (this.classSelected == '') {
-    //     this.notify('warning', '请选择一个类别')
-    //     return
-    //   }
-    //   if (this.$refs.classTree.getNodeByKey(this.classSelected).isParent == 1) {
-    //     this.notify('warning', '只能选择子类')
-    //     this.classSelected = ''
-    //     return
-    //   }
-    //   this.productStyle.prodClass = this.$refs.classTree.getNodeByKey(
-    //     this.classSelected
-    //   ).id
-    //   this.productStyle.classLabel = this.$refs.classTree.getNodeByKey(
-    //     this.classSelected
-    //   ).label
-    //   this.classOpened = false
-    // },
-
     //upload image
-    openImageUpload(id, prodStyle, styleName,prodType) {
+    openImageUpload(id, prodStyle, styleName, prodType) {
       //check prodType permission
       let pt = prodType
       pt += ''
@@ -1163,6 +1182,16 @@ export default {
       // release url object
       URL.revokeObjectURL(link.href)
       document.body.removeChild(link)
+    },
+    // prodLog
+    openProdLogModal(type, id) {
+      getProdLogList(type, id)
+        .then(response => {
+          let data = response.data.data
+          this.timelineBeanList = data
+          this.prodLogModalOpened = true
+        })
+        .catch(error => {})
     },
     // delete prodStyle
     deleteProdStyle() {

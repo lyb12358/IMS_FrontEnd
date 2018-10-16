@@ -96,7 +96,8 @@
                 style="text-align:center">
             <q-icon :name="props.row.status==1?'mdi-check-circle':'mdi-close-circle'"
                     size="1.5rem"
-                    :color="props.row.status==1?'positive':'negative'" /></q-td>
+                    :color="props.row.status==1?'positive':'negative'" />
+          </q-td>
           <q-td key="operation"
                 :props="props"
                 style="text-align:center">
@@ -202,7 +203,8 @@
              no-esc-dismiss
              :content-css="{maxWidth: '50vw', minHeight: '50vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header">
+        <q-toolbar slot="header"
+                   :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -289,6 +291,11 @@ export default {
       userIdChosen: '',
       roleOptions: [],
       roleList: []
+    }
+  },
+  computed: {
+    brandColor() {
+      return this.$store.getters['user/brandColor']
     }
   },
   methods: {

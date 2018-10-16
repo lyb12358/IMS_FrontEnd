@@ -94,7 +94,7 @@
              no-refocus
              :content-css="{minWidth: '80vw', minHeight: '80vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header">
+        <q-toolbar slot="header" :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -218,7 +218,7 @@
              no-refocus
              :content-css="{minWidth: '100vw', minHeight: '100vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header">
+        <q-toolbar slot="header" :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -364,7 +364,7 @@
              no-refocus
              :content-css="{minWidth: '25vw', minHeight: '50vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header">
+        <q-toolbar slot="header" :color="brandColor">
           <q-btn flat
                  round
                  dense

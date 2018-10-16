@@ -1,7 +1,7 @@
 
 ![logo](_media/icon.png)
 
-# CMS <small>0.95</small>
+# CMS <small>0.10.1</small>
 
 > empowering your product!
 

@@ -281,7 +281,8 @@
                 style="text-align:center">
             <q-icon :name="props.row.codeIsSync?'mdi-check-circle':'mdi-sync-off'"
                     size="1.5rem"
-                    :color="props.row.codeIsSync?'positive':'negative'" /></q-td>
+                    :color="props.row.codeIsSync?'positive':'negative'" />
+          </q-td>
           <q-td v-if="checkCode('gmtCreate')"
                 key="gmtCreate"
                 :props="props"
@@ -332,6 +333,13 @@
                    @click="downloadSpec(props.row.id,props.row.prodName )">
               <q-tooltip>下载产品说明书</q-tooltip>
             </q-btn>
+            <q-btn v-if="checkAuth(162)"
+                   icon="mdi-pencil-box"
+                   rounded
+                   color="info"
+                   @click="openProdLogModal(2,props.row.id)">
+              <q-tooltip>查看日志</q-tooltip>
+            </q-btn>
             <q-btn v-if="checkAuth(17)"
                    icon="mdi-delete"
                    rounded
@@ -366,14 +374,14 @@
                @click="props.nextPage" />
       </div>
     </q-table>
-    <!-- search dialog -->
+    <!-- search modal -->
     <q-modal v-model="searchFormDialogOpened"
              no-backdrop-dismiss
              no-esc-dismiss
              no-refocus
              :content-css="{maxWidth: '50vw', minHeight: '60vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header">
+        <q-toolbar slot="header" :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -502,7 +510,7 @@
              no-refocus
              :content-css="{minWidth: '100vw', minHeight: '100vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header">
+        <q-toolbar slot="header" :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -796,6 +804,50 @@
                @click="imageUploadCancel" />
       </template>
     </q-dialog>
+    <!-- prodLog -->
+    <q-modal v-model="prodLogModalOpened"
+             no-esc-dismiss
+             no-backdrop-dismiss
+             no-refocus
+             :content-css="{minWidth: '50vw', minHeight: '50vh'}">
+      <q-modal-layout footer-class="no-shadow">
+        <q-toolbar slot="header" :color="brandColor">
+          <q-btn flat
+                 round
+                 dense
+                 v-close-overlay
+                 icon="mdi-arrow-left" />
+          <q-toolbar-title>
+            产品日志
+          </q-toolbar-title>
+        </q-toolbar>
+        <q-toolbar slot="footer"
+                   inverted>
+          <div class="col-12 row justify-center ">
+            <q-btn color="primary"
+                   v-close-overlay
+                   label="取消" />
+          </div>
+        </q-toolbar>
+        <div class="layout-padding"
+             style="max-width: 800px">
+          <q-timeline style="padding: 0 24px;">
+            <q-timeline-entry v-for="log in timelineBeanList"
+                              :key="log.id"
+                              :title="log.title"
+                              :color="log.color"
+                              :subtitle="log.subtitle">
+              <q-collapsible v-if="checkAuth(163)"
+                             indent
+                             icon="mdi-camera"
+                             label="产品快照">
+                <div>{{log.detail}}</div>
+              </q-collapsible>
+            </q-timeline-entry>
+          </q-timeline>
+        </div>
+      </q-modal-layout>
+    </q-modal>
   </q-page>
 
 </template>
@@ -828,6 +880,7 @@ import {
   getProdSpeOptionsByParent
 } from 'src/api/productParam'
 import { specDownload, codeExport } from 'src/api/productPlus'
+import { getProdLogList } from 'src/api/log'
 //custom validate
 //const validDecimal = value => value.toString().split('.')[1].length <= 2
 export default {
@@ -998,7 +1051,10 @@ export default {
       expandStyle: '',
       expandName: '',
       imageUploadDialog: false,
-      imageUploadUrl: '/imageUpload/prodCode'
+      imageUploadUrl: '/imageUpload/prodCode',
+      //prodLog
+      prodLogModalOpened: false,
+      timelineBeanList: []
     }
   },
   validations: {
@@ -1066,6 +1122,9 @@ export default {
         }
       }
       return columnsComputed
+    },
+    brandColor() {
+      return this.$store.getters['user/brandColor']
     }
   },
   watch: {
@@ -1475,6 +1534,16 @@ export default {
       // release url object
       URL.revokeObjectURL(link.href)
       document.body.removeChild(link)
+    },
+    // prodLog
+    openProdLogModal(type, id) {
+      getProdLogList(type, id)
+        .then(response => {
+          let data = response.data.data
+          this.timelineBeanList = data
+          this.prodLogModalOpened = true
+        })
+        .catch(error => {})
     },
     // delete prodCode
     deleteProdCode(departId) {
