@@ -6,7 +6,7 @@
                 class="no-shadow">
           <q-card-main style="text-align:center;">
             <span style="font-weight:bold;font-size:1.5rem;color:white;">
-              产品管理系统 Beta
+              商品管理系统 Beta
             </span>
             <br>
             <small style="color:white;">
