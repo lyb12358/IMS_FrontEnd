@@ -381,7 +381,8 @@
              no-refocus
              :content-css="{maxWidth: '50vw', minHeight: '60vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header" :color="brandColor">
+        <q-toolbar slot="header"
+                   :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -510,7 +511,8 @@
              no-refocus
              :content-css="{minWidth: '100vw', minHeight: '100vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header" :color="brandColor">
+        <q-toolbar slot="header"
+                   :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -811,7 +813,8 @@
              no-refocus
              :content-css="{minWidth: '50vw', minHeight: '50vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header" :color="brandColor">
+        <q-toolbar slot="header"
+                   :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -1314,11 +1317,9 @@ export default {
           let data = response.data.data
           this.prodSpeOptions = data
         })
-        bigType += ''
-        this.prodCatOptions = filter(bigType, {
-          field: 'classId',
-          list: this.catList
-        })
+        this.prodCatOptions = this.catList.filter(
+          item => item.classId == bigType
+        )
       } else if (action === 'update') {
         // if (
         //   departId != this.myDepart &&
@@ -1356,11 +1357,9 @@ export default {
           let data = response.data.data
           this.prodSpeOptions = data
         })
-        bigType += ''
-        this.prodCatOptions = filter(bigType, {
-          field: 'classId',
-          list: this.catList
-        })
+        this.prodCatOptions = this.catList.filter(
+          item => item.classId == bigType
+        )
       }
     },
     newProdCode() {
@@ -1575,7 +1574,7 @@ export default {
     getProdParamOptions().then(response => {
       let data = response.data.data
       this.paramList = data
-      this.prodColorOptions = filter('466', { field: 'parentId', list: data })
+      this.prodColorOptions = data.filter(item => item.parentId == 466)
     })
     //fetch all the categories
     getProdCatOptions().then(response => {

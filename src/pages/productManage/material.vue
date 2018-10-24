@@ -864,11 +864,9 @@ export default {
         this.material.smallType = ''
         this.material.matCat = ''
         this.material.matSpe = ''
-        newVal += ''
-        this.matTypeOptions = filter(newVal, {
-          field: 'parentId',
-          list: this.classList
-        })
+        this.matTypeOptions = this.classList.filter(
+          item => item.parentId == newVal
+        )
       }
     },
     'material.matType': function(newVal, oldVal) {
@@ -882,11 +880,9 @@ export default {
         this.material.smallType = ''
         this.material.matCat = ''
         this.material.matSpe = ''
-        newVal += ''
-        this.bigTypeOptions = filter(newVal, {
-          field: 'parentId',
-          list: this.classList
-        })
+        this.bigTypeOptions = this.classList.filter(
+          item => item.parentId == newVal
+        )
       }
     },
     'material.bigType': function(newVal, oldVal) {
@@ -900,25 +896,18 @@ export default {
           let data = response.data.data
           this.matSpeOptions = data
         })
-        newVal += ''
-        this.middleTypeOptions = filter(newVal, {
-          field: 'parentId',
-          list: this.classList
-        })
-        this.matCatOptions = filter(newVal, {
-          field: 'classId',
-          list: this.catList
-        })
+        this.middleTypeOptions = this.classList.filter(
+          item => item.parentId == newVal
+        )
+        this.matCatOptions = this.catList.filter(item => item.classId == newVal)
       }
     },
     'material.middleType': function(newVal, oldVal) {
       if (this.mainMatModalOpened && newVal != '') {
         this.material.smallType = ''
-        newVal += ''
-        this.smallTypeOptions = filter(newVal, {
-          field: 'parentId',
-          list: this.classList
-        })
+        this.smallTypeOptions = this.classList.filter(
+          item => item.parentId == newVal
+        )
       }
     }
   },
@@ -1006,30 +995,24 @@ export default {
             this.matSpeOptions = data
           })
           // filter util need string parameter
-          let matFamily = material.matFamily + ''
-          let matType = material.matType + ''
-          bigType += ''
-          let middleType = material.middleType + ''
-          this.matTypeOptions = filter(matFamily, {
-            field: 'parentId',
-            list: this.classList
-          })
-          this.bigTypeOptions = filter(matType, {
-            field: 'parentId',
-            list: this.classList
-          })
-          this.middleTypeOptions = filter(bigType, {
-            field: 'parentId',
-            list: this.classList
-          })
-          this.smallTypeOptions = filter(middleType, {
-            field: 'parentId',
-            list: this.classList
-          })
-          this.matCatOptions = filter(bigType, {
-            field: 'classId',
-            list: this.catList
-          })
+          let matFamily = material.matFamily
+          let matType = material.matType
+          let middleType = material.middleType
+          this.matTypeOptions = this.classList.filter(
+            item => item.parentId == matFamily
+          )
+          this.bigTypeOptions = this.classList.filter(
+            item => item.parentId == matType
+          )
+          this.middleTypeOptions = this.classList.filter(
+            item => item.parentId == bigType
+          )
+          this.smallTypeOptions = this.classList.filter(
+            item => item.parentId == middleType
+          )
+          this.matCatOptions = this.catList.filter(
+            item => item.classId == bigType
+          )
           this.$nextTick(() => {
             this.mainMatModalOpened = true
           })
@@ -1250,7 +1233,7 @@ export default {
     getProdClassOptions().then(response => {
       let data = response.data.data
       this.classList = data
-      let list = filter('0', { field: 'parentId', list: data })
+      let list = data.filter(item => item.parentId == 0)
       // abandon prod
       for (let i = 0; i < list.length; i++) {
         let id = list[i].value
@@ -1262,10 +1245,10 @@ export default {
     getProdParamOptions().then(response => {
       let data = response.data.data
       this.paramList = data
-      this.matAttrOptions = filter('606', { field: 'parentId', list: data })
-      this.matYearOptions = filter('464', { field: 'parentId', list: data })
-      this.matUnitOptions = filter('458', { field: 'parentId', list: data })
-      this.matColorOptions = filter('466', { field: 'parentId', list: data })
+      this.matAttrOptions = data.filter(item => item.parentId == 606)
+      this.matYearOptions = data.filter(item => item.parentId == 464)
+      this.matUnitOptions = data.filter(item => item.parentId == 458)
+      this.matColorOptions = data.filter(item => item.parentId == 466)
     })
     //fetch all the categories
     getProdCatOptions().then(response => {

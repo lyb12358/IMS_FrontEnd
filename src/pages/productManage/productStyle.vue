@@ -248,7 +248,8 @@
              no-refocus
              :content-css="{maxWidth: '50vw', minHeight: '60vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header" :color="brandColor">
+        <q-toolbar slot="header"
+                   :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -350,7 +351,8 @@
              no-refocus
              :content-css="{minWidth: '100vw', minHeight: '100vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header" :color="brandColor">
+        <q-toolbar slot="header"
+                   :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -592,7 +594,8 @@
              no-refocus
              :content-css="{minWidth: '50vw', minHeight: '50vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header" :color="brandColor">
+        <q-toolbar slot="header"
+                   :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -854,11 +857,9 @@ export default {
         this.productStyle.bigType = ''
         this.productStyle.middleType = ''
         this.productStyle.smallType = ''
-        newVal += ''
-        this.prodTypeOptions = filter(newVal, {
-          field: 'parentId',
-          list: this.classList
-        })
+        this.prodTypeOptions = this.classList.filter(
+          item => item.parentId == newVal
+        )
       }
     },
     'productStyle.prodType': function(newVal, oldVal) {
@@ -868,11 +869,9 @@ export default {
         this.productStyle.bigType = ''
         this.productStyle.middleType = ''
         this.productStyle.smallType = ''
-        newVal += ''
-        this.bigTypeOptions = filter(newVal, {
-          field: 'parentId',
-          list: this.classList
-        })
+        this.bigTypeOptions = this.classList.filter(
+          item => item.parentId == newVal
+        )
       }
     },
     'productStyle.bigType': function(newVal, oldVal) {
@@ -881,20 +880,18 @@ export default {
         this.productStyle.middleType = ''
         this.productStyle.smallType = ''
         newVal += ''
-        this.middleTypeOptions = filter(newVal, {
-          field: 'parentId',
-          list: this.classList
-        })
+        this.middleTypeOptions = this.classList.filter(
+          item => item.parentId == newVal
+        )
       }
     },
     'productStyle.middleType': function(newVal, oldVal) {
       if (this.mainStyleModalOpened && newVal != '') {
         this.productStyle.smallType = ''
         newVal += ''
-        this.smallTypeOptions = filter(newVal, {
-          field: 'parentId',
-          list: this.classList
-        })
+        this.smallTypeOptions = this.classList.filter(
+          item => item.parentId == newVal
+        )
       }
     }
   },
@@ -1004,26 +1001,22 @@ export default {
           }
           Object.assign(this.productStyle, productStyle)
           // filter util need string parameter
-          let prodFamily = productStyle.prodFamily + ''
-          let prodType = productStyle.prodType + ''
-          let bigType = productStyle.bigType + ''
-          let middleType = productStyle.middleType + ''
-          this.prodTypeOptions = filter(prodFamily, {
-            field: 'parentId',
-            list: this.classList
-          })
-          this.bigTypeOptions = filter(prodType, {
-            field: 'parentId',
-            list: this.classList
-          })
-          this.middleTypeOptions = filter(bigType, {
-            field: 'parentId',
-            list: this.classList
-          })
-          this.smallTypeOptions = filter(middleType, {
-            field: 'parentId',
-            list: this.classList
-          })
+          let prodFamily = productStyle.prodFamily
+          let prodType = productStyle.prodType
+          let bigType = productStyle.bigType
+          let middleType = productStyle.middleType
+          this.prodTypeOptions = this.classList.filter(
+            item => item.parentId == prodFamily
+          )
+          this.bigTypeOptions = this.classList.filter(
+            item => item.parentId == prodType
+          )
+          this.middleTypeOptions = this.classList.filter(
+            item => item.parentId == bigType
+          )
+          this.smallTypeOptions = this.classList.filter(
+            item => item.parentId == middleType
+          )
           this.$nextTick(() => {
             this.mainStyleModalOpened = true
           })
@@ -1225,7 +1218,7 @@ export default {
     getProdClassOptions().then(response => {
       let data = response.data.data
       this.classList = data
-      let list = filter('0', { field: 'parentId', list: data })
+      let list = data.filter(item => item.parentId == 0)
       // abandon mat
       for (let i = 0; i < list.length; i++) {
         let id = list[i].value
@@ -1237,15 +1230,12 @@ export default {
     getProdParamOptions().then(response => {
       let data = response.data.data
       this.paramList = data
-      this.prodAttrOptions = filter('606', { field: 'parentId', list: data })
-      this.prodYearOptions = filter('464', { field: 'parentId', list: data })
-      this.prodSeasonOptions = filter('465', {
-        field: 'parentId',
-        list: data
-      })
-      this.prodUnitOptions = filter('458', { field: 'parentId', list: data })
-      this.prodLevelOptions = filter('486', { field: 'parentId', list: data })
-      this.designerOptions = filter('567', { field: 'parentId', list: data })
+      this.prodAttrOptions = data.filter(item => item.parentId == 606)
+      this.prodYearOptions = data.filter(item => item.parentId == 464)
+      this.prodSeasonOptions = data.filter(item => item.parentId == 465)
+      this.prodUnitOptions = data.filter(item => item.parentId == 458)
+      this.prodLevelOptions = data.filter(item => item.parentId == 486)
+      this.designerOptions = data.filter(item => item.parentId == 567)
     })
   }
 }
