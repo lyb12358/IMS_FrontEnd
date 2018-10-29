@@ -101,7 +101,7 @@
                 :props="props"
                 style="text-align:center">
             <img :src="thumbnailCheck(props.row.id,props.row.thumbnail)"
-                 style="height: 80px; width: 140px;"></q-td>
+                 style="height: 80px; width: 80px;"></q-td>
           <q-td key="matName"
                 :props="props"
                 style="text-align:center">{{ props.row.matName }}</q-td>

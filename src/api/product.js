@@ -14,16 +14,16 @@ export function getProdCodeById(id) {
         method: 'get',
     })
 }
-export function addProdCode(product) {
+export function addProdCode(product, thirdFlag) {
     return service({
-        url: '/prodCode',
+        url: '/prodCode/' + thirdFlag,
         method: 'post',
         data: product
     })
 }
-export function updateProdCode(product) {
+export function updateProdCode(product, thirdFlag) {
     return service({
-        url: '/prodCode',
+        url: '/prodCode/' + thirdFlag,
         method: 'put',
         data: product
     })

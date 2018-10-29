@@ -88,7 +88,7 @@
                 CMS
               </div>
               <div class="caption q-ml-lg text-white">
-                v0.10.1
+                v1.0.0
               </div>
             </div>
             <q-item-separator />

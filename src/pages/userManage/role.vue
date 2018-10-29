@@ -381,7 +381,7 @@
                                 label="查看生产周期"
                                 color="tertiary"
                                 :val=63 />
-                    <q-checkbox v-model="rolePermission"
+                    <!-- <q-checkbox v-model="rolePermission"
                                 label="查看三等品零售价"
                                 color="tertiary"
                                 :val=64 />
@@ -392,7 +392,7 @@
                     <q-checkbox v-model="rolePermission"
                                 label="查看三等品成本价"
                                 color="tertiary"
-                                :val=66 />
+                                :val=66 /> -->
                     <q-checkbox v-model="rolePermission"
                                 label="查看产品编号缩略图"
                                 color="tertiary"
@@ -554,7 +554,7 @@
                                 label="修改生产周期"
                                 color="orange"
                                 :val=113 />
-                    <q-checkbox v-model="rolePermission"
+                    <!-- <q-checkbox v-model="rolePermission"
                                 label="修改三等品零售价"
                                 color="orange"
                                 :val=114 />
@@ -565,7 +565,7 @@
                     <q-checkbox v-model="rolePermission"
                                 label="修改三等品成本价"
                                 color="orange"
-                                :val=116 />
+                                :val=116 /> -->
                   </div>
                 </q-collapsible>
                 <q-collapsible label="产品款式管理(点击展开)">

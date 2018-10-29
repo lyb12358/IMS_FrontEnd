@@ -114,7 +114,7 @@
                 :props="props"
                 style="text-align:center">
             <img :src="thumbnailCheck(props.row.id,props.row.styleId,props.row.codeThumbnail,props.row.styleThumbnail)"
-                 style="height: 80px; width: 140px;"></q-td>
+                 style="height: 80px; width: 80px;"></q-td>
           <q-td v-if="checkCode('prodName')"
                 key="prodName"
                 :props="props"
@@ -229,7 +229,7 @@
                 :props="props"
                 style="text-align:center">{{ props.row.prodCycle }}
           </q-td>
-          <q-td v-if="checkCode('tRetailPrice')"
+          <!-- <q-td v-if="checkCode('tRetailPrice')"
                 key="tRetailPrice"
                 :props="props"
                 style="text-align:center">{{ props.row.tRetailPrice }}
@@ -243,7 +243,7 @@
                 key="tCostPrice"
                 :props="props"
                 style="text-align:center">{{ props.row.tCostPrice }}
-          </q-td>
+          </q-td> -->
           <q-td v-if="checkCode('yearName')"
                 key="yearName"
                 :props="props"
@@ -526,26 +526,35 @@
                    inverted>
           <div class="col-12 row justify-center ">
             <div v-if="modalActionName==='修改产品信息'"
-                 style="margin:0 2rem">
+                 style="margin:0 1.5rem">
               <q-btn color="primary"
                      :loading="modifyLoading"
                      label="确定"
-                     @click="modifyProdCode" />
+                     @click="modifyProdCode(false)" />
+              <q-btn color="primary"
+                     v-show="isNotThird"
+                     :loading="modifyLoading"
+                     label="确定(含三等品)"
+                     @click="modifyProdCode(true)" />
             </div>
             <div v-if="modalActionName==='新增产品信息'"
-                 style="margin:0 2rem">
+                 style="margin:0 1.5rem">
               <q-btn color="primary"
                      :loading="newLoading"
                      label="确定"
-                     @click="newProdCode" />
+                     @click="newProdCode(false)" />
+              <q-btn color="primary"
+                     :loading="newLoading"
+                     label="确定(含三等品)"
+                     @click="newProdCode(true)" />
             </div>
             <div v-if="modalActionName==='新增产品信息'"
-                 style="margin:0 2rem">
+                 style="margin:0 1.5rem">
               <q-btn color="primary"
                      label="重置"
                      @click="resetCodeModal" />
             </div>
-            <div style="margin:0 2rem">
+            <div style="margin:0 1.5rem">
               <q-btn color="primary"
                      v-close-overlay
                      label="取消" />
@@ -726,7 +735,7 @@
                          float-label="生产周期" />
               </q-field>
             </div>
-            <div v-show="checkCodeModified(114)"
+            <!-- <div v-show="checkCodeModified(114)"
                  class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.tRetailPrice.$error"
                        error-label="请填写有效值">
@@ -752,7 +761,7 @@
                          class="no-margin"
                          float-label="三等品成本价" />
               </q-field>
-            </div>
+            </div> -->
             <div class="col-xs-12 col-sm-6 col-md-3">
               <q-toggle v-show="checkCodeModified(109)"
                         v-model="productCode.isRemind"
@@ -959,9 +968,9 @@ export default {
         { name: 'isSecurity', label: '是否防伪码', field: 'isSecurity' },
         { name: 'isRate', label: '计算周转率', field: 'isRate' },
         { name: 'prodCycle', label: '生产周期(天)', field: 'prodCycle' },
-        { name: 'tRetailPrice', label: '三等品零售价', field: 'tRetailPrice' },
-        { name: 'tSupplyPrice', label: '三等品供应价', field: 'tSupplyPrice' },
-        { name: 'tCostPrice', label: '三等品成本价', field: 'tCostPrice' },
+        // { name: 'tRetailPrice', label: '三等品零售价', field: 'tRetailPrice' },
+        // { name: 'tSupplyPrice', label: '三等品供应价', field: 'tSupplyPrice' },
+        // { name: 'tCostPrice', label: '三等品成本价', field: 'tCostPrice' },
         { name: 'yearName', label: '年份', field: 'yearName' },
         { name: 'seasonName', label: '季节', field: 'seasonName' },
         { name: 'unitName', label: '单位', field: 'unitName' },
@@ -1015,6 +1024,7 @@ export default {
         isDel: false,
         isSync: false
       },
+      isNotThird: false,
       productCode: {
         id: 0,
         styleId: 0,
@@ -1038,9 +1048,9 @@ export default {
         isSecurity: false,
         isRate: false,
         prodCycle: '',
-        tRetailPrice: '',
-        tSupplyPrice: '',
-        tCostPrice: '',
+        // tRetailPrice: '',
+        // tSupplyPrice: '',
+        // tCostPrice: '',
         isDel: false,
         isSync: false
       },
@@ -1085,22 +1095,22 @@ export default {
       numModel: { integer },
       boxNum: { integer },
       boxWarn: { integer },
-      prodCycle: { integer },
-      tRetailPrice: {
-        decimal,
-        minValue: minValue(0),
-        maxValue: maxValue(999999)
-      },
-      tSupplyPrice: {
-        decimal,
-        minValue: minValue(0),
-        maxValue: maxValue(999999)
-      },
-      tCostPrice: {
-        decimal,
-        minValue: minValue(0),
-        maxValue: maxValue(999999)
-      }
+      prodCycle: { integer }
+      // tRetailPrice: {
+      //   decimal,
+      //   minValue: minValue(0),
+      //   maxValue: maxValue(999999)
+      // },
+      // tSupplyPrice: {
+      //   decimal,
+      //   minValue: minValue(0),
+      //   maxValue: maxValue(999999)
+      // },
+      // tCostPrice: {
+      //   decimal,
+      //   minValue: minValue(0),
+      //   maxValue: maxValue(999999)
+      // }
     }
   },
   computed: {
@@ -1343,6 +1353,8 @@ export default {
           }
           Object.assign(this.productStyle, product)
           Object.assign(this.productCode, product)
+          //judge if modify third
+          this.isNotThird = product.prodCode.substring(product.prodCode.length-1)!='T'
           this.$nextTick(() => {
             this.productStyle.thumbnail = this.productStyle.styleThumbnail
             this.productStyle.id = this.productStyle.styleId
@@ -1362,7 +1374,7 @@ export default {
         )
       }
     },
-    newProdCode() {
+    newProdCode(thirdFlag) {
       //check prodType permission
       let pt = this.productStyle.prodType
       pt += ''
@@ -1384,7 +1396,7 @@ export default {
       //fix
       this.productCode.isSync = 1
       this.productCode.gmtCreate = Date.now()
-      addProdCode(this.productCode)
+      addProdCode(this.productCode, thirdFlag)
         .then(response => {
           this.mainCodeModalOpened = false
           this.newLoading = false
@@ -1406,7 +1418,7 @@ export default {
           this.newLoading = false
         })
     },
-    modifyProdCode() {
+    modifyProdCode(thirdFlag) {
       this.$v.productCode.$touch()
       if (this.$v.productCode.$invalid) {
         return
@@ -1418,7 +1430,7 @@ export default {
       this.productCode.status = 1
       this.productCode.gmtCreate = ''
       this.productCode.gmtModified = ''
-      updateProdCode(this.productCode)
+      updateProdCode(this.productCode, thirdFlag)
         .then(response => {
           this.mainCodeModalOpened = false
           this.modifyLoading = false

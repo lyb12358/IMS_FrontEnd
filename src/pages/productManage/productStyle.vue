@@ -97,7 +97,7 @@
                 :props="props"
                 style="text-align:center">
             <img :src="thumbnailCheck(props.row.id,props.row.thumbnail)"
-                 style="height: 80px; width: 140px;"></q-td>
+                 style="height: 80px; width: 80px;"></q-td>
           <q-td v-if="checkStyle('styleName')"
                 key="styleName"
                 :props="props"
