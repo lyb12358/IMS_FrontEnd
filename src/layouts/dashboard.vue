@@ -412,7 +412,7 @@ export default {
   },
   mounted() {
     this.$q.notify({
-      message: '主题功能正式上线！右上角开始体验 :)',
+      message: '系统正式上线，有需求请联系信息中心！',
       color: 'tertiary',
       timeout: 5000,
       position: 'bottom-right',

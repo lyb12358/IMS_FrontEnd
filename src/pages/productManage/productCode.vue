@@ -530,7 +530,8 @@
               <q-btn color="primary"
                      :loading="modifyLoading"
                      label="确定"
-                     @click="modifyProdCode(false)" />
+                     @click="modifyProdCode(false)"
+                     style="margin:0 1.5rem" />
               <q-btn color="primary"
                      v-show="isNotThird"
                      :loading="modifyLoading"
@@ -542,7 +543,8 @@
               <q-btn color="primary"
                      :loading="newLoading"
                      label="确定"
-                     @click="newProdCode(false)" />
+                     @click="newProdCode(false)" 
+                     style="margin:0 1.5rem"/>
               <q-btn color="primary"
                      :loading="newLoading"
                      label="确定(含三等品)"
