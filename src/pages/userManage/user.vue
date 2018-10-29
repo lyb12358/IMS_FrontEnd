@@ -90,7 +90,7 @@
                 style="text-align:center">{{ props.row.name}}</q-td>
           <q-td key="roleName"
                 :props="props"
-                style="text-align:center">{{ props.row.roleName}}</q-td>
+                :style="{textAlign:'center',maxWidth:'200px',whiteSpace:'normal'}">{{ props.row.roleName}}</q-td>
           <q-td key="status"
                 :props="props"
                 style="text-align:center">

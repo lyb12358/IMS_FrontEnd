@@ -101,7 +101,7 @@
           <q-td v-if="checkStyle('styleName')"
                 key="styleName"
                 :props="props"
-                style="text-align:center">{{ props.row.styleName }}</q-td>
+                :style="{textAlign:'center',maxWidth:'100px',whiteSpace:'normal'}">{{ props.row.styleName }}</q-td>
           <q-td v-if="checkStyle('familyName')"
                 key="familyName"
                 :props="props"
@@ -129,7 +129,7 @@
           <q-td v-if="checkStyle('prodMat')"
                 key="prodMat"
                 :props="props"
-                style="text-align:center">{{ props.row.prodMat }}</q-td>
+                :style="{textAlign:'center',maxWidth:'100px',whiteSpace:'normal'}">{{ props.row.prodMat }}</q-td>
           <q-td v-if="checkStyle('yearName')"
                 key="yearName"
                 :props="props"

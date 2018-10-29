@@ -118,11 +118,21 @@
           <q-td v-if="checkCode('prodName')"
                 key="prodName"
                 :props="props"
-                style="text-align:center">{{ props.row.prodName }}</q-td>
+                :style="{textAlign:'center',maxWidth:'150px',whiteSpace:'normal'}">
+            {{ props.row.prodName }}<q-btn flat
+                   v-if="checkAuth(15)"
+                   rounded
+                   color="info"
+                   class="print-hide"
+                   icon="mdi-tooltip-image"
+                   @click="imageCheck(props.row.id,props.row.styleId,props.row.codeImage,props.row.styleImage)">
+                   <q-tooltip>图片预览</q-tooltip>
+            </q-btn>
+          </q-td>
           <q-td v-if="checkCode('catName')"
                 key="catName"
                 :props="props"
-                style="text-align:center">{{ props.row.catName }}</q-td>
+                :style="{textAlign:'center',maxWidth:'100px',whiteSpace:'normal'}">{{ props.row.catName }}</q-td>
           <q-td v-if="checkCode('prodStyle')"
                 key="prodStyle"
                 :props="props"
@@ -154,7 +164,7 @@
           <q-td v-if="checkCode('speName')"
                 key="speName"
                 :props="props"
-                style="text-align:center">{{ props.row.speName }}</q-td>
+                :style="{textAlign:'center',maxWidth:'100px',whiteSpace:'normal'}">{{ props.row.speName }}</q-td>
           <q-td v-if="checkCode('colorName')"
                 key="colorName"
                 :props="props"
@@ -543,8 +553,8 @@
               <q-btn color="primary"
                      :loading="newLoading"
                      label="确定"
-                     @click="newProdCode(false)" 
-                     style="margin:0 1.5rem"/>
+                     @click="newProdCode(false)"
+                     style="margin:0 1.5rem" />
               <q-btn color="primary"
                      :loading="newLoading"
                      label="确定(含三等品)"
@@ -784,6 +794,28 @@
                        :max-height="100" />
             </div>
           </div>
+        </div>
+      </q-modal-layout>
+    </q-modal>
+    <!-- image preview -->
+    <q-modal v-model="imagePreviewModalOpened"
+             no-refocus
+             :content-css="{ minHeight: '100vh'}">
+      <q-modal-layout footer-class="no-shadow">
+        <q-toolbar slot="header"
+                   :color="brandColor">
+          <q-btn flat
+                 round
+                 dense
+                 v-close-overlay
+                 icon="mdi-arrow-left" />
+          <q-toolbar-title>
+            图片预览
+          </q-toolbar-title>
+        </q-toolbar>
+        <div>
+          <img :src="imageAddress"
+                 style="height: 1000px; width: 1000px;">
         </div>
       </q-modal-layout>
     </q-modal>
@@ -1061,6 +1093,9 @@ export default {
       catList: [],
       prodCatOptions: [],
       prodSpeOptions: [],
+      //image preview
+      imageAddress:'',
+      imagePreviewModalOpened:false,
       //upload image
       expandId: 0,
       expandStyle: '',
@@ -1315,6 +1350,17 @@ export default {
         return 'statics/sad.svg'
       }
     },
+    //image preview
+    imageCheck(id, styleId, codeImage, styleImage) {
+      if (!(codeImage === null) && !(codeImage === '')) {
+        this.imageAddress= this.api + '/image/code/' + id + '/' + codeImage
+      } else if (!(styleImage === null) && !(styleImage === '')) {
+        this.imageAddress= this.api + '/image/style/' + styleId + '/' + styleImage
+      } else {
+        this.imageAddress= 'statics/sad.svg'
+      }
+      this.imagePreviewModalOpened=true
+    },
     //main modal function
     openMainCodeModal(action, id) {
       this.$v.productCode.$reset()
@@ -1356,7 +1402,8 @@ export default {
           Object.assign(this.productStyle, product)
           Object.assign(this.productCode, product)
           //judge if modify third
-          this.isNotThird = product.prodCode.substring(product.prodCode.length-1)!='T'
+          this.isNotThird =
+            product.prodCode.substring(product.prodCode.length - 1) != 'T'
           this.$nextTick(() => {
             this.productStyle.thumbnail = this.productStyle.styleThumbnail
             this.productStyle.id = this.productStyle.styleId

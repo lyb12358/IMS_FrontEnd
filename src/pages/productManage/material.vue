@@ -104,7 +104,7 @@
                  style="height: 80px; width: 80px;"></q-td>
           <q-td key="matName"
                 :props="props"
-                style="text-align:center">{{ props.row.matName }}</q-td>
+                :style="{textAlign:'center',maxWidth:'100px',whiteSpace:'normal'}">{{ props.row.matName }}</q-td>
           <q-td key="matFamily"
                 :props="props"
                 style="text-align:center">{{ props.row.familyName }}</q-td>
