@@ -104,7 +104,16 @@
                  style="height: 80px; width: 80px;"></q-td>
           <q-td key="matName"
                 :props="props"
-                :style="{textAlign:'center',maxWidth:'100px',whiteSpace:'normal'}">{{ props.row.matName }}</q-td>
+                :style="{textAlign:'center',maxWidth:'100px',whiteSpace:'normal'}">{{ props.row.matName }}
+                <q-btn flat
+                   v-show="checkAuth(31)"
+                   rounded
+                   color="info"
+                   class="print-hide"
+                   icon="mdi-tooltip-image"
+                   @click="imageCheck(props.row.id,props.row.image)">
+              <q-tooltip>图片预览</q-tooltip>
+            </q-btn></q-td>
           <q-td key="matFamily"
                 :props="props"
                 style="text-align:center">{{ props.row.familyName }}</q-td>
@@ -566,6 +575,28 @@
                label="取消" />
       </template>
     </q-dialog> -->
+    <!-- image preview -->
+    <q-modal v-model="imagePreviewModalOpened"
+             no-refocus
+             :content-css="{ minHeight: '100vh'}">
+      <q-modal-layout footer-class="no-shadow">
+        <q-toolbar slot="header"
+                   :color="brandColor">
+          <q-btn flat
+                 round
+                 dense
+                 v-close-overlay
+                 icon="mdi-arrow-left" />
+          <q-toolbar-title>
+            图片预览
+          </q-toolbar-title>
+        </q-toolbar>
+        <div>
+          <img :src="imageAddress"
+               style="height: 1000px; width: 1000px;">
+        </div>
+      </q-modal-layout>
+    </q-modal>
     <!-- upload image -->
     <q-dialog v-model="imageUploadDialog"
               prevent-close>
@@ -778,6 +809,9 @@ export default {
       matYearOptions: [],
       matColorOptions: [],
       matUnitOptions: [],
+      //image preview
+      imageAddress: '',
+      imagePreviewModalOpened: false,
       //upload image
       expandId: 0,
       expandStyle: '',
@@ -1101,6 +1135,15 @@ export default {
       } else {
         return 'statics/sad.svg'
       }
+    },
+    //image preview
+    imageCheck(id, image) {
+      if (!(image === null) && !(image === '')) {
+        this.imageAddress = this.api + '/image/mat/' + id + '/' + image
+      } else {
+        this.imageAddress = 'statics/sad.svg'
+      }
+      this.imagePreviewModalOpened = true
     },
     newMat() {
       //check matType permission

@@ -101,7 +101,17 @@
           <q-td v-if="checkStyle('styleName')"
                 key="styleName"
                 :props="props"
-                :style="{textAlign:'center',maxWidth:'100px',whiteSpace:'normal'}">{{ props.row.styleName }}</q-td>
+                :style="{textAlign:'center',maxWidth:'100px',whiteSpace:'normal'}">{{ props.row.styleName }}
+            <q-btn flat
+                   v-show="checkAuth(23)"
+                   rounded
+                   color="info"
+                   class="print-hide"
+                   icon="mdi-tooltip-image"
+                   @click="imageCheck(props.row.id,props.row.image)">
+              <q-tooltip>图片预览</q-tooltip>
+            </q-btn>
+          </q-td>
           <q-td v-if="checkStyle('familyName')"
                 key="familyName"
                 :props="props"
@@ -557,6 +567,28 @@
                label="取消" />
       </template>
     </q-dialog> -->
+    <!-- image preview -->
+    <q-modal v-model="imagePreviewModalOpened"
+             no-refocus
+             :content-css="{ minHeight: '100vh'}">
+      <q-modal-layout footer-class="no-shadow">
+        <q-toolbar slot="header"
+                   :color="brandColor">
+          <q-btn flat
+                 round
+                 dense
+                 v-close-overlay
+                 icon="mdi-arrow-left" />
+          <q-toolbar-title>
+            图片预览
+          </q-toolbar-title>
+        </q-toolbar>
+        <div>
+          <img :src="imageAddress"
+               style="height: 1000px; width: 1000px;">
+        </div>
+      </q-modal-layout>
+    </q-modal>
     <!-- upload image -->
     <q-dialog v-model="imageUploadDialog"
               prevent-close>
@@ -776,6 +808,9 @@ export default {
       prodUnitOptions: [],
       prodLevelOptions: [],
       designerOptions: [],
+      //image preview
+      imageAddress: '',
+      imagePreviewModalOpened: false,
       //upload image
       expandId: 0,
       expandStyle: '',
@@ -1075,6 +1110,15 @@ export default {
       } else {
         return 'statics/sad.svg'
       }
+    },
+    //image preview
+    imageCheck(id, image) {
+      if (!(image === null) && !(image === '')) {
+        this.imageAddress = this.api + '/image/style/' + id + '/' + image
+      } else {
+        this.imageAddress = 'statics/sad.svg'
+      }
+      this.imagePreviewModalOpened = true
     },
     newProdStyle() {
       //check prodType permission
