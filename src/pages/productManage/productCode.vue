@@ -542,11 +542,11 @@
                      label="确定"
                      @click="modifyProdCode(false)"
                      style="margin:0 1.5rem" />
-              <q-btn color="primary"
+              <!-- <q-btn color="primary"
                      v-show="isNotThird"
                      :loading="modifyLoading"
                      label="确定(含三等品)"
-                     @click="modifyProdCode(true)" />
+                     @click="modifyProdCode(true)" /> -->
             </div>
             <div v-if="modalActionName==='新增产品信息'"
                  style="margin:0 1.5rem">
