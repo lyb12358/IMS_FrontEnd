@@ -105,7 +105,7 @@
           <q-td key="matName"
                 :props="props"
                 :style="{textAlign:'center',maxWidth:'100px',whiteSpace:'normal'}">{{ props.row.matName }}
-                <q-btn flat
+            <q-btn flat
                    v-show="checkAuth(31)"
                    rounded
                    color="info"
@@ -113,7 +113,8 @@
                    icon="mdi-tooltip-image"
                    @click="imageCheck(props.row.id,props.row.image)">
               <q-tooltip>图片预览</q-tooltip>
-            </q-btn></q-td>
+            </q-btn>
+          </q-td>
           <q-td key="matFamily"
                 :props="props"
                 style="text-align:center">{{ props.row.familyName }}</q-td>
@@ -528,7 +529,7 @@
                         :options="matYearOptions" />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-select v-model="material.prodUnit"
+              <q-select v-model="material.matUnit"
                         float-label="单位"
                         filter
                         radio
