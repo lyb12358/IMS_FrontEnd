@@ -1108,7 +1108,7 @@ export default {
       if (!(thumbnail === null)) {
         return this.api + '/image/style/' + id + '/' + thumbnail
       } else {
-        return 'statics/sad.svg'
+        return 'statics/noImage.jpg'
       }
     },
     //image preview
@@ -1116,7 +1116,7 @@ export default {
       if (!(image === null) && !(image === '')) {
         this.imageAddress = this.api + '/image/style/' + id + '/' + image
       } else {
-        this.imageAddress = 'statics/sad.svg'
+        this.imageAddress = 'statics/noImage.jpg'
       }
       this.imagePreviewModalOpened = true
     },

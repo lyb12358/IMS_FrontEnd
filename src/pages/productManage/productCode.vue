@@ -126,7 +126,7 @@
                    class="print-hide"
                    icon="mdi-tooltip-image"
                    @click="imageCheck(props.row.id,props.row.styleId,props.row.codeImage,props.row.styleImage)">
-                   <q-tooltip>图片预览</q-tooltip>
+              <q-tooltip>图片预览</q-tooltip>
             </q-btn>
           </q-td>
           <q-td v-if="checkCode('catName')"
@@ -815,7 +815,7 @@
         </q-toolbar>
         <div>
           <img :src="imageAddress"
-                 style="height: 1000px; width: 1000px;">
+               style="height: 1000px; width: 1000px;">
         </div>
       </q-modal-layout>
     </q-modal>
@@ -1094,8 +1094,8 @@ export default {
       prodCatOptions: [],
       prodSpeOptions: [],
       //image preview
-      imageAddress:'',
-      imagePreviewModalOpened:false,
+      imageAddress: '',
+      imagePreviewModalOpened: false,
       //upload image
       expandId: 0,
       expandStyle: '',
@@ -1347,19 +1347,20 @@ export default {
       } else if (!(styleThumbnail === null) && !(styleThumbnail === '')) {
         return this.api + '/image/style/' + styleId + '/' + styleThumbnail
       } else {
-        return 'statics/sad.svg'
+        return 'statics/noImage.jpg'
       }
     },
     //image preview
     imageCheck(id, styleId, codeImage, styleImage) {
       if (!(codeImage === null) && !(codeImage === '')) {
-        this.imageAddress= this.api + '/image/code/' + id + '/' + codeImage
+        this.imageAddress = this.api + '/image/code/' + id + '/' + codeImage
       } else if (!(styleImage === null) && !(styleImage === '')) {
-        this.imageAddress= this.api + '/image/style/' + styleId + '/' + styleImage
+        this.imageAddress =
+          this.api + '/image/style/' + styleId + '/' + styleImage
       } else {
-        this.imageAddress= 'statics/sad.svg'
+        this.imageAddress = 'statics/noImage.jpg'
       }
-      this.imagePreviewModalOpened=true
+      this.imagePreviewModalOpened = true
     },
     //main modal function
     openMainCodeModal(action, id) {
@@ -1376,7 +1377,7 @@ export default {
           this.prodSpeOptions = data
         })
         this.prodCatOptions = this.catList.filter(
-          item => item.classId == bigType
+          item => item.parentId == bigType
         )
       } else if (action === 'update') {
         // if (
@@ -1387,7 +1388,7 @@ export default {
         //   return
         // }
         this.modalActionName = '修改产品信息'
-        let xx = getProdCodeById(id).then(response => {
+        getProdCodeById(id).then(response => {
           let product = response.data.data
           //check prodType permission
           let pt = product.prodType
@@ -1409,18 +1410,15 @@ export default {
             this.productStyle.id = this.productStyle.styleId
             this.mainCodeModalOpened = true
           })
+          let bigType = this.productStyle.bigType
+          getProdSpeOptionsByParent(bigType).then(response => {
+            let data = response.data.data
+            this.prodSpeOptions = data
+          })
+          this.prodCatOptions = this.catList.filter(
+            item => item.parentId == bigType
+          )
         })
-        if (xx) {
-          return
-        }
-        let bigType = this.productStyle.bigType
-        getProdSpeOptionsByParent(bigType).then(response => {
-          let data = response.data.data
-          this.prodSpeOptions = data
-        })
-        this.prodCatOptions = this.catList.filter(
-          item => item.classId == bigType
-        )
       }
     },
     newProdCode(thirdFlag) {
