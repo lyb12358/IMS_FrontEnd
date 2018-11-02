@@ -149,19 +149,19 @@
             <template slot="header">
               <q-item-side icon="mdi-layers"
                            color="white" />
-              <q-item-main label="产品管理" />
+              <q-item-main label="商品管理" />
             </template>
             <q-item link
                     v-if="checkAuth(6)"
                     @click.native="$router.push('productCode')"
                     class="q-ml-xl">
-              <q-item-main label="产品编号管理" />
+              <q-item-main label="商品编号管理" />
             </q-item>
             <q-item link
                     v-if="checkAuth(7)"
                     @click.native="$router.push('productStyle')"
                     class="q-ml-xl">
-              <q-item-main label="产品款式管理" />
+              <q-item-main label="商品款式管理" />
             </q-item>
             <q-item link
                     v-if="checkAuth(8)"
@@ -179,7 +179,7 @@
                     v-if="$q.platform.is.cordova"
                     @click.native="$router.push('productCard')"
                     class="q-ml-xl">
-              <q-item-main label="产品卡片" />
+              <q-item-main label="商品卡片" />
             </q-item>
           </q-collapsible>
           <q-item v-if="checkAuth(10)"

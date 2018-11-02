@@ -13,7 +13,7 @@
                size="2rem"
                class="absolute"
                style="top: 0; right: 8px; transform: translateY(-20%);" />
-        <div class="text-faded">产品款式数量</div>
+        <div class="text-faded">商品款式数量</div>
       </q-card-title>
       <q-card-main style="margin-left:50px;">
         <p style="margin-left:50px;font-weight:500;font-size:4em;">{{styleNum}}</p>
@@ -37,7 +37,7 @@
                size="2rem"
                class="absolute"
                style="top: 0; right: 8px; transform: translateY(-20%);" />
-        <div class="text-faded">产品编号数量</div>
+        <div class="text-faded">商品编号数量</div>
       </q-card-title>
       <q-card-main style="margin-left:50px;">
         <p style="margin-left:50px;font-weight:500;font-size:4em;">

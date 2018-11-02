@@ -235,8 +235,8 @@
               </q-collapsible>
               <q-collapsible indent
                              icon="mdi-layers"
-                             label="产品管理">
-                <q-collapsible label="产品编号管理(点击展开)">
+                             label="商品管理">
+                <q-collapsible label="商品编号管理(点击展开)">
                   <q-btn-group>
                     <q-btn label="全选查看权限"
                            color="secondary"
@@ -261,23 +261,23 @@
                   </q-btn-group>
                   <div class="gutter-sm">
                     <q-checkbox v-model="rolePermission"
-                                label="产品编号管理页面"
+                                label="商品编号管理页面"
                                 :val=6 />
                     <br>
                     <q-checkbox v-model="rolePermission"
-                                label="新增产品编号"
+                                label="新增商品编号"
                                 color="secondary"
                                 :val=12 />
                     <q-checkbox v-model="rolePermission"
-                                label="修改产品编号"
+                                label="修改商品编号"
                                 color="secondary"
                                 :val=13 />
                     <q-checkbox v-model="rolePermission"
-                                label="上传产品编号图片"
+                                label="上传商品编号图片"
                                 color="secondary"
                                 :val=14 />
                     <q-checkbox v-model="rolePermission"
-                                label="下载产品编号图片"
+                                label="下载商品编号图片"
                                 color="secondary"
                                 :val=15 />
                     <q-checkbox v-model="rolePermission"
@@ -285,11 +285,11 @@
                                 color="secondary"
                                 :val=16 />
                     <q-checkbox v-model="rolePermission"
-                                label="删除产品编号"
+                                label="删除商品编号"
                                 color="secondary"
                                 :val=17 />
                     <q-checkbox v-model="rolePermission"
-                                label="导出产品编号"
+                                label="导出商品编号"
                                 color="secondary"
                                 :val=18 />
                     <q-checkbox v-model="rolePermission"
@@ -302,7 +302,7 @@
                                 :val=163 />
                     <br>
                     <q-checkbox v-model="rolePermission"
-                                label="查看产品编号"
+                                label="查看商品编号"
                                 color="tertiary"
                                 :val=44 />
                     <q-checkbox v-model="rolePermission"
@@ -394,11 +394,11 @@
                                 color="tertiary"
                                 :val=66 /> -->
                     <q-checkbox v-model="rolePermission"
-                                label="查看产品编号缩略图"
+                                label="查看商品编号缩略图"
                                 color="tertiary"
                                 :val=68 />
                     <q-checkbox v-model="rolePermission"
-                                label="查看产品编号是否同步"
+                                label="查看商品编号是否同步"
                                 color="tertiary"
                                 :val=71 />
                     <q-checkbox v-model="rolePermission"
@@ -418,15 +418,15 @@
                                 color="tertiary"
                                 :val=75 />
                     <q-checkbox v-model="rolePermission"
-                                label="查看产品属性"
+                                label="查看商品属性"
                                 color="tertiary"
                                 :val=76 />
                     <q-checkbox v-model="rolePermission"
-                                label="查看产品归属"
+                                label="查看商品归属"
                                 color="tertiary"
                                 :val=77 />
                     <q-checkbox v-model="rolePermission"
-                                label="查看产品类别"
+                                label="查看商品类别"
                                 color="tertiary"
                                 :val=78 />
                     <q-checkbox v-model="rolePermission"
@@ -475,7 +475,7 @@
                                 :val=90 />
                     <br>
                     <q-checkbox v-model="rolePermission"
-                                label="修改产品编号"
+                                label="修改商品编号"
                                 color="orange"
                                 :val=94 />
                     <q-checkbox v-model="rolePermission"
@@ -568,7 +568,7 @@
                                 :val=116 /> -->
                   </div>
                 </q-collapsible>
-                <q-collapsible label="产品款式管理(点击展开)">
+                <q-collapsible label="商品款式管理(点击展开)">
                   <q-btn-group>
                     <q-btn label="全选查看权限"
                            color="secondary"
@@ -593,31 +593,31 @@
                   </q-btn-group>
                   <div class="gutter-sm">
                     <q-checkbox v-model="rolePermission"
-                                label="产品款式管理页面"
+                                label="商品款式管理页面"
                                 :val=7 />
                     <br>
                     <q-checkbox v-model="rolePermission"
-                                label="新增产品款式"
+                                label="新增商品款式"
                                 color="secondary"
                                 :val=20 />
                     <q-checkbox v-model="rolePermission"
-                                label="修改产品款式"
+                                label="修改商品款式"
                                 color="secondary"
                                 :val=21 />
                     <q-checkbox v-model="rolePermission"
-                                label="上传产品款式图片"
+                                label="上传商品款式图片"
                                 color="secondary"
                                 :val=22 />
                     <q-checkbox v-model="rolePermission"
-                                label="下载产品款式图片"
+                                label="下载商品款式图片"
                                 color="secondary"
                                 :val=23 />
                     <q-checkbox v-model="rolePermission"
-                                label="删除产品款式"
+                                label="删除商品款式"
                                 color="secondary"
                                 :val=25 />
                     <!-- <q-checkbox v-model="rolePermission"
-                                label="导出产品款式"
+                                label="导出商品款式"
                                 color="secondary"
                                 :val=26 /> -->
                     <q-checkbox v-model="rolePermission"
@@ -638,15 +638,15 @@
                                 color="tertiary"
                                 :val=118 />
                     <q-checkbox v-model="rolePermission"
-                                label="查看产品属性"
+                                label="查看商品属性"
                                 color="tertiary"
                                 :val=119 />
                     <q-checkbox v-model="rolePermission"
-                                label="查看产品归属"
+                                label="查看商品归属"
                                 color="tertiary"
                                 :val=120 />
                     <q-checkbox v-model="rolePermission"
-                                label="查看产品类别"
+                                label="查看商品类别"
                                 color="tertiary"
                                 :val=121 />
                     <q-checkbox v-model="rolePermission"
@@ -715,15 +715,15 @@
                                 color="orange"
                                 :val=139 />
                     <q-checkbox v-model="rolePermission"
-                                label="修改产品属性"
+                                label="修改商品属性"
                                 color="orange"
                                 :val=140 />
                     <q-checkbox v-model="rolePermission"
-                                label="修改产品归属"
+                                label="修改商品归属"
                                 color="orange"
                                 :val=141 />
                     <q-checkbox v-model="rolePermission"
-                                label="修改产品类别"
+                                label="修改商品类别"
                                 color="orange"
                                 :val=142 />
                     <q-checkbox v-model="rolePermission"
@@ -852,7 +852,7 @@
                                 :val=43 />
                   </div>
                 </q-collapsible>
-                <q-collapsible label="维护产品权限管理(点击展开)">
+                <q-collapsible label="维护商品权限管理(点击展开)">
                   <div class="gutter-sm">
                     <q-checkbox v-model="rolePermission"
                                 label="维护常规大货"
@@ -875,7 +875,7 @@
                                 color="warning"
                                 :val=157 />
                     <q-checkbox v-model="rolePermission"
-                                label="维护老产品"
+                                label="维护老商品"
                                 color="warning"
                                 :val=158 />
                     <q-checkbox v-model="rolePermission"

@@ -10,16 +10,16 @@
                @click="openClassModel()">
             <q-icon name="settings"
                     :color="brandColor" />
-            <p class="caption">产品类别</p>
+            <p class="caption">商品类别</p>
           </div>
         </div>
         <div class="col-xs-6 col-sm-4"
              v-if="checkAuth(36)">
           <div class="card text-center "
-               @click="openParamModel(606,'产品属性')">
+               @click="openParamModel(606,'商品属性')">
             <q-icon name="settings"
                     :color="brandColor" />
-            <p class="caption">产品属性</p>
+            <p class="caption">商品属性</p>
           </div>
         </div>
         <div class="col-xs-6 col-sm-4"
@@ -28,7 +28,7 @@
                @click="openCSModel('prodCat')">
             <q-icon name="settings"
                     :color="brandColor" />
-            <p class="caption">产品品类</p>
+            <p class="caption">商品品类</p>
           </div>
         </div>
         <div class="col-xs-6 col-sm-4"
@@ -37,52 +37,52 @@
                @click="openCSModel('prodSpe')">
             <q-icon name="settings"
                     :color="brandColor" />
-            <p class="caption">产品规格</p>
+            <p class="caption">商品规格</p>
           </div>
         </div>
         <div class="col-xs-6 col-sm-4"
              v-if="checkAuth(39)">
           <div class="card text-center "
-               @click="openParamModel(464,'产品年份')">
+               @click="openParamModel(464,'商品年份')">
             <q-icon name="settings"
                     :color="brandColor" />
-            <p class="caption">产品年份</p>
+            <p class="caption">商品年份</p>
           </div>
         </div>
         <div class="col-xs-6 col-sm-4"
              v-if="checkAuth(40)">
           <div class="card text-center "
-               @click="openParamModel(465,'产品季节')">
+               @click="openParamModel(465,'商品季节')">
             <q-icon name="settings"
                     :color="brandColor" />
-            <p class="caption">产品季节</p>
+            <p class="caption">商品季节</p>
           </div>
         </div>
         <div class="col-xs-6 col-sm-4"
              v-if="checkAuth(41)">
           <div class="card text-center "
-               @click="openParamModel(466,'产品花色')">
+               @click="openParamModel(466,'商品花色')">
             <q-icon name="mdi-palette"
                     :color="brandColor" />
-            <p class="caption">产品花色</p>
+            <p class="caption">商品花色</p>
           </div>
         </div>
         <div class="col-xs-6 col-sm-4"
              v-if="checkAuth(42)">
           <div class="card text-center "
-               @click="openParamModel(486,'产品档次')">
+               @click="openParamModel(486,'商品档次')">
             <q-icon name="mdi-triangle"
                     :color="brandColor" />
-            <p class="caption">产品档次</p>
+            <p class="caption">商品档次</p>
           </div>
         </div>
         <div class="col-xs-6 col-sm-4"
              v-if="checkAuth(43)">
           <div class="card text-center "
-               @click="openParamModel(567,'产品设计师')">
+               @click="openParamModel(567,'商品设计师')">
             <q-icon name="mdi-face"
                     :color="brandColor" />
-            <p class="caption">产品设计师</p>
+            <p class="caption">商品设计师</p>
           </div>
         </div>
       </div>
@@ -94,7 +94,8 @@
              no-refocus
              :content-css="{minWidth: '80vw', minHeight: '80vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header" :color="brandColor">
+        <q-toolbar slot="header"
+                   :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -156,7 +157,8 @@
                       style="text-align:center">
                   <q-icon :name="props.row.isSync?'mdi-check-circle':'mdi-sync-off'"
                           size="1.5rem"
-                          :color="props.row.isSync?'positive':'negative'" /></q-td>
+                          :color="props.row.isSync?'positive':'negative'" />
+                </q-td>
                 <q-td key="operation"
                       :props="props"
                       style="text-align:center">
@@ -218,7 +220,8 @@
              no-refocus
              :content-css="{minWidth: '100vw', minHeight: '100vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header" :color="brandColor">
+        <q-toolbar slot="header"
+                   :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -266,7 +269,8 @@
                        row-key="name">
                 <template slot="top-left"
                           slot-scope="props">
-                  <q-btn icon="mdi-new-box"
+                  <q-btn v-if="CSSelected!=null"
+                         icon="mdi-new-box"
                          rounded
                          class="q-ma-xs"
                          color="primary"
@@ -300,7 +304,8 @@
                           style="text-align:center">
                       <q-icon :name="props.row.isSync?'mdi-check-circle':'mdi-sync-off'"
                               size="1.5rem"
-                              :color="props.row.isSync?'positive':'negative'" /></q-td>
+                              :color="props.row.isSync?'positive':'negative'" />
+                    </q-td>
                     <q-td key="operation"
                           :props="props"
                           style="text-align:center">
@@ -364,14 +369,15 @@
              no-refocus
              :content-css="{minWidth: '25vw', minHeight: '50vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header" :color="brandColor">
+        <q-toolbar slot="header"
+                   :color="brandColor">
           <q-btn flat
                  round
                  dense
                  v-close-overlay
                  icon="mdi-arrow-left" />
           <q-toolbar-title>
-            产品类别
+            商品类别
           </q-toolbar-title>
         </q-toolbar>
         <q-toolbar slot="footer"
@@ -621,7 +627,7 @@ export default {
       this.paramFilter = ''
       this.paramId = id
       this.paramModalName = name
-      this.paramData=[]
+      this.paramData = []
       this.fetchParamData()
       this.paramModalOpened = true
     },
@@ -707,9 +713,9 @@ export default {
       this.CSTreeData = []
       this.CSData = []
       if (type == 'prodCat') {
-        this.CSModalName = '产品品类'
+        this.CSModalName = '商品品类'
       } else {
-        this.CSModalName = '产品规格'
+        this.CSModalName = '商品规格'
       }
       this.CSModalOpened = true
       getProdClassTreeOnBigType()
@@ -725,7 +731,7 @@ export default {
         .catch(error => {})
     },
     fetchCSData() {
-      if (this.CSModalName == '产品品类') {
+      if (this.CSModalName == '商品品类') {
         getProdCatListByParent(this.CSSelected).then(response => {
           let data = response.data.data
           this.CSData = data
@@ -764,7 +770,7 @@ export default {
       this.productCS.status = 1
       this.productCS.isDel = 0
       this.productCS.orderId = 0
-      if (this.CSModalName == '产品品类') {
+      if (this.CSModalName == '商品品类') {
         addProdCat(this.productCS)
           .then(response => {
             let data = response.data
@@ -805,7 +811,7 @@ export default {
       }
       this.$v.productCS.$reset()
       this.modifyCSLoading = true
-      if (this.CSModalName == '产品品类') {
+      if (this.CSModalName == '商品品类') {
         updateProdCat(this.productCS)
           .then(response => {
             let data = response.data

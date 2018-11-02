@@ -420,13 +420,13 @@
             </div>
             <!-- <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.classLabel.$error"
-                       error-label="产品类别必填">
+                       error-label="商品类别必填">
                 <q-input v-model="productStyle.classLabel"
                          ref="classInput"
                          readonly
                          @focus="openClassDialog()"
                          class="no-margin"
-                         float-label="产品类别" />
+                         float-label="商品类别" />
               </q-field>
             </div> -->
             <div class="col-xs-12  col-sm-6 col-md-3">
@@ -1007,7 +1007,7 @@ export default {
         //   departId != this.myDepart &&
         //   this.myPermissions.indexOf('superAdmin') < 0
         // ) {
-        //   this.notify('warning', '无权维护非本部门产品')
+        //   this.notify('warning', '无权维护非本部门商品')
         //   return
         // }
         this.modalActionName = '修改'
@@ -1063,7 +1063,7 @@ export default {
     //   if (
     //     this.$refs.departTree.getNodeByKey(this.departSelected).isParent == 1
     //   ) {
-    //     this.notify('warning', '产品绑定到部门，而非公司')
+    //     this.notify('warning', '商品绑定到部门，而非公司')
     //     this.departSelected = ''
     //     return
     //   }

@@ -310,14 +310,14 @@
                    rounded
                    color="orange"
                    @click="openMainCodeModal('update',props.row.id)">
-              <q-tooltip>修改该编号产品信息</q-tooltip>
+              <q-tooltip>修改该编号商品信息</q-tooltip>
             </q-btn>
             <q-btn v-if="checkAuth(12)"
                    icon="mdi-playlist-plus"
                    rounded
                    color="brown"
                    @click="checkStyle(props.row.styleId)">
-              <q-tooltip>增加同款式产品</q-tooltip>
+              <q-tooltip>增加同款式商品</q-tooltip>
             </q-btn>
             <q-btn v-if="checkAuth(14)"
                    icon="mdi-image-plus"
@@ -341,7 +341,7 @@
                    rounded
                    color="primary"
                    @click="downloadSpec(props.row.id,props.row.prodName )">
-              <q-tooltip>下载产品说明书</q-tooltip>
+              <q-tooltip>下载商品说明书</q-tooltip>
             </q-btn>
             <q-btn v-if="checkAuth(162)"
                    icon="mdi-pencil-box"
@@ -535,7 +535,7 @@
         <q-toolbar slot="footer"
                    inverted>
           <div class="col-12 row justify-center ">
-            <div v-if="modalActionName==='修改产品信息'"
+            <div v-if="modalActionName==='修改商品信息'"
                  style="margin:0 1.5rem">
               <q-btn color="primary"
                      :loading="modifyLoading"
@@ -548,7 +548,7 @@
                      label="确定(含三等品)"
                      @click="modifyProdCode(true)" /> -->
             </div>
-            <div v-if="modalActionName==='新增产品信息'"
+            <div v-if="modalActionName==='新增商品信息'"
                  style="margin:0 1.5rem">
               <q-btn color="primary"
                      :loading="newLoading"
@@ -560,7 +560,7 @@
                      label="确定(含三等品)"
                      @click="newProdCode(true)" />
             </div>
-            <div v-if="modalActionName==='新增产品信息'"
+            <div v-if="modalActionName==='新增商品信息'"
                  style="margin:0 1.5rem">
               <q-btn color="primary"
                      label="重置"
@@ -622,7 +622,7 @@
               <q-field :error="$v.productCode.prodCode.$error"
                        error-label="编号必填，且不超过20位">
                 <q-input v-model="productCode.prodCode"
-                         :readonly="modalActionName==='修改产品信息'?true:false"
+                         :readonly="modalActionName==='修改商品信息'?true:false"
                          class="no-margin"
                          float-label="编号" />
               </q-field>
@@ -864,7 +864,7 @@
                  v-close-overlay
                  icon="mdi-arrow-left" />
           <q-toolbar-title>
-            产品日志
+            商品日志
           </q-toolbar-title>
         </q-toolbar>
         <q-toolbar slot="footer"
@@ -886,7 +886,7 @@
               <q-collapsible v-if="checkAuth(163)"
                              indent
                              icon="mdi-camera"
-                             label="产品快照">
+                             label="商品快照">
                 <div>{{log.detail}}</div>
               </q-collapsible>
             </q-timeline-entry>
@@ -976,13 +976,13 @@ export default {
       },
       serverData: [],
       columns: [
-        { name: 'prodCode', label: '产品编号', field: 'prodCode' },
+        { name: 'prodCode', label: '商品编号', field: 'prodCode' },
         { name: 'codeThumbnail', label: '简图', field: 'codeThumbnail' },
-        { name: 'prodName', label: '产品名称', field: 'prodName' },
+        { name: 'prodName', label: '商品名称', field: 'prodName' },
         { name: 'catName', label: '品类', field: 'catName' },
         { name: 'prodStyle', label: '款号', field: 'prodStyle' },
-        { name: 'familyName', label: '产品归属', field: 'familyName' },
-        { name: 'typeName', label: '产品类别', field: 'typeName' },
+        { name: 'familyName', label: '商品归属', field: 'familyName' },
+        { name: 'typeName', label: '商品类别', field: 'typeName' },
         { name: 'bigName', label: '大类', field: 'bigName' },
         { name: 'middleName', label: '中类', field: 'middleName' },
         { name: 'smallName', label: '小类', field: 'smallName' },
@@ -1228,7 +1228,7 @@ export default {
         return true
       }
       if (
-        (this.modalActionName === '新增产品信息') |
+        (this.modalActionName === '新增商品信息') |
         (this.permissions.indexOf(auth) > -1)
       ) {
         return true
@@ -1310,7 +1310,7 @@ export default {
           this.permissions.indexOf(1) < 0 &&
           this.maintainProductPermission.indexOf(pt) < 0
         ) {
-          this.notify('warning', '无权维护该类别产品')
+          this.notify('warning', '无权维护该类别商品')
           return false
         }
         Object.assign(
@@ -1326,7 +1326,7 @@ export default {
         //   departId != this.myDepart &&
         //   this.myPermissions.indexOf('superAdmin') < 0
         // ) {
-        //   this.notify('warning', '无权维护非本部门产品')
+        //   this.notify('warning', '无权维护非本部门商品')
         //   return
         // }
         this.chooseStyleDialogOpened = false
@@ -1366,7 +1366,7 @@ export default {
     openMainCodeModal(action, id) {
       this.$v.productCode.$reset()
       if (action === 'add') {
-        this.modalActionName = '新增产品信息'
+        this.modalActionName = '新增商品信息'
         this.productCode.styleId = this.productStyle.id
         this.productCode.prodStyle = this.productStyle.prodStyle
         this.productCode.prodName = this.productStyle.styleName
@@ -1384,10 +1384,10 @@ export default {
         //   departId != this.myDepart &&
         //   this.myPermissions.indexOf('superAdmin') < 0
         // ) {
-        //   this.notify('warning', '无权维护非本部门产品')
+        //   this.notify('warning', '无权维护非本部门商品')
         //   return
         // }
-        this.modalActionName = '修改产品信息'
+        this.modalActionName = '修改商品信息'
         getProdCodeById(id).then(response => {
           let product = response.data.data
           //check prodType permission
@@ -1397,7 +1397,7 @@ export default {
             this.permissions.indexOf(1) < 0 &&
             this.maintainProductPermission.indexOf(pt) < 0
           ) {
-            this.notify('warning', '无权维护该类别产品')
+            this.notify('warning', '无权维护该类别商品')
             return false
           }
           Object.assign(this.productStyle, product)
@@ -1429,7 +1429,7 @@ export default {
         this.permissions.indexOf(1) < 0 &&
         this.maintainProductPermission.indexOf(pt) < 0
       ) {
-        this.notify('warning', '无权维护该类别产品')
+        this.notify('warning', '无权维护该类别商品')
         return
       }
       this.$v.productCode.$touch()
@@ -1517,7 +1517,7 @@ export default {
         this.permissions.indexOf(1) < 0 &&
         this.maintainProductPermission.indexOf(pt) < 0
       ) {
-        this.notify('warning', '无权维护该类别产品')
+        this.notify('warning', '无权维护该类别商品')
         return
       }
       this.expandId = id
@@ -1564,7 +1564,7 @@ export default {
         .then(response => {
           this.fileDownload(
             response.data,
-            '产品编号导出' + this.formatDate(Date.now()) + '.xls'
+            '商品编号导出' + this.formatDate(Date.now()) + '.xls'
           )
           this.excelLoading = false
         })
@@ -1575,7 +1575,7 @@ export default {
     //download specification
     downloadSpec(id, name) {
       specDownload(id).then(response => {
-        this.fileDownload(response.data, name + '产品说明书.pdf')
+        this.fileDownload(response.data, name + '商品说明书.pdf')
       })
     },
     // public method to download file

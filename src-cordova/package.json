@@ -1,6 +1,6 @@
 {
     "name": "org.beyond.app",
-    "displayName": "产品管理系统",
+    "displayName": "商品管理系统",
     "version": "0.5.0",
     "description": "A Intergrated Management System coded by Lyb",
     "main": "index.js",

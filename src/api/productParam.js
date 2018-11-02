@@ -1,7 +1,7 @@
 import { service } from 'src/plugins/axios'
 
 // product_cat品类
-// 获取产品品类列表(全部)
+// 获取商品品类列表(全部)
 export function getProdCatOptions() {
     return service({
         url: '/prodCats/options',
@@ -21,7 +21,7 @@ export function getProdCatListByParent(id) {
         method: 'get',
     })
 }
-// 添加产品品类
+// 添加商品品类
 export function addProdCat(prodCat) {
     return service({
         url: '/prodCat',
@@ -29,7 +29,7 @@ export function addProdCat(prodCat) {
         data: prodCat
     })
 }
-// 修改产品品类
+// 修改商品品类
 export function updateProdCat(prodCat) {
     return service({
         url: '/prodCat',
@@ -38,35 +38,35 @@ export function updateProdCat(prodCat) {
     })
 }
 // product_class类别
-// 获取产品类别列表(全级别)
+// 获取商品类别列表(全级别)
 export function getProdClassOptions() {
     return service({
         url: '/prodClasses/options',
         method: 'get'
     })
 }
-// 获取产品类别树(全级别)
+// 获取商品类别树(全级别)
 export function getProdClassTree() {
     return service({
         url: '/prodClasses/tree',
         method: 'get'
     })
 }
-// 获取产品类别树(到大类)
+// 获取商品类别树(到大类)
 export function getProdClassTreeOnBigType() {
     return service({
         url: '/prodClasses/tree/bigType',
         method: 'get'
     })
 }
-// 获取产品类别(对应父类)
+// 获取商品类别(对应父类)
 export function getProdClassOptionsByParent(id) {
     return service({
         url: '/prodClasses/ClassType/' + id,
         method: 'get',
     })
 }
-// 添加产品类别
+// 添加商品类别
 export function addProdClass(prodClass) {
     return service({
         url: '/prodClass',
@@ -74,7 +74,7 @@ export function addProdClass(prodClass) {
         data: prodClass
     })
 }
-// 修改产品类别
+// 修改商品类别
 export function updateProdClass(prodClass) {
     return service({
         url: '/prodClass',
@@ -83,21 +83,21 @@ export function updateProdClass(prodClass) {
     })
 }
 // product_param参数
-// 获取产品参数列表(全部)
+// 获取商品参数列表(全部)
 export function getProdParamOptions() {
     return service({
         url: '/prodParams/options',
         method: 'get'
     })
 }
-// 获取产品参数树(全部)
+// 获取商品参数树(全部)
 export function getProdParamTree() {
     return service({
         url: '/prodParams/tree',
         method: 'get'
     })
 }
-// 获取产品参数(对应父类)
+// 获取商品参数(对应父类)
 export function getProdParamOptionsByParent(id) {
     return service({
         url: '/prodParams/ParamType/' + id,
@@ -110,7 +110,7 @@ export function getProdParamListByParent(id) {
         method: 'get',
     })
 }
-// 添加产品参数
+// 添加商品参数
 export function addProdParam(prodParam) {
     return service({
         url: '/prodParam',
@@ -118,7 +118,7 @@ export function addProdParam(prodParam) {
         data: prodParam
     })
 }
-// 修改产品参数
+// 修改商品参数
 export function updateProdParam(prodParam) {
     return service({
         url: '/prodParam',
@@ -127,7 +127,7 @@ export function updateProdParam(prodParam) {
     })
 }
 // product_spe规格
-// 获取产品规格列表(全部)
+// 获取商品规格列表(全部)
 export function getProdSpeOptions() {
     return service({
         url: '/prodSpes/options',
@@ -148,7 +148,7 @@ export function getProdSpeListByParent(id) {
         method: 'get',
     })
 }
-// 添加产品品类
+// 添加商品品类
 export function addProdSpe(prodSpe) {
     return service({
         url: '/prodSpe',
@@ -156,7 +156,7 @@ export function addProdSpe(prodSpe) {
         data: prodSpe
     })
 }
-// 修改产品品类
+// 修改商品品类
 export function updateProdSpe(prodSpe) {
     return service({
         url: '/prodSpe',
