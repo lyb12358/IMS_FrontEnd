@@ -269,7 +269,7 @@
                        row-key="name">
                 <template slot="top-left"
                           slot-scope="props">
-                  <q-btn v-if="CSSelected!=null"
+                  <q-btn v-if="CSSelected!=null&&CSSelected!=''"
                          icon="mdi-new-box"
                          rounded
                          class="q-ma-xs"
