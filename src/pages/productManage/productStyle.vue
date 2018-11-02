@@ -829,7 +829,7 @@ export default {
       prodFamily: { required },
       prodType: { required },
       bigType: { required },
-      prodMat: { maxLength: maxLength(20) }
+      prodMat: { maxLength: maxLength(100) }
     }
   },
   computed: {
