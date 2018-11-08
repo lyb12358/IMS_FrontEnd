@@ -576,13 +576,13 @@ export default {
   },
   validations: {
     productParam: {
-      name: { required, maxLength: maxLength(15) }
+      name: { required, maxLength: maxLength(30) }
     },
     productCS: {
-      name: { required, maxLength: maxLength(15) }
+      name: { required, maxLength: maxLength(30) }
     },
     productClass: {
-      name: { required, maxLength: maxLength(15) }
+      name: { required, maxLength: maxLength(30) }
     }
   },
   computed: {

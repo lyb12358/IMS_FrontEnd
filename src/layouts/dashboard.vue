@@ -181,6 +181,12 @@
                     class="q-ml-xl">
               <q-item-main label="商品卡片" />
             </q-item>
+            <q-item link
+                    v-if="checkAuth(1)"
+                    @click.native="$router.push('batchInsert')"
+                    class="q-ml-xl">
+              <q-item-main label="批量导入" />
+            </q-item>
           </q-collapsible>
           <q-item v-if="checkAuth(10)"
                   @click.native="$router.push('changeLog')">

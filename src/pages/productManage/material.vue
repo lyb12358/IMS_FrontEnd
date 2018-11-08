@@ -130,6 +130,12 @@
           <q-td key="smallType"
                 :props="props"
                 style="text-align:center">{{ props.row.smallName }}</q-td>
+          <q-td key="matCat"
+                :props ="props"
+                style="text-align:center">{{ props.row.catName }}</q-td>
+          <q-td key="matSpe"
+                :props="props"
+                style="text-align:center">{{ props.row.speName }}</q-td>
           <q-td key="retailPrice"
                 :props="props"
                 style="text-align:center">{{ props.row.retailPrice}}
