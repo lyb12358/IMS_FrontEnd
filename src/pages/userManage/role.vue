@@ -183,7 +183,8 @@
              no-esc-dismiss
              :content-css="{minWidth: '100vw', minHeight: '100vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header" :color="brandColor">
+        <q-toolbar slot="header"
+                   :color="brandColor">
           <q-btn flat
                  round
                  dense
@@ -616,6 +617,10 @@
                                 label="删除商品款式"
                                 color="secondary"
                                 :val=25 />
+                    <q-checkbox v-model="rolePermission"
+                                label="新增该款的商品编号"
+                                color="secondary"
+                                :val=168 />
                     <!-- <q-checkbox v-model="rolePermission"
                                 label="导出商品款式"
                                 color="secondary"

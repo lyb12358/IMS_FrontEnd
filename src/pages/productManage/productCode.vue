@@ -1362,7 +1362,7 @@ export default {
       }
       this.imagePreviewModalOpened = true
     },
-    //main modal function
+    //main code modal function
     openMainCodeModal(action, id) {
       this.$v.productCode.$reset()
       if (action === 'add') {

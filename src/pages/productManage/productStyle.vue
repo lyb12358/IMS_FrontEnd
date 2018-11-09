@@ -187,6 +187,13 @@
                    @click="openMainStyleModal('update',props.row.id)">
               <q-tooltip>修改款式信息</q-tooltip>
             </q-btn>
+            <q-btn v-if="checkAuth(168)"
+                   icon="mdi-playlist-plus"
+                   rounded
+                   color="brown"
+                   @click="openMainCodeModal(props.row)">
+              <q-tooltip>新增该款的商品编号</q-tooltip>
+            </q-btn>
             <q-btn v-if="checkAuth(22)"
                    icon="mdi-image-plus"
                    rounded
@@ -354,7 +361,7 @@
         </div>
       </q-modal-layout>
     </q-modal>
-    <!-- 新建款式modal -->
+    <!-- main style modal -->
     <q-modal v-model="mainStyleModalOpened"
              no-esc-dismiss
              no-backdrop-dismiss
@@ -664,6 +671,226 @@
         </div>
       </q-modal-layout>
     </q-modal>
+    <!-- main code modal -->
+    <q-modal v-model="mainCodeModalOpened"
+             no-backdrop-dismiss
+             no-esc-dismiss
+             no-refocus
+             :content-css="{minWidth: '100vw', minHeight: '100vh'}">
+      <q-modal-layout footer-class="no-shadow">
+        <q-toolbar slot="header"
+                   :color="brandColor">
+          <q-btn flat
+                 round
+                 dense
+                 v-close-overlay
+                 icon="mdi-arrow-left" />
+          <q-toolbar-title>
+            新增产品
+          </q-toolbar-title>
+        </q-toolbar>
+        <q-toolbar slot="footer"
+                   inverted>
+          <div class="col-12 row justify-center ">
+            <div style="margin:0 1.5rem">
+              <q-btn color="primary"
+                     :loading="newLoading"
+                     label="确定"
+                     @click="newProdCode(false)"
+                     style="margin:0 1.5rem" />
+              <q-btn color="primary"
+                     :loading="newLoading"
+                     label="确定(含三等品)"
+                     @click="newProdCode(true)" />
+            </div>
+            <div style="margin:0 1.5rem">
+              <q-btn color="primary"
+                     label="重置"
+                     @click="resetCodeModal" />
+            </div>
+            <div style="margin:0 1.5rem">
+              <q-btn color="primary"
+                     v-close-overlay
+                     label="取消" />
+            </div>
+          </div>
+        </q-toolbar>
+        <div class="layout-padding">
+          <div class="row">
+            <div class="col-md-12">
+              <q-collapsible>
+                <template slot="header">
+                  <q-item-side :image="thumbnailCheck(productStyle.id,productStyle.thumbnail)"
+                               color="primary" />
+                  <q-item-main :label="productStyle.styleName"
+                               sublabel="点击可展开该款式详细内容" />
+                </template>
+                <q-card>
+                  <q-card-main>
+                    <table class="q-table">
+                      <tbody>
+                        <tr>
+                          <td class="text-right">款号：</td>
+                          <td class="text-left">{{productStyle.prodStyle}}</td>
+                          <td class="text-right">款名：</td>
+                          <td class="text-left">{{productStyle.styleName}}</td>
+                        </tr>
+                        <tr>
+                          <td class="text-right">归属：</td>
+                          <td class="text-left">{{productStyle.familyName}}</td>
+                          <td class="text-right">类别：</td>
+                          <td class="text-left">{{productStyle.typeName}}</td>
+                          <td class="text-right">属性：</td>
+                          <td class="text-left">{{productStyle.attrName}}</td>
+                        </tr>
+                        <tr>
+                          <td class="text-right">大类：</td>
+                          <td class="text-left">{{productStyle.bigName}}</td>
+                          <td class="text-right">中类：</td>
+                          <td class="text-left">{{productStyle.middleName}}</td>
+                          <td class="text-right">小类：</td>
+                          <td class="text-left">{{productStyle.smallName}}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </q-card-main>
+                </q-card>
+              </q-collapsible>
+            </div>
+          </div>
+          <div class="row gutter-sm">
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.prodCode.$error"
+                       error-label="编号必填，且不超过20位">
+                <q-input v-model="productCode.prodCode"
+                         class="no-margin"
+                         float-label="编号" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.prodName.$error"
+                       error-label="名称必填，且不超过30位">
+                <q-input v-model="productCode.prodName"
+                         class="no-margin"
+                         float-label="名称" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-select v-model="productCode.prodCat"
+                        float-label="品类"
+                        filter
+                        radio
+                        :options="prodCatOptions" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-select v-model="productCode.prodSpe"
+                        float-label="规格"
+                        filter
+                        radio
+                        :options="prodSpeOptions" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.retailPrice.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.retailPrice"
+                         class="no-margin"
+                         float-label="零售价" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.supplyPrice.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.supplyPrice"
+                         class="no-margin"
+                         float-label="供应价" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.costPrice.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.costPrice"
+                         class="no-margin"
+                         float-label="成本价" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-select v-model="productCode.prodColor"
+                        float-label="花色"
+                        filter
+                        radio
+                        :options="prodColorOptions" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.numModel.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.numModel"
+                         class="no-margin"
+                         float-label="件数" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-input v-model="productCode.netWeight"
+                       class="no-margin"
+                       float-label="克重" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.boxNum.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.boxNum"
+                         class="no-margin"
+                         float-label="装箱数" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-input v-model="productCode.boxModel"
+                       class="no-margin"
+                       float-label="装箱规格" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-input v-model="productCode.boxVolume"
+                       class="no-margin"
+                       float-label="装箱体积" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-input v-model="productCode.boxWeight"
+                       class="no-margin"
+                       float-label="箱重量" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.boxWarn.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.boxWarn"
+                         class="no-margin"
+                         float-label="散货预警量" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.prodCycle.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.prodCycle"
+                         class="no-margin"
+                         float-label="生产周期" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-toggle v-model="productCode.isRemind"
+                        label="是否库存提醒" />
+              <q-toggle v-model="productCode.isSecurity"
+                        label="是否有防伪码" />
+              <q-toggle v-model="productCode.isRate"
+                        label="是否计算周转率" />
+            </div>
+            <div class="col-xs-12  col-sm-12 col-md-12">
+              <q-input v-model.trim="productCode.remark"
+                       clearable
+                       type="textarea"
+                       float-label="备注"
+                       :max-height="100" />
+            </div>
+          </div>
+        </div>
+      </q-modal-layout>
+    </q-modal>
   </q-page>
 
 </template>
@@ -686,13 +913,16 @@ import {
   getProdStyleList,
   getProdStyleById,
   addProdStyle,
-  updateProdStyle
+  updateProdStyle,
+  addProdCode
 } from 'src/api/product'
 import {
   getProdClassOptions,
   getProdClassOptionsByParent,
   getProdParamOptions,
-  getProdParamOptionsByParent
+  getProdParamOptionsByParent,
+  getProdCatOptions,
+  getProdSpeOptionsByParent
 } from 'src/api/productParam'
 import { specDownload } from 'src/api/productPlus'
 import { getProdLogList } from 'src/api/log'
@@ -760,7 +990,7 @@ export default {
         { name: 'gmtCreate', label: '创建时间', field: 'gmtCreate' },
         { name: 'gmtModified', label: '修改时间', field: 'gmtModified' }
       ],
-      //main modal
+      //main style modal
       mainStyleModalOpened: false,
       modalActionName: '',
       //main modal content
@@ -819,7 +1049,43 @@ export default {
       imageUploadUrl: '/imageUpload/prodStyle',
       //prodLog
       prodLogModalOpened: false,
-      timelineBeanList: []
+      timelineBeanList: [],
+      //main code modal
+      mainCodeModalOpened: false,
+      productCode: {
+        id: 0,
+        styleId: 0,
+        prodCode: '',
+        prodName: '',
+        prodCat: '',
+        prodSpe: '',
+        retailPrice: '',
+        supplyPrice: '',
+        costPrice: '',
+        prodColor: '',
+        numModel: '',
+        netWeight: '',
+        boxNum: '',
+        boxModel: '',
+        boxVolume: '',
+        boxWeight: '',
+        boxWarn: '',
+        isRemind: false,
+        remark: '',
+        isSecurity: false,
+        isRate: false,
+        prodCycle: '',
+        // tRetailPrice: '',
+        // tSupplyPrice: '',
+        // tCostPrice: '',
+        isDel: false,
+        isSync: false
+      },
+      paramList: [],
+      prodColorOptions: [],
+      catList: [],
+      prodCatOptions: [],
+      prodSpeOptions: []
     }
   },
   validations: {
@@ -830,6 +1096,32 @@ export default {
       prodType: { required },
       bigType: { required },
       prodMat: { maxLength: maxLength(100) }
+    },
+    productCode: {
+      prodCode: { required, maxLength: maxLength(20) },
+      prodName: { required, maxLength: maxLength(30) },
+      retailPrice: {
+        required,
+        decimal,
+        minValue: minValue(0),
+        maxValue: maxValue(999999)
+      },
+      supplyPrice: {
+        required,
+        decimal,
+        minValue: minValue(0),
+        maxValue: maxValue(999999)
+      },
+      costPrice: {
+        required,
+        decimal,
+        minValue: minValue(0),
+        maxValue: maxValue(999999)
+      },
+      numModel: { integer },
+      boxNum: { integer },
+      boxWarn: { integer },
+      prodCycle: { integer }
     }
   },
   computed: {
@@ -1001,7 +1293,7 @@ export default {
     //     this.departOpened = true
     //   }
     // },
-    //main modal function
+    //main style modal function
     openMainStyleModal(action, id) {
       this.$v.productStyle.$reset()
       if (action === 'add') {
@@ -1235,6 +1527,73 @@ export default {
     deleteProdStyle() {
       this.notify('warning', '商品删除了哦')
     },
+    //main code modal function
+    openMainCodeModal(style) {
+      this.$v.productCode.$reset()
+      this.productCode.styleId = style.id
+      this.productCode.prodStyle = style.prodStyle
+      this.productCode.prodName = style.styleName
+      this.mainCodeModalOpened = true
+      Object.assign(this.productStyle, style)
+      let bigType = style.bigType
+      getProdSpeOptionsByParent(bigType).then(response => {
+        let data = response.data.data
+        this.prodSpeOptions = data
+      })
+      this.prodCatOptions = this.catList.filter(
+        item => item.parentId == bigType
+      )
+    },
+    newProdCode(thirdFlag) {
+      //check prodType permission
+      let pt = this.productStyle.prodType
+      pt += ''
+      if (
+        this.permissions.indexOf(1) < 0 &&
+        this.maintainProductPermission.indexOf(pt) < 0
+      ) {
+        this.notify('warning', '无权维护该类别商品')
+        return
+      }
+      this.$v.productCode.$touch()
+      if (this.$v.productCode.$invalid) {
+        return
+      }
+      this.$v.productCode.$reset()
+      this.newLoading = true
+      this.productCode.isDel = 0
+      this.productCode.status = 1
+      //fix
+      this.productCode.isSync = 1
+      this.productCode.gmtCreate = Date.now()
+      addProdCode(this.productCode, thirdFlag)
+        .then(response => {
+          this.mainCodeModalOpened = false
+          this.newLoading = false
+          let data = response.data
+          Object.assign(
+            this.productCode,
+            this.$options.data.call(this).productCode
+          )
+          Object.assign(
+            this.productStyle,
+            this.$options.data.call(this).productStyle
+          )
+          this.notify('positive', data.msg)
+        })
+        .catch(error => {
+          this.newLoading = false
+        })
+    },
+    resetCodeModal() {
+      Object.assign(this.productCode, this.$options.data.call(this).productCode)
+      this.$nextTick(() => {
+        this.productCode.styleId = this.productStyle.id
+        this.productCode.prodStyle = this.productStyle.prodStyle
+        this.productCode.prodName = this.productStyle.styleName
+        this.$v.productCode.$reset()
+      })
+    },
     //dataTable request
     request({ pagination }) {
       this.loading = true
@@ -1280,6 +1639,12 @@ export default {
       this.prodUnitOptions = data.filter(item => item.parentId == 458)
       this.prodLevelOptions = data.filter(item => item.parentId == 486)
       this.designerOptions = data.filter(item => item.parentId == 567)
+      this.prodColorOptions = data.filter(item => item.parentId == 466)
+    })
+    //fetch all the categories
+    getProdCatOptions().then(response => {
+      let data = response.data.data
+      this.catList = data
     })
   }
 }
