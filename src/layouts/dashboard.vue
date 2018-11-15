@@ -183,9 +183,9 @@
             </q-item>
             <q-item link
                     v-if="checkAuth(1)"
-                    @click.native="$router.push('batchInsert')"
+                    @click.native="$router.push('batch')"
                     class="q-ml-xl">
-              <q-item-main label="批量导入" />
+              <q-item-main label="批量操作" />
             </q-item>
           </q-collapsible>
           <q-item v-if="checkAuth(10)"

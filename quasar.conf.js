@@ -128,16 +128,12 @@ module.exports = function (ctx) {
         'Notify',
         'LocalStorage',
         'SessionStorage',
-        'Dialog',
-        'LoadingBar'
+        'Dialog'
       ],
       config: {
         notify: {
           position: 'top',
           timeout: 1500
-        },
-        loadingBar: {
-          // QAjaxBar properties
         }
       },
       i18n: 'zh-hans',

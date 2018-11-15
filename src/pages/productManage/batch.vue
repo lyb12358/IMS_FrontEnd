@@ -14,7 +14,7 @@
       <div slot="top-left"
            slot-scope="props"
            class="row print-hide">
-        <q-btn v-show="resetBtnExist"
+        <!-- <q-btn v-show="resetBtnExist"
                icon="mdi-eraser"
                label="重置当前搜索"
                rounded
@@ -26,6 +26,12 @@
                rounded
                color="secondary"
                @click="searchFormDialogOpened=true">
+        </q-btn> -->
+        <q-btn icon="mdi-new-box"
+               label="导入物料"
+               rounded
+               color="primary"
+               @click="openBatchDialog(3)">
         </q-btn>
       </div>
       <template slot="top-right"
@@ -56,21 +62,24 @@
       <template slot="body"
                 slot-scope="props">
         <q-tr :props="props">
-          <q-td key="account"
+          <q-td key="userName"
                 :props="props"
-                style="text-align:center">{{ props.row.account}}</q-td>
-          <q-td key="name"
+                style="text-align:center">{{ props.row.userName}}</q-td>
+          <q-td key="batchType"
                 :props="props"
-                style="text-align:center">{{ props.row.name}}</q-td>
-          <q-td key="roleName"
+                style="text-align:center">物料/辅料</q-td>
+          <q-td key="batchNum"
                 :props="props"
-                :style="{textAlign:'center',maxWidth:'200px',whiteSpace:'normal'}">{{ props.row.roleName}}</q-td>
-          <q-td key="status"
+                style="text-align:center">{{ props.row.batchNum}}</q-td>
+          <q-td key="gmtCreate"
+                :props="props"
+                style="text-align:center">{{ formatDate(props.row.gmtCreate) }}</q-td>
+          <q-td key="isSync"
                 :props="props"
                 style="text-align:center">
-            <q-icon :name="props.row.status==1?'mdi-check-circle':'mdi-close-circle'"
+            <q-icon :name="props.row.isSync?'mdi-check-circle':'mdi-sync-off'"
                     size="1.5rem"
-                    :color="props.row.status==1?'positive':'negative'" />
+                    :color="props.row.isSync?'positive':'negative'" />
           </q-td>
           <q-td key="operation"
                 :props="props"
@@ -78,20 +87,14 @@
             <q-btn icon="mdi-settings"
                    rounded
                    color="primary"
-                   @click="openRoleModel(props.row.id)">
-              <q-tooltip>角色管理</q-tooltip>
+                   @click="openBatchModel(props.row.id)">
+              <q-tooltip>详情</q-tooltip>
             </q-btn>
-            <q-btn icon="mdi-eraser-variant"
+            <q-btn icon="mdi-settings"
                    rounded
-                   color="dark"
-                   @click="resetPassword(props.row.id,props.row.name)">
-              <q-tooltip>重置密码</q-tooltip>
-            </q-btn>
-            <q-btn icon="mdi-delete"
-                   rounded
-                   color="negative"
-                   @click="deleteUser(props.row.id)">
-              <q-tooltip>删除</q-tooltip>
+                   color="primary"
+                   @click="syncBatch(props.row.batchDetail)">
+              <q-tooltip>同步</q-tooltip>
             </q-btn>
           </q-td>
         </q-tr>
@@ -120,10 +123,52 @@
                @click="props.nextPage" />
       </div>
     </q-table>
+    <!-- upload xls -->
+    <q-dialog v-model="batchFileUploadDialog"
+              prevent-close>
+      <span slot="title">批量导入</span>
+      <span slot="message">请按照模板填写相关信息</span>
+      <div slot="body">
+        <q-uploader ref="batchFileUpload"
+                    :url="api+batchFileUploadUrl"
+                    :additionalFields="[
+                      {'name':'batchType','value':this.batchType}]"
+                    clearable
+                    extensions=".xls,.xlsx"
+                    auto-expand
+                    hide-upload-button
+                    float-label="上传表格文件"
+                    @uploaded="batchFileUploaded"
+                    @fail="batchFileUploadedFail"
+                    @add="addbatchFile" />
+      </div>
+      <template slot="buttons"
+                slot-scope="props">
+        <q-btn color="primary"
+               label="上传"
+               @click="batchFileUpload" />
+        <q-btn color="primary"
+               label="取消"
+               @click="batchFileUploadCancel" />
+      </template>
+    </q-dialog>
   </q-page>
 </template>
 
 <script>
+import { filter } from 'quasar'
+import { date } from 'quasar'
+import {
+  minLength,
+  maxLength,
+  minValue,
+  maxValue,
+  numeric,
+  integer,
+  decimal,
+  required
+} from 'vuelidate/lib/validators'
+import { getBatchLogList } from 'src/api/batch'
 export default {
   data() {
     return {
@@ -133,7 +178,14 @@ export default {
         row: 0
       },
       loading: false,
-      visibleColumns: ['account', 'name', 'roleName', 'status', 'operation'],
+      visibleColumns: [
+        'userName',
+        'batchType',
+        'batchNum',
+        'gmtCreate',
+        'isSync',
+        'operation'
+      ],
       separator: 'horizontal',
       serverPagination: {
         page: 1,
@@ -142,8 +194,17 @@ export default {
       },
       serverData: [],
       columns: [
-        // { name: 'account', label: '账号', field: 'account' },
-      ]
+        { name: 'userName', label: '用户', field: 'userName' },
+        { name: 'batchType', label: '类型', field: 'batchType' },
+        { name: 'batchNum', label: '数量', field: 'batchNum' },
+        { name: 'gmtCreate', label: '导入时间', field: 'gmtCreate' },
+        { name: 'isSync', label: '是否同步', field: 'isSync' },
+        { name: 'operation', label: '操作', field: 'operation' }
+      ],
+      //batch dialog
+      batchFileUploadDialog: false,
+      batchFileUploadUrl: '/mat/batch',
+      batchType: ''
       //main modal
     }
   },
@@ -158,6 +219,9 @@ export default {
         message: message,
         type: type
       })
+    },
+    formatDate(timeStamp) {
+      return date.formatDate(timeStamp, 'YYYY-MM-DD HH:mm:ss')
     },
     resetSearchForm() {
       Object.assign(this.searchForm, this.$options.data.call(this).searchForm)
@@ -174,22 +238,56 @@ export default {
         pagination: this.serverPagination
       })
     },
+    //
+    openBatchDialog(type) {
+      if (type == 3) {
+        this.batchType = 3
+        this.batchFileUploadDialog = true
+      }
+    },
+    addbatchFile(files) {
+      if (files[0].size > 5 * 1024 * 1024) {
+        this.$refs.batchFileUpload.reset()
+        this.notify('warning', '图片不能大于5MB')
+      }
+    },
+    batchFileUpload() {
+      this.$refs.batchFileUpload.upload()
+    },
+    batchFileUploadCancel() {
+      this.$refs.batchFileUpload.reset()
+      this.batchFileUploadDialog = false
+    },
+    batchFileUploaded(file, xhr) {
+      let response = JSON.parse(xhr.response)
+      this.notify('positive', response.msg)
+      this.$refs.batchFileUpload.reset()
+      this.batchFileUploadDialog = false
+      this.request({
+        pagination: this.serverPagination
+      })
+    },
+    // when it has encountered error while uploading
+    batchFileUploadedFail(file, xhr) {
+      let response = JSON.parse(xhr.response)
+      this.notify('negative', response.data.msg)
+    },
     //dataTable request
     request({ pagination }) {
       this.loading = true
       this.searchForm.page = pagination.page
       this.searchForm.row = pagination.rowsPerPage
-      // getUserList(this.searchForm)
-      //   .then(response => {
-      //     let data = response.data.data
-      //     this.serverPagination = pagination
-      //     this.serverPagination.rowsNumber = data.total
-      //     this.serverData = data.rows
-      //     this.loading = false
-      //   })
-      //   .catch(error => {
-      //     this.loading = false
-      //   })
+      getBatchLogList(this.searchForm)
+        .then(response => {
+          let data = response.data.data
+          this.serverPagination = pagination
+          this.serverPagination.rowsNumber = data.total
+          this.serverData = data.rows
+          this.loading = false
+        })
+        .catch(error => {
+          this.loading = false
+        })
     }
   },
   mounted() {
