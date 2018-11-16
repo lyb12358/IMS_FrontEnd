@@ -182,7 +182,7 @@
               <q-item-main label="商品卡片" />
             </q-item>
             <q-item link
-                    v-if="checkAuth(1)"
+                    v-if="checkAuth(169)"
                     @click.native="$router.push('batch')"
                     class="q-ml-xl">
               <q-item-main label="批量操作" />

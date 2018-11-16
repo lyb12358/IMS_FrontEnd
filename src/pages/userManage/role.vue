@@ -897,6 +897,14 @@
                                 :val=161 />
                   </div>
                 </q-collapsible>
+                <q-collapsible label="批量操作(点击展开)">
+                  <div class="gutter-sm">
+                    <q-checkbox v-model="rolePermission"
+                                label="批量操作页面"
+                                color="primary"
+                                :val=169 />
+                  </div>
+                </q-collapsible>
               </q-collapsible>
               <q-collapsible icon="mdi-book-open"
                              label="更新日志">

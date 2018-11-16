@@ -7,3 +7,9 @@ export function getBatchLogList(searchForm) {
         data: searchForm
     })
 }
+export function addBatchDataSync(id) {
+    return service({
+        url: '/batch/sync/' + id,
+        method: 'post'
+    })
+}

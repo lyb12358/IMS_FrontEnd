@@ -1541,12 +1541,17 @@ export default {
     // when image has just bean uploaded
     imageUploaded(file, xhr) {
       let response = JSON.parse(xhr.response)
-      this.notify('positive', response.msg)
-      this.$refs.imageUpload.reset()
-      this.imageUploadDialog = false
-      this.request({
-        pagination: this.serverPagination
-      })
+      if (response.code == 20000) {
+        this.notify('positive', response.msg)
+        this.$refs.imageUpload.reset()
+        this.imageUploadDialog = false
+        this.request({
+          pagination: this.serverPagination
+        })
+      } else {
+        this.notify('negative', response.msg)
+        this.$refs.imageUpload.reset()
+      }
     },
     // when it has encountered error while uploading
     imageUploadedFail(file, xhr) {

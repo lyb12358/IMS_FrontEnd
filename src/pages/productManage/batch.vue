@@ -27,11 +27,17 @@
                color="secondary"
                @click="searchFormDialogOpened=true">
         </q-btn> -->
-        <q-btn icon="mdi-new-box"
+        <q-btn icon="mdi-file-import"
                label="导入物料"
                rounded
                color="primary"
                @click="openBatchDialog(3)">
+        </q-btn>
+        <q-btn icon="mdi-file-excel"
+               label="物料模板"
+               rounded
+               color="secondary"
+               @click="downloadImportModel('matImportModel')">
         </q-btn>
       </div>
       <template slot="top-right"
@@ -84,16 +90,18 @@
           <q-td key="operation"
                 :props="props"
                 style="text-align:center">
-            <q-btn icon="mdi-settings"
+            <!-- <q-btn icon="mdi-settings"
                    rounded
                    color="primary"
                    @click="openBatchModel(props.row.id)">
               <q-tooltip>详情</q-tooltip>
-            </q-btn>
-            <q-btn icon="mdi-settings"
+            </q-btn> -->
+            <q-btn v-show="!props.row.isSync"
+                   icon="mdi-cloud-sync"
                    rounded
-                   color="primary"
-                   @click="syncBatch(props.row.batchDetail)">
+                   :loading="syncLoading"
+                   color="secondary"
+                   @click="syncBatch(props.row.id)">
               <q-tooltip>同步</q-tooltip>
             </q-btn>
           </q-td>
@@ -132,7 +140,8 @@
         <q-uploader ref="batchFileUpload"
                     :url="api+batchFileUploadUrl"
                     :additionalFields="[
-                      {'name':'batchType','value':this.batchType}]"
+                      {'name':'batchType','value':this.batchType},
+                      {'name':'imsToken','value':this.imsToken}]"
                     clearable
                     extensions=".xls,.xlsx"
                     auto-expand
@@ -146,6 +155,7 @@
                 slot-scope="props">
         <q-btn color="primary"
                label="上传"
+               :loading="importLoading"
                @click="batchFileUpload" />
         <q-btn color="primary"
                label="取消"
@@ -168,7 +178,8 @@ import {
   decimal,
   required
 } from 'vuelidate/lib/validators'
-import { getBatchLogList } from 'src/api/batch'
+import { getBatchLogList, addBatchDataSync } from 'src/api/batch'
+import { importModelDownload } from 'src/api/productPlus'
 export default {
   data() {
     return {
@@ -201,16 +212,21 @@ export default {
         { name: 'isSync', label: '是否同步', field: 'isSync' },
         { name: 'operation', label: '操作', field: 'operation' }
       ],
+      syncLoading: false,
       //batch dialog
       batchFileUploadDialog: false,
       batchFileUploadUrl: '/mat/batch',
-      batchType: ''
+      batchType: '',
+      importLoading: false
       //main modal
     }
   },
   computed: {
     brandColor() {
       return this.$store.getters['user/brandColor']
+    },
+    imsToken() {
+      return this.$store.getters['user/token']
     }
   },
   methods: {
@@ -252,6 +268,7 @@ export default {
       }
     },
     batchFileUpload() {
+      this.importLoading = true
       this.$refs.batchFileUpload.upload()
     },
     batchFileUploadCancel() {
@@ -260,17 +277,62 @@ export default {
     },
     batchFileUploaded(file, xhr) {
       let response = JSON.parse(xhr.response)
-      this.notify('positive', response.msg)
-      this.$refs.batchFileUpload.reset()
-      this.batchFileUploadDialog = false
-      this.request({
-        pagination: this.serverPagination
-      })
+      if (response.code == 20000) {
+        this.notify('positive', response.msg)
+        this.$refs.batchFileUpload.reset()
+        this.batchFileUploadDialog = false
+        this.request({
+          pagination: this.serverPagination
+        })
+        this.importLoading = false
+      } else {
+        this.notify('negative', response.msg)
+        this.$refs.batchFileUpload.reset()
+        this.importLoading = false
+      }
     },
     // when it has encountered error while uploading
     batchFileUploadedFail(file, xhr) {
       let response = JSON.parse(xhr.response)
       this.notify('negative', response.data.msg)
+      this.importLoading = false
+    },
+    //download importModel
+    downloadImportModel(name) {
+      importModelDownload(name).then(response => {
+        if (name == 'matImportModel') {
+          this.fileDownload(response.data, '物料辅料导入模板.xls')
+        }
+      })
+    },
+    // public method to download file
+    fileDownload(data, name) {
+      if (!data) {
+        return
+      }
+      let url = window.URL.createObjectURL(new Blob([data]))
+      let link = document.createElement('a')
+      link.style.display = 'none'
+      link.href = url
+      link.setAttribute('download', name)
+      document.body.appendChild(link)
+      link.click()
+      // release url object
+      URL.revokeObjectURL(link.href)
+      document.body.removeChild(link)
+    },
+    syncBatch(id) {
+      this.syncLoading = true
+      addBatchDataSync(id)
+        .then(response => {
+          this.syncLoading = false
+          this.request({
+            pagination: this.serverPagination
+          })
+        })
+        .catch(error => {
+          this.syncLoading = false
+        })
     },
     //dataTable request
     request({ pagination }) {

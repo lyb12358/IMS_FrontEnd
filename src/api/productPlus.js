@@ -16,6 +16,13 @@ export function specDownload(id) {
         responseType: 'blob'
     })
 }
+export function importModelDownload(name) {
+    return service({
+        url: '/importModel/' + name,
+        method: 'get',
+        responseType: 'blob'
+    })
+}
 
 
 
