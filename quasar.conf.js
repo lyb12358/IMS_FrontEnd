@@ -38,7 +38,7 @@ module.exports = function (ctx) {
           API: JSON.stringify('/api')
         }
         : { // and on build (production):
-          API: JSON.stringify('http://40.60.10.152:8080')
+          API: JSON.stringify('http://183.249.229.144:9080')
         }
     },
     devServer: {
@@ -49,7 +49,7 @@ module.exports = function (ctx) {
       proxy: {
         // proxy all requests starting with /api to jsonplaceholder
         '/api': {
-          target: 'http://40.60.10.152:8080',
+          target: 'http://10.98.10.166:8080',
           changeOrigin: true,
           pathRewrite: {
             '^/api': ''
@@ -134,6 +134,10 @@ module.exports = function (ctx) {
         notify: {
           position: 'top',
           timeout: 1500
+        },
+        cordova: {
+          iosStatusBarPadding: true, // add the dynamic top padding on iOS mobile devices
+          backButtonExit: true  // Quasar handles app exit on mobile phone back button
         }
       },
       i18n: 'zh-hans',

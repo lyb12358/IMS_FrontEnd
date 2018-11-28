@@ -3,15 +3,10 @@
     <div class="row justify-center">
       <div>
         <div class="q-mb-sm">
-          <!-- <q-btn size="sm"
+          <q-btn v-if="$q.platform.is.cordova"
                  color="primary"
-                 @click="selectGoodService"
-                 label="选择'信息中心'" />
-          <q-btn v-if="selected"
-                 size="sm"
-                 color="red"
-                 @click="unselectNode"
-                 label="取消选择" /> -->
+                 @click="identifyBarcode"
+                 label="识别条码" />
         </div>
         <q-tree :nodes="props"
                 ref="orgTree"
@@ -32,7 +27,44 @@ export default {
     selected: '',
     props: []
   }),
-  methods: {},
+  methods: {
+    identifyBarcode() {
+      cordova.plugins.barcodeScanner.scan(
+        result => {
+          this.$q.dialog({
+            title: 'Alert',
+            message:
+              'We got a barcode\n' +
+              'Result: ' +
+              result.text +
+              '\n' +
+              'Format: ' +
+              result.format +
+              '\n' +
+              'Cancelled: ' +
+              result.cancelled
+          })
+        },
+        error => {
+          this.$q.dialog({
+            title: 'Alert',
+            message: 'Scanning failed: ' + error
+          })
+        },
+        {
+          preferFrontCamera: false, // iOS and Android
+          showFlipCameraButton: true, // iOS and Android
+          showTorchButton: true, // iOS and Android
+          torchOn: false, // Android, launch with the torch switched on (if available)
+          saveHistory: false, // Android, save scan history (default false)
+          prompt: '对得准,才能扫得快:)', // Android
+          resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
+          disableAnimations: true, // iOS
+          disableSuccessBeep: false // iOS and Android
+        }
+      )
+    }
+  },
   computed: {},
   created() {
     getOrgList()
