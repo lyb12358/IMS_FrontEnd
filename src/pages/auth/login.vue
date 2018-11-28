@@ -76,7 +76,8 @@
         </q-inner-loading> -->
       </div>
 
-      <div class="bg-boxes">
+      <div class="bg-boxes"
+           v-if="!$q.platform.is.cordova">
         <svg width="300px"
              height="100%"
              id="col1">
@@ -237,6 +238,19 @@ export default {
         .catch(error => {
           this.loading = false
         })
+    },
+    onBackKeyDown() {
+      this.$q
+        .dialog({
+          title: '警告',
+          message: '确定要退出吗',
+          ok: '确定',
+          cancel: '我点错了'
+        })
+        .then(() => {
+          navigator.app.exitApp()
+        })
+        .catch(() => {})
     }
   },
   created() {
@@ -245,9 +259,15 @@ export default {
         this.$router.push('/mobileWarn')
       }
     }
+    document.addEventListener('backbutton', this.onBackKeyDown, false)
   },
   mounted() {
+    navigator.splashscreen.hide()
     this.$refs.account.focus()
+  },
+  beforeDestroy() {
+    //remove the event listener
+    document.removeEventListener('backbutton', this.onBackKeyDown, false)
   }
 }
 </script>

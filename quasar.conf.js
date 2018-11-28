@@ -137,7 +137,7 @@ module.exports = function (ctx) {
         },
         cordova: {
           iosStatusBarPadding: true, // add the dynamic top padding on iOS mobile devices
-          backButtonExit: true  // Quasar handles app exit on mobile phone back button
+          backButtonExit: false  // Quasar handles app exit on mobile phone back button
         }
       },
       i18n: 'zh-hans',

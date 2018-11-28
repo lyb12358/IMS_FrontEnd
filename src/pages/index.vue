@@ -95,7 +95,24 @@ export default {
       return this.$store.getters['user/brandColor']
     }
   },
-  method: {},
+  method: {
+    onBackKeyDown() {
+      this.$q
+        .dialog({
+          title: '警告',
+          message: '确定要退出吗',
+          ok: '确定',
+          cancel: '我点错了'
+        })
+        .then(() => {
+          navigator.app.exitApp()
+        })
+        .catch(() => {})
+    }
+  },
+  created() {
+    document.addEventListener('backbutton', this.onBackKeyDown, false)
+  },
   mounted() {
     codeCount()
       .then(response => {
@@ -112,6 +129,10 @@ export default {
         this.matNum = response.data.data
       })
       .catch(error => {})
+  },
+  beforeDestroy() {
+    //remove the event listener
+    document.removeEventListener('backbutton', this.onBackKeyDown, false)
   }
 }
 </script>
