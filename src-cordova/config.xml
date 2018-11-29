@@ -75,13 +75,10 @@
     <preference name="SplashScreenDelay" value="3000" />
     <preference name="WebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
-    <engine name="android" spec="~7.1.2" />
-    <engine name="ios" spec="~4.5.5" />
     <plugin name="phonegap-plugin-barcodescanner" spec="^8.0.0">
         <variable name="ANDROID_SUPPORT_V4_VERSION" value="27.+" />
     </plugin>
     <plugin name="cordova-plugin-splashscreen" spec="^5.0.2" />
-    <plugin name="cordova-plugin-wechatv2" spec="^2.1.5">
-        <variable name="WECHATAPPID" value="wxa5b61bec18aa9a7e" />
-    </plugin>
+    <engine name="android" spec="^7.1.2" />
+    <engine name="ios" spec="^4.5.5" />
 </widget>

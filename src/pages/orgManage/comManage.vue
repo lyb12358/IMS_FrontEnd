@@ -7,6 +7,10 @@
                  color="primary"
                  @click="identifyBarcode"
                  label="识别条码" />
+          <q-btn v-if="$q.platform.is.cordova"
+                 color="primary"
+                 @click="wechatShare"
+                 label="识别条码" />
         </div>
         <q-tree :nodes="props"
                 ref="orgTree"
@@ -32,7 +36,7 @@ export default {
       cordova.plugins.barcodeScanner.scan(
         result => {
           this.$q.dialog({
-            title: 'Alert',
+            title: '通知',
             message:
               'We got a barcode\n' +
               'Result: ' +
@@ -47,7 +51,7 @@ export default {
         },
         error => {
           this.$q.dialog({
-            title: 'Alert',
+            title: '通知',
             message: 'Scanning failed: ' + error
           })
         },
@@ -61,6 +65,26 @@ export default {
           resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
           disableAnimations: true, // iOS
           disableSuccessBeep: false // iOS and Android
+        }
+      )
+    },
+    wechatShare() {
+      Wechat.share(
+        {
+          text: 'This is just a plain string',
+          scene: Wechat.Scene.SESSION // share to Timeline
+        },
+        function() {
+          this.$q.dialog({
+            title: '通知',
+            message: '分享成功!'
+          })
+        },
+        function(reason) {
+          this.$q.dialog({
+            title: '通知',
+            message: '分享失败,原因:' + reason
+          })
         }
       )
     }
