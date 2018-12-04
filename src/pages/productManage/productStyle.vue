@@ -686,7 +686,7 @@
                  v-close-overlay
                  icon="mdi-arrow-left" />
           <q-toolbar-title>
-            新增产品
+            新增商品
           </q-toolbar-title>
         </q-toolbar>
         <q-toolbar slot="footer"

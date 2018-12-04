@@ -10,7 +10,7 @@
     "author": "Apache Cordova Team",
     "license": "Apache-2.0",
     "dependencies": {
-        "cordova-android": "^7.1.2",
+        "cordova-android": "^7.1.4",
         "cordova-ios": "^4.5.5",
         "cordova-plugin-splashscreen": "^5.0.2",
         "cordova-plugin-wechat2": "^2.2.2",
@@ -26,8 +26,8 @@
             "cordova-plugin-splashscreen": {}
         },
         "platforms": [
-            "android",
-            "ios"
+            "ios",
+            "android"
         ]
     }
 }
