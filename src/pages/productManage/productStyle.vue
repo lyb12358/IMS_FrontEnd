@@ -224,11 +224,18 @@
                    @click="openProdLogModal(1,props.row.id)">
               <q-tooltip>查看日志</q-tooltip>
             </q-btn>
+            <q-btn v-if="checkAuth(21)"
+                   icon="mdi-format-section"
+                   rounded
+                   color="purple"
+                   @click="openSwitchBindDialog(0,props.row.id)">
+              <q-tooltip>款式解绑</q-tooltip>
+            </q-btn>
             <q-btn v-if="checkAuth(25)"
                    icon="mdi-delete"
                    rounded
                    color="negative"
-                   @click="deleteProdStyle(props.row.id)">
+                   @click="deleteStyle(props.row.id)">
               <q-tooltip>删除</q-tooltip>
             </q-btn>
           </q-td>
@@ -891,6 +898,33 @@
         </div>
       </q-modal-layout>
     </q-modal>
+    <!-- switch bind -->
+    <q-dialog v-model="switchBindDialogOpened"
+              no-refocus
+              prevent-close>
+      <span slot="title">请选择一个款式</span>
+      <div slot="body">
+        <q-field icon="mdi-sofa"
+                 label="款名"
+                 :label-width="3">
+          <q-input v-model.trim="prodStyleAutoSearch.styleName">
+            <q-autocomplete @search="autoStyleNameSearch"
+                            :min-characters="2"
+                            @selected="styleSelected"
+                            value-field="label" />
+          </q-input>
+        </q-field>
+      </div>
+      <template slot="buttons"
+                slot-scope="props">
+        <q-btn color="primary"
+               @click="styleSwitch(prodStyleAutoSearch.id)"
+               label="确定" />
+        <q-btn color="primary"
+               @click="closeSwitchBindDialog"
+               label="取消" />
+      </template>
+    </q-dialog>
   </q-page>
 
 </template>
@@ -910,11 +944,14 @@ import {
 } from 'vuelidate/lib/validators'
 import { getOrgList } from 'src/api/organization'
 import {
+  addProdCode,
+  switchBind,
   getProdStyleList,
   getProdStyleById,
   addProdStyle,
   updateProdStyle,
-  addProdCode
+  deleteProdStyle,
+  getProdStyleOptions
 } from 'src/api/product'
 import {
   getProdClassOptions,
@@ -1050,6 +1087,15 @@ export default {
       //prodLog
       prodLogModalOpened: false,
       timelineBeanList: [],
+      //switch bind
+      switchBindDialogOpened: false,
+      switchId: 0,
+      switchOldStyleId: 0,
+      prodStyleAutoSearch: {
+        id: '',
+        prodStyle: '',
+        styleName: ''
+      },
       //main code modal
       mainCodeModalOpened: false,
       productCode: {
@@ -1528,9 +1574,71 @@ export default {
         })
         .catch(error => {})
     },
+    //switch bind
+    openSwitchBindDialog(id, oldStyleId) {
+      this.switchId = id
+      this.switchOldStyleId = oldStyleId
+      Object.assign(
+        this.prodStyleAutoSearch,
+        this.$options.data.call(this).prodStyleAutoSearch
+      )
+      this.switchBindDialogOpened = true
+    },
+    autoProdStyleSearch(terms, done) {
+      getProdStyleOptions(this.prodStyleAutoSearch).then(response => {
+        let data = response.data.data
+        done(data)
+      })
+    },
+    autoStyleNameSearch(terms, done) {
+      getProdStyleOptions(this.prodStyleAutoSearch).then(response => {
+        let data = response.data.data
+        done(data)
+      })
+    },
+    styleSelected(item) {
+      this.prodStyleAutoSearch.id = item.value
+    },
+    closeSwitchBindDialog() {
+      Object.assign(
+        this.prodStyleAutoSearch,
+        this.$options.data.call(this).prodStyleAutoSearch
+      )
+      this.switchBindDialogOpened = false
+    },
+    styleSwitch(id) {
+      if (id == '') {
+        this.notify('warning', '请先选择一个现有的款式')
+        return
+      }
+      if (id == this.switchOldStyleId) {
+        this.notify('warning', '请选择一个和当前产品不同的款式')
+        return
+      }
+      switchBind(this.switchOldStyleId, id, this.switchId).then(response => {
+        let data = response.data
+        this.notify('positive', data.msg)
+        this.switchBindDialogOpened = false
+        this.request({
+          pagination: this.serverPagination
+        })
+        Object.assign(
+          this.prodStyleAutoSearch,
+          this.$options.data.call(this).prodStyleAutoSearch
+        )
+      })
+    },
     // delete prodStyle
-    deleteProdStyle() {
-      this.notify('warning', '商品删除了哦')
+    deleteStyle(id) {
+      deleteProdStyle(id)
+        .then(response => {
+          let data = response.data
+          this.notify('positive', data.msg)
+          this.request({
+            pagination: this.serverPagination
+          })
+        })
+        .catch(error => {})
     },
     //main code modal function
     openMainCodeModal(style) {

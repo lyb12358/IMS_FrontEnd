@@ -262,7 +262,9 @@ export default {
     document.addEventListener('backbutton', this.onBackKeyDown, false)
   },
   mounted() {
-    navigator.splashscreen.hide()
+    if (this.$q.platform.is.cordova) {
+      navigator.splashscreen.hide()
+    }
     this.$refs.account.focus()
   },
   beforeDestroy() {

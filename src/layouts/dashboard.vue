@@ -20,36 +20,36 @@
           <q-list link
                   class="no-padding">
             <q-item v-close-overlay
-                    class="bg-light-blue-5"
-                    @click.native="brandFlag=1">
+                    class="bg-light-blue-6"
+                    @click.native="brandFlag='light-blue-6'">
               <q-item-main>
                 <q-item-tile label>静谧幽兰</q-item-tile>
               </q-item-main>
             </q-item>
             <q-item v-close-overlay
                     class="bg-amber-6"
-                    @click.native="brandFlag=2">
+                    @click.native="brandFlag='amber-6'">
               <q-item-main>
                 <q-item-tile label>凡尔赛</q-item-tile>
               </q-item-main>
             </q-item>
             <q-item v-close-overlay
                     class="bg-pink-4"
-                    @click.native="brandFlag=3">
+                    @click.native="brandFlag='pink-4'">
               <q-item-main>
                 <q-item-tile label>霞缛云嫣</q-item-tile>
               </q-item-main>
             </q-item>
             <q-item v-close-overlay
                     class="bg-deep-purple-4"
-                    @click.native="brandFlag=4">
+                    @click.native="brandFlag='deep-purple-4'">
               <q-item-main>
                 <q-item-tile label>奢语夜魅</q-item-tile>
               </q-item-main>
             </q-item>
             <q-item v-close-overlay
                     class="bg-light-green-6"
-                    @click.native="brandFlag=5">
+                    @click.native="brandFlag='light-green-6'">
               <q-item-main>
                 <q-item-tile label>潮流素客</q-item-tile>
               </q-item-main>
@@ -88,7 +88,7 @@
                 CMS
               </div>
               <div class="caption q-ml-lg text-white">
-                v1.0.0
+                v1.1.0
               </div>
             </div>
             <q-item-separator />
@@ -270,7 +270,7 @@ export default {
   name: 'dashboard',
   data() {
     return {
-      brandFlag: 5,
+      brandFlag: 'light-green-6',
       leftDrawerOpen: true,
       passwordDialogOpened: false,
       user: {
@@ -303,28 +303,28 @@ export default {
       return this.$store.getters['user/brandColor']
     },
     backImage() {
-      if (this.brandFlag == 1) {
+      if (this.brandFlag == 'light-blue-6') {
         return { background: 'url(statics/10422.jpg) no-repeat' }
-      } else if (this.brandFlag == 2) {
+      } else if (this.brandFlag == 'amber-6') {
         return { background: 'url(statics/10092.jpg) no-repeat' }
-      } else if (this.brandFlag == 3) {
+      } else if (this.brandFlag == 'pink-4') {
         return { background: 'url(statics/10112.jpg) no-repeat' }
-      } else if (this.brandFlag == 4) {
+      } else if (this.brandFlag == 'deep-purple-4') {
         return { background: 'url(statics/10322.jpg) no-repeat' }
-      } else if (this.brandFlag == 5) {
+      } else if (this.brandFlag == 'light-green-6') {
         return { background: 'url(statics/12832.jpg) no-repeat' }
       }
     },
     backColor() {
-      if (this.brandFlag == 1) {
+      if (this.brandFlag == 'light-blue-6') {
         return 'width: 100%; height: 100%;background-color:rgba(41,182,246,0.6);'
-      } else if (this.brandFlag == 2) {
+      } else if (this.brandFlag == 'amber-6') {
         return 'width: 100%; height: 100%;background-color:rgba(255,213,79,0.6);'
-      } else if (this.brandFlag == 3) {
+      } else if (this.brandFlag == 'pink-4') {
         return 'width: 100%; height: 100%;background-color:rgba(240,98,146,0.6);'
-      } else if (this.brandFlag == 4) {
+      } else if (this.brandFlag == 'deep-purple-4') {
         return 'width: 100%; height: 100%;background-color:rgba(149,117,205,0.7);'
-      } else if (this.brandFlag == 5) {
+      } else if (this.brandFlag == 'light-green-6') {
         return 'width: 100%; height: 100%;background-color:rgba(139,195,74,0.6);'
       }
     },
@@ -344,15 +344,15 @@ export default {
   },
   watch: {
     brandFlag: function(newVal, oldVal) {
-      if (newVal == 1) {
+      if (newVal == 'light-blue-6') {
         this.$store.commit('user/SetBrandColor', 'light-blue-6')
-      } else if (newVal == 2) {
+      } else if (newVal == 'amber-6') {
         this.$store.commit('user/SetBrandColor', 'amber-6')
-      } else if (newVal == 3) {
+      } else if (newVal == 'pink-4') {
         this.$store.commit('user/SetBrandColor', 'pink-4')
-      } else if (newVal == 4) {
+      } else if (newVal == 'deep-purple-4') {
         this.$store.commit('user/SetBrandColor', 'deep-purple-4')
-      } else if (newVal == 5) {
+      } else if (newVal == 'light-green-6') {
         this.$store.commit('user/SetBrandColor', 'light-green-6')
       } else {
         this.$store.commit('user/SetBrandColor', 'light-green-6')
@@ -417,7 +417,7 @@ export default {
     }
   },
   mounted() {
-    this.brandFlag = 6
+    this.brandFlag = this.brandColor
   }
 }
 </script>

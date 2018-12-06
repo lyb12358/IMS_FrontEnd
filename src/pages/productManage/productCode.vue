@@ -350,6 +350,13 @@
                    @click="openProdLogModal(2,props.row.id)">
               <q-tooltip>查看日志</q-tooltip>
             </q-btn>
+            <q-btn v-if="checkAuth(13)"
+                   icon="mdi-format-section"
+                   rounded
+                   color="purple"
+                   @click="openSwitchBindDialog(props.row.id,props.row.styleId)">
+              <q-tooltip>更换绑定</q-tooltip>
+            </q-btn>
             <q-btn v-if="checkAuth(17)"
                    icon="mdi-delete"
                    rounded
@@ -894,6 +901,33 @@
         </div>
       </q-modal-layout>
     </q-modal>
+    <!-- switch bind -->
+    <q-dialog v-model="switchBindDialogOpened"
+              no-refocus
+              prevent-close>
+      <span slot="title">请选择一个款式</span>
+      <div slot="body">
+        <q-field icon="mdi-sofa"
+                 label="款名"
+                 :label-width="3">
+          <q-input v-model.trim="prodStyleAutoSearch.styleName">
+            <q-autocomplete @search="autoStyleNameSearch"
+                            :min-characters="2"
+                            @selected="styleSelected"
+                            value-field="label" />
+          </q-input>
+        </q-field>
+      </div>
+      <template slot="buttons"
+                slot-scope="props">
+        <q-btn color="primary"
+               @click="styleSwitch(prodStyleAutoSearch.id)"
+               label="确定" />
+        <q-btn color="primary"
+               @click="closeSwitchBindDialog"
+               label="取消" />
+      </template>
+    </q-dialog>
   </q-page>
 
 </template>
@@ -917,6 +951,7 @@ import {
   getProdCodeById,
   addProdCode,
   updateProdCode,
+  switchBind,
   getProdStyleOptions,
   getProdStyleById
 } from 'src/api/product'
@@ -958,6 +993,7 @@ export default {
         'prodCode',
         'codeThumbnail',
         'prodName',
+        'prodStyle',
         'catName',
         'speName',
         'typeName',
@@ -1104,7 +1140,11 @@ export default {
       imageUploadUrl: '/imageUpload/prodCode',
       //prodLog
       prodLogModalOpened: false,
-      timelineBeanList: []
+      timelineBeanList: [],
+      //switch bind
+      switchBindDialogOpened: false,
+      switchId: 0,
+      switchOldStyleId: 0
     }
   },
   validations: {
@@ -1608,6 +1648,45 @@ export default {
           this.prodLogModalOpened = true
         })
         .catch(error => {})
+    },
+    //switch bind
+    openSwitchBindDialog(id, oldStyleId) {
+      this.switchId = id
+      this.switchOldStyleId = oldStyleId
+      Object.assign(
+        this.prodStyleAutoSearch,
+        this.$options.data.call(this).prodStyleAutoSearch
+      )
+      this.switchBindDialogOpened = true
+    },
+    closeSwitchBindDialog() {
+      Object.assign(
+        this.prodStyleAutoSearch,
+        this.$options.data.call(this).prodStyleAutoSearch
+      )
+      this.switchBindDialogOpened = false
+    },
+    styleSwitch(id) {
+      if (id == '') {
+        this.notify('warning', '请先选择一个现有的款式')
+        return
+      }
+      if (id == this.switchOldStyleId) {
+        this.notify('warning', '请选择一个和当前产品不同的款式')
+        return
+      }
+      switchBind(this.switchOldStyleId, id, this.switchId).then(response => {
+        let data = response.data
+        this.notify('positive', data.msg)
+        this.switchBindDialogOpened = false
+        this.request({
+          pagination: this.serverPagination
+        })
+        Object.assign(
+          this.prodStyleAutoSearch,
+          this.$options.data.call(this).prodStyleAutoSearch
+        )
+      })
     },
     // delete prodCode
     deleteProdCode(departId) {
