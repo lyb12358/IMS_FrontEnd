@@ -28,6 +28,13 @@ export function updateProdCode(product, thirdFlag) {
         data: product
     })
 }
+export function switchBind(oldId, newId, codeId) {
+    return service({
+        url: '/prodCodes/styleId/' + oldId + '/' + newId + '/' + codeId,
+        method: 'put',
+    })
+}
+
 
 //productStyle
 export function getProdStyleList(searchForm) {
@@ -62,6 +69,12 @@ export function updateProdStyle(productStyle) {
         url: '/prodStyle',
         method: 'put',
         data: productStyle
+    })
+}
+export function deleteProdStyle(id) {
+    return service({
+        url: '/prodStyle/' + id,
+        method: 'delete',
     })
 }
 //记数

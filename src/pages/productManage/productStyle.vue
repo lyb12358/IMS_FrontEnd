@@ -423,7 +423,7 @@
             <div v-show="checkStyleModified(138)"
                  class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.prodStyle.$error"
-                       error-label="款号是必填项，且不超过10位">
+                       error-label="款号是必填项，6位到8位">
                 <q-input v-model.trim="productStyle.prodStyle"
                          class="no-margin"
                          float-label="款号" />
@@ -1090,7 +1090,7 @@ export default {
   },
   validations: {
     productStyle: {
-      prodStyle: { required, maxLength: maxLength(10) },
+      prodStyle: { required, minLength: minLength(6), maxLength: maxLength(8) },
       styleName: { required, maxLength: maxLength(30) },
       prodFamily: { required },
       prodType: { required },

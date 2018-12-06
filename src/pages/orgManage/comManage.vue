@@ -10,7 +10,7 @@
           <q-btn v-if="$q.platform.is.cordova"
                  color="primary"
                  @click="wechatShare"
-                 label="识别条码" />
+                 label="微信分享" />
         </div>
         <q-tree :nodes="props"
                 ref="orgTree"
@@ -24,11 +24,11 @@
 </template>
 
 <script>
-import { getOrgList } from 'src/api/organization'
+import { getOrgList } from "src/api/organization";
 
 export default {
   data: () => ({
-    selected: '',
+    selected: "",
     props: []
   }),
   methods: {
@@ -36,24 +36,24 @@ export default {
       cordova.plugins.barcodeScanner.scan(
         result => {
           this.$q.dialog({
-            title: '通知',
+            title: "通知",
             message:
-              'We got a barcode\n' +
-              'Result: ' +
+              "We got a barcode\n" +
+              "Result: " +
               result.text +
-              '\n' +
-              'Format: ' +
+              "\n" +
+              "Format: " +
               result.format +
-              '\n' +
-              'Cancelled: ' +
+              "\n" +
+              "Cancelled: " +
               result.cancelled
-          })
+          });
         },
         error => {
           this.$q.dialog({
-            title: '通知',
-            message: 'Scanning failed: ' + error
-          })
+            title: "通知",
+            message: "Scanning failed: " + error
+          });
         },
         {
           preferFrontCamera: false, // iOS and Android
@@ -61,47 +61,47 @@ export default {
           showTorchButton: true, // iOS and Android
           torchOn: false, // Android, launch with the torch switched on (if available)
           saveHistory: false, // Android, save scan history (default false)
-          prompt: '对得准,才能扫得快:)', // Android
+          prompt: "对得准,才能扫得快:)", // Android
           resultDisplayDuration: 500, // Android, display scanned text for X ms. 0 suppresses it entirely, default 1500
           disableAnimations: true, // iOS
           disableSuccessBeep: false // iOS and Android
         }
-      )
+      );
     },
     wechatShare() {
       Wechat.share(
         {
-          text: 'This is just a plain string',
+          text: "This is just a plain string",
           scene: Wechat.Scene.SESSION // share to Timeline
         },
-        function() {
+        () => {
           this.$q.dialog({
-            title: '通知',
-            message: '分享成功!'
-          })
+            title: "通知",
+            message: "分享成功!"
+          });
         },
-        function(reason) {
+        reason => {
           this.$q.dialog({
-            title: '通知',
-            message: '分享失败,原因:' + reason
-          })
+            title: "通知",
+            message: "分享失败,原因:" + reason
+          });
         }
-      )
+      );
     }
   },
   computed: {},
   created() {
     getOrgList()
       .then(response => {
-        let data = response.data.data
-        this.props.push(data[0])
+        let data = response.data.data;
+        this.props.push(data[0]);
         this.$nextTick(() => {
-          this.$refs.orgTree.expandAll()
-        })
+          this.$refs.orgTree.expandAll();
+        });
       })
-      .catch(error => {})
+      .catch(error => {});
   }
-}
+};
 </script>
 
 <style>
