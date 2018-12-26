@@ -38,18 +38,18 @@ module.exports = function (ctx) {
           API: JSON.stringify('/api')
         }
         : { // and on build (production):
-          API: JSON.stringify('http://183.249.229.144:9080')
+          API: JSON.stringify('https://ims-backend.beyond-itservice.com')
         }
     },
     devServer: {
-      // https: true,
+      //https: true,
       port: 9090,
       open: true, // opens browser window automatically
       index: '/',
       proxy: {
         // proxy all requests starting with /api to jsonplaceholder
         '/api': {
-          target: 'http://10.98.10.166:8080',
+          target: '10.98.10.166:8080',
           changeOrigin: true,
           pathRewrite: {
             '^/api': ''

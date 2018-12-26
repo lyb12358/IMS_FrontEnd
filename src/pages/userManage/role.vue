@@ -895,6 +895,14 @@
                                 label="维护生产辅料"
                                 color="warning"
                                 :val=161 />
+                    <q-checkbox v-model="rolePermission"
+                                label="维护大货团购"
+                                color="warning"
+                                :val=170 />
+                    <q-checkbox v-model="rolePermission"
+                                label="维护大货定制"
+                                color="warning"
+                                :val=171 />
                   </div>
                 </q-collapsible>
                 <q-collapsible label="批量操作(点击展开)">
