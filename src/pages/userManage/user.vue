@@ -346,7 +346,7 @@ export default {
           cancel: '取消'
         })
         .then(() => {
-          updatePassword(id, '123456').then(response => {
+          updatePassword(id, '111111').then(response => {
             let data = response.data
             this.notify('positive', data.msg)
           })
