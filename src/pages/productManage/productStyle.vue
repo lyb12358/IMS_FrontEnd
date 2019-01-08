@@ -1292,7 +1292,7 @@ export default {
       let totalTdList = []
       for (let i = 0; i < list.length; i++) {
         if (this.checkStylePermission.indexOf(list[i].name) > -1) {
-          totalTdList.push(this.list[i])
+          totalTdList.push(list[i])
         }
       }
       return totalTdList
