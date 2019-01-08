@@ -121,7 +121,8 @@
                    :filter="paramFilter"
                    :columns="paramColumns"
                    row-key="name">
-            <template slot="top-left">
+            <template slot="top-left"
+                      slot-scope="props">
               <q-btn icon="mdi-new-box"
                      rounded
                      class="q-ma-xs"
@@ -130,7 +131,8 @@
                 <q-tooltip>新建</q-tooltip>
               </q-btn>
             </template>
-            <template slot="top-right">
+            <template slot="top-right"
+                      slot-scope="props">
               <q-search hide-underline
                         clearable
                         v-model="paramFilter" />
@@ -194,7 +196,8 @@
           </q-input>
         </q-field>
       </div>
-      <template slot="buttons">
+      <template slot="buttons"
+                slot-scope="props">
         <q-btn v-if="paramDialogAction=='add'"
                color="primary"
                :loading="newParamLoading"
@@ -264,7 +267,8 @@
                        :filter="CSFilter"
                        :columns="CSColumns"
                        row-key="name">
-                <template slot="top-left">
+                <template slot="top-left"
+                          slot-scope="props">
                   <q-btn v-if="CSSelected!=null&&CSSelected!=''"
                          icon="mdi-new-box"
                          rounded
@@ -274,7 +278,8 @@
                     <q-tooltip>新建</q-tooltip>
                   </q-btn>
                 </template>
-                <template slot="top-right">
+                <template slot="top-right"
+                          slot-scope="props">
                   <q-search hide-underline
                             clearable
                             v-model="CSFilter" />
@@ -340,7 +345,8 @@
           </q-input>
         </q-field>
       </div>
-      <template slot="buttons">
+      <template slot="buttons"
+                slot-scope="props">
         <q-btn v-if="CSDialogAction=='add'"
                color="primary"
                :loading="newCSLoading"
@@ -469,7 +475,8 @@
           </q-input>
         </q-field>
       </div>
-      <template slot="buttons">
+      <template slot="buttons"
+                slot-scope="props">
         <q-btn v-if="classDialogAction=='add'|classDialogAction=='expand'"
                color="primary"
                :loading="newClassLoading"
