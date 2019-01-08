@@ -12,7 +12,6 @@
              :rows-per-page-options="[5,10,15,20]"
              @request="request">
       <div slot="top-left"
-           slot-scope="props"
            class="row print-hide">
         <q-input class="q-mt-ml q-mr-sm"
                  @keyup.enter="search"

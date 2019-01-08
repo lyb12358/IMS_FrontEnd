@@ -12,7 +12,6 @@
              :rows-per-page-options="[5,10,15,20]"
              @request="request">
       <div slot="top-left"
-           slot-scope="props"
            class="row print-hide">
         <q-btn v-show="resetBtnExist"
                icon="mdi-eraser"
@@ -71,8 +70,7 @@
       </template>
       <q-tr slot="header"
             slot-scope="props">
-        <q-th v-for="col in props.cols"
-              v-if="checkStyle(col.name)"
+        <q-th v-for="col in checkStyleArray(props.cols)"
               :key="col.name"
               :props="props"
               style="text-align:center">
@@ -623,8 +621,7 @@
                     @fail="imageUploadedFail"
                     @add="addImageFile" />
       </div>
-      <template slot="buttons"
-                slot-scope="props">
+      <template slot="buttons">
         <q-btn color="primary"
                label="上传"
                @click="imageUpload" />
@@ -915,8 +912,7 @@
           </q-input>
         </q-field>
       </div>
-      <template slot="buttons"
-                slot-scope="props">
+      <template slot="buttons">
         <q-btn color="primary"
                @click="styleSwitch(prodStyleAutoSearch.id)"
                label="确定" />
@@ -1288,6 +1284,18 @@ export default {
       } else {
         return false
       }
+    },
+    checkStyleArray(list) {
+      if (this.permissions.indexOf(1) > -1) {
+        return list
+      }
+      let totalTdList = []
+      for (let i = 0; i < list.length; i++) {
+        if (this.checkStylePermission.indexOf(list[i].name) > -1) {
+          totalTdList.push(this.list[i])
+        }
+      }
+      return totalTdList
     },
     //check if user have right to modify specific element
     checkStyleModified(auth) {

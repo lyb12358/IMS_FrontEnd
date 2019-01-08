@@ -12,7 +12,6 @@
              :rows-per-page-options="[5,10,15,20]"
              @request="request">
       <div slot="top-left"
-           slot-scope="props"
            class="row print-hide">
         <q-btn v-show="resetBtnExist"
                icon="mdi-eraser"
@@ -84,8 +83,7 @@
                       v-model="props.selected"
                       indeterminate-value="some" />
         </q-th> -->
-        <q-th v-for="col in props.cols"
-              v-if="checkCode(col.name)"
+        <q-th v-for="col in checkCodeArray(props.cols)"
               :key="col.name"
               :props="props"
               style="text-align:center">
@@ -511,8 +509,7 @@
           </q-input>
         </q-field>
       </div>
-      <template slot="buttons"
-                slot-scope="props">
+      <template slot="buttons">
         <q-btn color="primary"
                @click="checkStyle(prodStyleAutoSearch.id)"
                label="确定" />
@@ -846,8 +843,7 @@
                     @fail="imageUploadedFail"
                     @add="addImageFile" />
       </div>
-      <template slot="buttons"
-                slot-scope="props">
+      <template slot="buttons">
         <q-btn color="primary"
                label="上传"
                @click="imageUpload" />
@@ -918,8 +914,7 @@
           </q-input>
         </q-field>
       </div>
-      <template slot="buttons"
-                slot-scope="props">
+      <template slot="buttons">
         <q-btn color="primary"
                @click="styleSwitch(prodStyleAutoSearch.id)"
                label="确定" />
@@ -1261,6 +1256,18 @@ export default {
       } else {
         return false
       }
+    },
+    checkCodeArray(list) {
+      if (this.permissions.indexOf(1) > -1) {
+        return list
+      }
+      let totalTdList = []
+      for (let i = 0; i < list.length; i++) {
+        if (this.checkCodePermission.indexOf(list[i].name) > -1) {
+          totalTdList.push(this.list[i])
+        }
+      }
+      return totalTdList
     },
     //check if user have right to modify specific element
     checkCodeModified(auth) {
