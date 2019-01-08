@@ -189,7 +189,7 @@
                  label="名称"
                  :label-width="3"
                  :error="$v.productParam.name.$error"
-                 error-label="参数名不为空，且不超过15位">
+                 error-label="参数名不为空，且不超过30位">
           <q-input v-model.trim="productParam.name">
           </q-input>
         </q-field>
@@ -335,7 +335,7 @@
                  label="名称"
                  :label-width="3"
                  :error="$v.productCS.name.$error"
-                 error-label="名称不为空，且不超过15位">
+                 error-label="名称不为空，且不超过100位">
           <q-input v-model.trim="productCS.name">
           </q-input>
         </q-field>
@@ -464,7 +464,7 @@
                  label="名称"
                  :label-width="3"
                  :error="$v.productClass.name.$error"
-                 error-label="类别名称不为空，且不超过15位">
+                 error-label="类别名称不为空，且不超过30位">
           <q-input v-model.trim="productClass.name">
           </q-input>
         </q-field>
@@ -572,7 +572,7 @@ export default {
       name: { required, maxLength: maxLength(30) }
     },
     productCS: {
-      name: { required, maxLength: maxLength(30) }
+      name: { required, maxLength: maxLength(100) }
     },
     productClass: {
       name: { required, maxLength: maxLength(30) }
