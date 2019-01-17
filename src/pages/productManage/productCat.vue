@@ -168,12 +168,12 @@
                          @click="openParamDialog('update',props.row)">
                     <q-tooltip>修改</q-tooltip>
                   </q-btn>
-                  <q-btn icon="mdi-delete"
+                  <!-- <q-btn icon="mdi-delete"
                          rounded
                          color="negative"
                          @click="deleteParam(props.row.name)">
                     <q-tooltip>删除</q-tooltip>
-                  </q-btn>
+                  </q-btn> -->
                 </q-td>
               </q-tr>
             </template>
@@ -315,12 +315,12 @@
                              @click="openCSDialog('update',props.row)">
                         <q-tooltip>修改</q-tooltip>
                       </q-btn>
-                      <q-btn icon="mdi-delete"
+                      <!-- <q-btn icon="mdi-delete"
                              rounded
                              color="negative"
                              @click="deleteCS(props.row.name)">
                         <q-tooltip>删除</q-tooltip>
-                      </q-btn>
+                      </q-btn> -->
                     </q-td>
                   </q-tr>
                 </template>
