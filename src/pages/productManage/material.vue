@@ -163,6 +163,12 @@
           <q-td key="numModel"
                 :props="props"
                 style="text-align:center">{{ props.row.numModel }}</q-td>
+          <q-td key="boxVolume"
+                :props="props"
+                style="text-align:center">{{ props.row.boxVolume }}</q-td>
+          <q-td key="boxWeight"
+                :props="props"
+                style="text-align:center">{{ props.row.boxWeight }}</q-td>
           <q-td key="isSync"
                 :props="props"
                 style="text-align:center">
@@ -556,6 +562,16 @@
                          float-label="件数" />
               </q-field>
             </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-input v-model="material.boxVolume"
+                       class="no-margin"
+                       float-label="箱体积" />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-input v-model="material.boxWeight"
+                       class="no-margin"
+                       float-label="箱重量" />
+            </div>
           </div>
         </div>
       </q-modal-layout>
@@ -741,8 +757,9 @@ export default {
         'bigType',
         'middleType',
         'smallType',
-        'matAttr',
-        'styleIsSync'
+        'boxVolume',
+        'boxWeight',
+        'isSync'
       ],
       separator: 'horizontal',
       serverPagination: {
@@ -770,6 +787,8 @@ export default {
         { name: 'matColor', label: '花色', field: 'matColor' },
         { name: 'matUnit', label: '单位', field: 'matUnit' },
         { name: 'numModel', label: '件数', field: 'numModel' },
+        { name: 'boxVolume', label: '箱体积', field: 'boxVolume' },
+        { name: 'boxWeight', label: '箱重量', field: 'boxWeight' },
         { name: 'isSync', label: '是否同步', field: 'isSync' },
         { name: 'gmtCreate', label: '创建时间', field: 'gmtCreate' },
         { name: 'gmtModified', label: '修改时间', field: 'gmtModified' }
@@ -797,6 +816,8 @@ export default {
         matUnit: '',
         matColor: '',
         numModel: '',
+        boxVolume: '',
+        boxWeight: '',
         isDel: false,
         isSync: false
       },
@@ -1292,7 +1313,7 @@ export default {
       // abandon prod
       for (let i = 0; i < list.length; i++) {
         let id = list[i].value
-        if ((id == 267) | (id == 697)) {
+        if (id == 267 || id == 697 || id == 765) {
           this.matFamilyOptions.push(list[i])
         }
       }

@@ -1749,7 +1749,7 @@ export default {
       // abandon mat
       for (let i = 0; i < list.length; i++) {
         let id = list[i].value
-        if ((id != 267) & (id != 697)) {
+        if (id != 267 && id != 697 && id != 765) {
           this.prodFamilyOptions.push(list[i])
         }
       }

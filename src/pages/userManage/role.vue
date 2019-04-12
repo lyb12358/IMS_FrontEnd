@@ -903,6 +903,10 @@
                                 label="维护大货定制"
                                 color="warning"
                                 :val=171 />
+                    <q-checkbox v-model="rolePermission"
+                                label="维护会员礼品"
+                                color="warning"
+                                :val=172 />
                   </div>
                 </q-collapsible>
                 <q-collapsible label="批量操作(点击展开)">
