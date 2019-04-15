@@ -160,6 +160,9 @@
           <q-td key="matUnit"
                 :props="props"
                 style="text-align:center">{{ props.row.unitName}}</q-td>
+          <q-td key="boxNum"
+                :props="props"
+                style="text-align:center">{{ props.row.boxNum }}</q-td>
           <q-td key="numModel"
                 :props="props"
                 style="text-align:center">{{ props.row.numModel }}</q-td>
@@ -563,6 +566,14 @@
               </q-field>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.material.boxNum.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="material.boxNum"
+                         class="no-margin"
+                         float-label="箱数量" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-input v-model="material.boxVolume"
                        class="no-margin"
                        float-label="箱体积" />
@@ -757,8 +768,8 @@ export default {
         'bigType',
         'middleType',
         'smallType',
+        'boxNum',
         'boxVolume',
-        'boxWeight',
         'isSync'
       ],
       separator: 'horizontal',
@@ -787,6 +798,7 @@ export default {
         { name: 'matColor', label: '花色', field: 'matColor' },
         { name: 'matUnit', label: '单位', field: 'matUnit' },
         { name: 'numModel', label: '件数', field: 'numModel' },
+        { name: 'boxNum', label: '箱数量', field: 'boxNum' },
         { name: 'boxVolume', label: '箱体积', field: 'boxVolume' },
         { name: 'boxWeight', label: '箱重量', field: 'boxWeight' },
         { name: 'isSync', label: '是否同步', field: 'isSync' },
@@ -816,6 +828,7 @@ export default {
         matUnit: '',
         matColor: '',
         numModel: '',
+        boxNum: '',
         boxVolume: '',
         boxWeight: '',
         isDel: false,
@@ -860,6 +873,7 @@ export default {
       bigType: { required },
       // middleType: { required },
       // smallType: { required },
+      boxNum: { integer },
       numModel: { integer },
       retailPrice: {
         decimal,
