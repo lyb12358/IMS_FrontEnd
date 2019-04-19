@@ -408,23 +408,23 @@
         </q-toolbar>
         <div class="layout-padding">
           <div class="row gutter-sm">
-            <!-- <div class="col-xs-12  col-sm-6 col-md-3">
-              <q-field :error="$v.productStyle.prodStyle.$error"
-                       error-label="物料编号必填，且不超过10位">
-                <q-input v-model="productStyle.prodStyle"
+            <div class="col-xs-12  col-sm-6 col-md-3">
+              <q-field :error="$v.material.matCode.$error"
+                       error-label="物料编号必填，且不超过15位">
+                <q-input v-model="material.matCode"
                          :readonly="modalActionName==='修改物料'?true:false"
                          class="no-margin"
                          float-label="物料编号" />
               </q-field>
-            </div> -->
-            <div class="col-xs-12  col-sm-6 col-md-3">
+            </div>
+            <!-- <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.material.matCode.$error"
                        error-label="编号是必填项，且不超过15位">
                 <q-input v-model.trim="material.matCode"
                          class="no-margin"
                          float-label="编号" />
               </q-field>
-            </div>
+            </div> -->
             <div class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.material.matName.$error"
                        error-label="名称是必填项，且不超过15位">
