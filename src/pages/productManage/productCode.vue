@@ -725,15 +725,21 @@
             </div>
             <div v-show="checkCodeModified(106)"
                  class="col-xs-12 col-sm-6 col-md-3">
-              <q-input v-model="productCode.boxVolume"
-                       class="no-margin"
-                       float-label="装箱体积" />
+              <q-field :error="$v.productCode.boxVolume.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.boxVolume"
+                         class="no-margin"
+                         float-label="装箱体积" />
+              </q-field>
             </div>
             <div v-show="checkCodeModified(107)"
                  class="col-xs-12 col-sm-6 col-md-3">
-              <q-input v-model="productCode.boxWeight"
-                       class="no-margin"
-                       float-label="箱重量" />
+              <q-field :error="$v.productCode.boxWeight.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.boxWeight"
+                         class="no-margin"
+                         float-label="箱重量" />
+              </q-field>
             </div>
             <div v-show="checkCodeModified(108)"
                  class="col-xs-12 col-sm-6 col-md-3">
@@ -1170,6 +1176,8 @@ export default {
       },
       numModel: { integer },
       boxNum: { integer },
+      boxVolume: { decimal },
+      boxWeight: { decimal },
       boxWarn: { integer },
       prodCycle: { integer }
       // tRetailPrice: {

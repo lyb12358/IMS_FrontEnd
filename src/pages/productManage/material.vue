@@ -574,14 +574,20 @@
               </q-field>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
-              <q-input v-model="material.boxVolume"
-                       class="no-margin"
-                       float-label="箱体积" />
+              <q-field :error="$v.material.boxVolume.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="material.boxVolume"
+                         class="no-margin"
+                         float-label="箱体积" />
+              </q-field>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
-              <q-input v-model="material.boxWeight"
-                       class="no-margin"
-                       float-label="箱重量" />
+              <q-field :error="$v.material.boxWeight.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="material.boxWeight"
+                         class="no-margin"
+                         float-label="箱重量" />
+              </q-field>
             </div>
           </div>
         </div>
@@ -874,6 +880,8 @@ export default {
       // middleType: { required },
       // smallType: { required },
       boxNum: { integer },
+      boxVolume: { decimal },
+      boxWeight: { decimal },
       numModel: { integer },
       retailPrice: {
         decimal,
