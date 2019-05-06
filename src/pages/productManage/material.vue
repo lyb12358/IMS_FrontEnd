@@ -1243,7 +1243,7 @@ export default {
       }
       this.$v.material.$reset()
       this.modifyLoading = true
-      this.material.isSync = 1
+      //this.material.isSync = 1
       this.material.status = 1
       this.material.gmtCreate = ''
       this.material.gmtModified = ''
