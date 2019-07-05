@@ -907,6 +907,10 @@
                                 label="维护会员礼品"
                                 color="warning"
                                 :val=172 />
+                    <q-checkbox v-model="rolePermission"
+                                label="维护七星物料"
+                                color="warning"
+                                :val=173 />
                   </div>
                 </q-collapsible>
                 <q-collapsible label="批量操作(点击展开)">
