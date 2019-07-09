@@ -12,7 +12,7 @@
              :rows-per-page-options="[5,10,15,20]"
              @request="request">
       <div slot="top-left"
-      slot-scope="props"
+           slot-scope="props"
            class="row print-hide">
         <q-input class="q-mt-ml q-mr-sm"
                  @keyup.enter="search"
@@ -161,7 +161,7 @@
         </q-field>
       </div>
       <template slot="buttons"
-      slot-scope="props">
+                slot-scope="props">
         <q-btn v-if="roleDialogAction=='add'"
                color="primary"
                :loading="newRoleLoading"
@@ -476,6 +476,31 @@
                                 :val=90 />
                     <br>
                     <q-checkbox v-model="rolePermission"
+                                label="查看69码"
+                                color="tertiary"
+                                :val=179 />
+                    <br>
+                    <q-checkbox v-model="rolePermission"
+                                label="查看单品毛重"
+                                color="tertiary"
+                                :val=180 />
+                    <br>
+                    <q-checkbox v-model="rolePermission"
+                                label="查看单品净重"
+                                color="tertiary"
+                                :val=181 />
+                    <br>
+                    <q-checkbox v-model="rolePermission"
+                                label="查看包装材质"
+                                color="tertiary"
+                                :val=182 />
+                    <br>
+                    <q-checkbox v-model="rolePermission"
+                                label="查看单品包装尺寸"
+                                color="tertiary"
+                                :val=183 />
+                    <br>
+                    <q-checkbox v-model="rolePermission"
                                 label="修改商品编号"
                                 color="orange"
                                 :val=94 />
@@ -567,6 +592,26 @@
                                 label="修改三等品成本价"
                                 color="orange"
                                 :val=116 /> -->
+                    <q-checkbox v-model="rolePermission"
+                                label="修改69码"
+                                color="orange"
+                                :val=174 />
+                    <q-checkbox v-model="rolePermission"
+                                label="修改单品毛重"
+                                color="orange"
+                                :val=175 />
+                    <q-checkbox v-model="rolePermission"
+                                label="修改单品净重"
+                                color="orange"
+                                :val=176 />
+                    <q-checkbox v-model="rolePermission"
+                                label="修改包装材质"
+                                color="orange"
+                                :val=177 />
+                    <q-checkbox v-model="rolePermission"
+                                label="修改单品包装尺寸"
+                                color="orange"
+                                :val=178 />
                   </div>
                 </q-collapsible>
                 <q-collapsible label="商品款式管理(点击展开)">

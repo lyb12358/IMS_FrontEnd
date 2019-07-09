@@ -292,6 +292,32 @@
                     size="1.5rem"
                     :color="props.row.codeIsSync?'positive':'negative'" />
           </q-td>
+          <!-- 20190705 -->
+          <q-td v-if="checkCode('code69')"
+                key="code69"
+                :props="props"
+                style="text-align:center">{{ props.row.code69 }}
+          </q-td>
+          <q-td v-if="checkCode('grossWeight')"
+                key="grossWeight"
+                :props="props"
+                style="text-align:center">{{ props.row.grossWeight }}
+          </q-td>
+          <q-td v-if="checkCode('singleWeight')"
+                key="singleWeight"
+                :props="props"
+                style="text-align:center">{{ props.row.singleWeight }}
+          </q-td>
+          <q-td v-if="checkCode('pakMat')"
+                key="pakMat"
+                :props="props"
+                style="text-align:center">{{ props.row.pakMat }}
+          </q-td>
+          <q-td v-if="checkCode('pakSize')"
+                key="pakSize"
+                :props="props"
+                style="text-align:center">{{ props.row.pakSize }}
+          </q-td>
           <q-td v-if="checkCode('gmtCreate')"
                 key="gmtCreate"
                 :props="props"
@@ -786,6 +812,7 @@
                          float-label="三等品成本价" />
               </q-field>
             </div> -->
+
             <div class="col-xs-12 col-sm-6 col-md-3">
               <q-toggle v-show="checkCodeModified(109)"
                         v-model="productCode.isRemind"
@@ -796,6 +823,43 @@
               <q-toggle v-show="checkCodeModified(112)"
                         v-model="productCode.isRate"
                         label="是否计算周转率" />
+            </div>
+            <!-- 20190705 -->
+            <div v-show="checkCodeModified(174)"
+                 class="col-xs-12 col-sm-6 col-md-3">
+                <q-input v-model="productCode.code69"
+                         class="no-margin"
+                         float-label="69码" />
+            </div>
+              <div v-show="checkCodeModified(175)"
+                 class="col-xs-12 col-sm-6 col-md-3">
+                 <q-field :error="$v.productCode.grossWeight.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.grossWeight"
+                         class="no-margin"
+                         float-label="单品毛重" />
+                         </q-field>
+            </div>
+            <div v-show="checkCodeModified(176)"
+                 class="col-xs-12 col-sm-6 col-md-3">
+                 <q-field :error="$v.productCode.singleWeight.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="productCode.singleWeight"
+                         class="no-margin"
+                         float-label="单品净重" />
+                         </q-field>
+            </div>
+            <div v-show="checkCodeModified(177)"
+                 class="col-xs-12 col-sm-6 col-md-3">
+                <q-input v-model="productCode.pakMat"
+                         class="no-margin"
+                         float-label="包装材质" />
+            </div>
+            <div v-show="checkCodeModified(178)"
+                 class="col-xs-12 col-sm-6 col-md-3">
+                <q-input v-model="productCode.pakSize"
+                         class="no-margin"
+                         float-label="单品包装尺寸" />
             </div>
             <div v-show="checkCodeModified(110)"
                  class="col-xs-12  col-sm-12 col-md-12">
@@ -1053,6 +1117,11 @@ export default {
         { name: 'levelName', label: '档次', field: 'levelName' },
         { name: 'designerName', label: '设计师', field: 'designerName' },
         { name: 'codeIsSync', label: '是否同步', field: 'codeIsSync' },
+        { name: 'code69', label: '69码', field: 'code69' },
+        { name: 'grossWeight', label: '单品毛重', field: 'grossWeight' },
+        { name: 'singleWeight', label: '单品净重', field: 'singleWeight' },
+        { name: 'pakMat', label: '包装材质', field: 'pakMat' },
+        { name: 'pakSize', label: '单品包装尺寸', field: 'pakSize' },
         { name: 'gmtCreate', label: '创建时间', field: 'gmtCreate' },
         { name: 'gmtModified', label: '修改时间', field: 'gmtModified' }
       ],
@@ -1127,7 +1196,12 @@ export default {
         // tSupplyPrice: '',
         // tCostPrice: '',
         isDel: false,
-        isSync: false
+        isSync: false,
+        code69:'',
+        grossWeight:'',
+        singleWeight:'',
+        pakMat:'',
+        pakSize:''
       },
       paramList: [],
       prodColorOptions: [],
@@ -1179,7 +1253,9 @@ export default {
       boxVolume: { decimal },
       boxWeight: { decimal },
       boxWarn: { integer },
-      prodCycle: { integer }
+      prodCycle: { integer },
+      grossWeight: { integer },
+      singleWeight: { integer }
       // tRetailPrice: {
       //   decimal,
       //   minValue: minValue(0),
