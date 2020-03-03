@@ -160,6 +160,9 @@
           <q-td key="matUnit"
                 :props="props"
                 style="text-align:center">{{ props.row.unitName}}</q-td>
+          <q-td key="boxWarn"
+                :props="props"
+                style="text-align:center">{{ props.row.boxWarn }}</q-td>
           <q-td key="boxNum"
                 :props="props"
                 style="text-align:center">{{ props.row.boxNum }}</q-td>
@@ -566,6 +569,14 @@
               </q-field>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.material.boxWarn.$error"
+                       error-label="请填写有效值">
+                <q-input v-model="material.boxWarn"
+                         class="no-margin"
+                         float-label="散货预警量" />
+              </q-field>
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.material.boxNum.$error"
                        error-label="请填写有效值">
                 <q-input v-model="material.boxNum"
@@ -804,6 +815,7 @@ export default {
         { name: 'matColor', label: '花色', field: 'matColor' },
         { name: 'matUnit', label: '单位', field: 'matUnit' },
         { name: 'numModel', label: '件数', field: 'numModel' },
+        { name: 'boxWarn', label: '散货预警量', field: 'boxWarn' },
         { name: 'boxNum', label: '箱数量', field: 'boxNum' },
         { name: 'boxVolume', label: '箱体积', field: 'boxVolume' },
         { name: 'boxWeight', label: '箱重量', field: 'boxWeight' },
@@ -834,6 +846,7 @@ export default {
         matUnit: '',
         matColor: '',
         numModel: '',
+        boxWarn: '',
         boxNum: '',
         boxVolume: '',
         boxWeight: '',
@@ -879,6 +892,7 @@ export default {
       bigType: { required },
       // middleType: { required },
       // smallType: { required },
+      boxWarn: { integer },
       boxNum: { integer },
       boxVolume: { decimal },
       boxWeight: { decimal },
