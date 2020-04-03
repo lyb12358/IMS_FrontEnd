@@ -827,39 +827,39 @@
             <!-- 20190705 -->
             <div v-show="checkCodeModified(174)"
                  class="col-xs-12 col-sm-6 col-md-3">
-                <q-input v-model="productCode.code69"
-                         class="no-margin"
-                         float-label="69码" />
+              <q-input v-model="productCode.code69"
+                       class="no-margin"
+                       float-label="69码" />
             </div>
-              <div v-show="checkCodeModified(175)"
+            <div v-show="checkCodeModified(175)"
                  class="col-xs-12 col-sm-6 col-md-3">
-                 <q-field :error="$v.productCode.grossWeight.$error"
+              <q-field :error="$v.productCode.grossWeight.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.grossWeight"
                          class="no-margin"
                          float-label="单品毛重" />
-                         </q-field>
+              </q-field>
             </div>
             <div v-show="checkCodeModified(176)"
                  class="col-xs-12 col-sm-6 col-md-3">
-                 <q-field :error="$v.productCode.singleWeight.$error"
+              <q-field :error="$v.productCode.singleWeight.$error"
                        error-label="请填写有效值">
                 <q-input v-model="productCode.singleWeight"
                          class="no-margin"
                          float-label="单品净重" />
-                         </q-field>
+              </q-field>
             </div>
             <div v-show="checkCodeModified(177)"
                  class="col-xs-12 col-sm-6 col-md-3">
-                <q-input v-model="productCode.pakMat"
-                         class="no-margin"
-                         float-label="包装材质" />
+              <q-input v-model="productCode.pakMat"
+                       class="no-margin"
+                       float-label="包装材质" />
             </div>
             <div v-show="checkCodeModified(178)"
                  class="col-xs-12 col-sm-6 col-md-3">
-                <q-input v-model="productCode.pakSize"
-                         class="no-margin"
-                         float-label="单品包装尺寸" />
+              <q-input v-model="productCode.pakSize"
+                       class="no-margin"
+                       float-label="单品包装尺寸" />
             </div>
             <div v-show="checkCodeModified(110)"
                  class="col-xs-12  col-sm-12 col-md-12">
@@ -1197,11 +1197,11 @@ export default {
         // tCostPrice: '',
         isDel: false,
         isSync: false,
-        code69:'',
-        grossWeight:'',
-        singleWeight:'',
-        pakMat:'',
-        pakSize:''
+        code69: '',
+        grossWeight: '',
+        singleWeight: '',
+        pakMat: '',
+        pakSize: ''
       },
       paramList: [],
       prodColorOptions: [],
@@ -1578,6 +1578,7 @@ export default {
       //fix
       this.productCode.isSync = 1
       this.productCode.gmtCreate = Date.now()
+      this.productCode.gmtModified = Date.now()
       addProdCode(this.productCode, thirdFlag)
         .then(response => {
           this.mainCodeModalOpened = false

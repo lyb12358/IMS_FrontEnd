@@ -1496,6 +1496,7 @@ export default {
       this.productStyle.isSync = 1
       this.productStyle.status = 1
       this.productStyle.gmtCreate = Date.now()
+      this.productStyle.gmtModified = Date.now()
       addProdStyle(this.productStyle)
         .then(response => {
           let data = response.data
