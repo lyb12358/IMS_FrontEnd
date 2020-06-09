@@ -1,243 +1,300 @@
 <template>
   <q-page padding>
-    <q-table ref="table"
-             :data="serverData"
-             :columns="columnsComputed"
-             row-key="id"
-             :visible-columns="visibleColumns"
-             :separator="separator"
-             :pagination.sync="serverPagination"
-             :loading="loading"
-             color="secondary"
-             :rows-per-page-options="[5,10,15,20]"
-             @request="request">
-      <div slot="top-left"
-           slot-scope="props"
-           class="row print-hide">
-        <q-btn v-show="resetBtnExist"
-               icon="mdi-eraser"
-               label="重置当前搜索"
-               rounded
-               color="dark"
-               @click="resetSearchFormAndSearch">
-        </q-btn>
-        <q-btn icon="mdi-magnify"
-               label="搜索"
-               rounded
-               color="secondary"
-               @click="searchFormDialogOpened=true">
-        </q-btn>
-        <q-btn v-if="checkAuth(18)"
-               :loading="excelLoading"
-               label="导出"
-               rounded
-               icon="mdi-file-excel"
-               color="tertiary"
-               @click="downloadExcel">
-        </q-btn>
-        <q-btn icon="mdi-new-box"
-               v-if="checkAuth(12)"
-               label="新建"
-               rounded
-               color="primary"
-               @click="openChooseStyleDialog">
-        </q-btn>
+    <q-table
+      ref="table"
+      :data="serverData"
+      :columns="columnsComputed"
+      row-key="id"
+      :visible-columns="visibleColumns"
+      :separator="separator"
+      :pagination.sync="serverPagination"
+      :loading="loading"
+      color="secondary"
+      :rows-per-page-options="[5,10,15,20]"
+      @request="request"
+    >
+      <div slot="top-left" slot-scope="props" class="row print-hide">
+        <q-btn
+          v-show="resetBtnExist"
+          icon="mdi-eraser"
+          label="重置当前搜索"
+          rounded
+          color="dark"
+          @click="resetSearchFormAndSearch"
+        ></q-btn>
+        <q-btn
+          icon="mdi-magnify"
+          label="搜索"
+          rounded
+          color="secondary"
+          @click="searchFormDialogOpened=true"
+        ></q-btn>
+        <q-btn
+          v-if="checkAuth(18)"
+          :loading="excelLoading"
+          label="导出"
+          rounded
+          icon="mdi-file-excel"
+          color="tertiary"
+          @click="downloadExcel"
+        ></q-btn>
+        <q-btn
+          icon="mdi-new-box"
+          v-if="checkAuth(12)"
+          label="新建"
+          rounded
+          color="primary"
+          @click="openChooseStyleDialog"
+        ></q-btn>
       </div>
-      <template slot="top-right"
-                slot-scope="props"
-                class="print-hide">
-        <q-table-columns color="secondary"
-                         class="q-mr-sm print-hide"
-                         label="筛选列"
-                         v-model="visibleColumns"
-                         :columns="columnsComputed" />
-        <q-select color="secondary"
-                  class="print-hide"
-                  v-model="separator"
-                  :options="[
+      <template slot="top-right" slot-scope="props" class="print-hide">
+        <q-table-columns
+          color="secondary"
+          class="q-mr-sm print-hide"
+          label="筛选列"
+          v-model="visibleColumns"
+          :columns="columnsComputed"
+        />
+        <q-select
+          color="secondary"
+          class="print-hide"
+          v-model="separator"
+          :options="[
           { label: '水平框线', value: 'horizontal' },
           { label: '竖直框线', value: 'vertical' },
           { label: '网格框线', value: 'cell' },
           { label: '无框线', value: 'none' }
         ]"
-                  hide-underline />
-        <q-btn flat
-               rounded
-               class="print-hide"
-               :icon="props.inFullscreen ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'"
-               @click="props.toggleFullscreen">
+          hide-underline
+        />
+        <q-btn
+          flat
+          rounded
+          class="print-hide"
+          :icon="props.inFullscreen ? 'mdi-fullscreen-exit' : 'mdi-fullscreen'"
+          @click="props.toggleFullscreen"
+        >
           <q-tooltip>全屏</q-tooltip>
         </q-btn>
-        <q-btn flat
-               rounded
-               class="print-hide"
-               v-if="props.inFullscreen"
-               icon="mdi-printer"
-               @click="printSth">
+        <q-btn
+          flat
+          rounded
+          class="print-hide"
+          v-if="props.inFullscreen"
+          icon="mdi-printer"
+          @click="printSth"
+        >
           <q-tooltip>打印</q-tooltip>
         </q-btn>
       </template>
-      <q-tr slot="header"
-            slot-scope="props">
+      <q-tr slot="header" slot-scope="props">
         <!-- <q-th auto-width>
           <q-checkbox v-if="props.multipleSelect"
                       v-model="props.selected"
                       indeterminate-value="some" />
-        </q-th> -->
-        <q-th v-for="col in checkCodeArray(props.cols)"
-              :key="col.name"
-              :props="props"
-              style="text-align:center">
-          {{ col.label }}
-        </q-th>
+        </q-th>-->
+        <q-th
+          v-for="col in checkCodeArray(props.cols)"
+          :key="col.name"
+          :props="props"
+          style="text-align:center"
+        >{{ col.label }}</q-th>
       </q-tr>
-      <template slot="body"
-                slot-scope="props">
+      <template slot="body" slot-scope="props">
         <q-tr :props="props">
           <!-- <q-td auto-width>
             <q-checkbox color="secondary"
                         v-model="props.selected" />
-          </q-td> -->
-          <q-td v-if="checkCode('prodCode')"
-                key="prodCode"
-                :props="props"
-                style="text-align:center">
-            <q-checkbox color="secondary"
-                        v-model="props.expand"
-                        checked-icon="mdi-minus"
-                        unchecked-icon="mdi-plus"
-                        class="q-mr-md" /> {{ props.row.prodCode }}
+          </q-td>-->
+          <q-td
+            v-if="checkCode('prodCode')"
+            key="prodCode"
+            :props="props"
+            style="text-align:center"
+          >
+            <q-checkbox
+              color="secondary"
+              v-model="props.expand"
+              checked-icon="mdi-minus"
+              unchecked-icon="mdi-plus"
+              class="q-mr-md"
+            />
+            {{ props.row.prodCode }}
           </q-td>
-          <q-td v-if="checkCode('codeThumbnail')"
-                key="codeThumbnail"
-                :props="props"
-                style="text-align:center">
-            <img :src="thumbnailCheck(props.row.id,props.row.styleId,props.row.codeThumbnail,props.row.styleThumbnail)"
-                 style="height: 80px; width: 80px;"></q-td>
-          <q-td v-if="checkCode('prodName')"
-                key="prodName"
-                :props="props"
-                :style="{textAlign:'center',maxWidth:'150px',whiteSpace:'normal'}">
-            {{ props.row.prodName }}<q-btn flat
-                   v-if="checkAuth(15)"
-                   rounded
-                   color="info"
-                   class="print-hide"
-                   icon="mdi-tooltip-image"
-                   @click="imageCheck(props.row.id,props.row.styleId,props.row.codeImage,props.row.styleImage)">
+          <q-td
+            v-if="checkCode('codeThumbnail')"
+            key="codeThumbnail"
+            :props="props"
+            style="text-align:center"
+          >
+            <img
+              :src="thumbnailCheck(props.row.id,props.row.styleId,props.row.codeThumbnail,props.row.styleThumbnail)"
+              style="height: 80px; width: 80px;"
+            >
+          </q-td>
+          <q-td
+            v-if="checkCode('prodName')"
+            key="prodName"
+            :props="props"
+            :style="{textAlign:'center',maxWidth:'150px',whiteSpace:'normal'}"
+          >
+            {{ props.row.prodName }}
+            <q-btn
+              flat
+              v-if="checkAuth(15)"
+              rounded
+              color="info"
+              class="print-hide"
+              icon="mdi-tooltip-image"
+              @click="imageCheck(props.row.id,props.row.styleId,props.row.codeImage,props.row.styleImage)"
+            >
               <q-tooltip>图片预览</q-tooltip>
             </q-btn>
           </q-td>
-          <q-td v-if="checkCode('catName')"
-                key="catName"
-                :props="props"
-                :style="{textAlign:'center',maxWidth:'100px',whiteSpace:'normal'}">{{ props.row.catName }}</q-td>
-          <q-td v-if="checkCode('prodStyle')"
-                key="prodStyle"
-                :props="props"
-                style="text-align:center">{{ props.row.prodStyle }}</q-td>
-          <q-td v-if="checkCode('familyName')"
-                key="familyName"
-                :props="props"
-                style="text-align:center">{{ props.row.familyName }}</q-td>
-          <q-td v-if="checkCode('typeName')"
-                key="typeName"
-                :props="props"
-                style="text-align:center">{{ props.row.typeName }}</q-td>
-          <q-td v-if="checkCode('bigName')"
-                key="bigName"
-                :props="props"
-                style="text-align:center">{{ props.row.bigName }}</q-td>
-          <q-td v-if="checkCode('middleName')"
-                key="middleName"
-                :props="props"
-                style="text-align:center">{{ props.row.middleName }}</q-td>
-          <q-td v-if="checkCode('smallName')"
-                key="smallName"
-                :props="props"
-                style="text-align:center">{{ props.row.smallName }}</q-td>
-          <q-td v-if="checkCode('attrName')"
-                key="attrName"
-                :props="props"
-                style="text-align:center">{{ props.row.attrName}}</q-td>
-          <q-td v-if="checkCode('speName')"
-                key="speName"
-                :props="props"
-                :style="{textAlign:'center',maxWidth:'100px',whiteSpace:'normal'}">{{ props.row.speName }}</q-td>
-          <q-td v-if="checkCode('colorName')"
-                key="colorName"
-                :props="props"
-                style="text-align:center">{{ props.row.colorName }}</q-td>
-          <q-td v-if="checkCode('retailPrice')"
-                key="retailPrice"
-                :props="props"
-                style="text-align:center">{{ props.row.retailPrice}}
-          </q-td>
-          <q-td v-if="checkCode('supplyPrice')"
-                key="supplyPrice"
-                :props="props"
-                style="text-align:center">{{ props.row.supplyPrice }}
-          </q-td>
-          <q-td v-if="checkCode('costPrice')"
-                key="costPrice"
-                :props="props"
-                style="text-align:center">{{ props.row.costPrice }}
-          </q-td>
-          <q-td v-if="checkCode('numModel')"
-                key="numModel"
-                :props="props"
-                style="text-align:center">{{ props.row.numModel }}
-          </q-td>
-          <q-td v-if="checkCode('netWeight')"
-                key="netWeight"
-                :props="props"
-                style="text-align:center">{{ props.row.netWeight }}
-          </q-td>
-          <q-td v-if="checkCode('boxNum')"
-                key="boxNum"
-                :props="props"
-                style="text-align:center">{{ props.row.boxNum }}
-          </q-td>
-          <q-td v-if="checkCode('boxModel')"
-                key="boxModel"
-                :props="props"
-                style="text-align:center">{{ props.row.boxModel }}
-          </q-td>
-          <q-td v-if="checkCode('boxVolume')"
-                key="boxVolume"
-                :props="props"
-                style="text-align:center">{{ props.row.boxVolume }}
-          </q-td>
-          <q-td v-if="checkCode('boxWeight')"
-                key="boxWeight"
-                :props="props"
-                style="text-align:center">{{ props.row.boxWeight }}
-          </q-td>
-          <q-td v-if="checkCode('boxWarn')"
-                key="boxWarn"
-                :props="props"
-                style="text-align:center">{{ props.row.boxWarn }}
-          </q-td>
-          <q-td v-if="checkCode('isRemind')"
-                key="isRemind"
-                :props="props"
-                style="text-align:center">{{ props.row.isRemind?'是':'否' }}
-          </q-td>
-          <q-td v-if="checkCode('isSecurity')"
-                key="isSecurity"
-                :props="props"
-                style="text-align:center">{{ props.row.isSecurity?'是':'否' }}
-          </q-td>
-          <q-td v-if="checkCode('isRate')"
-                key="isRate"
-                :props="props"
-                style="text-align:center">{{ props.row.isRate?'是':'否' }}
-          </q-td>
-          <q-td v-if="checkCode('prodCycle')"
-                key="prodCycle"
-                :props="props"
-                style="text-align:center">{{ props.row.prodCycle }}
-          </q-td>
+          <q-td
+            v-if="checkCode('catName')"
+            key="catName"
+            :props="props"
+            :style="{textAlign:'center',maxWidth:'100px',whiteSpace:'normal'}"
+          >{{ props.row.catName }}</q-td>
+          <q-td
+            v-if="checkCode('prodStyle')"
+            key="prodStyle"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.prodStyle }}</q-td>
+          <q-td
+            v-if="checkCode('familyName')"
+            key="familyName"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.familyName }}</q-td>
+          <q-td
+            v-if="checkCode('typeName')"
+            key="typeName"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.typeName }}</q-td>
+          <q-td
+            v-if="checkCode('bigName')"
+            key="bigName"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.bigName }}</q-td>
+          <q-td
+            v-if="checkCode('middleName')"
+            key="middleName"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.middleName }}</q-td>
+          <q-td
+            v-if="checkCode('smallName')"
+            key="smallName"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.smallName }}</q-td>
+          <q-td
+            v-if="checkCode('attrName')"
+            key="attrName"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.attrName}}</q-td>
+          <q-td
+            v-if="checkCode('speName')"
+            key="speName"
+            :props="props"
+            :style="{textAlign:'center',maxWidth:'100px',whiteSpace:'normal'}"
+          >{{ props.row.speName }}</q-td>
+          <q-td
+            v-if="checkCode('colorName')"
+            key="colorName"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.colorName }}</q-td>
+          <q-td
+            v-if="checkCode('retailPrice')"
+            key="retailPrice"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.retailPrice}}</q-td>
+          <q-td
+            v-if="checkCode('supplyPrice')"
+            key="supplyPrice"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.supplyPrice }}</q-td>
+          <q-td
+            v-if="checkCode('costPrice')"
+            key="costPrice"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.costPrice }}</q-td>
+          <q-td
+            v-if="checkCode('numModel')"
+            key="numModel"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.numModel }}</q-td>
+          <q-td
+            v-if="checkCode('netWeight')"
+            key="netWeight"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.netWeight }}</q-td>
+          <q-td
+            v-if="checkCode('boxNum')"
+            key="boxNum"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.boxNum }}</q-td>
+          <q-td
+            v-if="checkCode('boxModel')"
+            key="boxModel"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.boxModel }}</q-td>
+          <q-td
+            v-if="checkCode('boxVolume')"
+            key="boxVolume"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.boxVolume }}</q-td>
+          <q-td
+            v-if="checkCode('boxWeight')"
+            key="boxWeight"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.boxWeight }}</q-td>
+          <q-td
+            v-if="checkCode('boxWarn')"
+            key="boxWarn"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.boxWarn }}</q-td>
+          <q-td
+            v-if="checkCode('isRemind')"
+            key="isRemind"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.isRemind?'是':'否' }}</q-td>
+          <q-td
+            v-if="checkCode('isSecurity')"
+            key="isSecurity"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.isSecurity?'是':'否' }}</q-td>
+          <q-td
+            v-if="checkCode('isRate')"
+            key="isRate"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.isRate?'是':'否' }}</q-td>
+          <q-td
+            v-if="checkCode('prodCycle')"
+            key="prodCycle"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.prodCycle }}</q-td>
           <!-- <q-td v-if="checkCode('tRetailPrice')"
                 key="tRetailPrice"
                 :props="props"
@@ -252,356 +309,366 @@
                 key="tCostPrice"
                 :props="props"
                 style="text-align:center">{{ props.row.tCostPrice }}
-          </q-td> -->
-          <q-td v-if="checkCode('yearName')"
-                key="yearName"
-                :props="props"
-                style="text-align:center">{{ props.row.yearName }}
-          </q-td>
-          <q-td v-if="checkCode('seasonName')"
-                key="seasonName"
-                :props="props"
-                style="text-align:center">{{ props.row.seasonName }}
-          </q-td>
-          <q-td v-if="checkCode('unitName')"
-                key="unitName"
-                :props="props"
-                style="text-align:center">{{ props.row.unitName }}
-          </q-td>
-          <q-td v-if="checkCode('prodMat')"
-                key="prodMat"
-                :props="props"
-                style="text-align:center">{{ props.row.prodMat }}
-          </q-td>
-          <q-td v-if="checkCode('levelName')"
-                key="levelName"
-                :props="props"
-                style="text-align:center">{{ props.row.levelName }}
-          </q-td>
-          <q-td v-if="checkCode('designerName')"
-                key="designerName"
-                :props="props"
-                style="text-align:center">{{ props.row.designerName }}
-          </q-td>
+          </q-td>-->
+          <q-td
+            v-if="checkCode('yearName')"
+            key="yearName"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.yearName }}</q-td>
+          <q-td
+            v-if="checkCode('seasonName')"
+            key="seasonName"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.seasonName }}</q-td>
+          <q-td
+            v-if="checkCode('unitName')"
+            key="unitName"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.unitName }}</q-td>
+          <!-- <q-td
+            v-if="checkCode('prodMat')"
+            key="prodMat"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.prodMat }}</q-td>-->
+          <q-td
+            v-if="checkCode('levelName')"
+            key="levelName"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.levelName }}</q-td>
+          <q-td
+            v-if="checkCode('designerName')"
+            key="designerName"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.designerName }}</q-td>
 
-          <q-td v-if="checkCode('codeIsSync')"
-                key="codeIsSync"
-                :props="props"
-                style="text-align:center">
-            <q-icon :name="props.row.codeIsSync?'mdi-check-circle':'mdi-sync-off'"
-                    size="1.5rem"
-                    :color="props.row.codeIsSync?'positive':'negative'" />
+          <q-td
+            v-if="checkCode('codeIsSync')"
+            key="codeIsSync"
+            :props="props"
+            style="text-align:center"
+          >
+            <q-icon
+              :name="props.row.codeIsSync?'mdi-check-circle':'mdi-sync-off'"
+              size="1.5rem"
+              :color="props.row.codeIsSync?'positive':'negative'"
+            />
           </q-td>
           <!-- 20190705 -->
-          <q-td v-if="checkCode('code69')"
-                key="code69"
-                :props="props"
-                style="text-align:center">{{ props.row.code69 }}
-          </q-td>
-          <q-td v-if="checkCode('grossWeight')"
-                key="grossWeight"
-                :props="props"
-                style="text-align:center">{{ props.row.grossWeight }}
-          </q-td>
-          <q-td v-if="checkCode('singleWeight')"
-                key="singleWeight"
-                :props="props"
-                style="text-align:center">{{ props.row.singleWeight }}
-          </q-td>
-          <q-td v-if="checkCode('pakMat')"
-                key="pakMat"
-                :props="props"
-                style="text-align:center">{{ props.row.pakMat }}
-          </q-td>
-          <q-td v-if="checkCode('pakSize')"
-                key="pakSize"
-                :props="props"
-                style="text-align:center">{{ props.row.pakSize }}
-          </q-td>
-          <q-td v-if="checkCode('gmtCreate')"
-                key="gmtCreate"
-                :props="props"
-                style="text-align:center">{{ formatDate(props.row.gmtCreate) }}</q-td>
-          <q-td v-if="checkCode('gmtModified')"
-                key="gmtModified"
-                :props="props"
-                style="text-align:center">{{ formatDate(props.row.gmtModified) }}</q-td>
+          <q-td
+            v-if="checkCode('code69')"
+            key="code69"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.code69 }}</q-td>
+          <q-td
+            v-if="checkCode('grossWeight')"
+            key="grossWeight"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.grossWeight }}</q-td>
+          <q-td
+            v-if="checkCode('singleWeight')"
+            key="singleWeight"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.singleWeight }}</q-td>
+          <q-td
+            v-if="checkCode('pakMat')"
+            key="pakMat"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.pakMat }}</q-td>
+          <q-td
+            v-if="checkCode('pakSize')"
+            key="pakSize"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.pakSize }}</q-td>
+          <q-td
+            v-if="checkCode('gmtCreate')"
+            key="gmtCreate"
+            :props="props"
+            style="text-align:center"
+          >{{ formatDate(props.row.gmtCreate) }}</q-td>
+          <q-td
+            v-if="checkCode('gmtModified')"
+            key="gmtModified"
+            :props="props"
+            style="text-align:center"
+          >{{ formatDate(props.row.gmtModified) }}</q-td>
         </q-tr>
-        <q-tr v-show="props.expand"
-              :props="props">
+        <q-tr v-show="props.expand" :props="props">
           <q-td colspan="100%">
-            <q-btn v-if="checkAuth(13)"
-                   icon="mdi-format-list-numbers"
-                   rounded
-                   color="orange"
-                   @click="openMainCodeModal('update',props.row.id)">
+            <q-btn
+              v-if="checkAuth(13)"
+              icon="mdi-format-list-numbers"
+              rounded
+              color="orange"
+              @click="openMainCodeModal('update',props.row.id)"
+            >
               <q-tooltip>修改该编号商品信息</q-tooltip>
             </q-btn>
-            <q-btn v-if="checkAuth(12)"
-                   icon="mdi-playlist-plus"
-                   rounded
-                   color="brown"
-                   @click="checkStyle(props.row.styleId)">
+            <q-btn
+              v-if="checkAuth(12)"
+              icon="mdi-playlist-plus"
+              rounded
+              color="brown"
+              @click="checkStyle(props.row.styleId)"
+            >
               <q-tooltip>增加同款式商品</q-tooltip>
             </q-btn>
-            <q-btn v-if="checkAuth(14)"
-                   icon="mdi-image-plus"
-                   rounded
-                   color="secondary"
-                   @click="openImageUpload(props.row.id,props.row.prodCode,props.row.prodName,props.row.prodType)">
+            <q-btn
+              v-if="checkAuth(14)"
+              icon="mdi-image-plus"
+              rounded
+              color="secondary"
+              @click="openImageUpload(props.row.id,props.row.prodCode,props.row.prodName,props.row.prodType)"
+            >
               <q-tooltip>上传图片</q-tooltip>
             </q-btn>
-            <a v-if="checkAuth(15)"
-               :href="props.row.codeThumbnail!=null?api+'/image/code/'+props.row.id+'/'+props.row.codeImage:api+'/image/style/'+props.row.styleId+'/'+props.row.styleImage"
-               :download="props.row.prodName">
-              <q-btn icon="mdi-image-area-close"
-                     v-if="props.row.codeThumbnail!=null|props.row.styleThumbnail!=null"
-                     rounded
-                     color="tertiary">
+            <a
+              v-if="checkAuth(15)"
+              :href="props.row.codeThumbnail!=null?api+'/image/code/'+props.row.id+'/'+props.row.codeImage:api+'/image/style/'+props.row.styleId+'/'+props.row.styleImage"
+              :download="props.row.prodName"
+            >
+              <q-btn
+                icon="mdi-image-area-close"
+                v-if="props.row.codeThumbnail!=null|props.row.styleThumbnail!=null"
+                rounded
+                color="tertiary"
+              >
                 <q-tooltip>下载原图</q-tooltip>
               </q-btn>
             </a>
-            <q-btn v-if="checkAuth(16)"
-                   icon="mdi-clipboard-arrow-down"
-                   rounded
-                   color="primary"
-                   @click="downloadSpec(props.row.id,props.row.prodName )">
+            <q-btn
+              v-if="checkAuth(16)"
+              icon="mdi-clipboard-arrow-down"
+              rounded
+              color="primary"
+              @click="downloadSpec(props.row.id,props.row.prodName )"
+            >
               <q-tooltip>下载商品说明书</q-tooltip>
             </q-btn>
-            <q-btn v-if="checkAuth(162)"
-                   icon="mdi-pencil-box"
-                   rounded
-                   color="info"
-                   @click="openProdLogModal(2,props.row.id)">
+            <q-btn
+              v-if="checkAuth(162)"
+              icon="mdi-pencil-box"
+              rounded
+              color="info"
+              @click="openProdLogModal(2,props.row.id)"
+            >
               <q-tooltip>查看日志</q-tooltip>
             </q-btn>
-            <q-btn v-if="checkAuth(13)"
-                   icon="mdi-format-section"
-                   rounded
-                   color="purple"
-                   @click="openSwitchBindDialog(props.row.id,props.row.styleId)">
+            <q-btn
+              v-if="checkAuth(13)"
+              icon="mdi-format-section"
+              rounded
+              color="purple"
+              @click="openSwitchBindDialog(props.row.id,props.row.styleId)"
+            >
               <q-tooltip>更换绑定</q-tooltip>
             </q-btn>
-            <q-btn v-if="checkAuth(17)"
-                   icon="mdi-delete"
-                   rounded
-                   color="negative"
-                   @click="deleteProdCode(props.row.id)">
+            <q-btn
+              v-if="checkAuth(17)"
+              icon="mdi-delete"
+              rounded
+              color="negative"
+              @click="deleteProdCode(props.row.id)"
+            >
               <q-tooltip>删除</q-tooltip>
             </q-btn>
           </q-td>
         </q-tr>
       </template>
-      <div slot="pagination"
-           slot-scope="props"
-           class="row flex-center q-py-sm print-hide">
-        <q-btn round
-               dense
-               size="sm"
-               icon="mdi-undo"
-               color="secondary"
-               class="q-mr-sm"
-               :disable="props.isFirstPage"
-               @click="props.prevPage" />
-        <div class="q-mr-sm"
-             style="font-size: small">
-          页 {{ props.pagination.page }} / {{ props.pagesNumber }}
-        </div>
-        <q-btn round
-               dense
-               size="sm"
-               icon="mdi-redo"
-               color="secondary"
-               :disable="props.isLastPage"
-               @click="props.nextPage" />
+      <div slot="pagination" slot-scope="props" class="row flex-center q-py-sm print-hide">
+        <q-btn
+          round
+          dense
+          size="sm"
+          icon="mdi-undo"
+          color="secondary"
+          class="q-mr-sm"
+          :disable="props.isFirstPage"
+          @click="props.prevPage"
+        />
+        <div
+          class="q-mr-sm"
+          style="font-size: small"
+        >页 {{ props.pagination.page }} / {{ props.pagesNumber }}</div>
+        <q-btn
+          round
+          dense
+          size="sm"
+          icon="mdi-redo"
+          color="secondary"
+          :disable="props.isLastPage"
+          @click="props.nextPage"
+        />
       </div>
     </q-table>
     <!-- search modal -->
-    <q-modal v-model="searchFormDialogOpened"
-             no-backdrop-dismiss
-             no-esc-dismiss
-             no-refocus
-             :content-css="{maxWidth: '50vw', minHeight: '60vh'}">
+    <q-modal
+      v-model="searchFormDialogOpened"
+      no-backdrop-dismiss
+      no-esc-dismiss
+      no-refocus
+      :content-css="{maxWidth: '50vw', minHeight: '60vh'}"
+    >
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header"
-                   :color="brandColor">
-          <q-btn flat
-                 round
-                 dense
-                 v-close-overlay
-                 icon="mdi-arrow-left" />
-          <q-toolbar-title>
-            搜索项（请注意，搜索项的值同样会对导出生效）
-          </q-toolbar-title>
+        <q-toolbar slot="header" :color="brandColor">
+          <q-btn flat round dense v-close-overlay icon="mdi-arrow-left"/>
+          <q-toolbar-title>搜索项（请注意，搜索项的值同样会对导出生效）</q-toolbar-title>
         </q-toolbar>
-        <q-toolbar slot="footer"
-                   inverted>
-          <div class="col-12 row justify-center ">
+        <q-toolbar slot="footer" inverted>
+          <div class="col-12 row justify-center">
             <div style="margin:0 1rem">
-              <q-btn v-show="searchBtnExist"
-                     color="primary"
-                     label="确定"
-                     @click="search" />
+              <q-btn v-show="searchBtnExist" color="primary" label="确定" @click="search"/>
             </div>
             <div style="margin:0 1rem">
-              <q-btn color="primary"
-                     label="重置"
-                     @click="resetSearchForm" />
+              <q-btn color="primary" label="重置" @click="resetSearchForm"/>
             </div>
             <div style="margin:0 1rem">
-              <q-btn color="primary"
-                     v-close-overlay
-                     label="取消" />
+              <q-btn color="primary" v-close-overlay label="取消"/>
             </div>
           </div>
         </q-toolbar>
         <div class="layout-padding">
           <div class="row gutter-sm">
-            <div class="col-xs-12  col-sm-6 ">
-              <q-input v-model.trim="searchForm.prodCode"
-                       class="no-margin"
-                       float-label="编号" />
+            <div class="col-xs-12 col-sm-6">
+              <q-input v-model.trim="searchForm.prodCode" class="no-margin" float-label="编号"/>
             </div>
-            <div class="col-xs-12 col-sm-6 ">
-              <q-input v-model.trim="searchForm.prodName"
-                       class="no-margin"
-                       float-label="名称" />
+            <div class="col-xs-12 col-sm-6">
+              <q-input v-model.trim="searchForm.prodName" class="no-margin" float-label="名称"/>
             </div>
-            <div class="col-xs-12 col-sm-6 ">
-              <q-input v-model.trim="searchForm.typeName"
-                       class="no-margin"
-                       float-label="类别" />
+            <div class="col-xs-12 col-sm-6">
+              <q-input v-model.trim="searchForm.prodStyle" class="no-margin" float-label="款号"/>
             </div>
-            <div class="col-xs-12 col-sm-6 ">
-              <q-input v-model.trim="searchForm.attrName"
-                       class="no-margin"
-                       float-label="属性" />
+            <div class="col-xs-12 col-sm-6">
+              <q-input v-model.trim="searchForm.typeName" class="no-margin" float-label="类别"/>
             </div>
-            <div class="col-xs-12 col-sm-6 ">
-              <q-input v-model.trim="searchForm.bigName"
-                       class="no-margin"
-                       float-label="大类" />
+            <div class="col-xs-12 col-sm-6">
+              <q-input v-model.trim="searchForm.attrName" class="no-margin" float-label="属性"/>
             </div>
-            <div class="col-xs-12 col-sm-6 ">
-              <q-input v-model.trim="searchForm.middleName"
-                       class="no-margin"
-                       float-label="中类" />
+            <div class="col-xs-12 col-sm-6">
+              <q-input v-model.trim="searchForm.bigName" class="no-margin" float-label="大类"/>
             </div>
-            <div class="col-xs-12 col-sm-6 ">
-              <q-datetime v-model="searchForm.gmtCreateStart"
-                          ref="gmtCreateStart"
-                          float-label="添加时间大于等于"
-                          clearable
-                          type="date" />
+            <div class="col-xs-12 col-sm-6">
+              <q-input v-model.trim="searchForm.middleName" class="no-margin" float-label="中类"/>
             </div>
-            <div class="col-xs-12 col-sm-6 ">
-              <q-datetime v-model="searchForm.gmtCreateEnd"
-                          ref="gmtCreateEnd"
-                          float-label="添加时间小于等于"
-                          clearable
-                          type="date" />
+            <div class="col-xs-12 col-sm-6">
+              <q-datetime
+                v-model="searchForm.gmtCreateStart"
+                ref="gmtCreateStart"
+                float-label="添加时间大于等于"
+                clearable
+                type="date"
+              />
             </div>
-            <div class="col-xs-12 col-sm-6 ">
-              <q-datetime v-model="searchForm.gmtModifiedStart"
-                          ref="gmtModifiedStart"
-                          float-label="修改时间大于等于"
-                          clearable
-                          type="date" />
+            <div class="col-xs-12 col-sm-6">
+              <q-datetime
+                v-model="searchForm.gmtCreateEnd"
+                ref="gmtCreateEnd"
+                float-label="添加时间小于等于"
+                clearable
+                type="date"
+              />
             </div>
-            <div class="col-xs-12 col-sm-6 ">
-              <q-datetime v-model="searchForm.gmtModifiedEnd"
-                          ref="gmtModifiedEnd"
-                          float-label="修改时间小于等于"
-                          clearable
-                          type="date" />
+            <div class="col-xs-12 col-sm-6">
+              <q-datetime
+                v-model="searchForm.gmtModifiedStart"
+                ref="gmtModifiedStart"
+                float-label="修改时间大于等于"
+                clearable
+                type="date"
+              />
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <q-datetime
+                v-model="searchForm.gmtModifiedEnd"
+                ref="gmtModifiedEnd"
+                float-label="修改时间小于等于"
+                clearable
+                type="date"
+              />
             </div>
           </div>
         </div>
       </q-modal-layout>
     </q-modal>
     <!-- choose style -->
-    <q-dialog v-model="chooseStyleDialogOpened"
-              no-refocus
-              prevent-close>
+    <q-dialog v-model="chooseStyleDialogOpened" no-refocus prevent-close>
       <span slot="title">请选择一个款式</span>
       <div slot="body">
-        <q-field icon="mdi-sofa"
-                 label="款名"
-                 :label-width="3">
+        <q-field icon="mdi-sofa" label="款名" :label-width="3">
           <q-input v-model.trim="prodStyleAutoSearch.styleName">
-            <q-autocomplete @search="autoStyleNameSearch"
-                            :min-characters="2"
-                            @selected="styleSelected"
-                            value-field="label" />
+            <q-autocomplete
+              @search="autoStyleNameSearch"
+              :min-characters="2"
+              @selected="styleSelected"
+              value-field="label"
+            />
           </q-input>
         </q-field>
       </div>
-      <template slot="buttons"
-                slot-scope="props">
-        <q-btn color="primary"
-               @click="checkStyle(prodStyleAutoSearch.id)"
-               label="确定" />
-        <q-btn color="primary"
-               @click="closeChooseStyleDialog"
-               label="取消" />
+      <template slot="buttons" slot-scope="props">
+        <q-btn color="primary" @click="checkStyle(prodStyleAutoSearch.id)" label="确定"/>
+        <q-btn color="primary" @click="closeChooseStyleDialog" label="取消"/>
       </template>
     </q-dialog>
     <!-- main modal -->
-    <q-modal v-model="mainCodeModalOpened"
-             no-backdrop-dismiss
-             no-esc-dismiss
-             no-refocus
-             :content-css="{minWidth: '100vw', minHeight: '100vh'}">
+    <q-modal
+      v-model="mainCodeModalOpened"
+      no-backdrop-dismiss
+      no-esc-dismiss
+      no-refocus
+      :content-css="{minWidth: '100vw', minHeight: '100vh'}"
+    >
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header"
-                   :color="brandColor">
-          <q-btn flat
-                 round
-                 dense
-                 v-close-overlay
-                 icon="mdi-arrow-left" />
-          <q-toolbar-title>
-            {{modalActionName}}
-          </q-toolbar-title>
+        <q-toolbar slot="header" :color="brandColor">
+          <q-btn flat round dense v-close-overlay icon="mdi-arrow-left"/>
+          <q-toolbar-title>{{modalActionName}}</q-toolbar-title>
         </q-toolbar>
-        <q-toolbar slot="footer"
-                   inverted>
-          <div class="col-12 row justify-center ">
-            <div v-if="modalActionName==='修改商品信息'"
-                 style="margin:0 1.5rem">
-              <q-btn color="primary"
-                     :loading="modifyLoading"
-                     label="确定"
-                     @click="modifyProdCode(false)"
-                     style="margin:0 1.5rem" />
+        <q-toolbar slot="footer" inverted>
+          <div class="col-12 row justify-center">
+            <div v-if="modalActionName==='修改商品信息'" style="margin:0 1.5rem">
+              <q-btn
+                color="primary"
+                :loading="modifyLoading"
+                label="确定"
+                @click="modifyProdCode(false)"
+                style="margin:0 1.5rem"
+              />
               <!-- <q-btn color="primary"
                      v-show="isNotThird"
                      :loading="modifyLoading"
                      label="确定(含三等品)"
-                     @click="modifyProdCode(true)" /> -->
+              @click="modifyProdCode(true)" />-->
             </div>
-            <div v-if="modalActionName==='新增商品信息'"
-                 style="margin:0 1.5rem">
-              <q-btn color="primary"
-                     :loading="newLoading"
-                     label="确定"
-                     @click="newProdCode(false)"
-                     style="margin:0 1.5rem" />
-              <q-btn color="primary"
-                     :loading="newLoading"
-                     label="确定(含三等品)"
-                     @click="newProdCode(true)" />
+            <div v-if="modalActionName==='新增商品信息'" style="margin:0 1.5rem">
+              <q-btn
+                color="primary"
+                :loading="newLoading"
+                label="确定"
+                @click="newProdCode(false)"
+                style="margin:0 1.5rem"
+              />
+              <q-btn
+                color="primary"
+                :loading="newLoading"
+                label="确定(含三等品)"
+                @click="newProdCode(true)"
+              />
             </div>
-            <div v-if="modalActionName==='新增商品信息'"
-                 style="margin:0 1.5rem">
-              <q-btn color="primary"
-                     label="重置"
-                     @click="resetCodeModal" />
+            <div v-if="modalActionName==='新增商品信息'" style="margin:0 1.5rem">
+              <q-btn color="primary" label="重置" @click="resetCodeModal"/>
             </div>
             <div style="margin:0 1.5rem">
-              <q-btn color="primary"
-                     v-close-overlay
-                     label="取消" />
+              <q-btn color="primary" v-close-overlay label="取消"/>
             </div>
           </div>
         </q-toolbar>
@@ -610,10 +677,11 @@
             <div class="col-md-12">
               <q-collapsible>
                 <template slot="header">
-                  <q-item-side :image="thumbnailCheck(null,productStyle.id,null,productStyle.thumbnail)"
-                               color="primary" />
-                  <q-item-main :label="productStyle.styleName"
-                               sublabel="点击可展开该款式详细内容" />
+                  <q-item-side
+                    :image="thumbnailCheck(null,productStyle.id,null,productStyle.thumbnail)"
+                    color="primary"
+                  />
+                  <q-item-main :label="productStyle.styleName" sublabel="点击可展开该款式详细内容"/>
                 </template>
                 <q-card>
                   <q-card-main>
@@ -638,8 +706,8 @@
                           <td class="text-left">{{productStyle.bigName}}</td>
                           <td class="text-right">中类：</td>
                           <td class="text-left">{{productStyle.middleName}}</td>
-                          <td class="text-right">小类：</td>
-                          <td class="text-left">{{productStyle.smallName}}</td>
+                          <!-- <td class="text-right">小类：</td>
+                          <td class="text-left">{{productStyle.smallName}}</td>-->
                         </tr>
                       </tbody>
                     </table>
@@ -649,140 +717,114 @@
             </div>
           </div>
           <div class="row gutter-sm">
-            <div v-show="checkCodeModified(94)"
-                 class="col-xs-12  col-sm-6 col-md-3">
-              <q-field :error="$v.productCode.prodCode.$error"
-                       error-label="编号必填，且不超过20位">
-                <q-input v-model="productCode.prodCode"
-                         :readonly="modalActionName==='修改商品信息'?true:false"
-                         class="no-margin"
-                         float-label="编号" />
+            <div v-show="checkCodeModified(94)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.prodCode.$error" error-label="编号必填，且不超过20位">
+                <q-input
+                  v-model="productCode.prodCode"
+                  :readonly="modalActionName==='修改商品信息'?true:false"
+                  class="no-margin"
+                  float-label="编号"
+                />
               </q-field>
             </div>
-            <div v-show="checkCodeModified(95)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-field :error="$v.productCode.prodName.$error"
-                       error-label="名称必填，且不超过30位">
-                <q-input v-model="productCode.prodName"
-                         class="no-margin"
-                         float-label="名称" />
+            <div v-show="checkCodeModified(95)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.prodName.$error" error-label="名称必填，且不超过30位">
+                <q-input v-model="productCode.prodName" class="no-margin" float-label="名称"/>
               </q-field>
             </div>
-            <div v-show="checkCodeModified(96)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-select v-model="productCode.prodCat"
-                        float-label="品类"
-                        filter
-                        radio
-                        :options="prodCatOptions" />
+            <div v-show="checkCodeModified(96)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-select
+                v-model="productCode.prodCat"
+                float-label="品类"
+                filter
+                radio
+                :options="prodCatOptions"
+              />
             </div>
-            <div v-show="checkCodeModified(97)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-select v-model="productCode.prodSpe"
-                        float-label="规格"
-                        filter
-                        radio
-                        :options="prodSpeOptions" />
+            <div v-show="checkCodeModified(97)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-select
+                v-model="productCode.prodSpe"
+                float-label="规格"
+                filter
+                radio
+                :options="prodSpeOptions"
+              />
             </div>
-            <div v-show="checkCodeModified(98)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-field :error="$v.productCode.retailPrice.$error"
-                       error-label="请填写有效值">
-                <q-input v-model="productCode.retailPrice"
-                         class="no-margin"
-                         float-label="零售价" />
+            <!-- 20200605 -->
+            <div v-show="checkCodeModified(145)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.smallType.$error" error-label="小类必选">
+                <q-select
+                  v-model="productCode.smallType"
+                  float-label="小类"
+                  filter
+                  radio
+                  :options="smallTypeOptions"
+                />
               </q-field>
             </div>
-            <div v-show="checkCodeModified(99)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-field :error="$v.productCode.supplyPrice.$error"
-                       error-label="请填写有效值">
-                <q-input v-model="productCode.supplyPrice"
-                         class="no-margin"
-                         float-label="供应价" />
+            <div v-show="checkCodeModified(149)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.prodMat.$error" error-label="材质必填，不能过长">
+                <q-input v-model.trim="productCode.prodMat" class="no-margin" float-label="材质"/>
               </q-field>
             </div>
-            <div v-show="checkCodeModified(100)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-field :error="$v.productCode.costPrice.$error"
-                       error-label="请填写有效值">
-                <q-input v-model="productCode.costPrice"
-                         class="no-margin"
-                         float-label="成本价" />
+            <div v-show="checkCodeModified(98)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.retailPrice.$error" error-label="请填写有效值">
+                <q-input v-model="productCode.retailPrice" class="no-margin" float-label="零售价"/>
               </q-field>
             </div>
-            <div v-show="checkCodeModified(101)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-select v-model="productCode.prodColor"
-                        float-label="花色"
-                        filter
-                        radio
-                        :options="prodColorOptions" />
-            </div>
-            <div v-show="checkCodeModified(102)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-field :error="$v.productCode.numModel.$error"
-                       error-label="请填写有效值">
-                <q-input v-model="productCode.numModel"
-                         class="no-margin"
-                         float-label="件数" />
+            <div v-show="checkCodeModified(99)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.supplyPrice.$error" error-label="请填写有效值">
+                <q-input v-model="productCode.supplyPrice" class="no-margin" float-label="供应价"/>
               </q-field>
             </div>
-            <div v-show="checkCodeModified(103)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-input v-model="productCode.netWeight"
-                       class="no-margin"
-                       float-label="克重" />
-            </div>
-            <div v-show="checkCodeModified(104)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-field :error="$v.productCode.boxNum.$error"
-                       error-label="请填写有效值">
-                <q-input v-model="productCode.boxNum"
-                         class="no-margin"
-                         float-label="装箱数" />
+            <div v-show="checkCodeModified(100)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.costPrice.$error" error-label="请填写有效值">
+                <q-input v-model="productCode.costPrice" class="no-margin" float-label="成本价"/>
               </q-field>
             </div>
-            <div v-show="checkCodeModified(105)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-input v-model="productCode.boxModel"
-                       class="no-margin"
-                       float-label="装箱规格" />
+            <div v-show="checkCodeModified(101)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-select
+                v-model="productCode.prodColor"
+                float-label="花色"
+                filter
+                radio
+                :options="prodColorOptions"
+              />
             </div>
-            <div v-show="checkCodeModified(106)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-field :error="$v.productCode.boxVolume.$error"
-                       error-label="请填写有效值">
-                <q-input v-model="productCode.boxVolume"
-                         class="no-margin"
-                         float-label="装箱体积" />
+            <div v-show="checkCodeModified(102)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.numModel.$error" error-label="请填写有效值">
+                <q-input v-model="productCode.numModel" class="no-margin" float-label="件数"/>
               </q-field>
             </div>
-            <div v-show="checkCodeModified(107)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-field :error="$v.productCode.boxWeight.$error"
-                       error-label="请填写有效值">
-                <q-input v-model="productCode.boxWeight"
-                         class="no-margin"
-                         float-label="箱重量" />
+            <div v-show="checkCodeModified(103)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-input v-model="productCode.netWeight" class="no-margin" float-label="克重"/>
+            </div>
+            <div v-show="checkCodeModified(104)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.boxNum.$error" error-label="请填写有效值">
+                <q-input v-model="productCode.boxNum" class="no-margin" float-label="装箱数"/>
               </q-field>
             </div>
-            <div v-show="checkCodeModified(108)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-field :error="$v.productCode.boxWarn.$error"
-                       error-label="请填写有效值">
-                <q-input v-model="productCode.boxWarn"
-                         class="no-margin"
-                         float-label="散货预警量" />
+            <div v-show="checkCodeModified(105)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-input v-model="productCode.boxModel" class="no-margin" float-label="装箱规格"/>
+            </div>
+            <div v-show="checkCodeModified(106)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.boxVolume.$error" error-label="请填写有效值">
+                <q-input v-model="productCode.boxVolume" class="no-margin" float-label="装箱体积"/>
               </q-field>
             </div>
-            <div v-show="checkCodeModified(113)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-field :error="$v.productCode.prodCycle.$error"
-                       error-label="请填写有效值">
-                <q-input v-model="productCode.prodCycle"
-                         class="no-margin"
-                         float-label="生产周期" />
+            <div v-show="checkCodeModified(107)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.boxWeight.$error" error-label="请填写有效值">
+                <q-input v-model="productCode.boxWeight" class="no-margin" float-label="箱重量"/>
+              </q-field>
+            </div>
+            <div v-show="checkCodeModified(108)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.boxWarn.$error" error-label="请填写有效值">
+                <q-input v-model="productCode.boxWarn" class="no-margin" float-label="散货预警量"/>
+              </q-field>
+            </div>
+            <div v-show="checkCodeModified(113)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.prodCycle.$error" error-label="请填写有效值">
+                <q-input v-model="productCode.prodCycle" class="no-margin" float-label="生产周期"/>
               </q-field>
             </div>
             <!-- <div v-show="checkCodeModified(114)"
@@ -811,158 +853,123 @@
                          class="no-margin"
                          float-label="三等品成本价" />
               </q-field>
-            </div> -->
-
+            </div>-->
             <div class="col-xs-12 col-sm-6 col-md-3">
-              <q-toggle v-show="checkCodeModified(109)"
-                        v-model="productCode.isRemind"
-                        label="是否库存提醒" />
-              <q-toggle v-show="checkCodeModified(111)"
-                        v-model="productCode.isSecurity"
-                        label="是否有防伪码" />
-              <q-toggle v-show="checkCodeModified(112)"
-                        v-model="productCode.isRate"
-                        label="是否计算周转率" />
+              <q-toggle
+                v-show="checkCodeModified(109)"
+                v-model="productCode.isRemind"
+                label="是否库存提醒"
+              />
+              <q-toggle
+                v-show="checkCodeModified(111)"
+                v-model="productCode.isSecurity"
+                label="是否有防伪码"
+              />
+              <q-toggle
+                v-show="checkCodeModified(112)"
+                v-model="productCode.isRate"
+                label="是否计算周转率"
+              />
             </div>
             <!-- 20190705 -->
-            <div v-show="checkCodeModified(174)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-input v-model="productCode.code69"
-                       class="no-margin"
-                       float-label="69码" />
+            <div v-show="checkCodeModified(174)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-input v-model="productCode.code69" class="no-margin" float-label="69码"/>
             </div>
-            <div v-show="checkCodeModified(175)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-field :error="$v.productCode.grossWeight.$error"
-                       error-label="请填写有效值">
-                <q-input v-model="productCode.grossWeight"
-                         class="no-margin"
-                         float-label="单品毛重" />
+            <div v-show="checkCodeModified(175)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.grossWeight.$error" error-label="请填写有效值">
+                <q-input v-model="productCode.grossWeight" class="no-margin" float-label="单品毛重"/>
               </q-field>
             </div>
-            <div v-show="checkCodeModified(176)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-field :error="$v.productCode.singleWeight.$error"
-                       error-label="请填写有效值">
-                <q-input v-model="productCode.singleWeight"
-                         class="no-margin"
-                         float-label="单品净重" />
+            <div v-show="checkCodeModified(176)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.singleWeight.$error" error-label="请填写有效值">
+                <q-input v-model="productCode.singleWeight" class="no-margin" float-label="单品净重"/>
               </q-field>
             </div>
-            <div v-show="checkCodeModified(177)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-input v-model="productCode.pakMat"
-                       class="no-margin"
-                       float-label="包装材质" />
+            <div v-show="checkCodeModified(177)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-input v-model="productCode.pakMat" class="no-margin" float-label="包装材质"/>
             </div>
-            <div v-show="checkCodeModified(178)"
-                 class="col-xs-12 col-sm-6 col-md-3">
-              <q-input v-model="productCode.pakSize"
-                       class="no-margin"
-                       float-label="单品包装尺寸" />
+            <div v-show="checkCodeModified(178)" class="col-xs-12 col-sm-6 col-md-3">
+              <q-input v-model="productCode.pakSize" class="no-margin" float-label="单品包装尺寸"/>
             </div>
-            <div v-show="checkCodeModified(110)"
-                 class="col-xs-12  col-sm-12 col-md-12">
-              <q-input v-model.trim="productCode.remark"
-                       clearable
-                       type="textarea"
-                       float-label="备注"
-                       :max-height="100" />
+            <div v-show="checkCodeModified(110)" class="col-xs-12 col-sm-12 col-md-12">
+              <q-input
+                v-model.trim="productCode.remark"
+                clearable
+                type="textarea"
+                float-label="备注"
+                :max-height="100"
+              />
             </div>
           </div>
         </div>
       </q-modal-layout>
     </q-modal>
     <!-- image preview -->
-    <q-modal v-model="imagePreviewModalOpened"
-             no-refocus
-             :content-css="{ minHeight: '100vh'}">
+    <q-modal v-model="imagePreviewModalOpened" no-refocus :content-css="{ minHeight: '100vh'}">
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header"
-                   :color="brandColor">
-          <q-btn flat
-                 round
-                 dense
-                 v-close-overlay
-                 icon="mdi-arrow-left" />
-          <q-toolbar-title>
-            图片预览
-          </q-toolbar-title>
+        <q-toolbar slot="header" :color="brandColor">
+          <q-btn flat round dense v-close-overlay icon="mdi-arrow-left"/>
+          <q-toolbar-title>图片预览</q-toolbar-title>
         </q-toolbar>
         <div>
-          <img :src="imageAddress"
-               style="height: 1000px; width: 1000px;">
+          <img :src="imageAddress" style="height: 1000px; width: 1000px;">
         </div>
       </q-modal-layout>
     </q-modal>
     <!-- upload image -->
-    <q-dialog v-model="imageUploadDialog"
-              prevent-close>
+    <q-dialog v-model="imageUploadDialog" prevent-close>
       <span slot="title">上传图片</span>
       <span slot="message">点击"+"，选择清晰度较高的图片，将作为主要图片展示</span>
       <div slot="body">
-        <q-uploader ref="imageUpload"
-                    :url="api+imageUploadUrl"
-                    :additionalFields="[
+        <q-uploader
+          ref="imageUpload"
+          :url="api+imageUploadUrl"
+          :additionalFields="[
                       {'name':'id','value':this.expandId},
                       {'name':'prodCode','value':this.expandStyle},
                       {'name':'prodName','value':this.expandName}]"
-                    clearable
-                    auto-expand
-                    hide-upload-button
-                    float-label="上传图片"
-                    @uploaded="imageUploaded"
-                    @fail="imageUploadedFail"
-                    @add="addImageFile" />
+          clearable
+          auto-expand
+          hide-upload-button
+          float-label="上传图片"
+          @uploaded="imageUploaded"
+          @fail="imageUploadedFail"
+          @add="addImageFile"
+        />
       </div>
-      <template slot="buttons"
-                slot-scope="props">
-        <q-btn color="primary"
-               label="上传"
-               @click="imageUpload" />
-        <q-btn color="primary"
-               label="取消"
-               @click="imageUploadCancel" />
+      <template slot="buttons" slot-scope="props">
+        <q-btn color="primary" label="上传" @click="imageUpload"/>
+        <q-btn color="primary" label="取消" @click="imageUploadCancel"/>
       </template>
     </q-dialog>
     <!-- prodLog -->
-    <q-modal v-model="prodLogModalOpened"
-             no-esc-dismiss
-             no-backdrop-dismiss
-             no-refocus
-             :content-css="{minWidth: '50vw', minHeight: '50vh'}">
+    <q-modal
+      v-model="prodLogModalOpened"
+      no-esc-dismiss
+      no-backdrop-dismiss
+      no-refocus
+      :content-css="{minWidth: '50vw', minHeight: '50vh'}"
+    >
       <q-modal-layout footer-class="no-shadow">
-        <q-toolbar slot="header"
-                   :color="brandColor">
-          <q-btn flat
-                 round
-                 dense
-                 v-close-overlay
-                 icon="mdi-arrow-left" />
-          <q-toolbar-title>
-            商品日志
-          </q-toolbar-title>
+        <q-toolbar slot="header" :color="brandColor">
+          <q-btn flat round dense v-close-overlay icon="mdi-arrow-left"/>
+          <q-toolbar-title>商品日志</q-toolbar-title>
         </q-toolbar>
-        <q-toolbar slot="footer"
-                   inverted>
-          <div class="col-12 row justify-center ">
-            <q-btn color="primary"
-                   v-close-overlay
-                   label="取消" />
+        <q-toolbar slot="footer" inverted>
+          <div class="col-12 row justify-center">
+            <q-btn color="primary" v-close-overlay label="取消"/>
           </div>
         </q-toolbar>
-        <div class="layout-padding"
-             style="max-width: 800px">
+        <div class="layout-padding" style="max-width: 800px">
           <q-timeline style="padding: 0 24px;">
-            <q-timeline-entry v-for="log in timelineBeanList"
-                              :key="log.id"
-                              :title="log.title"
-                              :color="log.color"
-                              :subtitle="log.subtitle">
-              <q-collapsible v-if="checkAuth(163)"
-                             indent
-                             icon="mdi-camera"
-                             label="商品快照">
+            <q-timeline-entry
+              v-for="log in timelineBeanList"
+              :key="log.id"
+              :title="log.title"
+              :color="log.color"
+              :subtitle="log.subtitle"
+            >
+              <q-collapsible v-if="checkAuth(163)" indent icon="mdi-camera" label="商品快照">
                 <div>{{log.detail}}</div>
               </q-collapsible>
             </q-timeline-entry>
@@ -971,34 +978,26 @@
       </q-modal-layout>
     </q-modal>
     <!-- switch bind -->
-    <q-dialog v-model="switchBindDialogOpened"
-              no-refocus
-              prevent-close>
+    <q-dialog v-model="switchBindDialogOpened" no-refocus prevent-close>
       <span slot="title">请选择一个款式</span>
       <div slot="body">
-        <q-field icon="mdi-sofa"
-                 label="款名"
-                 :label-width="3">
+        <q-field icon="mdi-sofa" label="款名" :label-width="3">
           <q-input v-model.trim="prodStyleAutoSearch.styleName">
-            <q-autocomplete @search="autoStyleNameSearch"
-                            :min-characters="2"
-                            @selected="styleSelected"
-                            value-field="label" />
+            <q-autocomplete
+              @search="autoStyleNameSearch"
+              :min-characters="2"
+              @selected="styleSelected"
+              value-field="label"
+            />
           </q-input>
         </q-field>
       </div>
-      <template slot="buttons"
-                slot-scope="props">
-        <q-btn color="primary"
-               @click="styleSwitch(prodStyleAutoSearch.id)"
-               label="确定" />
-        <q-btn color="primary"
-               @click="closeSwitchBindDialog"
-               label="取消" />
+      <template slot="buttons" slot-scope="props">
+        <q-btn color="primary" @click="styleSwitch(prodStyleAutoSearch.id)" label="确定"/>
+        <q-btn color="primary" @click="closeSwitchBindDialog" label="取消"/>
       </template>
     </q-dialog>
   </q-page>
-
 </template>
 
 <script>
@@ -1025,6 +1024,8 @@ import {
   getProdStyleById
 } from 'src/api/product'
 import {
+  getProdClassOptions,
+  getProdClassOptionsByParent,
   getProdParamOptions,
   getProdCatOptions,
   getProdSpeOptionsByParent
@@ -1044,6 +1045,7 @@ export default {
         page: 0,
         row: 0,
         prodCode: '',
+        prodStyle: '',
         prodName: '',
         typeName: '',
         attrName: '',
@@ -1176,6 +1178,9 @@ export default {
         prodName: '',
         prodCat: '',
         prodSpe: '',
+        smallType: '',
+        smallName: '',
+        prodMat: '',
         retailPrice: '',
         supplyPrice: '',
         costPrice: '',
@@ -1223,13 +1228,17 @@ export default {
       //switch bind
       switchBindDialogOpened: false,
       switchId: 0,
-      switchOldStyleId: 0
+      switchOldStyleId: 0,
+      // 20200605
+      smallTypeOptions: [],
+      classList: []
     }
   },
   validations: {
     productCode: {
       prodCode: { required, maxLength: maxLength(20) },
-      prodName: { required, maxLength: maxLength(30) },
+      prodName: { required, maxLength: maxLength(50) },
+      smallType: { required },
       retailPrice: {
         required,
         decimal,
@@ -1255,7 +1264,8 @@ export default {
       boxWarn: { integer },
       prodCycle: { integer },
       grossWeight: { integer },
-      singleWeight: { integer }
+      singleWeight: { integer },
+      prodMat: { required, maxLength: maxLength(100) }
       // tRetailPrice: {
       //   decimal,
       //   minValue: minValue(0),
@@ -1308,6 +1318,7 @@ export default {
         if (
           (newVal.prodCode != '') |
           (newVal.prodName != '') |
+          (newVal.prodStyle != '') |
           (newVal.typeName != '') |
           (newVal.attrName != '') |
           (newVal.bigName != '') |
@@ -1514,6 +1525,10 @@ export default {
         this.prodCatOptions = this.catList.filter(
           item => item.parentId == bigType
         )
+        let middleType = this.productStyle.middleType
+        this.smallTypeOptions = this.classList.filter(
+          item => item.parentId == middleType
+        )
       } else if (action === 'update') {
         // if (
         //   departId != this.myDepart &&
@@ -1550,6 +1565,10 @@ export default {
             let data = response.data.data
             this.prodSpeOptions = data
           })
+          let middleType = this.productStyle.middleType
+          this.smallTypeOptions = this.classList.filter(
+            item => item.parentId == middleType
+          )
           this.prodCatOptions = this.catList.filter(
             item => item.parentId == bigType
           )
@@ -1820,17 +1839,22 @@ export default {
       let data = response.data.data
       this.catList = data
     })
+    //once mounted, fetch some product parameters
+    getProdClassOptions().then(response => {
+      let data = response.data.data
+      this.classList = data
+    })
   }
 }
 </script>
 
 <style lang="stylus" scoped>
 .q-table th
-  font-size 13px
+  font-size: 13px
 .q-table tbody td
-  font-size 15px
-  padding 7px 7px
+  font-size: 15px
+  padding: 7px 7px
 @media (min-width: 1200px)
   .layout-padding
-    padding 1.5rem 1.5rem
+    padding: 1.5rem 1.5rem
 </style>
