@@ -753,8 +753,8 @@
                           <td class="text-left">{{productStyle.bigName}}</td>
                           <td class="text-right">中类：</td>
                           <td class="text-left">{{productStyle.middleName}}</td>
-                          <td class="text-right">小类：</td>
-                          <td class="text-left">{{productStyle.smallName}}</td>
+                          <!-- <td class="text-right">小类：</td>
+                          <td class="text-left">{{productStyle.smallName}}</td>-->
                         </tr>
                       </tbody>
                     </table>
@@ -791,6 +791,21 @@
                 radio
                 :options="prodSpeOptions"
               />
+            </div>
+            <!-- 20200605 -->
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-select
+                v-model="productCode.smallType"
+                float-label="小类"
+                filter
+                radio
+                :options="smallTypeOptions"
+              />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productCode.prodMat.$error" error-label="材质不能过长">
+                <q-input v-model.trim="productCode.prodMat" class="no-margin" float-label="材质"/>
+              </q-field>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productCode.retailPrice.$error" error-label="请填写有效值">
@@ -1100,12 +1115,12 @@ export default {
       styleName: { required, maxLength: maxLength(50) },
       prodFamily: { required },
       prodType: { required },
-      bigType: { required },
-      prodMat: { maxLength: maxLength(100) }
+      bigType: { required }
     },
     productCode: {
       prodCode: { required, maxLength: maxLength(20) },
       prodName: { required, maxLength: maxLength(30) },
+      prodMat: { maxLength: maxLength(100) },
       retailPrice: {
         required,
         decimal,
@@ -1626,6 +1641,10 @@ export default {
         let data = response.data.data
         this.prodSpeOptions = data
       })
+      let middleType = style.middleType
+      this.smallTypeOptions = this.classList.filter(
+        item => item.parentId == middleType
+      )
       this.prodCatOptions = this.catList.filter(
         item => item.parentId == bigType
       )

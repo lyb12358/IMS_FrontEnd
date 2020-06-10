@@ -752,18 +752,16 @@
             </div>
             <!-- 20200605 -->
             <div v-show="checkCodeModified(145)" class="col-xs-12 col-sm-6 col-md-3">
-              <q-field :error="$v.productCode.smallType.$error" error-label="小类必选">
-                <q-select
-                  v-model="productCode.smallType"
-                  float-label="小类"
-                  filter
-                  radio
-                  :options="smallTypeOptions"
-                />
-              </q-field>
+              <q-select
+                v-model="productCode.smallType"
+                float-label="小类"
+                filter
+                radio
+                :options="smallTypeOptions"
+              />
             </div>
             <div v-show="checkCodeModified(149)" class="col-xs-12 col-sm-6 col-md-3">
-              <q-field :error="$v.productCode.prodMat.$error" error-label="材质必填，不能过长">
+              <q-field :error="$v.productCode.prodMat.$error" error-label="材质不能过长">
                 <q-input v-model.trim="productCode.prodMat" class="no-margin" float-label="材质"/>
               </q-field>
             </div>
@@ -1238,7 +1236,6 @@ export default {
     productCode: {
       prodCode: { required, maxLength: maxLength(20) },
       prodName: { required, maxLength: maxLength(50) },
-      smallType: { required },
       retailPrice: {
         required,
         decimal,
@@ -1265,7 +1262,7 @@ export default {
       prodCycle: { integer },
       grossWeight: { integer },
       singleWeight: { integer },
-      prodMat: { required, maxLength: maxLength(100) }
+      prodMat: { maxLength: maxLength(100) }
       // tRetailPrice: {
       //   decimal,
       //   minValue: minValue(0),
