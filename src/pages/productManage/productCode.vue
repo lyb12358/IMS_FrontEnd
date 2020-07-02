@@ -609,6 +609,7 @@
             <q-autocomplete
               @search="autoStyleNameSearch"
               :min-characters="2"
+              :max-results="20"
               @selected="styleSelected"
               value-field="label"
             />
@@ -984,6 +985,7 @@
             <q-autocomplete
               @search="autoStyleNameSearch"
               :min-characters="2"
+              :max-results="20"
               @selected="styleSelected"
               value-field="label"
             />
