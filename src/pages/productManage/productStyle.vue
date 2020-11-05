@@ -225,6 +225,11 @@
             :props="props"
             style="text-align:center"
           >{{ formatDate(props.row.gmtModified) }}</q-td>
+          <q-td
+            key="syncProtype"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.syncProtype }}</q-td>
         </q-tr>
         <q-tr v-show="props.expand" :props="props">
           <q-td colspan="100%">
@@ -531,21 +536,25 @@
               </q-field>
             </div>-->
             <div v-show="checkStyleModified(146)" class="col-xs-12 col-sm-6 col-md-3">
-              <q-select
-                v-model="productStyle.prodYear"
-                float-label="年份"
-                filter
-                radio
-                :options="prodYearOptions"
-              />
+              <q-field :error="$v.productStyle.prodYear.$error" error-label="年份是必填项">
+                <q-select
+                  v-model="productStyle.prodYear"
+                  float-label="年份"
+                  filter
+                  radio
+                  :options="prodYearOptions"
+                />
+              </q-field>
             </div>
             <div v-show="checkStyleModified(147)" class="col-xs-12 col-sm-6 col-md-3">
-              <q-select
-                v-model="productStyle.prodSeason"
-                float-label="季节"
-                radio
-                :options="prodSeasonOptions"
-              />
+              <q-field :error="$v.productStyle.prodSeason.$error" error-label="季节是必填项">
+                <q-select
+                  v-model="productStyle.prodSeason"
+                  float-label="季节"
+                  radio
+                  :options="prodSeasonOptions"
+                />
+              </q-field>
             </div>
             <div v-show="checkStyleModified(148)" class="col-xs-12 col-sm-6 col-md-3">
               <q-select
@@ -572,6 +581,17 @@
                 radio
                 :options="designerOptions"
               />
+            </div>
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productStyle.syncProtype.$error" error-label="必填项">
+                <q-select
+                  v-model="productStyle.syncProtype"
+                  float-label="集团同步类别"
+                  filter
+                  radio
+                  :options="syncProtypeOptions"
+                />
+              </q-field>
             </div>
             <div v-show="checkStyleModified(152)" class="col-xs-12 col-sm-12 col-md-12">
               <q-input
@@ -1000,7 +1020,8 @@ export default {
         { name: 'designerName', label: '设计师', field: 'designerName' },
         { name: 'styleIsSync', label: '是否同步', field: 'styleIsSync' },
         { name: 'gmtCreate', label: '创建时间', field: 'gmtCreate' },
-        { name: 'gmtModified', label: '修改时间', field: 'gmtModified' }
+        { name: 'gmtModified', label: '修改时间', field: 'gmtModified' },
+        { name: 'syncProtype', label: '集团同步类别', field: 'syncProtype' }
       ],
       //main style modal
       mainStyleModalOpened: false,
@@ -1032,6 +1053,7 @@ export default {
         prodLevel: '',
         //levelName: '',
         designer: '',
+        syncProtype: '',
         //designerName: '',
         prodDesc: '',
         isDel: false,
@@ -1050,6 +1072,36 @@ export default {
       prodUnitOptions: [],
       prodLevelOptions: [],
       designerOptions: [],
+      syncProtypeOptions: [
+        {
+          label: '套件',
+          value: '套件'
+        },
+        {
+          label: '被芯',
+          value: '被芯'
+        },
+        {
+          label: '枕芯',
+          value: '枕芯'
+        },
+        {
+          label: '床垫',
+          value: '床垫'
+        },
+        {
+          label: '夏季品',
+          value: '夏季品'
+        },
+        {
+          label: '家居用品',
+          value: '家居用品'
+        },
+        {
+          label: '其他',
+          value: '其他'
+        }
+      ],
       //image preview
       imageAddress: '',
       imagePreviewModalOpened: false,
@@ -1115,7 +1167,10 @@ export default {
       styleName: { required, maxLength: maxLength(50) },
       prodFamily: { required },
       prodType: { required },
-      bigType: { required }
+      bigType: { required },
+      prodYear: { required },
+      prodSeason: { required },
+      syncProtype: { required }
     },
     productCode: {
       prodCode: { required, maxLength: maxLength(20) },
