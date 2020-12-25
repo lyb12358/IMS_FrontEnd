@@ -527,7 +527,7 @@
       no-backdrop-dismiss
       no-esc-dismiss
       no-refocus
-      :content-css="{maxWidth: '50vw', minHeight: '60vh'}"
+      :content-css="{maxWidth: '50vw', minHeight: '95vh'}"
     >
       <q-modal-layout footer-class="no-shadow">
         <q-toolbar slot="header" :color="brandColor">
@@ -559,16 +559,59 @@
               <q-input v-model.trim="searchForm.prodStyle" class="no-margin" float-label="款号"/>
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input v-model.trim="searchForm.typeName" class="no-margin" float-label="类别(直接输入)"/>
+              <q-input v-model.trim="searchForm.typeName" class="no-margin" float-label="类别(直接输入文字)"/>
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input v-model.trim="searchForm.attrName" class="no-margin" float-label="属性(直接输入)"/>
+              <q-input v-model.trim="searchForm.attrName" class="no-margin" float-label="属性(直接输入文字)"/>
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input v-model.trim="searchForm.bigName" class="no-margin" float-label="大类(直接输入)"/>
+              <q-input v-model.trim="searchForm.bigName" class="no-margin" float-label="大类(直接输入文字)"/>
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input v-model.trim="searchForm.middleName" class="no-margin" float-label="中类(直接输入)"/>
+              <q-input v-model.trim="searchForm.middleName" class="no-margin" float-label="中类(直接输入文字)"/>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <q-select
+                  v-model="searchForm.prodFamily"
+                  float-label="归属"
+                  radio
+                  :options="prodFamilyOptions"
+                />
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <q-select
+                  v-model="searchForm.prodType"
+                  float-label="类别"
+                  radio
+                  :options="prodTypeOptions"
+                />
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <q-select
+                  v-model="searchForm.bigType"
+                  float-label="大类"
+                  filter
+                  radio
+                  :options="bigTypeOptions"
+                />
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <q-select
+                  v-model="searchForm.middleType"
+                  float-label="中类"
+                  filter
+                  radio
+                  :options="middleTypeOptions"
+                />
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <q-select
+                  v-model="searchForm.smallType"
+                  float-label="小类"
+                  filter
+                  radio
+                  :options="smallTypeOptions"
+                />
             </div>
             <div class="col-xs-12 col-sm-6">
               <q-datetime
@@ -1248,7 +1291,11 @@ export default {
       smallTypeOptions: [],
       classList: [],
       //20201225
-      pageChanged: ''
+      pageChanged: '',
+      prodFamilyOptions: [],
+      prodTypeOptions: [],
+      bigTypeOptions: [],
+      middleTypeOptions: []
     }
   },
   validations: {
@@ -1339,6 +1386,11 @@ export default {
           (newVal.attrName != '') |
           (newVal.bigName != '') |
           (newVal.middleName != '') |
+          (newVal.prodFamily != null) |
+          (newVal.prodType != null) |
+          (newVal.bigType != null) |
+          (newVal.middleType != null) |
+          (newVal.smallType != null) |
           (newVal.gmtCreateStart != null) |
           (newVal.gmtCreateEnd != null) |
           (newVal.gmtModifiedStart != null) |
@@ -1348,6 +1400,53 @@ export default {
         } else {
           this.searchBtnExist = false
         }
+      }
+    },
+    //reset the prodClass when it changes
+    'searchForm.prodFamily': function(newVal, oldVal) {
+      if (this.searchFormDialogOpened && newVal != '') {
+        this.bigTypeOptions = []
+        this.middleTypeOptions = []
+        this.smallTypeOptions = []
+        this.searchForm.prodType = ''
+        this.searchForm.bigType = ''
+        this.searchForm.middleType = ''
+        this.searchForm.smallType = ''
+        this.prodTypeOptions = this.classList.filter(
+          item => item.parentId == newVal
+        )
+      }
+    },
+    'searchForm.prodType': function(newVal, oldVal) {
+      if (this.searchFormDialogOpened && newVal != '') {
+        this.middleTypeOptions = []
+        this.smallTypeOptions = []
+        this.searchForm.bigType = ''
+        this.searchForm.middleType = ''
+        this.searchForm.smallType = ''
+        this.bigTypeOptions = this.classList.filter(
+          item => item.parentId == newVal
+        )
+      }
+    },
+    'searchForm.bigType': function(newVal, oldVal) {
+      if (this.searchFormDialogOpened && newVal != '') {
+        this.smallTypeOptions = []
+        this.searchForm.middleType = ''
+        this.searchForm.smallType = ''
+        newVal += ''
+        this.middleTypeOptions = this.classList.filter(
+          item => item.parentId == newVal
+        )
+      }
+    },
+    'searchForm.middleType': function(newVal, oldVal) {
+      if (this.searchFormDialogOpened && newVal != '') {
+        this.searchForm.smallType = ''
+        newVal += ''
+        this.smallTypeOptions = this.classList.filter(
+          item => item.parentId == newVal
+        )
       }
     }
   },
@@ -1866,6 +1965,14 @@ export default {
     getProdClassOptions().then(response => {
       let data = response.data.data
       this.classList = data
+      let list = data.filter(item => item.parentId == 0)
+      // abandon mat
+      for (let i = 0; i < list.length; i++) {
+        let id = list[i].value
+        if (id != 267 && id != 697 && id != 765) {
+          this.prodFamilyOptions.push(list[i])
+        }
+      }
     })
   }
 }
