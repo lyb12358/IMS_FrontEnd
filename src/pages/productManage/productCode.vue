@@ -486,6 +486,16 @@
         </q-tr>
       </template>
       <div slot="pagination" slot-scope="props" class="row flex-center q-py-sm print-hide">
+        <q-input v-model.trim="pageChanged" type="number" suffix="页" class="q-mr-sm"  align="center" min="1"/>
+        <q-btn
+          round
+          dense
+          size="sm"
+          icon="mdi-book-open-page-variant"
+          color="secondary"
+          class="q-mr-sm"
+          @click="changePage"
+        />
         <q-btn
           round
           dense
@@ -499,7 +509,7 @@
         <div
           class="q-mr-sm"
           style="font-size: small"
-        >页 {{ props.pagination.page }} / {{ props.pagesNumber }}</div>
+        > {{ props.pagination.page }} / {{ props.pagesNumber }}</div>
         <q-btn
           round
           dense
@@ -549,16 +559,16 @@
               <q-input v-model.trim="searchForm.prodStyle" class="no-margin" float-label="款号"/>
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input v-model.trim="searchForm.typeName" class="no-margin" float-label="类别"/>
+              <q-input v-model.trim="searchForm.typeName" class="no-margin" float-label="类别(直接输入)"/>
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input v-model.trim="searchForm.attrName" class="no-margin" float-label="属性"/>
+              <q-input v-model.trim="searchForm.attrName" class="no-margin" float-label="属性(直接输入)"/>
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input v-model.trim="searchForm.bigName" class="no-margin" float-label="大类"/>
+              <q-input v-model.trim="searchForm.bigName" class="no-margin" float-label="大类(直接输入)"/>
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input v-model.trim="searchForm.middleName" class="no-margin" float-label="中类"/>
+              <q-input v-model.trim="searchForm.middleName" class="no-margin" float-label="中类(直接输入)"/>
             </div>
             <div class="col-xs-12 col-sm-6">
               <q-datetime
@@ -1054,7 +1064,12 @@ export default {
         gmtCreateStart: null,
         gmtCreateEnd: null,
         gmtModifiedStart: null,
-        gmtModifiedEnd: null
+        gmtModifiedEnd: null,
+        prodFamily:null,
+        prodType:null,
+        bigType:null,
+        middleType:null,
+        smallType:null
       },
       loading: false,
       excelLoading: false,
@@ -1231,7 +1246,9 @@ export default {
       switchOldStyleId: 0,
       // 20200605
       smallTypeOptions: [],
-      classList: []
+      classList: [],
+      //20201225
+      pageChanged: ''
     }
   },
   validations: {
@@ -1401,6 +1418,12 @@ export default {
         pagination: this.serverPagination
       })
       this.resetBtnExist = true
+    },
+    changePage() {
+      this.serverPagination.page = this.pageChanged
+      this.request({
+        pagination: this.serverPagination
+      })
     },
     printSth() {
       window.print()
@@ -1818,6 +1841,7 @@ export default {
           this.serverPagination.rowsNumber = data.total
           this.serverData = data.rows
           this.loading = false
+          this.pageChanged=pagination.page
         })
         .catch(error => {
           this.loading = false

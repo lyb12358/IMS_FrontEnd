@@ -311,6 +311,16 @@
         </q-tr>
       </template>
       <div slot="pagination" slot-scope="props" class="row flex-center q-py-sm print-hide">
+        <q-input v-model.trim="pageChanged" type="number" suffix="页" class="q-mr-sm"  align="center" min="1"/>
+        <q-btn
+          round
+          dense
+          size="sm"
+          icon="mdi-book-open-page-variant"
+          color="secondary"
+          class="q-mr-sm"
+          @click="changePage"
+        />
         <q-btn
           round
           dense
@@ -978,7 +988,12 @@ export default {
         gmtCreateStart: null,
         gmtCreateEnd: null,
         gmtModifiedStart: null,
-        gmtModifiedEnd: null
+        gmtModifiedEnd: null,
+        prodFamily:null,
+        prodType:null,
+        bigType:null,
+        middleType:null,
+        smallType:null
       },
       loading: false,
       modifyLoading: false,
@@ -1158,7 +1173,9 @@ export default {
       prodColorOptions: [],
       catList: [],
       prodCatOptions: [],
-      prodSpeOptions: []
+      prodSpeOptions: [],
+      //20201225
+      pageChanged: ''
     }
   },
   validations: {
@@ -1365,6 +1382,12 @@ export default {
         pagination: this.serverPagination
       })
       this.resetBtnExist = true
+    },
+    changePage() {
+      this.serverPagination.page = this.pageChanged
+      this.request({
+        pagination: this.serverPagination
+      })
     },
     printSth() {
       window.print()
@@ -1766,6 +1789,7 @@ export default {
           this.serverPagination.rowsNumber = data.total
           this.serverData = data.rows
           this.loading = false
+          this.pageChanged=pagination.page
         })
         .catch(error => {
           this.loading = false
