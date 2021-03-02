@@ -718,8 +718,9 @@
                     <q-checkbox v-model="rolePermission" label="维护七星物料" color="warning" :val="173"/>
                     <q-checkbox v-model="rolePermission" label="维护常规生活" color="warning" :val="184"/>
                     <q-checkbox v-model="rolePermission" label="维护生活定制" color="warning" :val="185"/>
+                    <q-checkbox v-model="rolePermission" label="维护生活物料" color="warning" :val="190"/>
                     <q-checkbox v-model="rolePermission" label="维护717" color="warning" :val="188"/>
-                    <q-checkbox v-model="rolePermission" label="维护七星定制" color="warning" :val="189"/>
+                    <q-checkbox v-model="rolePermission" label="维护七星定制" color="warning" :val="189"/>                    
                   </div>
                 </q-collapsible>
                 <q-collapsible label="批量操作(点击展开)">
