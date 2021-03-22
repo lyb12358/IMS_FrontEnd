@@ -414,7 +414,7 @@
                     </q-item-main>
                   </q-item>
                   <q-item v-close-overlay
-                          @click.native="deleteProdClass(classNode.label)">
+                          @click.native="deleteProdClass()">
                     <q-item-side icon="mdi-delete"
                                  color="negative" />
                     <q-item-main>
@@ -887,8 +887,29 @@ export default {
         return '小类'
       }
     },
-    deleteProdClass(name) {
-      this.notify('warning', '删除了' + name)
+    deleteProdClass() {
+      Object.assign(this.productClass, this.classNode)
+      this.productClass.name = this.classNode.label
+      this.productClass.isDel=1
+      updateProdClass(this.productClass)
+        .then(response => {
+          let data = response.data
+          Object.assign(
+            this.productClass,
+            this.$options.data.call(this).productClass
+          )
+          this.notify('positive', data.msg)
+          this.classTreeData = []
+          getProdClassTree().then(response => {
+            let data = response.data.data
+            for (let i = 0; i < data.length; i++) {
+              this.classTreeData.push(data[i])
+            }
+          })
+        })
+        .catch(error => {
+          this.productClass.isDel=0
+        })
     },
     openClassDialog(action) {
       this.$v.productClass.$reset()
