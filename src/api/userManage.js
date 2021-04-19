@@ -8,6 +8,22 @@ export function getUserList(searchForm) {
         data: searchForm
     })
 }
+// 添加用户
+export function addUser(user) {
+    return service({
+        url: '/user',
+        method: 'post',
+        data: user
+    })
+}
+// 修改用户
+export function updateUser(user) {
+    return service({
+        url: '/user',
+        method: 'put',
+        data: user
+    })
+}
 // 修改密码
 export function updatePassword(id, password) {
     return service({
