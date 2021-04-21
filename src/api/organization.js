@@ -6,3 +6,10 @@ export function getOrgList() {
         method: 'get'
     })
 }
+// 获取品牌
+export function getBrandOptions() {
+    return service({
+        url: '/com/options',
+        method: 'get'
+    })
+}

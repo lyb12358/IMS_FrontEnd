@@ -115,6 +115,9 @@
               <q-tooltip>图片预览</q-tooltip>
             </q-btn>
           </q-td>
+          <q-td key="comId"
+                :props="props"
+                style="text-align:center">{{ filterCom(props.row.comId,comOptions) }}</q-td>
           <q-td key="matFamily"
                 :props="props"
                 style="text-align:center">{{ props.row.familyName }}</q-td>
@@ -329,6 +332,15 @@
                        class="no-margin"
                        float-label="中类" />
             </div>
+            <div class="col-xs-12 col-sm-6">
+              <q-select
+                  v-model="searchForm.comId"
+                  float-label="品牌"
+                  filter
+                  radio
+                  :options="comOptions"
+                />
+            </div>
             <div class="col-xs-12 col-sm-6 ">
               <q-datetime v-model="searchForm.gmtCreateStart"
                           ref="gmtCreateStart"
@@ -455,6 +467,16 @@
                           radio
                           :options="matFamilyOptions" />
               </q-field>
+            </div>
+            <!-- 20210419 -->
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-select
+                v-model="material.comId"
+                float-label="品牌"
+                filter
+                radio
+                :options="comOptions"
+              />
             </div>
             <div class="col-xs-12  col-sm-6 col-md-3">
               <q-field :error="$v.material.matType.$error"
@@ -752,6 +774,7 @@ import {
 } from 'src/api/productParam'
 import { specDownload } from 'src/api/productPlus'
 import { getProdLogList } from 'src/api/log'
+import {getBrandOptions} from 'src/api/organization'
 
 export default {
   data() {
@@ -771,7 +794,8 @@ export default {
         gmtCreateStart: null,
         gmtCreateEnd: null,
         gmtModifiedStart: null,
-        gmtModifiedEnd: null
+        gmtModifiedEnd: null,
+        comId:null
       },
       loading: false,
       modifyLoading: false,
@@ -800,6 +824,7 @@ export default {
         { name: 'matCode', label: '编号', field: 'matCode' },
         { name: 'thumbnail', label: '简图', field: 'thumbnail' },
         { name: 'matName', label: '名称', field: 'matName' },
+        { name: 'comId', label: '品牌', field: 'comId' },
         { name: 'matFamily', label: '归属', field: 'matFamily' },
         { name: 'matType', label: '类别', field: 'matType' },
         { name: 'bigType', label: '大类', field: 'bigType' },
@@ -851,7 +876,8 @@ export default {
         boxVolume: '',
         boxWeight: '',
         isDel: false,
-        isSync: false
+        isSync: false,
+        comId:null
       },
       classList: [],
       matFamilyOptions: [],
@@ -880,7 +906,9 @@ export default {
       imageUploadUrl: '/imageUpload/mat',
       //matLog
       matLogModalOpened: false,
-      timelineBeanList: []
+      timelineBeanList: [],
+      //20210419
+      comOptions:[]
     }
   },
   validations: {
@@ -937,6 +965,7 @@ export default {
           (newVal.attrName != '') |
           (newVal.bigName != '') |
           (newVal.middleName != '') |
+          (newVal.comId != null) |
           (newVal.gmtCreateStart != null) |
           (newVal.gmtCreateEnd != null) |
           (newVal.gmtModifiedStart != null) |
@@ -1318,6 +1347,14 @@ export default {
     deleteMat() {
       this.notify('warning', '删除了哦')
     },
+    //filter com
+    filterCom(value,list){
+      for(let com of list){
+        if(com.value==value){
+          return com.label
+        }
+      }
+    },
     //dataTable request
     request({ pagination }) {
       this.loading = true
@@ -1366,6 +1403,11 @@ export default {
     getProdCatOptions().then(response => {
       let data = response.data.data
       this.catList = data
+    })
+    //20210419品牌
+    getBrandOptions().then(response => {
+      let data = response.data.data
+      this.comOptions = data
     })
   }
 }

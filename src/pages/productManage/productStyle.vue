@@ -167,6 +167,7 @@
             :props="props"
             style="text-align:center"
           >{{ props.row.attrName}}</q-td>
+          <q-td key="comName" :props="props" style="text-align:center">{{ props.row.comName}}</q-td>
           <!-- <q-td v-if="checkStyle('prodMat')"
                 key="prodMat"
                 :props="props"
@@ -311,7 +312,14 @@
         </q-tr>
       </template>
       <div slot="pagination" slot-scope="props" class="row flex-center q-py-sm print-hide">
-        <q-input v-model.trim="pageChanged" type="number" suffix="页" class="q-mr-sm"  align="center" min="1"/>
+        <q-input
+          v-model.trim="pageChanged"
+          type="number"
+          suffix="页"
+          class="q-mr-sm"
+          align="center"
+          min="1"
+        />
         <q-btn
           round
           dense
@@ -381,50 +389,75 @@
               <q-input v-model.trim="searchForm.styleName" class="no-margin" float-label="款名"/>
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input v-model.trim="searchForm.typeName" class="no-margin" float-label="类别(直接输入文字)"/>
+              <q-input
+                v-model.trim="searchForm.typeName"
+                class="no-margin"
+                float-label="类别(直接输入文字)"
+              />
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input v-model.trim="searchForm.attrName" class="no-margin" float-label="属性(直接输入文字)"/>
+              <q-input
+                v-model.trim="searchForm.attrName"
+                class="no-margin"
+                float-label="属性(直接输入文字)"
+              />
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input v-model.trim="searchForm.bigName" class="no-margin" float-label="大类(直接输入文字)"/>
+              <q-input
+                v-model.trim="searchForm.bigName"
+                class="no-margin"
+                float-label="大类(直接输入文字)"
+              />
             </div>
             <div class="col-xs-12 col-sm-6">
-              <q-input v-model.trim="searchForm.middleName" class="no-margin" float-label="中类(直接输入文字)"/>
-            </div>
-             <div class="col-xs-12 col-sm-6">
-              <q-select
-                  v-model="searchForm.prodFamily"
-                  float-label="归属"
-                  radio
-                  :options="prodFamilyOptions"
-                />
-            </div>
-            <div class="col-xs-12 col-sm-6">
-              <q-select
-                  v-model="searchForm.prodType"
-                  float-label="类别"
-                  radio
-                  :options="prodTypeOptions"
-                />
-            </div>
-            <div class="col-xs-12 col-sm-6">
-              <q-select
-                  v-model="searchForm.bigType"
-                  float-label="大类"
-                  filter
-                  radio
-                  :options="bigTypeOptions"
-                />
+              <q-input
+                v-model.trim="searchForm.middleName"
+                class="no-margin"
+                float-label="中类(直接输入文字)"
+              />
             </div>
             <div class="col-xs-12 col-sm-6">
               <q-select
-                  v-model="searchForm.middleType"
-                  float-label="中类"
-                  filter
-                  radio
-                  :options="middleTypeOptions"
-                />
+                v-model="searchForm.prodFamily"
+                float-label="归属"
+                radio
+                :options="prodFamilyOptions"
+              />
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <q-select
+                v-model="searchForm.prodType"
+                float-label="类别"
+                radio
+                :options="prodTypeOptions"
+              />
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <q-select
+                v-model="searchForm.bigType"
+                float-label="大类"
+                filter
+                radio
+                :options="bigTypeOptions"
+              />
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <q-select
+                v-model="searchForm.middleType"
+                float-label="中类"
+                filter
+                radio
+                :options="middleTypeOptions"
+              />
+            </div>
+            <div class="col-xs-12 col-sm-6">
+              <q-select
+                v-model="searchForm.comId"
+                float-label="品牌"
+                filter
+                radio
+                :options="comOptions"
+              />
             </div>
             <div class="col-xs-12 col-sm-6">
               <q-datetime
@@ -514,6 +547,18 @@
             <div v-show="checkStyleModified(139)" class="col-xs-12 col-sm-6 col-md-3">
               <q-field :error="$v.productStyle.styleName.$error" error-label="款名是必填项，且不超过30位">
                 <q-input v-model.trim="productStyle.styleName" class="no-margin" float-label="款名"/>
+              </q-field>
+            </div>
+            <!-- 20210419 -->
+            <div class="col-xs-12 col-sm-6 col-md-3">
+              <q-field :error="$v.productStyle.comId.$error" error-label="品牌必选">
+                <q-select
+                  v-model="productStyle.comId"
+                  float-label="品牌"
+                  filter
+                  radio
+                  :options="comOptions"
+                />
               </q-field>
             </div>
             <div v-show="checkStyleModified(141)" class="col-xs-12 col-sm-6 col-md-3">
@@ -817,8 +862,8 @@
                           <td class="text-left">{{productStyle.bigName}}</td>
                           <td class="text-right">中类：</td>
                           <td class="text-left">{{productStyle.middleName}}</td>
-                          <!-- <td class="text-right">小类：</td>
-                          <td class="text-left">{{productStyle.smallName}}</td>-->
+                          <td class="text-right">品牌：</td>
+                          <td class="text-left">{{productStyle.comName}}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -1002,6 +1047,7 @@ import {
 } from 'src/api/productParam'
 import { specDownload } from 'src/api/productPlus'
 import { getProdLogList } from 'src/api/log'
+import { getBrandOptions } from 'src/api/organization'
 
 export default {
   data() {
@@ -1023,11 +1069,12 @@ export default {
         gmtCreateEnd: null,
         gmtModifiedStart: null,
         gmtModifiedEnd: null,
-        prodFamily:null,
-        prodType:null,
-        bigType:null,
-        middleType:null,
-        smallType:null
+        prodFamily: null,
+        prodType: null,
+        bigType: null,
+        middleType: null,
+        smallType: null,
+        comId: null
       },
       loading: false,
       modifyLoading: false,
@@ -1040,8 +1087,8 @@ export default {
         'typeName',
         'bigName',
         'middleName',
-        'smallName',
         'attrName',
+        'comName',
         'styleIsSync'
       ],
       separator: 'horizontal',
@@ -1061,6 +1108,7 @@ export default {
         { name: 'middleName', label: '中类', field: 'middleName' },
         // { name: 'smallName', label: '小类', field: 'smallName' },
         { name: 'attrName', label: '属性', field: 'attrName' },
+        { name: 'comName', label: '品牌', field: 'comName' },
         // { name: 'prodMat', label: '材质', field: 'prodMat' },
         { name: 'yearName', label: '年份', field: 'yearName' },
         { name: 'seasonName', label: '季节', field: 'seasonName' },
@@ -1106,7 +1154,8 @@ export default {
         //designerName: '',
         prodDesc: '',
         isDel: false,
-        isSync: false
+        isSync: false,
+        comId: null
       },
       classList: [],
       paramList: [],
@@ -1201,7 +1250,8 @@ export default {
         // tSupplyPrice: '',
         // tCostPrice: '',
         isDel: false,
-        isSync: false
+        isSync: false,
+        comId: null
       },
       paramList: [],
       prodColorOptions: [],
@@ -1209,7 +1259,9 @@ export default {
       prodCatOptions: [],
       prodSpeOptions: [],
       //20201225
-      pageChanged: ''
+      pageChanged: '',
+      //20210419
+      comOptions: []
     }
   },
   validations: {
@@ -1221,7 +1273,8 @@ export default {
       bigType: { required },
       prodYear: { required },
       prodSeason: { required },
-      syncProtype: { required }
+      syncProtype: { required },
+      comId: { required }
     },
     productCode: {
       prodCode: { required, maxLength: maxLength(20) },
@@ -1294,6 +1347,7 @@ export default {
           (newVal.prodType != null) |
           (newVal.bigType != null) |
           (newVal.middleType != null) |
+          (newVal.comId != null) |
           (newVal.gmtCreateStart != null) |
           (newVal.gmtCreateEnd != null) |
           (newVal.gmtModifiedStart != null) |
@@ -1827,7 +1881,7 @@ export default {
           this.serverPagination.rowsNumber = data.total
           this.serverData = data.rows
           this.loading = false
-          this.pageChanged=pagination.page
+          this.pageChanged = pagination.page
         })
         .catch(error => {
           this.loading = false
@@ -1867,6 +1921,11 @@ export default {
     getProdCatOptions().then(response => {
       let data = response.data.data
       this.catList = data
+    })
+    //20210419品牌
+    getBrandOptions().then(response => {
+      let data = response.data.data
+      this.comOptions = data
     })
   }
 }

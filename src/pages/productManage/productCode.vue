@@ -200,6 +200,11 @@
             style="text-align:center"
           >{{ props.row.attrName}}</q-td>
           <q-td
+            key="comName"
+            :props="props"
+            style="text-align:center"
+          >{{ props.row.comName}}</q-td>
+          <q-td
             v-if="checkCode('speName')"
             key="speName"
             :props="props"
@@ -614,6 +619,15 @@
                 />
             </div>
             <div class="col-xs-12 col-sm-6">
+              <q-select
+                  v-model="searchForm.comId"
+                  float-label="品牌"
+                  filter
+                  radio
+                  :options="comOptions"
+                />
+            </div>
+            <div class="col-xs-12 col-sm-6">
               <q-datetime
                 v-model="searchForm.gmtCreateStart"
                 ref="gmtCreateStart"
@@ -760,8 +774,8 @@
                           <td class="text-left">{{productStyle.bigName}}</td>
                           <td class="text-right">中类：</td>
                           <td class="text-left">{{productStyle.middleName}}</td>
-                          <!-- <td class="text-right">小类：</td>
-                          <td class="text-left">{{productStyle.smallName}}</td>-->
+                          <td class="text-right">品牌：</td>
+                          <td class="text-left">{{productStyle.comName}}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -1085,6 +1099,7 @@ import {
 } from 'src/api/productParam'
 import { specDownload, codeExport } from 'src/api/productPlus'
 import { getProdLogList } from 'src/api/log'
+import {getBrandOptions} from 'src/api/organization'
 //custom validate
 //const validDecimal = value => value.toString().split('.')[1].length <= 2
 export default {
@@ -1112,7 +1127,8 @@ export default {
         prodType:null,
         bigType:null,
         middleType:null,
-        smallType:null
+        smallType:null,
+        comId:null
       },
       loading: false,
       excelLoading: false,
@@ -1152,6 +1168,7 @@ export default {
         { name: 'middleName', label: '中类', field: 'middleName' },
         { name: 'smallName', label: '小类', field: 'smallName' },
         { name: 'attrName', label: '属性', field: 'attrName' },
+        { name: 'comName', label: '品牌', field: 'comName' },
         { name: 'speName', label: '规格', field: 'speName' },
         { name: 'colorName', label: '花色', field: 'colorName' },
         { name: 'retailPrice', label: '零售价', field: 'retailPrice' },
@@ -1295,7 +1312,9 @@ export default {
       prodFamilyOptions: [],
       prodTypeOptions: [],
       bigTypeOptions: [],
-      middleTypeOptions: []
+      middleTypeOptions: [],
+      //20210419
+      comOptions:[]
     }
   },
   validations: {
@@ -1386,6 +1405,7 @@ export default {
           (newVal.attrName != '') |
           (newVal.bigName != '') |
           (newVal.middleName != '') |
+          (newVal.comId != null) |
           (newVal.prodFamily != null) |
           (newVal.prodType != null) |
           (newVal.bigType != null) |
@@ -1973,6 +1993,11 @@ export default {
           this.prodFamilyOptions.push(list[i])
         }
       }
+    })
+    //20210419品牌
+    getBrandOptions().then(response => {
+      let data = response.data.data
+      this.comOptions = data
     })
   }
 }
