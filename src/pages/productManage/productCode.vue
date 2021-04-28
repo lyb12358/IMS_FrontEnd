@@ -553,8 +553,8 @@
           </div>
         </q-toolbar>
         <div class="layout-padding">
-          <div class="row gutter-sm">
-            <div class="col-xs-12 col-sm-6">
+          <div class="row gutter-sm" @keyup.enter="search">
+            <div class="col-xs-12 col-sm-6"  >
               <q-input v-model.trim="searchForm.prodCode" class="no-margin" float-label="编号"/>
             </div>
             <div class="col-xs-12 col-sm-6">
